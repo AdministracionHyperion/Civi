@@ -1,0 +1,1 @@
+"""Clean SIMIT integration service."""

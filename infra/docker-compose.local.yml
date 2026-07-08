@@ -1,0 +1,454 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: civi
+      POSTGRES_PASSWORD: civi
+      POSTGRES_DB: civi
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U civi -d civi"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  channel-gateway:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/channel-gateway
+        SERVICE_MODULE: channel_gateway.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8080
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      CONVERSATION_SERVICE_URL: http://conversation-service:8081
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN:-change-me-local-only}
+      WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET:-}
+      WHATSAPP_SIGNATURE_REQUIRED: ${WHATSAPP_SIGNATURE_REQUIRED:-}
+      CHANNEL_PUBLIC_RATE_LIMIT_ENABLED: "true"
+      CHANNEL_PUBLIC_RATE_LIMIT_MAX: "60"
+      CHANNEL_PUBLIC_RATE_LIMIT_WINDOW_SECONDS: "60"
+      EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    ports:
+      - "${CHANNEL_BIND:-0.0.0.0}:${CHANNEL_GATEWAY_PORT:-8080}:8080"
+    depends_on:
+      - conversation-service
+      - notification-service
+      - redis
+
+  conversation-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/conversation-service
+        SERVICE_MODULE: conversation_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8081
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      BOT_ORCHESTRATOR_URL: http://bot-orchestrator:8082
+      CONVERSATION_REPOSITORY_MODE: sql
+      CONVERSATION_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      CONVERSATION_AUTO_CREATE_SCHEMA: "true"
+      EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      bot-orchestrator:
+        condition: service_started
+
+  bot-orchestrator:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/bot-orchestrator
+        SERVICE_MODULE: bot_orchestrator.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8082
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      LLM_PROVIDER_MODE: ${LLM_PROVIDER_MODE:-disabled}
+      LLM_PROVIDER: ${LLM_PROVIDER:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com}
+      OPENAI_LLM_MODEL: ${OPENAI_LLM_MODEL:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_BASE_URL: ${GROQ_BASE_URL:-https://api.groq.com/openai/v1}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      VEHICLE_SERVICE_URL: http://vehicle-service:8083
+      PLACES_SERVICE_URL: http://places-service:8085
+      APPOINTMENT_SERVICE_URL: http://appointment-service:8086
+      MEDIA_SERVICE_URL: http://media-service:8088
+      KNOWLEDGE_SERVICE_URL: http://knowledge-service:8094
+      QUOTE_SERVICE_URL: http://quote-service:8091
+      BILLING_SERVICE_URL: http://billing-service:8092
+      HANDOFF_SERVICE_URL: http://handoff-service:8093
+    ports:
+      - "8082:8082"
+    depends_on:
+      - vehicle-service
+      - places-service
+      - appointment-service
+      - media-service
+      - knowledge-service
+      - quote-service
+      - billing-service
+      - handoff-service
+
+  vehicle-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/vehicle-service
+        SERVICE_MODULE: vehicle_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8083
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      RUNT_SERVICE_URL: http://runt-service:8084
+      SIMIT_SERVICE_URL: http://simit-service:8090
+      VEHICLE_CACHE_MODE: sql
+      VEHICLE_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      VEHICLE_AUTO_CREATE_SCHEMA: "true"
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      runt-service:
+        condition: service_started
+      simit-service:
+        condition: service_started
+
+  runt-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.browser-service
+      args:
+        SERVICE_PATH: services/runt-service
+        SERVICE_MODULE: runt_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8084
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      RUNT_PROVIDER_MODE: ${RUNT_PROVIDER_MODE:-local}
+      RUNT_PROVIDER_API_URL: ${RUNT_PROVIDER_API_URL:-}
+      RUNT_PROVIDER_TIMEOUT_SECONDS: ${RUNT_PROVIDER_TIMEOUT_SECONDS:-120}
+      RUNT_PROVIDER_RETRIES: ${RUNT_PROVIDER_RETRIES:-2}
+      RUNT_PERSONA_PROVIDER_MODE: ${RUNT_PERSONA_PROVIDER_MODE:-local}
+      RUNT_PERSONA_PROVIDER_API_URL: ${RUNT_PERSONA_PROVIDER_API_URL:-}
+      RUNT_PERSONA_PROVIDER_TIMEOUT_SECONDS: ${RUNT_PERSONA_PROVIDER_TIMEOUT_SECONDS:-120}
+      RUNT_PERSONA_PROVIDER_RETRIES: ${RUNT_PERSONA_PROVIDER_RETRIES:-2}
+      RUNT_BROWSER_URL: ${RUNT_BROWSER_URL:-https://portalpublico.runt.gov.co/#/consulta-vehiculo/consulta/consulta-ciudadana}
+      RUNT_BROWSER_TIMEOUT_SECONDS: ${RUNT_BROWSER_TIMEOUT_SECONDS:-75}
+      RUNT_BROWSER_CAPTCHA_RETRIES: ${RUNT_BROWSER_CAPTCHA_RETRIES:-5}
+      RUNT_BROWSER_HEADLESS: ${RUNT_BROWSER_HEADLESS:-true}
+      RUNT_BROWSER_EXECUTABLE_PATH: ${RUNT_BROWSER_EXECUTABLE_PATH:-}
+      CAPTCHA_API_KEY: ${CAPTCHA_API_KEY:-}
+    ports:
+      - "8084:8084"
+
+  simit-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.browser-service
+      args:
+        SERVICE_PATH: services/simit-service
+        SERVICE_MODULE: simit_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8090
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      SIMIT_PROVIDER_MODE: ${SIMIT_PROVIDER_MODE:-local}
+      SIMIT_PROVIDER_API_URL: ${SIMIT_PROVIDER_API_URL:-}
+      SIMIT_PROVIDER_TIMEOUT_SECONDS: ${SIMIT_PROVIDER_TIMEOUT_SECONDS:-90}
+      SIMIT_PROVIDER_RETRIES: ${SIMIT_PROVIDER_RETRIES:-2}
+      SIMIT_BROWSER_URL: ${SIMIT_BROWSER_URL:-https://www.fcm.org.co/simit/#/estado-cuenta}
+      SIMIT_BROWSER_TIMEOUT_SECONDS: ${SIMIT_BROWSER_TIMEOUT_SECONDS:-75}
+      SIMIT_BROWSER_HEADLESS: ${SIMIT_BROWSER_HEADLESS:-true}
+      SIMIT_BROWSER_EXECUTABLE_PATH: ${SIMIT_BROWSER_EXECUTABLE_PATH:-}
+    ports:
+      - "8090:8090"
+
+  places-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/places-service
+        SERVICE_MODULE: places_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8085
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      PLACES_REPOSITORY_MODE: sql
+      PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      PLACES_AUTO_CREATE_SCHEMA: "true"
+      PLACES_AUTO_SEED_CATALOG: "true"
+    ports:
+      - "8085:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  appointment-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/appointment-service
+        SERVICE_MODULE: appointment_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8086
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      APPOINTMENT_REPOSITORY_MODE: sql
+      APPOINTMENT_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      APPOINTMENT_AUTO_CREATE_SCHEMA: "true"
+      EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    ports:
+      - "8086:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      notification-service:
+        condition: service_started
+
+  notification-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/notification-service
+        SERVICE_MODULE: notification_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8087
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      NOTIFICATION_REPOSITORY_MODE: sql
+      NOTIFICATION_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      NOTIFICATION_AUTO_CREATE_SCHEMA: "true"
+      WHATSAPP_PROVIDER_MODE: ${WHATSAPP_PROVIDER_MODE:-disabled}
+      WHATSAPP_GRAPH_API_VERSION: ${WHATSAPP_GRAPH_API_VERSION:-v20.0}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID:-}
+      EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    ports:
+      - "8087:8087"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  notification-worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/notification-service
+        SERVICE_MODULE: notification_service.main:app
+    command: ["python", "-m", "notification_service.workers.reminders"]
+    environment:
+      APP_ENV: development
+      LOG_LEVEL: INFO
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      NOTIFICATION_REPOSITORY_MODE: sql
+      NOTIFICATION_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      NOTIFICATION_AUTO_CREATE_SCHEMA: "true"
+      WHATSAPP_PROVIDER_MODE: ${WHATSAPP_PROVIDER_MODE:-disabled}
+      WHATSAPP_GRAPH_API_VERSION: ${WHATSAPP_GRAPH_API_VERSION:-v20.0}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID:-}
+      NOTIFICATION_WORKER_INTERVAL_SECONDS: "30"
+      NOTIFICATION_WORKER_LIMIT: "50"
+      NOTIFICATION_WORKER_DISPATCH_OUTBOX: "false"
+      EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  media-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/media-service
+        SERVICE_MODULE: media_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8088
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      MEDIA_REPOSITORY_MODE: sql
+      MEDIA_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      MEDIA_AUTO_CREATE_SCHEMA: "true"
+      MEDIA_AUDIO_PROVIDER_MODE: ${MEDIA_AUDIO_PROVIDER_MODE:-disabled}
+      MEDIA_IMAGE_PROVIDER_MODE: ${MEDIA_IMAGE_PROVIDER_MODE:-disabled}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com}
+      OPENAI_AUDIO_TRANSCRIPTION_MODEL: ${OPENAI_AUDIO_TRANSCRIPTION_MODEL:-}
+      OPENAI_IMAGE_VISION_MODEL: ${OPENAI_IMAGE_VISION_MODEL:-}
+      OPENAI_IMAGE_EXTRACTION_PROMPT: ${OPENAI_IMAGE_EXTRACTION_PROMPT:-Extrae el texto visible de esta imagen. Responde solo el texto encontrado.}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
+      DEEPSEEK_IMAGE_MODEL: ${DEEPSEEK_IMAGE_MODEL:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_BASE_URL: ${GROQ_BASE_URL:-https://api.groq.com/openai/v1}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      GROQ_IMAGE_MODEL: ${GROQ_IMAGE_MODEL:-}
+    ports:
+      - "8088:8088"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  quote-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/quote-service
+        SERVICE_MODULE: quote_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8091
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+    ports:
+      - "8091:8091"
+
+  knowledge-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/knowledge-service
+        SERVICE_MODULE: knowledge_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8094
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+    ports:
+      - "8094:8094"
+
+  billing-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/billing-service
+        SERVICE_MODULE: billing_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8092
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+    ports:
+      - "8092:8092"
+
+  handoff-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/handoff-service
+        SERVICE_MODULE: handoff_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8093
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+    ports:
+      - "8093:8093"
+
+  admin-service:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/admin-service
+        SERVICE_MODULE: admin_service.main:app
+    environment:
+      APP_ENV: development
+      PORT: 8089
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      ADMIN_AUDIT_REPOSITORY_MODE: sql
+      ADMIN_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      ADMIN_AUTO_CREATE_SCHEMA: "true"
+      ADMIN_USER: admin-local
+      ADMIN_PASSWORD: change-me-local-only
+      CHANNEL_GATEWAY_URL: http://channel-gateway:8080
+      CONVERSATION_SERVICE_URL: http://conversation-service:8081
+      BOT_ORCHESTRATOR_URL: http://bot-orchestrator:8082
+      VEHICLE_SERVICE_URL: http://vehicle-service:8083
+      RUNT_SERVICE_URL: http://runt-service:8084
+      SIMIT_SERVICE_URL: http://simit-service:8090
+      PLACES_SERVICE_URL: http://places-service:8085
+      APPOINTMENT_SERVICE_URL: http://appointment-service:8086
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      MEDIA_SERVICE_URL: http://media-service:8088
+      KNOWLEDGE_SERVICE_URL: http://knowledge-service:8094
+      QUOTE_SERVICE_URL: http://quote-service:8091
+      BILLING_SERVICE_URL: http://billing-service:8092
+      HANDOFF_SERVICE_URL: http://handoff-service:8093
+    ports:
+      - "8089:8089"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  admin-event-audit-worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/admin-service
+        SERVICE_MODULE: admin_service.main:app
+    command: ["python", "-m", "admin_service.workers.event_audit"]
+    environment:
+      APP_ENV: development
+      LOG_LEVEL: INFO
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      ADMIN_AUDIT_REPOSITORY_MODE: sql
+      ADMIN_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      ADMIN_AUTO_CREATE_SCHEMA: "true"
+      EVENT_REDIS_URL: redis://redis:6379/1
+      EVENT_CHANNEL_PREFIX: civi.events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started

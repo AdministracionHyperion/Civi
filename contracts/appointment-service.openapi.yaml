@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: Civi Appointment Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/appointments:
+    post:
+      summary: Create appointment
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_key, procedure, starts_at, place]
+              properties:
+                user_key:
+                  type: string
+                procedure:
+                  type: string
+                starts_at:
+                  type: string
+                notification_to:
+                  type: string
+                  nullable: true
+                place:
+                  type: object
+                  required: [id, name, address, city]
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    address:
+                      type: string
+                    city:
+                      type: string
+      responses:
+        "201":
+          description: appointment created
+    get:
+      summary: List appointments
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: appointments
+  /internal/appointments/{appointment_id}:
+    delete:
+      summary: Cancel appointment
+      security:
+        - internalBearer: []
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_key
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: cancellation result
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,48 @@
+# Secrets
+.env
+.env.*
+!.env.example
+!.env.deploy.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+.venv_new/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs and operational artifacts
+*.log
+prod_data.txt
+prod_runt.txt
+prod_schema.txt
+prod_schema_post.txt
+scratch/
+backups/
+tmp/
+URL_PUBLICA.txt
+cloudflared.exe
+*.lnk
+
+# Local outputs
+.coverage
+coverage.xml
+htmlcov/
+.benchmarks/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: Civi Billing Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/billing/payment-intents:
+    post:
+      summary: Create payment intent
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: payment intent
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

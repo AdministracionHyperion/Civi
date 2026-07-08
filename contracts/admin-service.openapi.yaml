@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: Civi Admin Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/admin/auth/check:
+    post:
+      summary: Check admin credentials
+      security:
+        - adminUserHeader: []
+          adminPasswordHeader: []
+      responses:
+        "200":
+          description: authenticated
+        "503":
+          description: admin credentials missing
+  /internal/admin/dashboard/summary:
+    get:
+      summary: Dashboard summary through internal service contracts
+      security:
+        - adminUserHeader: []
+          adminPasswordHeader: []
+      responses:
+        "200":
+          description: summary with service statuses
+        "401":
+          description: invalid admin credentials
+        "503":
+          description: admin credentials missing
+  /internal/admin/partners:
+    get:
+      summary: Partner management routing information
+      security:
+        - adminUserHeader: []
+          adminPasswordHeader: []
+      responses:
+        "200":
+          description: partner management info
+        "401":
+          description: invalid admin credentials
+        "503":
+          description: admin credentials missing
+  /internal/admin/audit:
+    get:
+      summary: List admin audit events
+      security:
+        - adminUserHeader: []
+          adminPasswordHeader: []
+      responses:
+        "200":
+          description: audit events
+        "401":
+          description: invalid admin credentials
+        "503":
+          description: admin credentials missing
+  /internal/admin/events:
+    post:
+      summary: Consume an internal event into sanitized admin audit
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: event consumed into audit log
+        "401":
+          description: invalid internal service token
+        "503":
+          description: internal service token missing
+components:
+  securitySchemes:
+    adminUserHeader:
+      type: apiKey
+      in: header
+      name: X-Admin-User
+    adminPasswordHeader:
+      type: apiKey
+      in: header
+      name: X-Admin-Password
+    internalBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: Civi Channel Gateway
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /webhook:
+    get:
+      summary: Legacy WhatsApp webhook verification
+      responses:
+        "200":
+          description: challenge response
+        "403":
+          description: invalid verify token
+    post:
+      summary: Legacy WhatsApp webhook ingress
+      responses:
+        "202":
+          description: accepted
+        "429":
+          description: public ingress rate limit exceeded
+  /webhook/whatsapp:
+    get:
+      summary: WhatsApp webhook verification
+      responses:
+        "200":
+          description: challenge response
+        "403":
+          description: invalid verify token
+    post:
+      summary: WhatsApp webhook ingress
+      responses:
+        "202":
+          description: accepted
+        "429":
+          description: public ingress rate limit exceeded
+  /chat/messages:
+    post:
+      summary: Web chat message ingress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_key, text]
+              properties:
+                user_key:
+                  type: string
+                text:
+                  type: string
+                channel:
+                  type: string
+                metadata:
+                  type: object
+                  additionalProperties: true
+      responses:
+        "200":
+          description: response ready
+        "429":
+          description: public ingress rate limit exceeded
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

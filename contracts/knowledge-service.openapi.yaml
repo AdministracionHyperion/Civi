@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: Civi Knowledge Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/knowledge/info:
+    post:
+      summary: Return deterministic domain knowledge
+      description: Supports legacy bot knowledge topics for tecnomecanica and CIA.
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [domain, topic]
+              properties:
+                domain:
+                  type: string
+                  examples: [tecnomecanica, cia]
+                topic:
+                  type: string
+                  examples: [que_llevar, descuentos_fotomulta]
+      responses:
+        "200":
+          description: domain knowledge response
+  /internal/knowledge/city:
+    post:
+      summary: Return deterministic city coverage knowledge
+      description: Provides coverage notes without inventing volatile local traffic rules.
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [city]
+              properties:
+                city:
+                  type: string
+                service_type:
+                  type: string
+                  default: tecnomecanica
+      responses:
+        "200":
+          description: city knowledge response
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

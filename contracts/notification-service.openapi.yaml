@@ -1,0 +1,60 @@
+openapi: 3.1.0
+info:
+  title: Civi Notification Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/notifications/whatsapp:
+    post:
+      summary: Send WhatsApp message
+      security:
+        - internalBearer: []
+      responses:
+        "202":
+          description: queued
+  /internal/notifications/reminders:
+    post:
+      summary: Schedule reminder
+      security:
+        - internalBearer: []
+      responses:
+        "201":
+          description: reminder scheduled
+  /internal/notifications/outbox/dispatch:
+    post:
+      summary: Dispatch queued outbox messages in dry-run/internal mode
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: dispatched messages
+  /internal/notifications/reminders/process-due:
+    post:
+      summary: Queue due reminders into notification outbox
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: due reminders processed
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

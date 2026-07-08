@@ -1,0 +1,62 @@
+openapi: 3.1.0
+info:
+  title: Civi Places Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/places/nearest:
+    post:
+      summary: Find nearest center by procedure and location
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [procedure]
+              properties:
+                procedure:
+                  type: string
+                city:
+                  type: string
+                lat:
+                  type: number
+                lng:
+                  type: number
+                limit:
+                  type: integer
+      responses:
+        "200":
+          description: nearest places
+  /internal/places/partners:
+    get:
+      summary: List partner centers without phone numbers
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: partners
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

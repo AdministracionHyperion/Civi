@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  title: Civi RUNT Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/runt/vigencia:
+    post:
+      summary: Check normalized RUNT vehicle validity
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: normalized RUNT result
+  /internal/runt/tipos-documento:
+    get:
+      summary: List supported RUNT document types
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: supported document types
+  /internal/runt/persona:
+    post:
+      summary: Check normalized RUNT person profile by document
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: normalized RUNT person profile result
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

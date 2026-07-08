@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  title: Civi Media Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/media/validate:
+    post:
+      summary: Validate media metadata
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: validation result
+  /internal/media/audio:
+    post:
+      summary: Process audio media through the configured transcription provider
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: audio result
+  /internal/media/image:
+    post:
+      summary: Process image media through the configured vision provider
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: image result
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer

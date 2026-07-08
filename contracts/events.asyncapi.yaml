@@ -1,0 +1,400 @@
+asyncapi: 3.0.0
+info:
+  title: Civi Internal Events
+  version: 0.2.0
+  description: Event contracts for asynchronous communication between Civi microservices.
+defaultContentType: application/json
+servers:
+  local:
+    host: redis:6379
+    protocol: redis
+    description: Local development event bus using civi.events channel prefix.
+channels:
+  message.received:
+    address: civi.events.message.received
+    messages:
+      MessageReceived:
+        $ref: '#/components/messages/MessageReceived'
+  conversation.completed:
+    address: civi.events.conversation.completed
+    messages:
+      ConversationCompleted:
+        $ref: '#/components/messages/ConversationCompleted'
+  consent.updated:
+    address: civi.events.consent.updated
+    messages:
+      ConsentUpdated:
+        $ref: '#/components/messages/ConsentUpdated'
+  appointment.created:
+    address: civi.events.appointment.created
+    messages:
+      AppointmentCreated:
+        $ref: '#/components/messages/AppointmentCreated'
+  appointment.cancelled:
+    address: civi.events.appointment.cancelled
+    messages:
+      AppointmentCancelled:
+        $ref: '#/components/messages/AppointmentCancelled'
+  reminder.scheduled:
+    address: civi.events.reminder.scheduled
+    messages:
+      ReminderScheduled:
+        $ref: '#/components/messages/ReminderScheduled'
+  reminder.due:
+    address: civi.events.reminder.due
+    messages:
+      ReminderDue:
+        $ref: '#/components/messages/ReminderDue'
+  notification.queued:
+    address: civi.events.notification.queued
+    messages:
+      NotificationQueued:
+        $ref: '#/components/messages/NotificationQueued'
+  notification.sent:
+    address: civi.events.notification.sent
+    messages:
+      NotificationSent:
+        $ref: '#/components/messages/NotificationSent'
+operations:
+  publishMessageReceived:
+    action: send
+    channel:
+      $ref: '#/channels/message.received'
+    messages:
+      - $ref: '#/components/messages/MessageReceived'
+  consumeMessageReceived:
+    action: receive
+    channel:
+      $ref: '#/channels/message.received'
+    messages:
+      - $ref: '#/components/messages/MessageReceived'
+  publishConversationCompleted:
+    action: send
+    channel:
+      $ref: '#/channels/conversation.completed'
+    messages:
+      - $ref: '#/components/messages/ConversationCompleted'
+  consumeConversationCompleted:
+    action: receive
+    channel:
+      $ref: '#/channels/conversation.completed'
+    messages:
+      - $ref: '#/components/messages/ConversationCompleted'
+  publishConsentUpdated:
+    action: send
+    channel:
+      $ref: '#/channels/consent.updated'
+    messages:
+      - $ref: '#/components/messages/ConsentUpdated'
+  consumeConsentUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/consent.updated'
+    messages:
+      - $ref: '#/components/messages/ConsentUpdated'
+  publishAppointmentCreated:
+    action: send
+    channel:
+      $ref: '#/channels/appointment.created'
+    messages:
+      - $ref: '#/components/messages/AppointmentCreated'
+  consumeAppointmentCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/appointment.created'
+    messages:
+      - $ref: '#/components/messages/AppointmentCreated'
+  publishAppointmentCancelled:
+    action: send
+    channel:
+      $ref: '#/channels/appointment.cancelled'
+    messages:
+      - $ref: '#/components/messages/AppointmentCancelled'
+  consumeAppointmentCancelled:
+    action: receive
+    channel:
+      $ref: '#/channels/appointment.cancelled'
+    messages:
+      - $ref: '#/components/messages/AppointmentCancelled'
+  publishReminderScheduled:
+    action: send
+    channel:
+      $ref: '#/channels/reminder.scheduled'
+    messages:
+      - $ref: '#/components/messages/ReminderScheduled'
+  consumeReminderScheduled:
+    action: receive
+    channel:
+      $ref: '#/channels/reminder.scheduled'
+    messages:
+      - $ref: '#/components/messages/ReminderScheduled'
+  publishReminderDue:
+    action: send
+    channel:
+      $ref: '#/channels/reminder.due'
+    messages:
+      - $ref: '#/components/messages/ReminderDue'
+  consumeReminderDue:
+    action: receive
+    channel:
+      $ref: '#/channels/reminder.due'
+    messages:
+      - $ref: '#/components/messages/ReminderDue'
+  publishNotificationQueued:
+    action: send
+    channel:
+      $ref: '#/channels/notification.queued'
+    messages:
+      - $ref: '#/components/messages/NotificationQueued'
+  consumeNotificationQueued:
+    action: receive
+    channel:
+      $ref: '#/channels/notification.queued'
+    messages:
+      - $ref: '#/components/messages/NotificationQueued'
+  publishNotificationSent:
+    action: send
+    channel:
+      $ref: '#/channels/notification.sent'
+    messages:
+      - $ref: '#/components/messages/NotificationSent'
+  consumeNotificationSent:
+    action: receive
+    channel:
+      $ref: '#/channels/notification.sent'
+    messages:
+      - $ref: '#/components/messages/NotificationSent'
+components:
+  messages:
+    MessageReceived:
+      name: MessageReceived
+      title: Public channel message accepted by channel-gateway
+      payload:
+        $ref: '#/components/schemas/MessageReceivedPayload'
+    ConversationCompleted:
+      name: ConversationCompleted
+      title: Conversation turn completed by conversation-service
+      payload:
+        $ref: '#/components/schemas/ConversationCompletedPayload'
+    ConsentUpdated:
+      name: ConsentUpdated
+      title: Consent status updated by conversation-service
+      payload:
+        $ref: '#/components/schemas/ConsentUpdatedPayload'
+    AppointmentCreated:
+      name: AppointmentCreated
+      title: Appointment created by appointment-service
+      payload:
+        $ref: '#/components/schemas/AppointmentCreatedPayload'
+    AppointmentCancelled:
+      name: AppointmentCancelled
+      title: Appointment cancelled by appointment-service
+      payload:
+        $ref: '#/components/schemas/AppointmentCancelledPayload'
+    ReminderScheduled:
+      name: ReminderScheduled
+      title: Reminder scheduled by notification-service
+      payload:
+        $ref: '#/components/schemas/ReminderScheduledPayload'
+    ReminderDue:
+      name: ReminderDue
+      title: Reminder is due for dispatch
+      payload:
+        $ref: '#/components/schemas/ReminderDuePayload'
+    NotificationQueued:
+      name: NotificationQueued
+      title: Notification queued in outbox
+      payload:
+        $ref: '#/components/schemas/NotificationQueuedPayload'
+    NotificationSent:
+      name: NotificationSent
+      title: Notification sent by provider adapter
+      payload:
+        $ref: '#/components/schemas/NotificationSentPayload'
+  schemas:
+    EventEnvelope:
+      type: object
+      required: [event_id, event_type, occurred_at, producer, schema_version]
+      properties:
+        event_id:
+          type: string
+          description: Unique event id generated by the producer.
+        event_type:
+          type: string
+        occurred_at:
+          type: string
+          format: date-time
+        producer:
+          type: string
+        schema_version:
+          type: string
+          const: '1'
+        correlation_id:
+          type: string
+          nullable: true
+    MessageReceivedPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [user_key, channel, text]
+          properties:
+            event_type:
+              const: message.received
+            producer:
+              const: channel-gateway
+            user_key:
+              type: string
+            channel:
+              type: string
+              enum: [web, whatsapp, dashboard]
+            text:
+              type: string
+            has_location:
+              type: boolean
+    ConversationCompletedPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [user_key, channel, state_version]
+          properties:
+            event_type:
+              const: conversation.completed
+            producer:
+              const: conversation-service
+            user_key:
+              type: string
+            channel:
+              type: string
+            state_version:
+              type: integer
+              minimum: 1
+    ConsentUpdatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [user_key, channel, status, purpose, policy_version]
+          properties:
+            event_type:
+              const: consent.updated
+            producer:
+              const: conversation-service
+            user_key:
+              type: string
+            channel:
+              type: string
+            status:
+              type: string
+              enum: [accepted, declined]
+            purpose:
+              type: string
+            policy_version:
+              type: string
+    AppointmentCreatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [appointment_id, user_key, procedure, starts_at, place]
+          properties:
+            event_type:
+              const: appointment.created
+            producer:
+              const: appointment-service
+            appointment_id:
+              type: integer
+            user_key:
+              type: string
+            procedure:
+              type: string
+            starts_at:
+              type: string
+            place:
+              type: object
+              required: [id, name, city]
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                city:
+                  type: string
+    AppointmentCancelledPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [appointment_id, user_key]
+          properties:
+            event_type:
+              const: appointment.cancelled
+            producer:
+              const: appointment-service
+            appointment_id:
+              type: integer
+            user_key:
+              type: string
+    ReminderScheduledPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [reminder_id, user_key, to_tail, remind_at]
+          properties:
+            event_type:
+              const: reminder.scheduled
+            producer:
+              const: notification-service
+            reminder_id:
+              type: integer
+            user_key:
+              type: string
+            to_tail:
+              type: string
+            remind_at:
+              type: string
+    ReminderDuePayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [reminder_id, user_key]
+          properties:
+            event_type:
+              const: reminder.due
+            producer:
+              const: notification-service
+            reminder_id:
+              type: integer
+            user_key:
+              type: string
+    NotificationQueuedPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [message_id, channel, to_tail]
+          properties:
+            event_type:
+              const: notification.queued
+            producer:
+              const: notification-service
+            message_id:
+              type: integer
+            channel:
+              type: string
+            to_tail:
+              type: string
+    NotificationSentPayload:
+      allOf:
+        - $ref: '#/components/schemas/EventEnvelope'
+        - type: object
+          required: [message_id, channel, provider]
+          properties:
+            event_type:
+              const: notification.sent
+            producer:
+              const: notification-service
+            message_id:
+              type: integer
+            channel:
+              type: string
+            provider:
+              type: string
+            provider_message_id:
+              type: string
+              nullable: true

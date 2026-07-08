@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: Civi Quote Service
+  version: 0.1.0
+paths:
+  /health/live:
+    get:
+      responses:
+        "200":
+          description: service is alive
+  /health/ready:
+    get:
+      responses:
+        "200":
+          description: service is ready
+  /internal/status:
+    get:
+      summary: Internal service status
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: internal status
+  /internal/quotes:
+    post:
+      summary: Create reference quote
+      description: Supports generic bands plus exact SOAT, tecnomecanica, CIA course and CNT infraction quotes when enough inputs are present.
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [service_type]
+              properties:
+                service_type:
+                  type: string
+                  examples: [soat, tecnomecanica, infraccion, curso_multa]
+                vehicle_type:
+                  type: string
+                city:
+                  type: string
+                cilindraje:
+                  type: integer
+                modelo:
+                  type: integer
+                categoria:
+                  type: string
+                consulta:
+                  type: string
+                codigo:
+                  type: string
+                variable:
+                  type: string
+      responses:
+        "200":
+          description: reference quote
+components:
+  securitySchemes:
+    internalBearer:
+      type: http
+      scheme: bearer
