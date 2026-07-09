@@ -1,0 +1,2 @@
+# Keep the national catalog snapshot byte-stable across OS checkouts.
+services/places-service/data/raw/places_colombia_original.json text eol=lf

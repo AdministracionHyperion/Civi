@@ -3,7 +3,8 @@
 Fecha: 2026-07-09  
 Rama: `feat/places-national-catalog`  
 PR: https://github.com/AdministracionHyperion/Civi/pull/1  
-SHA fuente: `457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634`
+SHA fuente (blob LF en git): `03df28538959a7d596c92451fecf960073b30df622e55206677faa8dfa3abba7`  
+Nota: un checkout Windows con CRLF puede mostrar `457b4fda…` en disco; el contenido JSON es el mismo tras normalizar EOL.
 
 ## READY_TO_MERGE=NO
 

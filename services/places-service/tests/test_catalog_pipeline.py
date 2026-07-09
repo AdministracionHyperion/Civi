@@ -37,11 +37,16 @@ def test_baseline_counts_and_original_preserved() -> None:
     assert counts["CIA"] == 772
     assert counts["CRC"] == 794
 
+    # Canonical SHA is the LF blob stored in git. Windows checkouts may rewrite
+    # CRLF and change the raw-file hash without changing JSON content.
+    ORIGINAL_SHA256_LF = "03df28538959a7d596c92451fecf960073b30df622e55206677faa8dfa3abba7"
     original_bytes = RAW_ORIGINAL.read_bytes()
-    sha = hashlib.sha256(original_bytes).hexdigest()
-    assert sha.startswith("457b4fda")
+    normalized = original_bytes.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    sha = hashlib.sha256(normalized).hexdigest()
+    assert sha == ORIGINAL_SHA256_LF
     if SOURCE_FILE.exists():
-        assert hashlib.sha256(SOURCE_FILE.read_bytes()).hexdigest() == sha
+        source_norm = SOURCE_FILE.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        assert hashlib.sha256(source_norm).hexdigest() == ORIGINAL_SHA256_LF
 
 
 def test_nit_verification_digit_algorithm() -> None:
