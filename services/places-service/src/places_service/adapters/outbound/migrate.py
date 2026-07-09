@@ -156,17 +156,19 @@ def migrate_legacy_places_rows(engine: Engine) -> int:
                         address_raw, address_normalized, address_quality,
                         department, municipality, raw_city, raw_department,
                         lat, lng, geocode_status, location_precision,
-                        operational_status, status_verified, is_official_actor,
-                        is_partner, is_bookable, booking_mode, quality_score,
-                        requires_manual_review, snapshot_presence
+                        operational_status, status_verified, status_inferred_from_name,
+                        is_official_actor, is_partner, is_bookable, booking_mode,
+                        quality_score, requires_manual_review, snapshot_presence,
+                        source_presence_status, present_in_latest_snapshot
                     ) VALUES (
                         :site_id, :entity_id, :actor_type, :name, :name_normalized,
                         :address_raw, :address_normalized, :address_quality,
                         :department, :municipality, :raw_city, :raw_department,
                         :lat, :lng, :geocode_status, :location_precision,
-                        :operational_status, :status_verified, :is_official_actor,
-                        :is_partner, :is_bookable, :booking_mode, :quality_score,
-                        :requires_manual_review, :snapshot_presence
+                        :operational_status, :status_verified, :status_inferred_from_name,
+                        :is_official_actor, :is_partner, :is_bookable, :booking_mode,
+                        :quality_score, :requires_manual_review, :snapshot_presence,
+                        :source_presence_status, :present_in_latest_snapshot
                     )
                     """
                 ),
@@ -189,6 +191,7 @@ def migrate_legacy_places_rows(engine: Engine) -> int:
                     "location_precision": str(row.get("location_precision") or "unknown"),
                     "operational_status": str(row.get("status") or "unknown"),
                     "status_verified": bool(row.get("status_verified") or False),
+                    "status_inferred_from_name": False,
                     "is_official_actor": False,
                     "is_partner": bool(row.get("is_partner") or False),
                     "is_bookable": bool(row.get("is_bookable") or False),
@@ -196,6 +199,8 @@ def migrate_legacy_places_rows(engine: Engine) -> int:
                     "quality_score": 0.3,
                     "requires_manual_review": True,
                     "snapshot_presence": "present",
+                    "source_presence_status": "present",
+                    "present_in_latest_snapshot": True,
                 },
             )
             migrated += 1

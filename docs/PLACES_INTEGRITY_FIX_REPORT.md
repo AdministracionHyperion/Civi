@@ -7,7 +7,7 @@ SHA fuente: `457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634`
 
 ## READY_TO_MERGE=NO
 
-Motivo: el prompt completo exige CI verde en GitHub, smoke Compose del stack Civi, rollback de snapshot y cobertura total de las 74 pruebas listadas. Parte de eso aún no tiene evidencia remota/completa. Lo crítico de integridad local **sí** está demostrado abajo.
+Motivo: falta evidencia remota de CI verde en el PR tras este push, y smoke Compose del stack completo (no solo `postgres`/`redis` + `config --quiet`).
 
 ## Evidencia ejecutada
 
@@ -19,10 +19,15 @@ Motivo: el prompt completo exige CI verde en GitHub, smoke Compose del stack Civ
 | Apply SQLite #1 | inserted=4046 |
 | Apply SQLite #2 | inserted=0, updated=0, unchanged=4046 |
 | Apply PostgreSQL #1/#2 | second: inserted=0, updated=0, unchanged=4046 (`postgresql_validation_report.json`) |
+| Migración legacy `places` → `places_sites` | PASSED (`test_legacy_migration.py`) |
+| Búsqueda SQL filtrada (municipio + bbox GPS) | PASSED |
+| Summary por agregaciones SQL | PASSED |
+| Rollback CLI `restore_snapshot` | documentado + delega a import lifecycle |
+| Bot sin asumir municipio | mensaje para `city_or_coordinates_required` |
 | Migraciones | v1_baseline + v2_national_catalog |
-| `scripts/verify.ps1` | PASSED |
+| `scripts/verify.ps1` | PASSED (180 tests) |
 | Docker Compose config | PASSED |
-| Places/appointment tests | PASSED (tras ajuste detail) |
+| Compose `postgres`+`redis` up | PASSED |
 
 ## Reconciliación final
 
@@ -33,31 +38,17 @@ Motivo: el prompt completo exige CI verde en GitHub, smoke Compose del stack Civ
 - unique_sites: 4046  
 - unique_entities: 3293  
 
-## Las 4 colisiones originales
+## Correcciones en este tramo
 
-1. Filas 12/160 — misma entidad/dirección, municipios distintos (Apartadó/Turbo) → sedes distintas vía municipio en `site_id`.  
-2. Filas 164/166 — misma dirección; nombre con puntuación/sufijo → fusión por `name_core` o IDs distintos.  
-3. Filas 420/421 — LTDA vs LIMITADA / DV → fusión o distinción estable.  
-4. Filas 832/833 — fija vs línea móvil, misma dirección → distinción por nombre en hash.
-
-## Correcciones incluidas en este push
-
-- Sin overwrite silencioso de `site_id`
-- Idempotencia por `content_hash`
-- Historial `places_import_source_records`
-- Presencia present/missing/reappeared
-- `eligible_for_civi_booking` + appointment
-- DIVIPOLA 1122 municipios versionado
-- Geocoders disabled/http/manual + CLI `import_geocodes`
-- Migración versionada (no solo create_all)
-- CI workflow `.github/workflows/verify.yml`
-- OpenAPI/app version 0.2.0
+- Migración legacy incluye columnas NOT NULL (`status_inferred_from_name`, presencia).
+- `search_nearest` filtra en SQL (municipio / bbox) — no carga catálogo completo.
+- `catalog_summary` por agregaciones SQL + `by_source_presence_status`.
+- CLI `restore_snapshot` + runbook.
+- CI: PyYAML, dry-run reconciliación, job Postgres idempotency.
+- Bot: razones `city_or_coordinates_required` / `coordinates_outside_colombia`.
 
 ## Pendiente para READY_TO_MERGE=YES
 
-1. Workflow GitHub Actions verde en el PR remoto.  
-2. Smoke Compose completo del stack Civi (no solo `config --quiet`).  
-3. Rollback de snapshot documentado y probado end-to-end.  
-4. Cobertura explícita de todas las pruebas del §34 (ambigüedad territorial bot, caja GPS SQL, etc.).  
-5. Summary SQL con el 100% de métricas del §26.  
-6. Migración desde esquema exacto de `main` con datos legacy + citas (parcialmente cubierta; ampliar fixture).
+1. Workflow GitHub Actions verde en el PR remoto (tras push).  
+2. Smoke Compose completo del stack Civi (health de servicios de app).  
+3. Confirmar CI Postgres idempotency en Actions.

@@ -564,6 +564,13 @@ async def _find_places_and_continue_appointment(
             empty_text = "No encontre centros dentro del radio de busqueda para esa ubicacion."
         elif reason == "no_coverage_in_municipality":
             empty_text = "No tengo cobertura de centros para ese tramite en ese municipio."
+        elif reason == "city_or_coordinates_required":
+            empty_text = (
+                "Para buscarte el centro necesito la ciudad o tu ubicacion por WhatsApp. "
+                "No puedo asumir un municipio."
+            )
+        elif reason == "coordinates_outside_colombia":
+            empty_text = "La ubicacion que enviaste esta fuera de Colombia. Comparte una ubicacion valida."
         return AgentTurnResponse(
             text=empty_text,
             state_version=1,

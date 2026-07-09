@@ -201,6 +201,188 @@ async def test_retired_excluded_from_search() -> None:
     assert [p.id for p in response.places] == ["ok-1"]
 
 
+def test_sql_municipality_search_never_falls_back_nationally() -> None:
+    from datetime import datetime, timezone
+
+    from places_service.domain.models import Entity, Site
+
+    repo = CatalogSqlRepository("sqlite+pysqlite:///:memory:", create_schema=True)
+    now = datetime.now(timezone.utc).isoformat()
+    entity = Entity(
+        entity_id="entity-two-cities",
+        document_type="NIT",
+        document_number="900123456",
+        verification_digit="1",
+        document_raw="900123456-1",
+        document_valid=True,
+        legal_name="Two Cities",
+        legal_name_normalized="TWO CITIES",
+        created_at=now,
+        updated_at=now,
+    )
+    base_site = dict(
+        entity_id=entity.entity_id,
+        actor_type="CDA",
+        name_normalized="CDA TEST",
+        address_raw="Calle 1 # 2-3",
+        address_normalized="CALLE 1 # 2-3",
+        address_quality="valid",
+        department="Santander",
+        raw_department="Santander",
+        geocode_status="not_attempted",
+        operational_status="unknown",
+        status_verified=False,
+        is_official_actor=True,
+        is_partner=False,
+        is_bookable=False,
+        booking_mode="information_only",
+        quality_score=1.0,
+        requires_manual_review=False,
+        created_at=now,
+        updated_at=now,
+    )
+    sites = [
+        Site(
+            site_id="site-bucaramanga",
+            name="CDA Bucaramanga",
+            municipality="Bucaramanga",
+            raw_city="Bucaramanga",
+            municipality_code="68001",
+            **base_site,
+        ),
+        Site(
+            site_id="site-floridablanca",
+            name="CDA Floridablanca",
+            municipality="Floridablanca",
+            raw_city="Floridablanca",
+            municipality_code="68276",
+            **base_site,
+        ),
+    ]
+    repo.apply_import(
+        import_run=ImportRun(
+            import_run_id="two-cities",
+            source_name="test",
+            input_filename="two-cities.json",
+            input_sha256="test",
+            started_at=now,
+            status="applied",
+        ),
+        entities=[entity],
+        sites=sites,
+        contacts=[],
+        source_records=[],
+        duplicate_candidates=[],
+    )
+
+    result = repo.search_nearest(
+        actor_type="CDA",
+        city="Bucaramanga",
+        municipality_code=None,
+        lat=None,
+        lng=None,
+        limit=10,
+        radius_km=40,
+    )
+
+    assert result["match_scope"] == "municipality_name"
+    assert [place["id"] for place in result["places"]] == ["site-bucaramanga"]
+    assert result["total_candidates"] == 1
+
+
+def test_sql_gps_bounding_box_excludes_far_sites() -> None:
+    """GPS search must filter by SQL bbox before Haversine, not load the full catalog."""
+    from datetime import datetime, timezone
+
+    from places_service.domain.models import Entity, Site
+
+    repo = CatalogSqlRepository("sqlite+pysqlite:///:memory:", create_schema=True)
+    now = datetime.now(timezone.utc).isoformat()
+    entity = Entity(
+        entity_id="entity-gps",
+        document_type="NIT",
+        document_number="900999888",
+        verification_digit="1",
+        document_raw="900999888-1",
+        document_valid=True,
+        legal_name="GPS Entity",
+        legal_name_normalized="GPS ENTITY",
+        created_at=now,
+        updated_at=now,
+    )
+    base = dict(
+        entity_id=entity.entity_id,
+        actor_type="CDA",
+        name_normalized="CDA GPS",
+        address_raw="Calle 1 # 2-3",
+        address_normalized="CALLE 1 # 2-3",
+        address_quality="valid",
+        department="Santander",
+        raw_department="Santander",
+        geocode_status="ok",
+        location_precision="rooftop",
+        operational_status="unknown",
+        status_verified=False,
+        is_official_actor=True,
+        is_partner=False,
+        is_bookable=False,
+        booking_mode="information_only",
+        quality_score=1.0,
+        requires_manual_review=False,
+        created_at=now,
+        updated_at=now,
+    )
+    near = Site(
+        site_id="site-near-bga",
+        name="CDA Near Bucaramanga",
+        municipality="Bucaramanga",
+        raw_city="Bucaramanga",
+        municipality_code="68001",
+        lat=7.1193,
+        lng=-73.1227,
+        **base,
+    )
+    far = Site(
+        site_id="site-far-bogota",
+        name="CDA Far Bogota",
+        municipality="Bogota",
+        raw_city="Bogota",
+        municipality_code="11001",
+        lat=4.7110,
+        lng=-74.0721,
+        **base,
+    )
+    repo.apply_import(
+        import_run=ImportRun(
+            import_run_id="gps-bbox",
+            source_name="test",
+            input_filename="gps.json",
+            input_sha256="test",
+            started_at=now,
+            status="applied",
+        ),
+        entities=[entity],
+        sites=[near, far],
+        contacts=[],
+        source_records=[],
+        duplicate_candidates=[],
+    )
+
+    result = repo.search_nearest(
+        actor_type="CDA",
+        city=None,
+        municipality_code=None,
+        lat=7.1193,
+        lng=-73.1227,
+        limit=10,
+        radius_km=40,
+    )
+    assert result["match_scope"] == "gps"
+    assert [p["id"] for p in result["places"]] == ["site-near-bga"]
+    assert result["geocoded_candidates"] == 1
+    assert all(p["id"] != "site-far-bogota" for p in result["places"])
+
+
 def test_import_apply_idempotent(tmp_path: Path) -> None:
     rows = json.loads(RAW_ORIGINAL.read_text(encoding="utf-8"))
     # Use a small subset for speed but keep reconciliation logic on full set separately.

@@ -8,7 +8,7 @@ from dataclasses import asdict
 from datetime import datetime, timezone
 from typing import Any
 
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import and_, case, func, or_, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.engine import Engine
@@ -279,7 +279,6 @@ class CatalogSqlRepository:
 
     def catalog_summary(self) -> dict[str, Any]:
         with self.engine.begin() as conn:
-            sites = [dict(r) for r in conn.execute(select(places_sites)).mappings().all()]
             entities = conn.execute(select(func.count()).select_from(places_entities)).scalar_one()
             invalid_documents = conn.execute(
                 select(func.count())
@@ -296,29 +295,86 @@ class CatalogSqlRepository:
             latest = conn.execute(
                 select(places_import_runs).order_by(places_import_runs.c.started_at.desc()).limit(1)
             ).mappings().first()
-        by_type: dict[str, int] = {}
-        by_status: dict[str, int] = {}
-        for site in sites:
-            by_type[site["actor_type"]] = by_type.get(site["actor_type"], 0) + 1
-            by_status[site["operational_status"]] = by_status.get(site["operational_status"], 0) + 1
+            site_counts = conn.execute(
+                select(
+                    func.count().label("unique_sites"),
+                    func.coalesce(func.sum(_bool_as_int(places_sites.c.is_partner)), 0).label("partners"),
+                    func.coalesce(func.sum(_bool_as_int(places_sites.c.is_bookable)), 0).label("bookable"),
+                    func.coalesce(
+                        func.sum(
+                            _bool_as_int(
+                                and_(
+                                    places_sites.c.lat.is_not(None),
+                                    places_sites.c.lng.is_not(None),
+                                )
+                            )
+                        ),
+                        0,
+                    ).label("geocoded"),
+                    func.coalesce(
+                        func.sum(
+                            _bool_as_int(places_sites.c.geocode_status.in_(("not_attempted", "pending")))
+                        ),
+                        0,
+                    ).label("pending_geocoding"),
+                    func.coalesce(
+                        func.sum(_bool_as_int(places_sites.c.requires_manual_review)),
+                        0,
+                    ).label("manual_review"),
+                    func.coalesce(
+                        func.sum(
+                            _bool_as_int(places_sites.c.address_quality.in_(("invalid", "missing")))
+                        ),
+                        0,
+                    ).label("invalid_addresses"),
+                    func.coalesce(
+                        func.sum(
+                            _bool_as_int(
+                                or_(
+                                    places_sites.c.snapshot_presence == "absent",
+                                    places_sites.c.source_presence_status == "missing",
+                                )
+                            )
+                        ),
+                        0,
+                    ).label("absent_from_snapshot"),
+                    func.coalesce(
+                        func.sum(
+                            _bool_as_int(
+                                or_(
+                                    places_sites.c.snapshot_presence == "present",
+                                    places_sites.c.source_presence_status.in_(
+                                        ("present", "reappeared", "manually_preserved")
+                                    ),
+                                )
+                            )
+                        ),
+                        0,
+                    ).label("present_sites"),
+                ).select_from(places_sites)
+            ).mappings().one()
+            by_type = _grouped_counts(conn, places_sites.c.actor_type)
+            by_status = _grouped_counts(conn, places_sites.c.operational_status)
+            by_presence = _grouped_counts(conn, places_sites.c.source_presence_status)
         return {
             "source_records": int(source_records or 0),
             "unique_entities": int(entities or 0),
-            "unique_sites": len(sites),
+            "unique_sites": int(site_counts["unique_sites"] or 0),
             "by_actor_type": by_type,
             "by_operational_status": by_status,
-            "partners": sum(1 for s in sites if s["is_partner"]),
-            "bookable": sum(1 for s in sites if s["is_bookable"]),
-            "geocoded": sum(1 for s in sites if s["lat"] is not None and s["lng"] is not None),
-            "pending_geocoding": sum(1 for s in sites if s["geocode_status"] in {"not_attempted", "pending"}),
-            "manual_review": sum(1 for s in sites if s["requires_manual_review"]),
+            "by_source_presence_status": by_presence,
+            "partners": int(site_counts["partners"] or 0),
+            "bookable": int(site_counts["bookable"] or 0),
+            "geocoded": int(site_counts["geocoded"] or 0),
+            "pending_geocoding": int(site_counts["pending_geocoding"] or 0),
+            "manual_review": int(site_counts["manual_review"] or 0),
             "duplicate_candidates": int(dupes or 0),
-            "invalid_addresses": sum(1 for s in sites if s["address_quality"] in {"invalid", "missing"}),
+            "invalid_addresses": int(site_counts["invalid_addresses"] or 0),
             "invalid_phones": int(invalid_phones or 0),
             "invalid_documents": int(invalid_documents or 0),
-            "absent_from_snapshot": sum(
-                1 for s in sites if (s.get("snapshot_presence") or "present") == "absent"
-            ),
+            "absent_from_snapshot": int(site_counts["absent_from_snapshot"] or 0),
+            "missing": int(site_counts["absent_from_snapshot"] or 0),
+            "present_sites": int(site_counts["present_sites"] or 0),
             "latest_import": dict(latest) if latest else None,
             "source_updated_at": (latest or {}).get("source_updated_at") if latest else None,
             "snapshot_at": (latest or {}).get("snapshot_at") if latest else None,
@@ -335,19 +391,6 @@ class CatalogSqlRepository:
         limit: int,
         radius_km: float,
     ) -> dict[str, Any]:
-        with self.engine.begin() as conn:
-            stmt = select(places_sites).where(
-                places_sites.c.operational_status.notin_(list(EXCLUDED_STATUSES))
-            ).where(
-                or_(
-                    places_sites.c.snapshot_presence == "present",
-                    places_sites.c.snapshot_presence.is_(None),
-                )
-            )
-            if actor_type:
-                stmt = stmt.where(places_sites.c.actor_type == actor_type.upper())
-            rows = [dict(r) for r in conn.execute(stmt).mappings().all()]
-
         resolved_location = None
         match_scope = "none"
         no_results_reason = None
@@ -363,7 +406,20 @@ class CatalogSqlRepository:
                     "total_candidates": 0,
                     "geocoded_candidates": 0,
                 }
-            geo = [r for r in rows if r["lat"] is not None and r["lng"] is not None and is_colombia_latlng(float(r["lat"]), float(r["lng"]))]
+            latitude_delta = radius_km / 111.0
+            longitude_delta = radius_km / (111.0 * max(abs(math.cos(math.radians(lat))), 1e-6))
+            stmt = _searchable_sites_statement(actor_type).where(
+                places_sites.c.lat.is_not(None),
+                places_sites.c.lng.is_not(None),
+                places_sites.c.lat.between(lat - latitude_delta, lat + latitude_delta),
+                places_sites.c.lng.between(lng - longitude_delta, lng + longitude_delta),
+            )
+            with self.engine.begin() as conn:
+                geo = [dict(row) for row in conn.execute(stmt).mappings().all()]
+            geo = [
+                row for row in geo
+                if is_colombia_latlng(float(row["lat"]), float(row["lng"]))
+            ]
             ranked = []
             for row in geo:
                 distance = _haversine(lat, lng, float(row["lat"]), float(row["lng"]))
@@ -385,18 +441,19 @@ class CatalogSqlRepository:
 
         # Municipality search — NO national fallback
         city_norm = (city or "").strip().lower()
-        filtered = rows
         if municipality_code:
-            filtered = [r for r in rows if (r.get("municipality_code") or "") == municipality_code]
+            stmt = _searchable_sites_statement(actor_type).where(
+                places_sites.c.municipality_code == municipality_code
+            )
             match_scope = "municipality_code"
             resolved_location = {"municipality_code": municipality_code}
         elif city_norm:
-            filtered = [
-                r
-                for r in rows
-                if (r.get("municipality") or "").strip().lower() == city_norm
-                or (r.get("raw_city") or "").strip().lower() == city_norm
-            ]
+            stmt = _searchable_sites_statement(actor_type).where(
+                or_(
+                    func.lower(places_sites.c.municipality) == city_norm,
+                    func.lower(places_sites.c.raw_city) == city_norm,
+                )
+            )
             match_scope = "municipality_name"
             resolved_location = {"city": city}
         else:
@@ -410,6 +467,8 @@ class CatalogSqlRepository:
                 "geocoded_candidates": 0,
             }
 
+        with self.engine.begin() as conn:
+            filtered = [dict(row) for row in conn.execute(stmt).mappings().all()]
         if not filtered:
             return {
                 "places": [],
@@ -574,6 +633,39 @@ def _haversine(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
         + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlng / 2) ** 2
     )
     return radius * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def _bool_as_int(condition):
+    """Portable conditional count expression for SQLite and PostgreSQL."""
+    return case((condition, 1), else_=0)
+
+
+def _grouped_counts(conn, column) -> dict[str, int]:
+    rows = conn.execute(
+        select(column, func.count()).select_from(places_sites).group_by(column)
+    ).all()
+    return {str(value): int(count) for value, count in rows if value is not None}
+
+
+def _searchable_sites_statement(actor_type: str | None):
+    """Return the shared SQL eligibility filter for municipality and GPS search."""
+    stmt = (
+        select(places_sites)
+        .where(places_sites.c.operational_status.notin_(list(EXCLUDED_STATUSES)))
+        .where(
+            or_(
+                places_sites.c.source_presence_status.in_(
+                    ("present", "reappeared", "manually_preserved")
+                ),
+                places_sites.c.snapshot_presence == "present",
+                places_sites.c.source_presence_status.is_(None),
+                places_sites.c.snapshot_presence.is_(None),
+            )
+        )
+    )
+    if actor_type:
+        stmt = stmt.where(places_sites.c.actor_type == actor_type.upper())
+    return stmt
 
 
 def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = None) -> dict[str, Any]:
