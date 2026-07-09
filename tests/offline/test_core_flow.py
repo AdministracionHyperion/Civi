@@ -67,9 +67,29 @@ class FakePlacesClient:
                     "name": "CDA Bucaramanga",
                     "address": "Cra 1 # 2-3",
                     "city": city or "Bucaramanga",
+                    "department": "Santander",
+                    "kind": "CDA",
                     "distance_km": 2.5,
+                    "is_bookable": True,
+                    "booking_mode": "civi",
+                    "is_partner": True,
                 }
             ]
+        }
+
+
+class FakePlacesEligibilityClient:
+    async def booking_eligibility(self, site_id: str) -> dict[str, object]:
+        return {
+            "site_id": site_id,
+            "exists": True,
+            "is_partner": True,
+            "is_bookable": True,
+            "booking_mode": "civi",
+            "operational_status": "unknown",
+            "canonical_name": "CDA Bucaramanga",
+            "canonical_address": "Cra 1 # 2-3",
+            "canonical_city": "Bucaramanga",
         }
 
 
@@ -115,6 +135,7 @@ class LocalAppointmentClient:
             ),
             notification_client=LocalReminderClient(event_publisher=self._event_publisher),
             event_publisher=self._event_publisher,
+            places_client=FakePlacesEligibilityClient(),
         )
         return response.model_dump()
 

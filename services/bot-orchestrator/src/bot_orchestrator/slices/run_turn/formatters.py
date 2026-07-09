@@ -287,7 +287,7 @@ def format_place_response(place: dict[str, object]) -> str:
     distancia = _format_distance(place.get("distance_km"))
 
     lines = [
-        "Con la ubicacion que mandaste, esta es la opcion que mejor encaja:",
+        "Con la ubicacion que mandaste, esta es la opcion agendable que mejor encaja:",
         f"*{tipo}*",
         f"*{nombre}*",
     ]
@@ -298,6 +298,24 @@ def format_place_response(place: dict[str, object]) -> str:
     if distancia:
         lines.append(f"Distancia: {distancia}")
     lines.append("Te sirve o buscamos otra opcion?")
+    return "\n".join(lines)
+
+
+def format_informative_places_response(places: list[dict[str, object]]) -> str:
+    lines = [
+        "Encontre centros oficiales de referencia, pero *Civi no puede confirmar una cita* en ellos porque no son aliados agendables.",
+    ]
+    for idx, place in enumerate(places[:3], start=1):
+        nombre = str(place.get("name") or "").strip() or "Centro"
+        ciudad = str(place.get("city") or "").strip()
+        direccion = str(place.get("address") or "").strip()
+        tipo = _tipo_label(place)
+        lines.append(f"{idx}. *{tipo}* {nombre}")
+        if direccion:
+            lines.append(f"   Direccion: {direccion}")
+        if ciudad:
+            lines.append(f"   Ciudad: {ciudad}")
+    lines.append("Si quieres, buscamos un aliado donde si podamos agendar por Civi.")
     return "\n".join(lines)
 
 

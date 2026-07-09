@@ -1,0 +1,50 @@
+{
+  "import_run_id": "10891f34-9256-4ea8-8d4d-ad539c9cf46f",
+  "input_sha256": "457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634",
+  "source_records": 4107,
+  "unique_entities": 3293,
+  "unique_sites": 4044,
+  "by_actor_type": {
+    "CDA": 985,
+    "CEA": 1541,
+    "CIA": 724,
+    "CRC": 794
+  },
+  "by_operational_status": {
+    "unknown": 4038,
+    "retired": 6
+  },
+  "partners": 0,
+  "bookable": 0,
+  "geocoded": 0,
+  "pending_geocoding": 3974,
+  "insufficient_address": 70,
+  "manual_review": 1980,
+  "duplicate_candidates": 2815,
+  "merged_duplicates": 59,
+  "invalid_addresses": 2,
+  "partial_addresses": 280,
+  "valid_addresses": 3762,
+  "valid_phones": 3882,
+  "invalid_phones": 169,
+  "valid_documents": 3264,
+  "invalid_documents": 29,
+  "reconciliation": {
+    "input_rows": 4107,
+    "source_records": 4107,
+    "by_processing_status": {
+      "imported_as_site": 4042,
+      "merged_duplicate": 59,
+      "pending_review": 6
+    },
+    "unique_entities": 3293,
+    "unique_sites": 4044,
+    "merged_duplicates": 59,
+    "duplicate_candidates": 2815,
+    "rejected": 0,
+    "sum_check": 4107,
+    "sum_matches_input": true
+  },
+  "source_updated_at": null,
+  "snapshot_at": "2026-07-09T22:59:55.000079+00:00"
+}

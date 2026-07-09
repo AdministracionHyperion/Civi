@@ -216,7 +216,10 @@ services:
       PLACES_REPOSITORY_MODE: ${PLACES_REPOSITORY_MODE:-sql}
       PLACES_DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
       PLACES_AUTO_CREATE_SCHEMA: ${PLACES_AUTO_CREATE_SCHEMA:-true}
-      PLACES_AUTO_SEED_CATALOG: ${PLACES_AUTO_SEED_CATALOG:-true}
+      PLACES_BOOTSTRAP_MODE: ${PLACES_BOOTSTRAP_MODE:-none}
+      PLACES_AUTO_SEED_CATALOG: ${PLACES_AUTO_SEED_CATALOG:-false}
+      PLACES_SEARCH_RADIUS_KM: ${PLACES_SEARCH_RADIUS_KM:-40}
+      PLACES_GEOCODING_MODE: ${PLACES_GEOCODING_MODE:-disabled}
     depends_on:
       postgres:
         condition: service_healthy
@@ -235,6 +238,7 @@ services:
       PORT: 8086
       INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:?INTERNAL_SERVICE_TOKEN is required}
       NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      PLACES_SERVICE_URL: http://places-service:8085
       APPOINTMENT_REPOSITORY_MODE: ${APPOINTMENT_REPOSITORY_MODE:-sql}
       APPOINTMENT_DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
       APPOINTMENT_AUTO_CREATE_SCHEMA: ${APPOINTMENT_AUTO_CREATE_SCHEMA:-true}
@@ -247,6 +251,8 @@ services:
       redis:
         condition: service_started
       notification-service:
+        condition: service_started
+      places-service:
         condition: service_started
 
   notification-service:

@@ -1,0 +1,1412 @@
+[
+  {
+    "site_id": "site-prov-cda-pd-bomba-la-posesion-ver-2f1a0dcb7db1",
+    "address_raw": "PD. BOMBA LA POSESION VEREDA LAS COLONIAS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-envigado-antioquia-3259eb0b23e7",
+    "address_raw": "Envigado, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-cll28-36-123-99622e1c15b3",
+    "address_raw": "CLL28#36-123",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-medellin-antioquia-ebffa1ace67e",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-sabaneta-antioquia-8f2cc47cef17",
+    "address_raw": "Sabaneta, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-cir-13-24-local-7-4db091b48961",
+    "address_raw": "CIR 13 24 LOCAL 7",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-santa-rosa-de-osos-antio-0705f95d359c",
+    "address_raw": "Santa Rosa De Osos, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-bolombolo-sector--c5acf981cdaa",
+    "address_raw": "VEREDA BOLOMBOLO-SECTOR LA COQUERA-LOTE B",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-arauca-arauca-2df9e635fa20",
+    "address_raw": "Arauca, Arauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-57-r-sur-74-g-15-fea1b5ab0b27",
+    "address_raw": "AC 57 R SUR # 74 G 15",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-6-41a-40-y-ac-6-41c-0-a42e8a7ced96",
+    "address_raw": "AC 6 NO 41A - 40 Y AC 6 NO 41C - 08",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-6-n-16-60-d10778743812",
+    "address_raw": "AC 6 N° 16-60",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-bogota-bogota-d-c-779aaf552d0d",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-comercial-ac-17-81b-29-1237ea9eb8d3",
+    "address_raw": "COMERCIAL AC 17 NO 81B 29",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-71-sur-3a-83-ce76a60c85fe",
+    "address_raw": "AC 71 SUR # 3A-83",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-26-sur-68-f-54-6ee0197f082d",
+    "address_raw": "AC 26 SUR # 68 F - 54",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-bogota-bogota-d-c-d8455f640291",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-22-34-63-57-0ce14e298b75",
+    "address_raw": "AC 22 34 63 /57",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-bogota-bogota-d-c-1abbb5281ad1",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-57-r-sur-64-88-68-98-395cd857a244",
+    "address_raw": "AC 57 R SUR 64 - 88 / 68 / 98",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-ac-9-50-15-local-e-1114--6fd80c36b861",
+    "address_raw": "AC 9 # 50-15 LOCAL E 1114 LOCAL C 1056 Y LOCAL C 1054",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-bogota-bogota-d-c-9694e175c8d9",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-bogota-bogota-d-c-9bef34232d92",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-carretera-la-cordialidad-6c8ab993e6fe",
+    "address_raw": "CARRETERA LA CORDIALIDAD SECTOR DOÑA MANUELA CONTIGUO AL TERMINAL",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-urbanizacion-portal-de-l-1f9a65c1f1c6",
+    "address_raw": "URBANIZACION PORTAL DE LA TERMINAL MZ AD 41H NO 74 66",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-cartagena-bolivar-fe6d4d8f18e6",
+    "address_raw": "Cartagena, Bolivar",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-cartagena-bolivar-8aad762b314c",
+    "address_raw": "Cartagena, Bolivar",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-c-31-48a-11-91e356f95186",
+    "address_raw": "C 31 48A-11",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-llave-de-oro-lote-b6b-e6a1f84f67d8",
+    "address_raw": "LLAVE DE ORO LOTE B6B",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vrd-san-onofre-lote-3-f4bcc8b5480e",
+    "address_raw": "VRD SAN ONOFRE LOTE 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-duitama-boyaca-858e21b4e732",
+    "address_raw": "Duitama, Boyaca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-llano-grande-finc-c5378b1c92b0",
+    "address_raw": "VDA LLANO GRANDE FINCA BELLA VISTA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-tunja-boyaca-287d3347de32",
+    "address_raw": "Tunja, Boyaca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-vereda-san-onofre-c95c0fe0ce6a",
+    "address_raw": "VEREDA SAN ONOFRE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-manizales-caldas-cbcdd7939de4",
+    "address_raw": "Manizales, Caldas",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-antigua-piscina-puente-s-d13403e1fcee",
+    "address_raw": "ANTIGUA PISCINA- PUENTE SALIDA VILLAMARIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-centro-empresarial-agora-9fead1aace6f",
+    "address_raw": "CENTRO EMPRESARIAL AGORAA BODEGA 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-centro-de-diagnostico-au-59ca36936ab0",
+    "address_raw": "CENTRO DE DIAGNOSTICO AUTOMOTOR YARI ZOMAC SAS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-k-20-35-67-c-36-20-15-el-5ee06b76fbc8",
+    "address_raw": "K 20 35 67 C 36 20 15 - EL 20 DE JULIO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-la-carolina-via-piendamo-2aa2ca2343eb",
+    "address_raw": "LA CAROLINA VIA PIENDAMO MORALES VEREDA LA FLORIDA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-parque-industrial-el-cof-f6a93b143ef3",
+    "address_raw": "PARQUE INDUSTRIAL EL COFRE CENTRO POBLADO DE SAN JOSE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-monteria-cordoba-c3c07e37b975",
+    "address_raw": "Monteria, Cordoba",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-crr-9-a-21-31-a400366b30c4",
+    "address_raw": "CRR 9 A # 21-31",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-cerca-de-piedra-s-8c0a12d16d6b",
+    "address_raw": "VEREDA CERCA DE PIEDRA SECTOR LA RUANA PREDIO CHEOUX",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-susagua-parte-baj-b0bd5ad0ac8e",
+    "address_raw": "VEREDA SUSAGUA PARTE BAJA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-siberia-auto-mede-5034555dd534",
+    "address_raw": "VEREDA SIBERIA AUTO MEDELLIN CENTRO EMPRESARIAL LOS ROBLES",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-cra9-25-65-cra12-25-72-aae5a7eccea6",
+    "address_raw": "CRA9#25-65/ CRA12#25-72",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-la-aurora-lt-la-c-781f3103ac06",
+    "address_raw": "VDA LA AURORA LT LA CORRALEJA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-cda-de-la-terminal-de-tr-8eaaf6c726d7",
+    "address_raw": "CDA DE LA TERMINAL DE TRANSPORTES DE GIRARDOT S.A.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-girardot-cundinamarca-1229dd9ff90d",
+    "address_raw": "Girardot, Cundinamarca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-mosquera-cundinamarca-ba5e536bd28e",
+    "address_raw": "Mosquera, Cundinamarca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-lote-3b-9d55c4ecbb4f",
+    "address_raw": "LOTE #3B",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-villeta-cundinamarca-df0948ef15b1",
+    "address_raw": "Villeta, Cundinamarca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-zipaquira-cundinamarca-d2934d0873d0",
+    "address_raw": "Zipaquira, Cundinamarca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-400-metros-antes-del-ret-6c5ba365706d",
+    "address_raw": "400 METROS ANTES DEL RETEN LA FRAGUITA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-tranversal-8-a-37-114-f76d0ea5ae7b",
+    "address_raw": "TRANVERSAL 8 A # 37-114",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-neiva-huila-813aa4507e52",
+    "address_raw": "Neiva, Huila",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-acacias-meta-5990d5ca3cc3",
+    "address_raw": "Acacias, Meta",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-k-10-35-45-d06db2e67cd2",
+    "address_raw": "K 10 # 35-45",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-la-venturosa-pred-ab34474bd54c",
+    "address_raw": "VEREDA LA VENTUROSA PREDIO FILADELFIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-k-33-4-27-29-31-k34-24-3-8ab3a7559d20",
+    "address_raw": "K 33 # 4 27 29 31 K34 # 24 38 42 BRR SAN BENITO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-ipiales-narino-bd8fb41e0cd0",
+    "address_raw": "Ipiales, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-avenida-variante-sur-bar-7fc9d5f12820",
+    "address_raw": "AVENIDA VARIANTE SUR BARRIO PANAMERICANO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-pasto-narino-ed344b87dbbb",
+    "address_raw": "Pasto, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-pasto-narino-cd7abf504654",
+    "address_raw": "Pasto, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-terminal-emtur-barrio-po-450a6b867bbb",
+    "address_raw": "TERMINAL EMTUR BARRIO PORVENIR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-anillo-vial-oriental-13--06e465157ded",
+    "address_raw": "ANILLO VIAL ORIENTAL 13 70 CC JARDIN PLAZA UNIDAD COMERCIAL 7",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-cucuta-norte-de-santande-e1dc106704f5",
+    "address_raw": "Cucuta, Norte de Santander",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-parcela-7-lote-3-montevi-2578ea2c4a7a",
+    "address_raw": "PARCELA 7 LOTE 3 MONTEVIDEO BODEGA 4 FUERA DEL MUNICIPIO DEL EL ZULIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-pa-11-mi-tesoro-casa-val-982a6a77db57",
+    "address_raw": "PA 11 MI TESORO CASA VALE 1- FUERA DEL MUNICIPIO DE EL ZULIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-circunvalar-la-floresta--71cbabcb423a",
+    "address_raw": "CIRCUNVALAR LA FLORESTA 37 # 61 BARRIO DOCE OCTUBRE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-via-a-la-universidad-fra-605d18755ee0",
+    "address_raw": "VIA A LA UNIVERSIDAD FRANCISCO DE PAULA SANTANDER",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-mocoa-putumayo-055592c384b5",
+    "address_raw": "Mocoa, Putumayo",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-vereda-la-danta-carreter-79406f47c8f7",
+    "address_raw": "VEREDA LA DANTA CARRETERA CENTRAL DE PUERTO ASIS PASTO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-barbosa-santander-a8ffbabd4fcd",
+    "address_raw": "Barbosa, Santander",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-san-gil-santander-84a35ca2ba75",
+    "address_raw": "San Gil, Santander",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-c-28-n-23-60-lo-3a-93105a1ad133",
+    "address_raw": "C 28 N 23-60 LO 3A",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-car-70-1-03-2e7c3e5aa71e",
+    "address_raw": "CAR 70 NO 1-03",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-a-2b-28-n-37-f9649a8cbca8",
+    "address_raw": "A 2B # 28 N 37",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cda-cali-valle-del-cauca-e7947a6a75cf",
+    "address_raw": "Cali, Valle del Cauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-lt-5-finca-veracruz-lt-d-c4ebf3fac7ca",
+    "address_raw": "LT NO. 5 FINCA VERACRUZ LT DE TERRERO DEL MUNICIPIO DE CANDELARIA VALLE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-variante-sec-del-cedro-s-ad19d8d4f32f",
+    "address_raw": "VARIANTE SEC. DEL CEDRO SANTA ANA LOTE 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-crt-central-en-norte-de--416bf49fbfc7",
+    "address_raw": "CRT CENTRAL EN NORTE DE LA CIUDAD",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-lote-3-condominio-la-uni-d3917324ca82",
+    "address_raw": "LOTE 3 CONDOMINIO LA UNION",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cda-roldanillo-valle-del-cau-1216551cc626",
+    "address_raw": "Roldanillo, Valle del Cauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-car-103-98-09-barrio-ort-c4f851c7212e",
+    "address_raw": "CAR 103 98 09 BRR ORTIZ",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-call51-45-60-2fda67284f94",
+    "address_raw": "CALL51 NUM 45 -60",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-calle52no-47-69-cb245773d233",
+    "address_raw": "CALLE52NO 47 69",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-medellin-antioquia-43f041bd4890",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-medellin-antioquia-c80b5574ddb4",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-trasversal-42-65d-21-3f58b050e638",
+    "address_raw": "TRASVERSAL 42 65D 21",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-circular-2-73-22-094817ef50da",
+    "address_raw": "CIRCULAR 2 NO 73 22",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-medellin-antioquia-5e4304364802",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-medellin-antioquia-7b8be8831402",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-medellin-antioquia-0a48bd31694e",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-cll55-46-13-oficina-201-1de961fd7c8d",
+    "address_raw": "CLL55#46-13 OFICINA 201",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-crr-47-61-47-p-2-97f6f6a06620",
+    "address_raw": "CRR 47 # 61 47 P 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-carrera-la-pola-8d8e07c1c2ec",
+    "address_raw": "CR LA POLA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-clle-14-19-28-50d291418ed6",
+    "address_raw": "CLLE 14 NRO 19-28",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-cr27-68-4-640018166cc7",
+    "address_raw": "CR27 NO 68-4",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-crr-38-74-112-3e8128ded5a3",
+    "address_raw": "CRR 38 # 74-112",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-cll10-20-30-6961939fdf83",
+    "address_raw": "CLL10 # 20-30",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-lote-9b2-local-b-2-c015f938f18f",
+    "address_raw": "LOTE 9B2 LOCAL B-2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-cr79no41c39-sur-70263bf05d7b",
+    "address_raw": "CR79Nº41C39 SUR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-avenida15-114-09-de4b286e54ab",
+    "address_raw": "AV.15 NO. 114-09",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-bogota-bogota-d-c-78274eaf8afa",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-transv-44-49-60-sur-606146431cd2",
+    "address_raw": "TRANSV 44 # 49-60 SUR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-145-101-12-locales-10-643efada484c",
+    "address_raw": "AC 145# 101-12 LOCALES 10 Y 11",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-24-40-28-p2-16cc76d50abd",
+    "address_raw": "AC 24 40 28 P2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-145-n-91-19-lc-3-110-c7de61d48b73",
+    "address_raw": "AC 145 N 91 19 LC 3 110",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-trasv-18-bis-14-36-sur-p-6e0df09f2311",
+    "address_raw": "TRASV. 18 BIS 14 - 36 SUR PISO 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-bogota-bogota-d-c-7eec8e3dd562",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-clll-129-54-48-40eee3d80910",
+    "address_raw": "CLLL 129 NO 54-48",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-26-sur-69-a-45-piso-2-fe14845e8e5f",
+    "address_raw": "AC 26 SUR # 69 A - 45 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-bogota-bogota-d-c-6e9981173bc5",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-45-a-sur-53-69-local--5dca9054226a",
+    "address_raw": "AC 45 A SUR # 53 - 69 LOCAL 71",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-dig-49-sur-53-19-piso-2-23dc807fa9d9",
+    "address_raw": "DIG 49 SUR # 53 19 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-tranversal-60-49-40-sur--fac8e4ee80d5",
+    "address_raw": "TRANVERSAL 60 Nº 49 - 40 SUR PISO 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-80-70-f-09-piso-2-7c3ea4cb93de",
+    "address_raw": "AC 80 NO. 70 F - 09 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-26-sur-68-d-23-pi-2-397ae93e7a93",
+    "address_raw": "AC 26 SUR # 68 D 23 PI 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-12-81d-38-piso-3-7f5b03b22158",
+    "address_raw": "AC 12 # 81D-38 PISO 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-45-a-sur-52-c-10-p-3-76652c525f21",
+    "address_raw": "AC 45 A SUR # 52 C 10 P 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-k-71-d-n-8-20-sur4-p-lc--c912c13ad879",
+    "address_raw": "K 71 D N° 8-20 SUR4 P LC F 02",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-ac-86-n-6-37-local-223-4b3bde37f47e",
+    "address_raw": "AC 86 N 6-37 LOCAL 223",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-bogota-bogota-d-c-c631cb9a28b4",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-blas-de-lezo-m-11-t-casa-07624c792441",
+    "address_raw": "BLAS DE LEZO M. 11 T CASA N? 20 ETAPA 4A.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-urbanizacion-san-pedro-m-cf1740dbff29",
+    "address_raw": "URBANIZACION SAN PEDRO MANZANA LOTE 10 LOTE 7",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-manga-primer-callejon-ca-25aa8070f071",
+    "address_raw": "MANGA PRIMER CALLEJON CRA.18A # 26-179 APTO 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-transv-45-21-a-09-local--8f05eb49f559",
+    "address_raw": "TRANSV 45 NRO 21 A 09 LOCAL 4",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-mz-f-lt-17-los-corales-d36c3bf5a5e7",
+    "address_raw": "MZ F LT 17 LOS CORALES",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-71-b-31-a-8-barrio-la-co-aeae7c85b044",
+    "address_raw": "71 B - 31 A - 8 BARRIO LA CONCEPCION",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-mz-4-lt-2-piso-2-br-san--c4ff6fcddf96",
+    "address_raw": "MZ 4 LT 2 PISO 2 BR SAN PEDRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-mz-10-lote-7-piso-2-4e66e34d54fa",
+    "address_raw": "MZ 10 LOTE 7 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-manzana-12-15-piso-1-apa-d9ff7b7f415c",
+    "address_raw": "MANZANA # 12 - 15 PISO 1 APARTAMENTO 1 SECTOR 5 URBANIZACION VILLA GRANDE DE INDIAS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-lt-herederos-daza-cubide-8913da43d9f1",
+    "address_raw": "LT HEREDEROS DAZA CUBIDES MZ G LT 8",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-transv-36-21-14-barrio-a-019a45c86782",
+    "address_raw": "TRANSV 36 # 21 14 BARRIO ALTAMIRA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-puerto-boyaca-boyaca-e720fbf56950",
+    "address_raw": "Puerto Boyaca, Boyaca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-antigua-k-6-37-12-l-2-ac-aefd6bd613e4",
+    "address_raw": "ANTIGUA K 6 37 12 L 2 ACTUAL K 6 37 108",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-clle-13-6-37-41-centro-af4bc5468031",
+    "address_raw": "CLLE 13 6 37/41 - CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-k-5-3e-16-82e8b4279867",
+    "address_raw": "K 5 NO 3E 16",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-manzana-7-lote-nro2-barr-bf4352fb279d",
+    "address_raw": "MANZANA 7 LOTE NRO2 BARRIO NUEVO TAMBO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-santander-de-quilichao-c-0d4fe51a7bb8",
+    "address_raw": "Santander De Quilichao, Cauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-valledupar-cesar-0da13b9d6bbe",
+    "address_raw": "Valledupar, Cesar",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-crr-11-13b-68-barrio-obr-1666191cfb0e",
+    "address_raw": "CRR 11 13B 68 BRR OBRERO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-b-san-diego-1de213f7e941",
+    "address_raw": "B/ SAN DIEGO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-calle55-6-44-b-la-castel-70b5e4168b72",
+    "address_raw": "CL.55 NRO. 6-44 B/ LA CASTELLANA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-manzana-a-casa-5-piso-2--1e793fe83ca7",
+    "address_raw": "MANZANA A CASA 5 PISO 2 BARRIO DIAMANTE POPULAR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-manzana-28-casa-8-barrio-c65627c779e0",
+    "address_raw": "MANZANA 28 CASA 8 BARRIO DIAMANTE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-cll18-9-23-piso2-c6f323601989",
+    "address_raw": "CLL18 9-23 PISO2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-crr-1-n-2-61-37e4e82d08c3",
+    "address_raw": "CRR 1 N 2 61",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-vereda-la-cabrera-parte--3c5ff533b0c3",
+    "address_raw": "VEREDA LA CABRERA PARTE BAJA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-vereda-la-yeguera-predio-1c42a9a94ac9",
+    "address_raw": "VEREDA LA YEGUERA PREDIO DEMONIDA MANGASECA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-cll33-n5p-04-a8edd614ed8a",
+    "address_raw": "CLL33 N5P-04",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-car-16-17-53-c61a211effb6",
+    "address_raw": "CAR 16#17-53",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-calle12-12-06-bar-centro-fa3d93418a19",
+    "address_raw": "CALLE12 # 12-06 BAR CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-santa-marta-magdalena-5492858b7ac7",
+    "address_raw": "Santa Marta, Magdalena",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-tranv-37a-24a-168-170-17-d7f72e5c6fd4",
+    "address_raw": "TRANV 37A #24A-168-170-174 OFICINA 201 Y 202 BARRIO SAN BENITO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-ipiales-narino-9e932fb9611d",
+    "address_raw": "Ipiales, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-ipiales-las-cruces-narin-07935952733c",
+    "address_raw": "Ipiales - Las Cruces, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-mz-c-cs-9-urbanizacion-p-cd686f9e4584",
+    "address_raw": "MZ C CS 9 URBANIZACION PRADOS DE SAN NICOLAS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-call9-0-14-p1-p2-barrio--85a0f4f39427",
+    "address_raw": "CALL9 0-14 P1-P2 BARRIO LATINO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-centro-comercial-bolivar-3f79ecf28c05",
+    "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL E-8 SAN MATEO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-bodega-4-modulo-3-nueva--a25c680c4bd9",
+    "address_raw": "BODEGA 4 MODULO 3 NUEVA SEXTA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-cc-bolivar-local-c-12-ba-f6d6d439fb19",
+    "address_raw": "CC BOLIVAR LOCAL C 12 BARRIO SAN MATEO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-centro-comercial-bolivar-61489728d95a",
+    "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL E7",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-kra10-n19a-75-villa-del--ecf320cf1225",
+    "address_raw": "KRA10 N19A-75 VILLA DEL RIO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-clle-26-17-45-f9f6fe08098d",
+    "address_raw": "CLLE 26 17-45",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-clle-10-n-9-42-a6115723a725",
+    "address_raw": "CLLE 10 N 9- 42",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-trasversal-6-8-48-e0fd695ccf8d",
+    "address_raw": "TRASVERSAL 6 NO 8-48",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-trnsversal-7-n-554-centr-ea90feff3bbc",
+    "address_raw": "TRNSVERSAL 7 N. 554 CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-tvs-7-n-5-56-757a93742b58",
+    "address_raw": "TVS 7 N 5-56",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-manzana-12-casa-19-del-b-3e7cfc0cf9f0",
+    "address_raw": "MANZANA 12 CASA 19 DEL BARRIO SAN FERNANDO DE CUBA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-calle18-12-27-c77b5510a685",
+    "address_raw": "CALLE18 NO 12 27",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-calle18-14-50-66243637ad56",
+    "address_raw": "CALLE18 #14 - 50",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-carrera4-n-16-20-b1422470448e",
+    "address_raw": "CRA.4 N. 16-20",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-boulevar-bolivar-25-71-l-fa9122c70b0d",
+    "address_raw": "BOULEVAR BOLIVAR # 25 - 71 LOCAL 101",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-aut-floridablanca-147-78-b225e1b8ad1d",
+    "address_raw": "AUT FLORIDABLANCA 147 78 LC 15 ETAPA I CONJUNTO MULTIF CERROS CAMPESTRE PH",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-carrere-23-n-36-24-giron-e603e756a737",
+    "address_raw": "CARRERE 23 N 36 24 GIRÓN (SANTANDER)",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-mz-c-6-ca-5-sec-1-urb-ri-c4307e0a770c",
+    "address_raw": "MZ C 6 CA 5 SEC 1 - URB RINCO PIEDRA PINTADA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-kr100-5-169ec-134b-3ba065422bb6",
+    "address_raw": "KR100 #5-169EC-134B",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-diagonal23-10b-80-piso-2-12542f755f55",
+    "address_raw": "DIAG.23 NO. 10B-80 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cea-cali-valle-del-cauca-4c3ea4f8937b",
+    "address_raw": "Cali, Valle del Cauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-carr-14-14-05-cb6d89bffd1e",
+    "address_raw": "CARR 14 NRO 14 - 05",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-clle-94-8a-29-juanchito-0a41197c8ccd",
+    "address_raw": "CLLE 94 8A 29 JUANCHITO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-carrera49-47-68-5bdd7fbbf2ba",
+    "address_raw": "CARRERA49#47-68",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cea-carr-31-24-70-40ca08a518c8",
+    "address_raw": "CARR 31 24-70",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cra50-n100b-sur-360-f7a3a786fbba",
+    "address_raw": "CRA50 N100B SUR 360",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-calle49-48-b-98-local-20-10d22e561263",
+    "address_raw": "CALLE49 # 48 B 98 LOCAL 202",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-cra38-n74-324-f3a4c992344c",
+    "address_raw": "CRA38 N74-324",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-car-38-74-61-local-106-0a86e8929f2a",
+    "address_raw": "CAR 38 # 74-61 LOCAL 106",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-161-19-24-63eee56ffb92",
+    "address_raw": "AC 161 # 19 - 24",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-9-50-15-lc-c-218-salo-db5fb526ca3c",
+    "address_raw": "AC 9 50 15 LC C 218 SALON SANTANDER SALON DORADO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-k46-128-c-57-of-202-4e3b193e127c",
+    "address_raw": "K46 128 C 57 OF 202",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-clle-22-sur-n-29-b-38-lo-e700293dd7bc",
+    "address_raw": "CLLE 22 SUR N 29 B 38 LOC 301",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-26-sur-69-a-45-piso-3-274b78ebe211",
+    "address_raw": "AC 26 SUR # 69 A-45 PISO 3",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-carrera13-65c-58sur-lc14-ab3bd34fa891",
+    "address_raw": "CARRERA13 #65C -58SUR LC148-164-166",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-28-19b-87-ed-uransa1--51117330da57",
+    "address_raw": "AC 28 # 19B - 87 ED URANSA1 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-aven-145-n101-12-lc-1-et-b8dcc6a54bcc",
+    "address_raw": "AVEN 145 N101 12 LC 1 ET 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-19-28-80-lc-d01b-piso-be63ee05d7b2",
+    "address_raw": "AC 19 # 28 - 80 LC D01B PISO 4",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-145-101-12-lc-332a-33-fc1ee3641490",
+    "address_raw": "AC 145#101 12 LC 332A 332B",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-ac-1-25-a-30-efbba128d23f",
+    "address_raw": "AC 1 25 A 30",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-carretera-troncal-de-occ-16244cf9ad7e",
+    "address_raw": "CARRETERA TRONCAL DE OCCIDENTE K 46 # 57-160",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-centro-comercial-ronda-r-029ffe92f2dd",
+    "address_raw": "CENTRO COMERCIAL RONDA REAL LOCAL 141",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cc-la-dorada-plaza-local-7adfe1d554a9",
+    "address_raw": "CC LA DORADA PLAZA LOCAL S 201 - 7 CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-crr-2-22cn-127-local-2-53759406dff0",
+    "address_raw": "CRR 2 NRO.22CN-127 LOCAL 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-kra17-n-7-69-barrio-vale-040df5f692c1",
+    "address_raw": "KRA17 N°7-69 BARRIO VALENCIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-clle-5-10-57-7fe9ff377b50",
+    "address_raw": "CLLE 5 # 10-57",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-mercabasto-bloque-admini-26eb748e54ae",
+    "address_raw": "MERCABASTO BLOQUE ADMINISTRATIVO LOCAL COMERCIAL 5",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-carerra-11-15-41-local-2-36728db34503",
+    "address_raw": "CARERRA 11 # 15-41 LOCAL 2 BARRIO LOPERENA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-centro-comercial-local-2-a7da421c81aa",
+    "address_raw": "CENTRO COMERCIAL LOCAL 25 MALL COMERCIAL MERIDIANO COTA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-mz-b-ca-18-lc-101-barrio-5876a5776f6a",
+    "address_raw": "MZ B CA 18 LC 101 BRR DIAMANTE POPULAR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-disgonal-7-n-14a-66-barr-b1745c5410d1",
+    "address_raw": "DISGONAL 7 N. 14A 66 BARRIO CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-tras-7-16-a-68-oficina-2-1fed19db3307",
+    "address_raw": "TRAS 7 NO. 16 A 68 OFICINA 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-carrera6-6-38-piso-2-932deec3109c",
+    "address_raw": "CRA.6 NO.6-38 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-el-banco-cl9-12-78-barri-4f7e8fe00cc8",
+    "address_raw": "EL BANCO CL9 #12 -78 BRR EL HUERTO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-cl41-31-17-local-32a-fbef84b8bb8e",
+    "address_raw": "CL41 #31-17 LOCAL 32A",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cll15-a-31-41-local-101--86af6149466e",
+    "address_raw": "CLL15 A NO 31-41 LOCAL 101 BACHUE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-pasto-narino-c5ef8f4d41f7",
+    "address_raw": "Pasto, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-cl18-19-55-piso-2-centro-846acd395960",
+    "address_raw": "CL18 19 55 PISO 2- CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-pasto-narino-e4d3b4efaf08",
+    "address_raw": "Pasto, Narino",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-b-porvenir-casa-5-n-3-06-25f85f0dbe53",
+    "address_raw": "B/PORVENIR CASA 5 N: 3-06",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-centro-comercial-bolivar-850f6c3ae85a",
+    "address_raw": "CENTRO COMERCIAL BOLIVAR LC # 2 SAN LUIS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-calle8-3-67-piso-2-8ab4a2ab0a2d",
+    "address_raw": "CALLE8 #3-67 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-cl62-17e-103-piso-2-1541603d8b7b",
+    "address_raw": "CL62 #17E -103 PISO 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-cia-avda-la-rosita-25-53-pis-513bfc45868b",
+    "address_raw": "AVDA LA ROSITA # 25-53 PISO DOS BARRIO BOLIVAR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cl3a-8-151local-4-segund-33f8e672041d",
+    "address_raw": "CL3A #8-151LOCAL 4 SEGUNDO NIVEL",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-ac-12-a-15-107-lc-24-6ada2e0dd25f",
+    "address_raw": "AC 12 A 15 107 LC 24",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cll9-8-50-34b8da8c2ff2",
+    "address_raw": "CLL9 8-50",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-cc-llano-grande-local-20-3cf7b56d9431",
+    "address_raw": "CC LLANO GRANDE LOCAL 206-207-211",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-cia-c-10-8-81-1ec34f9e1a39",
+    "address_raw": "C 10 8-81",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-medellin-antioquia-b2eb0a29d951",
+    "address_raw": "Medellin, Antioquia",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-clle-23-19-42-fd17ef2247c3",
+    "address_raw": "CLLE 23 NRO 19-42",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-barranquilla-atlantico-e5efbdd1b588",
+    "address_raw": "Barranquilla, Atlantico",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-barranquilla-atlantico-c50ef4f696c6",
+    "address_raw": "Barranquilla, Atlantico",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-arrera-47-84-27-lo-12-13-dda3976300e1",
+    "address_raw": "ARRERA 47 # 84 - 27 LO 12 13 14",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-carrrea-46-39-04-22c67be337ee",
+    "address_raw": "CARRREA 46 # 39-04",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-26-sur-69-a-45-piso-1-6f6127a59c89",
+    "address_raw": "AC 26 SUR NO 69 A - 45 PISO 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-68-20-41-piso-2-ofici-307dd4ffa32e",
+    "address_raw": "AC 68 # 20-41 PISO 2 OFICINA 201",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-bogota-bogota-d-c-1dbd0f13defb",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-26-sur-69-a-31-pi-2-046bb3b61d6b",
+    "address_raw": "AC 26 SUR # 69 A - 31 PI 2",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-145-101-12-lc-5-9e8c4459043e",
+    "address_raw": "AC 145 # 101 - 12 LC 5",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-13-25-48-int-4-21c95facc421",
+    "address_raw": "AC 13 # 25 - 48 INT 4",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-28-29-b-91-378d3bd3e0a2",
+    "address_raw": "AC 28 NO 29 B 91",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-bogota-bogota-d-c-7cabf56fdcf4",
+    "address_raw": "Bogota, Bogota D.C.",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-45-a-sur-59-14-p-1-475d4ae7df4d",
+    "address_raw": "AC 45 A SUR NO 59 14 P 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-68-23-63-pi-1-6626c027abde",
+    "address_raw": "AC 68 23-63 PI 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-161-19-36-lc-40179b07897f",
+    "address_raw": "AC 161 NO 19 36 LC",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-calle14-sur-22-27-0b8129c9b826",
+    "address_raw": "CALLE14 SUR 22 27",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-28-19-b-87-p1-lc-101-c0a16ed2945a",
+    "address_raw": "AC 28 NO 19 B 87 P1 LC 101",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-traversal-35-n-32-b-36-s-b98ea98c1863",
+    "address_raw": "TRAVERSAL 35 N 32 B 36 SUR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-161-20-18-piso-1-entr-9cb04680018d",
+    "address_raw": "AC 161 NRO 20-18 PISO 1 ENTRADA 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-68-23-63-01c2ff9b5738",
+    "address_raw": "AC 68 NO 23 63",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac-13-8-a-44-of-801-7a4396cc7681",
+    "address_raw": "AC 13 # 8 A 44 OF 801",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-ac134-55-32-local-s1-l-1-4d64830945bd",
+    "address_raw": "AC134-55-32 LOCAL S1 L 1",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-d-31-54-71-local-1a-barr-0761de5de406",
+    "address_raw": "D 31 # 54-71 LOCAL 1A BRR. S. LUCIA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-manzana-10-lote-7-san-pe-8715ed651e5b",
+    "address_raw": "MANZANA 10 LOTE 7 SAN PEDRO CARTAGENA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-carretera-troncal-de-occ-cc0cb4d09526",
+    "address_raw": "CARRETERA TRONCAL DE OCCIDENTE N° 13A 62 CAMPO ALEGRE",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-chiquinquira-boyaca-b16b690643b8",
+    "address_raw": "Chiquinquira, Boyaca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-0-949fb000cd97",
+    "address_raw": "0",
+    "address_quality": "invalid"
+  },
+  {
+    "site_id": "site-crc-trv-18-b-20-32-las-delic-cdfe7e76bc07",
+    "address_raw": "TRV 18 B # 20-32 LAS DELICIAS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-manz-a-casa-4-b-diamante-09d2ddd53e67",
+    "address_raw": "MANZ A CASA 4 B DIAMANTE POPULAR",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-call11-n-4-13-98dab80cc065",
+    "address_raw": "CALL11 N 4 13",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-d-3-3-209-local-3-villet-c30abba699f3",
+    "address_raw": "D 3 3 - 209 LOCAL 3 VILLETA",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-garzon-huila-5a3ca0ff24c1",
+    "address_raw": "Garzon, Huila",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-mercaneiva-local-22-29-7dc49a8bd02b",
+    "address_raw": "MERCANEIVA LOCAL 22 - 29",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-cle-9-n-1e-03-afad0f43bfd3",
+    "address_raw": "CLE 9 N 1E 03",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-santa-marta-magdalena-e53768fbd273",
+    "address_raw": "Santa Marta, Magdalena",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-calle15-3-74-local-01-ce-e59b04b34672",
+    "address_raw": "CALLE15 # 3-74 LOCAL 01 CENTRO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-c-39-19b-10-mz-s4-cs-6-b-3396894c0dcc",
+    "address_raw": "C 39 19B 10 MZ S4 CS 6 BARRIO PARAISO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-villavicencio-meta-b6d37820a21d",
+    "address_raw": "Villavicencio, Meta",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-k-20-36-a-40-0b1cdb2f250d",
+    "address_raw": "K 20 36 A 40",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-clle-5e-n-1n-39-ipiales-0c9373601cb6",
+    "address_raw": "CLLE 5E N 1N-39 IPIALES",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-avenida-de-los-estudiant-a6922a500e83",
+    "address_raw": "AVENIDA DE LOS ESTUDIANTES TUMACO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-cc-bolivar-lc-e-21-san-m-fb042622fe2d",
+    "address_raw": "CC BOLIVAR LC E-21 SAN MATEO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-centro-comercial-bolivar-58eeba86531d",
+    "address_raw": "CENTRO COMERCIAL BOLIVAR L-23",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-nueva-sexta-modulo-2-bod-d18250e8c5f2",
+    "address_raw": "NUEVA SEXTA MODULO 2 BODEGA 23 URB GARCIAHERREROS",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-c-c-bolivar-lc-e-21-san--b613f125ae1b",
+    "address_raw": "C.C. BOLIVAR LC E-21 SAN MATEO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-centro-comercial-bolivar-2a2ef493ae68",
+    "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL C-14 SAN MATEO",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-armenia-quindio-7fcf233de4c5",
+    "address_raw": "Armenia, Quindio",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-crc-centro-empresarial-innov-a0946bd0fcd0",
+    "address_raw": "CENTRO EMPRESARIAL INNOVA MERCADEO Y LOGISTICA LOTE R 1 LC 9 Y 10 URB BERLIN",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-buenaventura-valle-del-c-c41ab79f7904",
+    "address_raw": "Buenaventura, Valle del Cauca",
+    "address_quality": "partial"
+  },
+  {
+    "site_id": "site-prov-crc-0-85928cac5855",
+    "address_raw": "0",
+    "address_quality": "invalid"
+  }
+]

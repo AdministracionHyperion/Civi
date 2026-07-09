@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Civi Places Service
-  version: 0.1.0
+  version: 0.2.0
 paths:
   /health/live:
     get:
@@ -44,6 +44,8 @@ paths:
                   type: number
                 limit:
                   type: integer
+                municipality_code:
+                  type: string
       responses:
         "200":
           description: nearest places
@@ -55,6 +57,42 @@ paths:
       responses:
         "200":
           description: partners
+  /internal/places/catalog/summary:
+    get:
+      summary: Catalog statistics for admin and operations
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: catalog summary
+  /internal/places/{site_id}:
+    get:
+      summary: Get place/site by id
+      security:
+        - internalBearer: []
+      parameters:
+        - name: site_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: place detail
+  /internal/places/{site_id}/booking-eligibility:
+    get:
+      summary: Booking eligibility for a site
+      security:
+        - internalBearer: []
+      parameters:
+        - name: site_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: eligibility
 components:
   securitySchemes:
     internalBearer:

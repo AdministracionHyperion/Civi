@@ -1,0 +1,415 @@
+[
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-carrera-10-9n-35-19073a9a5c75",
+    "merged_source_record_id": "src-01735-526c2194486ee310",
+    "row": 1735
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-calle-70-norte-9-11-loca-ca22c21864d1",
+    "merged_source_record_id": "src-01736-afbc7a35a7087c7a",
+    "row": 1736
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-carrera-19-8-05-local-10-225337116eba",
+    "merged_source_record_id": "src-01737-74cbeb687e92091e",
+    "row": 1737
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-calle-2-4-74-59eed67bda91",
+    "merged_source_record_id": "src-01738-4489835812d4b887",
+    "row": 1738
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-carrera-9-6-n-89-barrio--2d7a638363c1",
+    "merged_source_record_id": "src-01739-b0dc889632c8d97e",
+    "row": 1739
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cea-carrera-8-21n-09-ciudad--b7a57a4df722",
+    "merged_source_record_id": "src-01740-25b4f698bca10cb9",
+    "row": 1740
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-prov-cea-calle-7-5-10-barrio-golg-a1abc773554f",
+    "merged_source_record_id": "src-02063-d73ce5ca84ea048d",
+    "row": 2063
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-prov-cea-carrera-1-1a-53-barrio-c-a4fa0d4832b0",
+    "merged_source_record_id": "src-02064-ff13fce9560f32c6",
+    "row": 2064
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-prov-cea-calle-15-07-24-piso-2-335e5aa1e81a",
+    "merged_source_record_id": "src-02065-2be51bdc40c65183",
+    "row": 2065
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-prov-cea-calle-16-1-norte-12-barr-1df4ae605da4",
+    "merged_source_record_id": "src-02066-cfd8b6ae2fd3ecd5",
+    "row": 2066
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-prov-cea-carr-14-14-05-cb6d89bffd1e",
+    "merged_source_record_id": "src-02460-c2cb13a58bca5293",
+    "row": 2460
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-127-d-bis-a-91-05-a2800b37e081",
+    "merged_source_record_id": "src-02814-fd6f77dae96f1da6",
+    "row": 2814
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-avenida-calle-80-71-59-a732143ddb66",
+    "merged_source_record_id": "src-02815-ca4d7cc708044c75",
+    "row": 2815
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-18-77-51-local-202-8e9bf1d9a938",
+    "merged_source_record_id": "src-02816-77923ec99be3d8bf",
+    "row": 2816
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-23-c-69-55-lc-1-1d165af05925",
+    "merged_source_record_id": "src-02817-9cf6041ce0db8375",
+    "row": 2817
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-ac-161-19-24-63eee56ffb92",
+    "merged_source_record_id": "src-02818-7db3846fa5ff4d6f",
+    "row": 2818
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-69-b-25-01-sur-p-e8c441bb4f06",
+    "merged_source_record_id": "src-02819-23ce5e23e35212e5",
+    "row": 2819
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-26-71-b-30-local-04ec1040e287",
+    "merged_source_record_id": "src-02820-88c191df3a527b2f",
+    "row": 2820
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-transversal-55-98-a-66-l-77e38c787c7e",
+    "merged_source_record_id": "src-02821-a35a026570f507ae",
+    "row": 2821
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-17-19-16-sur-p2-988a4d0909bd",
+    "merged_source_record_id": "src-02822-005b5a5dc793058f",
+    "row": 2822
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-17-19-b-48-sur-819a5fde545e",
+    "merged_source_record_id": "src-02823-4240c14c3730c21e",
+    "row": 2823
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-57-45-08-sur-in--da4a9aae880a",
+    "merged_source_record_id": "src-02824-4baaece0fdc6380c",
+    "row": 2824
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-92-146-b-10-of-2-931c67832f17",
+    "merged_source_record_id": "src-02825-8a58abc52fa45f31",
+    "row": 2825
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-23-69-11-modulo-3d54308d5339",
+    "merged_source_record_id": "src-02826-0b51a5a9f25dcd5b",
+    "row": 2826
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-45-a-sur-52-c-81-p-29a2ea1d3cbd",
+    "merged_source_record_id": "src-02827-00e36955093e6cb7",
+    "row": 2827
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-avenida-calle-75-sur-81--b05e3cafacf0",
+    "merged_source_record_id": "src-02828-397592d1bd6206b1",
+    "row": 2828
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-avenida-carrera-24-73-62-82fdaacfcb77",
+    "merged_source_record_id": "src-02829-c200046498d4d1b8",
+    "row": 2829
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-transversal-93-64g-07-36c89cc367ba",
+    "merged_source_record_id": "src-02830-94401c0a2b826f09",
+    "row": 2830
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-147-101-56-loc-54-e85672fb00b2",
+    "merged_source_record_id": "src-02831-e22deec261d45184",
+    "row": 2831
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-23-69-11-modulo-0758cfb4b9e1",
+    "merged_source_record_id": "src-02832-789a9b25a1ba7ccb",
+    "row": 2832
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-23-69-11-local--45e64bf7e1dc",
+    "merged_source_record_id": "src-02833-04125d8ebb93038d",
+    "row": 2833
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-59-c-sur-51-21-loc-254cd051398a",
+    "merged_source_record_id": "src-02834-78f980c27be31606",
+    "row": 2834
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-19-99-48-local-1-a9fcbf558bf9",
+    "merged_source_record_id": "src-02835-23c99579f8bad07f",
+    "row": 2835
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-65-sur-78-h-51-loc-c77be45afa46",
+    "merged_source_record_id": "src-02836-403a75f69105adc7",
+    "row": 2836
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-18-77-51-local-214-b05544fda703",
+    "merged_source_record_id": "src-02837-b3d472328af42a53",
+    "row": 2837
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-ac-28-19b-87-ed-uransa1--51117330da57",
+    "merged_source_record_id": "src-02838-4983a918f50148df",
+    "row": 2838
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-10-b-sur-15-a-64-dfff55b3d610",
+    "merged_source_record_id": "src-02839-4feef6e8f1926145",
+    "row": 2839
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-avenida-carrera-45-106-0-fe4e2df7c6a0",
+    "merged_source_record_id": "src-02840-7595ac516bd49e22",
+    "row": 2840
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-15-94-61-bd028dbce08d",
+    "merged_source_record_id": "src-02842-23816bc5d9a26eaa",
+    "row": 2842
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-129-55-24-6a05d922ab2f",
+    "merged_source_record_id": "src-02843-1fdaa38975030b59",
+    "row": 2843
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-37-sur-n-24-06-5cb8b433e890",
+    "merged_source_record_id": "src-02844-9cb555b5d5855eea",
+    "row": 2844
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-14-sur-22-48-e49d91be37ad",
+    "merged_source_record_id": "src-02845-67bc38b8953ac628",
+    "row": 2845
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-30d-sur-5-a-43-loc-b419ae46fc7c",
+    "merged_source_record_id": "src-02846-9abaf66b6f16e42d",
+    "row": 2846
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-19-100-50-locales--c4062cbbf07c",
+    "merged_source_record_id": "src-02847-7160f018f608713f",
+    "row": 2847
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-57-c-sur-62-60--61ef3a01f56e",
+    "merged_source_record_id": "src-02848-2a65a15eeea567ef",
+    "row": 2848
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-12-8-65-p-3-6f56be0795df",
+    "merged_source_record_id": "src-02849-d69cab33e768b1b4",
+    "row": 2849
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-8-sur-32-16-3927acc70d51",
+    "merged_source_record_id": "src-02850-6e7e1aa358821937",
+    "row": 2850
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-13-37-86-d5526211a004",
+    "merged_source_record_id": "src-02851-e49b4223b18530cf",
+    "row": 2851
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-transversal-93-63-32-lc--1b7d1c2fc792",
+    "merged_source_record_id": "src-02852-49c56dc514ba00aa",
+    "row": 2852
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-ac-19-28-80-lc-d01b-piso-be63ee05d7b2",
+    "merged_source_record_id": "src-02853-e274877f2fa229db",
+    "row": 2853
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-14-sur-22-37-97fdcef977b1",
+    "merged_source_record_id": "src-02854-ae797b7fffe95ee8",
+    "row": 2854
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-diagonal-23-b-69-a-55-md-5d4a8ecade0e",
+    "merged_source_record_id": "src-02855-6986a4edd185fdcb",
+    "row": 2855
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-134-55-20-zona-com-b398cbdcca85",
+    "merged_source_record_id": "src-02856-21afd1496843f1d1",
+    "row": 2856
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-14-b-119-92-703ed5852d73",
+    "merged_source_record_id": "src-02857-a289f1687a77e26d",
+    "row": 2857
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-18-11-70-12c5e82b0c27",
+    "merged_source_record_id": "src-02858-d928fda2341570eb",
+    "row": 2858
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-carrera-27-27-53-sur-pi--31549c62b638",
+    "merged_source_record_id": "src-02859-a52c9bd65b050e74",
+    "row": 2859
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-13-36-51-8603b4e5cc84",
+    "merged_source_record_id": "src-02860-91517f22548fef92",
+    "row": 2860
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-185-45-03-plaza-ec-962d99353f46",
+    "merged_source_record_id": "src-02861-812b556caae122b2",
+    "row": 2861
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-calle-168-22-35-oficina--70ba5b64042e",
+    "merged_source_record_id": "src-02862-9d1facf772d76107",
+    "row": 2862
+  }
+]

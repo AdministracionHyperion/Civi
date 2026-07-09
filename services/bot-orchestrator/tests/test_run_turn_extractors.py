@@ -188,6 +188,8 @@ class FakePlacesClient:
                     "department": "Cundinamarca",
                     "kind": "CDA",
                     "distance_km": 1.2,
+                    "is_bookable": True,
+                    "booking_mode": "civi",
                 },
                 {
                     "id": "cda-2",
@@ -197,6 +199,8 @@ class FakePlacesClient:
                     "department": "Cundinamarca",
                     "kind": "CDA",
                     "distance_km": 2.4,
+                    "is_bookable": True,
+                    "booking_mode": "civi",
                 },
             ]
         }
@@ -617,6 +621,8 @@ async def test_agent_confirms_single_place_with_natural_date(monkeypatch: pytest
                         "department": "Santander",
                         "kind": "CDA",
                         "distance_km": 0.516,
+                        "is_bookable": True,
+                        "booking_mode": "civi",
                     }
                 ]
             }

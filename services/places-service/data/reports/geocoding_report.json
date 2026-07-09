@@ -1,0 +1,8 @@
+{
+  "mode": "disabled",
+  "total_sites": 4044,
+  "geocoded": 0,
+  "not_attempted": 3974,
+  "insufficient_address": 70,
+  "note": "Geocoding disabled by default; no external calls made."
+}

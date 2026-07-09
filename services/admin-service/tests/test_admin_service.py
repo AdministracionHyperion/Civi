@@ -44,12 +44,34 @@ async def test_admin_auth_accepts_configured_credentials(monkeypatch: pytest.Mon
 
 @pytest.mark.asyncio
 async def test_dashboard_summary_uses_service_contract_note() -> None:
-    summary = await dashboard_summary(status_client=FakeStatusClient())
+    class FakePlacesSummary:
+        async def catalog_summary(self) -> dict[str, object]:
+            return {
+                "success": True,
+                "source_records": 4107,
+                "unique_sites": 4044,
+                "unique_entities": 3293,
+                "by_actor_type": {"CDA": 985, "CEA": 1541, "CIA": 724, "CRC": 794},
+                "partners": 0,
+                "bookable": 0,
+            }
+
+    import admin_service.slices.list_dashboard_citas.use_case as dash
+
+    original = dash.PlacesSummaryClient
+    dash.PlacesSummaryClient = lambda: FakePlacesSummary()  # type: ignore[misc,assignment]
+    try:
+        summary = await dashboard_summary(status_client=FakeStatusClient())
+    finally:
+        dash.PlacesSummaryClient = original
 
     assert summary.success
     assert "bot-orchestrator" in summary.services
     assert summary.service_statuses[0]["service"] == "channel-gateway"
     assert not summary.appointments_visible
+    assert summary.places_catalog is not None
+    assert summary.places_catalog["source_records"] == 4107
+    assert summary.places_catalog["unique_sites"] == 4044
 
 
 @pytest.mark.asyncio
