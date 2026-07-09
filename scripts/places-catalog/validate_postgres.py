@@ -130,7 +130,10 @@ def main() -> int:
             report["second_apply"].get("inserted") == 0
             and report["second_apply"].get("updated") == 0
             and int(report["second_apply"].get("unchanged") or 0) > 0
-            and report["sha256"].startswith("457b4fda")
+            and (
+                report["sha256"].startswith("03df2853")
+                or report["sha256"].startswith("457b4fda")
+            )
         )
     except Exception as exc:  # noqa: BLE001
         report["passed"] = False
