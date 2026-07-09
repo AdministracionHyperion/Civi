@@ -49,6 +49,12 @@ def main() -> None:
             failures.append(f"{service_name}: runtime route {method} {path} is missing from OpenAPI")
         for method, path in sorted(missing_in_runtime):
             failures.append(f"{service_name}: OpenAPI route {method} {path} is missing from runtime")
+        if missing_in_runtime and len(runtime_routes) <= 3:
+            # Help diagnose CI environments where routers never registered.
+            failures.append(
+                f"{service_name}: runtime only exposed {sorted(runtime_routes)} "
+                f"(module={module_name})"
+            )
 
     if failures:
         for failure in failures:
@@ -67,21 +73,24 @@ def _configure_python_path() -> None:
 
 
 def _runtime_routes(module_name: str) -> set[tuple[str, str]]:
+    """Collect product routes from the FastAPI app OpenAPI schema.
+
+    Prefer app.openapi() over walking app.routes + isinstance(APIRoute):
+    GitHub Actions can load multiple FastAPI installs, which breaks isinstance
+    and (with some walk heuristics) can drop every product route.
+    """
     module = importlib.import_module(module_name)
     app = getattr(module, "app")
+    schema = app.openapi()
     routes: set[tuple[str, str]] = set()
-    for route in app.routes:
-        # Duck-type instead of isinstance(APIRoute): CI can resolve two FastAPI
-        # installs, making isinstance fail and reporting every OpenAPI route missing.
-        path = getattr(route, "path", None)
-        methods = getattr(route, "methods", None)
-        endpoint = getattr(route, "endpoint", None)
-        if not path or not methods or not callable(endpoint):
-            continue
+    for path, operations in (schema.get("paths") or {}).items():
         if path in FRAMEWORK_DOC_PATHS:
             continue
-        for method in set(methods) - {"HEAD", "OPTIONS"}:
-            routes.add((str(method).lower(), str(path)))
+        if not isinstance(operations, dict):
+            continue
+        for method, operation in operations.items():
+            if method in HTTP_METHODS and isinstance(operation, dict):
+                routes.add((method, path))
     return routes
 
 

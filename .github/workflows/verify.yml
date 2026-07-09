@@ -33,21 +33,29 @@ jobs:
       - name: Install Python service deps
         run: |
           python -m pip install --upgrade pip
+          # One FastAPI install for the whole job. Do NOT editable-install every
+          # service: setuptools without src package discovery + repeated fastapi
+          # deps left empty/shadow packages so runtime OpenAPI checks saw only
+          # health routes. verify-runtime-contracts and pytest resolve via PYTHONPATH.
           python -m pip install \
             pytest pytest-asyncio httpx fastapi uvicorn sqlalchemy \
-            pydantic-settings "psycopg[binary]" PyYAML
+            pydantic-settings "psycopg[binary]" asyncpg PyYAML redis greenlet
           python -m pip install -e packages/python-common
-          for svc in services/*/ ; do
-            if [ -f "$svc/pyproject.toml" ]; then
-              python -m pip install -e "$svc" || true
-            fi
-          done
+          python - <<'PY'
+          from pathlib import Path
+          roots = [Path("packages/python-common/src")]
+          roots.extend(sorted(p / "src" for p in Path("services").iterdir() if (p / "src").is_dir()))
+          path = ":".join(str(p.resolve()) for p in roots)
+          print(path)
+          Path("/tmp/civi_pythonpath.txt").write_text(path)
+          PY
+          echo "PYTHONPATH<<EOF" >> "$GITHUB_ENV"
+          cat /tmp/civi_pythonpath.txt >> "$GITHUB_ENV"
+          echo "EOF" >> "$GITHUB_ENV"
       - name: Install Node deps
         run: |
           if [ -f package.json ]; then npm ci || npm install; fi
       - name: Catalog dry-run reconciliation
-        env:
-          PYTHONPATH: services/places-service/src:packages/python-common/src
         run: |
           python -m places_service.cli.import_catalog \
             --input services/places-service/data/raw/places_colombia_original.json \
@@ -62,12 +70,26 @@ jobs:
           assert recon.get("non_merged_equals_unique_sites") is True
           print("reconciliation_ok", recon["unique_sites"], recon["by_processing_status"])
           PY
+      - name: Sanity runtime routes include product paths
+        run: |
+          python - <<'PY'
+          from places_service.main import app
+          paths = set((app.openapi().get("paths") or {}))
+          required = {
+              "/internal/places/nearest",
+              "/internal/places/partners",
+              "/internal/places/catalog/summary",
+              "/health/live",
+          }
+          missing = required - paths
+          assert not missing, (missing, sorted(paths))
+          print("places_runtime_ok", sorted(paths))
+          PY
       - name: Run verify.ps1 via pwsh
         shell: pwsh
         run: ./scripts/verify.ps1
       - name: PostgreSQL import idempotency
         env:
-          PYTHONPATH: services/places-service/src:packages/python-common/src
           PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
         run: |
           python -m places_service.cli.import_catalog \
