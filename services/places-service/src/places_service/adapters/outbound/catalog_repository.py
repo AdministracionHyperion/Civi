@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import math
 import os
 from dataclasses import asdict
+from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import and_, func, or_, select
@@ -13,12 +15,12 @@ from sqlalchemy.engine import Engine
 
 from civi_common.geo import is_colombia_latlng
 from places_service.adapters.outbound.schema import (
-    create_all_tables,
     create_engine_from_url,
     places,
     places_contacts,
     places_duplicate_candidates,
     places_entities,
+    places_import_source_records,
     places_import_runs,
     places_sites,
     places_source_records,
@@ -34,7 +36,9 @@ class CatalogSqlRepository:
     def __init__(self, database_url: str, *, create_schema: bool = False) -> None:
         self.engine: Engine = create_engine_from_url(database_url)
         if create_schema:
-            create_all_tables(self.engine)
+            from places_service.adapters.outbound.migrate import migrate_schema
+
+            migrate_schema(self.engine)
 
     def apply_import(
         self,
@@ -47,124 +51,168 @@ class CatalogSqlRepository:
         duplicate_candidates: list[Any],
         preserve_partner_flags: bool = True,
     ) -> dict[str, int]:
-        existing_partners: dict[str, dict[str, Any]] = {}
-        if preserve_partner_flags:
+        now = import_run.completed_at or datetime.now(timezone.utc).isoformat()
+        counts = {"inserted": 0, "updated": 0, "unchanged": 0, "entities_inserted": 0,
+                  "entities_updated": 0, "missing": 0, "reappeared": 0}
+        present_ids = {site.site_id for site in sites}
+        try:
             with self.engine.begin() as conn:
-                rows = conn.execute(
-                    select(
-                        places_sites.c.site_id,
-                        places_sites.c.is_partner,
-                        places_sites.c.is_bookable,
-                        places_sites.c.booking_mode,
+                run_payload = _import_run_payload(import_run, status="running", completed_at=None)
+                conn.execute(_upsert(self.engine, places_import_runs, run_payload, pk="import_run_id"))
+
+                for entity in entities:
+                    payload = asdict(entity)
+                    payload["content_hash"] = _content_hash(payload)
+                    payload["created_at"] = payload["created_at"] or now
+                    payload["updated_at"] = payload["updated_at"] or now
+                    current = conn.execute(
+                        select(places_entities).where(places_entities.c.entity_id == entity.entity_id)
+                    ).mappings().first()
+                    if current is None:
+                        conn.execute(places_entities.insert().values(**payload))
+                        counts["entities_inserted"] += 1
+                    elif current.get("content_hash") != payload["content_hash"]:
+                        payload["created_at"] = current["created_at"]
+                        conn.execute(
+                            places_entities.update()
+                            .where(places_entities.c.entity_id == entity.entity_id)
+                            .values(**{key: value for key, value in payload.items() if key != "entity_id"})
+                        )
+                        counts["entities_updated"] += 1
+
+                for site in sites:
+                    payload = asdict(site)
+                    current = conn.execute(
+                        select(places_sites).where(places_sites.c.site_id == site.site_id)
+                    ).mappings().first()
+                    if preserve_partner_flags and current and (current["is_partner"] or current["is_bookable"]):
+                        payload.update(
+                            is_partner=bool(current["is_partner"]),
+                            is_bookable=bool(current["is_bookable"]),
+                            booking_mode=str(current["booking_mode"]),
+                        )
+                    if payload["operational_status"] in EXCLUDED_STATUSES:
+                        payload["is_bookable"] = False
+                        payload["booking_mode"] = "unavailable"
+                    payload["content_hash"] = _content_hash(payload)
+                    payload.update(
+                        snapshot_presence="present",
+                        source_presence_status="present",
+                        present_in_latest_snapshot=True,
+                        last_seen_import_run_id=import_run.import_run_id,
+                        last_seen_import_run=import_run.import_run_id,
+                        missing_since_import_run=None,
+                        last_seen_at=now,
                     )
-                ).mappings().all()
-                for row in rows:
-                    if row["is_partner"] or row["is_bookable"]:
-                        existing_partners[str(row["site_id"])] = dict(row)
+                    if current is None:
+                        payload.update(
+                            first_seen_import_run=import_run.import_run_id,
+                            first_seen_at=now,
+                            created_at=payload["created_at"] or now,
+                            updated_at=payload["updated_at"] or now,
+                        )
+                        conn.execute(places_sites.insert().values(**payload))
+                        counts["inserted"] += 1
+                        changed = True
+                    elif current.get("content_hash") == payload["content_hash"]:
+                        lifecycle = {
+                            key: payload[key]
+                            for key in (
+                                "snapshot_presence", "source_presence_status", "present_in_latest_snapshot",
+                                "last_seen_import_run_id", "last_seen_import_run", "missing_since_import_run",
+                                "last_seen_at",
+                            )
+                        }
+                        if current.get("source_presence_status") == "missing":
+                            counts["reappeared"] += 1
+                        conn.execute(
+                            places_sites.update().where(places_sites.c.site_id == site.site_id).values(**lifecycle)
+                        )
+                        counts["unchanged"] += 1
+                        changed = False
+                    else:
+                        if current.get("source_presence_status") == "missing":
+                            counts["reappeared"] += 1
+                        payload["created_at"] = current["created_at"]
+                        payload["first_seen_import_run"] = current["first_seen_import_run"]
+                        payload["first_seen_at"] = current["first_seen_at"]
+                        payload["updated_at"] = now
+                        conn.execute(
+                            places_sites.update()
+                            .where(places_sites.c.site_id == site.site_id)
+                            .values(**{key: value for key, value in payload.items() if key != "site_id"})
+                        )
+                        counts["updated"] += 1
+                        changed = True
+                    if changed:
+                        conn.execute(_upsert(self.engine, places, _legacy_site_payload(site, payload, import_run), pk="id"))
 
-        inserted = updated = unchanged = 0
-        with self.engine.begin() as conn:
-            # import run
-            conn.execute(
-                _upsert(
-                    self.engine,
-                    places_import_runs,
-                    {
-                        "import_run_id": import_run.import_run_id,
-                        "source_name": import_run.source_name,
-                        "input_filename": import_run.input_filename,
-                        "input_sha256": import_run.input_sha256,
-                        "started_at": import_run.started_at,
-                        "completed_at": import_run.completed_at,
-                        "status": import_run.status,
-                        "source_record_count": import_run.source_record_count,
-                        "inserted_count": import_run.inserted_count,
-                        "updated_count": import_run.updated_count,
-                        "unchanged_count": import_run.unchanged_count,
-                        "merged_count": import_run.merged_count,
-                        "rejected_count": import_run.rejected_count,
-                        "review_count": import_run.review_count,
-                        "report_path": import_run.report_path,
-                        "source_updated_at": import_run.source_updated_at,
-                        "snapshot_at": import_run.snapshot_at,
-                    },
-                    pk="import_run_id",
-                )
-            )
-
-            for entity in entities:
-                payload = asdict(entity)
-                existed = conn.execute(
-                    select(places_entities.c.entity_id).where(places_entities.c.entity_id == entity.entity_id)
-                ).first()
-                conn.execute(_upsert(self.engine, places_entities, payload, pk="entity_id"))
-                if existed:
-                    updated += 1
-                else:
-                    inserted += 1
-
-            for site in sites:
-                payload = asdict(site)
-                if site.site_id in existing_partners:
-                    preserved = existing_partners[site.site_id]
-                    payload["is_partner"] = preserved["is_partner"]
-                    payload["is_bookable"] = preserved["is_bookable"]
-                    payload["booking_mode"] = preserved["booking_mode"]
-                existed = conn.execute(
-                    select(places_sites.c.site_id).where(places_sites.c.site_id == site.site_id)
-                ).first()
-                conn.execute(_upsert(self.engine, places_sites, payload, pk="site_id"))
-                # mirror legacy places row for transitional compatibility
-                conn.execute(
-                    _upsert(
-                        self.engine,
-                        places,
-                        {
-                            "id": site.site_id,
-                            "name": site.name,
-                            "address": site.address_raw or site.address_normalized,
-                            "city": site.municipality,
-                            "department": site.department,
-                            "kind": site.actor_type,
-                            "lat": site.lat,
-                            "lng": site.lng,
-                            "is_partner": payload["is_partner"],
-                            "phone": None,
-                            "status": site.operational_status,
-                            "source": "runt",
-                            "source_updated_at": import_run.source_updated_at,
-                            "geocode_confidence": site.geocode_confidence,
-                            "geocode_provider": site.geocode_provider,
-                            "geocode_status": site.geocode_status,
-                            "runt_actor_id": site.source_actor_id,
-                            "nit": None,
-                            "is_bookable": payload["is_bookable"],
-                            "booking_mode": payload["booking_mode"],
-                            "municipality_code": site.municipality_code,
-                            "status_verified": site.status_verified,
-                            "location_precision": site.location_precision,
-                        },
-                        pk="id",
+                for row in conn.execute(select(places_sites)).mappings():
+                    if row["site_id"] in present_ids:
+                        continue
+                    if row.get("source_presence_status") == "missing":
+                        continue
+                    conn.execute(
+                        places_sites.update()
+                        .where(places_sites.c.site_id == row["site_id"])
+                        .values(
+                            snapshot_presence="absent",
+                            source_presence_status="missing",
+                            present_in_latest_snapshot=False,
+                            missing_since_import_run=import_run.import_run_id,
+                            is_bookable=False,
+                            booking_mode="unavailable",
+                            updated_at=now,
+                        )
                     )
+                    counts["missing"] += 1
+
+                for contact in contacts:
+                    conn.execute(_upsert(self.engine, places_contacts, asdict(contact), pk="contact_id"))
+                for rec in source_records:
+                    payload = asdict(rec)
+                    legacy_payload = {
+                        **payload,
+                        "source_payload": json.dumps(payload["source_payload"], ensure_ascii=False, sort_keys=True),
+                        "processing_flags": json.dumps(payload["processing_flags"], ensure_ascii=False),
+                    }
+                    legacy_payload.pop("observed_at")
+                    conn.execute(_upsert(self.engine, places_source_records, legacy_payload, pk="source_record_id"))
+                    conn.execute(
+                        places_import_source_records.insert().values(
+                            import_run_id=import_run.import_run_id,
+                            source_record_id=payload["source_record_id"],
+                            source_row_number=payload["source_row_number"],
+                            source_hash=payload["source_hash"],
+                            observed_payload=json.dumps(payload["source_payload"], ensure_ascii=False, sort_keys=True),
+                            processing_status=payload["processing_status"],
+                            processing_flags=json.dumps(payload["processing_flags"], ensure_ascii=False),
+                            matched_entity_id=payload["matched_entity_id"],
+                            matched_site_id=payload["matched_site_id"],
+                            observed_at=payload["observed_at"] or now,
+                        )
+                    )
+                for cand in duplicate_candidates:
+                    conn.execute(_upsert(self.engine, places_duplicate_candidates, asdict(cand), pk="candidate_id"))
+
+                final_payload = _import_run_payload(
+                    import_run, status="applied", completed_at=now, counts=counts
                 )
-                if existed:
-                    updated += 1
-                else:
-                    inserted += 1
-
-            for contact in contacts:
-                conn.execute(_upsert(self.engine, places_contacts, asdict(contact), pk="contact_id"))
-
-            for rec in source_records:
-                payload = asdict(rec)
-                payload["source_payload"] = json.dumps(payload["source_payload"], ensure_ascii=False)
-                payload["processing_flags"] = json.dumps(payload["processing_flags"], ensure_ascii=False)
-                conn.execute(_upsert(self.engine, places_source_records, payload, pk="source_record_id"))
-
-            for cand in duplicate_candidates:
-                conn.execute(_upsert(self.engine, places_duplicate_candidates, asdict(cand), pk="candidate_id"))
-
-        return {"inserted": inserted, "updated": updated, "unchanged": unchanged}
+                conn.execute(_upsert(self.engine, places_import_runs, final_payload, pk="import_run_id"))
+        except Exception as exc:
+            with self.engine.begin() as conn:
+                failed = _import_run_payload(
+                    import_run,
+                    status="failed",
+                    completed_at=None,
+                    counts=counts,
+                    error_code=type(exc).__name__,
+                    error_message=str(exc),
+                    failed_at=datetime.now(timezone.utc).isoformat(),
+                )
+                conn.execute(_upsert(self.engine, places_import_runs, failed, pk="import_run_id"))
+            raise
+        return {**counts, "absent_marked": counts["missing"]}
 
     def get_site(self, site_id: str) -> dict[str, Any] | None:
         with self.engine.begin() as conn:
@@ -179,19 +227,51 @@ class CatalogSqlRepository:
                 "exists": False,
                 "is_partner": False,
                 "is_bookable": False,
+                "eligible_for_civi_booking": False,
+                "eligibility_reason": "site_not_found",
                 "booking_mode": "unavailable",
                 "operational_status": "unknown",
+                "source_presence_status": "missing",
+                "present_in_latest_snapshot": False,
                 "canonical_name": None,
                 "canonical_address": None,
                 "canonical_city": None,
             }
+        status = str(site.get("operational_status") or "unknown")
+        presence = str(site.get("source_presence_status") or site.get("snapshot_presence") or "present")
+        is_partner = bool(site["is_partner"])
+        booking_mode = str(site.get("booking_mode") or "information_only")
+        is_bookable = bool(site["is_bookable"])
+        eligible = False
+        reason = "not_civi_partner"
+        if status in EXCLUDED_STATUSES:
+            is_bookable = False
+            booking_mode = "unavailable"
+            reason = f"operational_status_{status}"
+        elif presence == "missing":
+            is_bookable = False
+            booking_mode = "unavailable"
+            reason = "missing_from_latest_snapshot"
+        elif not is_partner or booking_mode != "civi":
+            is_bookable = False
+            reason = "not_civi_partner"
+        elif not is_bookable:
+            reason = "not_bookable"
+        else:
+            eligible = True
+            reason = "eligible"
         return {
             "site_id": site_id,
             "exists": True,
-            "is_partner": bool(site["is_partner"]),
-            "is_bookable": bool(site["is_bookable"]),
-            "booking_mode": site["booking_mode"],
-            "operational_status": site["operational_status"],
+            "is_partner": is_partner,
+            "is_bookable": is_bookable,
+            "eligible_for_civi_booking": eligible,
+            "eligibility_reason": reason,
+            "booking_mode": booking_mode,
+            "operational_status": status,
+            "snapshot_presence": presence,
+            "source_presence_status": presence,
+            "present_in_latest_snapshot": bool(site.get("present_in_latest_snapshot", presence == "present")),
             "canonical_name": site["name"],
             "canonical_address": site["address_raw"],
             "canonical_city": site["municipality"],
@@ -199,10 +279,20 @@ class CatalogSqlRepository:
 
     def catalog_summary(self) -> dict[str, Any]:
         with self.engine.begin() as conn:
-            sites = conn.execute(select(places_sites)).mappings().all()
+            sites = [dict(r) for r in conn.execute(select(places_sites)).mappings().all()]
             entities = conn.execute(select(func.count()).select_from(places_entities)).scalar_one()
+            invalid_documents = conn.execute(
+                select(func.count())
+                .select_from(places_entities)
+                .where(places_entities.c.document_valid == False)  # noqa: E712
+            ).scalar_one()
             source_records = conn.execute(select(func.count()).select_from(places_source_records)).scalar_one()
             dupes = conn.execute(select(func.count()).select_from(places_duplicate_candidates)).scalar_one()
+            invalid_phones = conn.execute(
+                select(func.count())
+                .select_from(places_contacts)
+                .where(places_contacts.c.is_valid == False)  # noqa: E712
+            ).scalar_one()
             latest = conn.execute(
                 select(places_import_runs).order_by(places_import_runs.c.started_at.desc()).limit(1)
             ).mappings().first()
@@ -224,6 +314,11 @@ class CatalogSqlRepository:
             "manual_review": sum(1 for s in sites if s["requires_manual_review"]),
             "duplicate_candidates": int(dupes or 0),
             "invalid_addresses": sum(1 for s in sites if s["address_quality"] in {"invalid", "missing"}),
+            "invalid_phones": int(invalid_phones or 0),
+            "invalid_documents": int(invalid_documents or 0),
+            "absent_from_snapshot": sum(
+                1 for s in sites if (s.get("snapshot_presence") or "present") == "absent"
+            ),
             "latest_import": dict(latest) if latest else None,
             "source_updated_at": (latest or {}).get("source_updated_at") if latest else None,
             "snapshot_at": (latest or {}).get("snapshot_at") if latest else None,
@@ -243,6 +338,11 @@ class CatalogSqlRepository:
         with self.engine.begin() as conn:
             stmt = select(places_sites).where(
                 places_sites.c.operational_status.notin_(list(EXCLUDED_STATUSES))
+            ).where(
+                or_(
+                    places_sites.c.snapshot_presence == "present",
+                    places_sites.c.snapshot_presence.is_(None),
+                )
             )
             if actor_type:
                 stmt = stmt.where(places_sites.c.actor_type == actor_type.upper())
@@ -358,6 +458,97 @@ class CatalogSqlRepository:
             }
             for r in rows
         ]
+
+
+_HASH_EXCLUDED_FIELDS = frozenset(
+    {
+        "created_at",
+        "updated_at",
+        "import_run_id",
+        "first_seen_import_run",
+        "last_seen_import_run",
+        "last_seen_import_run_id",
+        "missing_since_import_run",
+        "first_seen_at",
+        "last_seen_at",
+        "content_hash",
+        "snapshot_presence",
+        "source_presence_status",
+        "present_in_latest_snapshot",
+    }
+)
+
+
+def _content_hash(payload: dict[str, Any]) -> str:
+    """Hash only canonical content, never import or lifecycle metadata."""
+    content = {key: value for key, value in payload.items() if key not in _HASH_EXCLUDED_FIELDS}
+    encoded = json.dumps(content, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _legacy_site_payload(site: Site, payload: dict[str, Any], import_run: ImportRun) -> dict[str, Any]:
+    return {
+        "id": site.site_id,
+        "name": site.name,
+        "address": site.address_raw or site.address_normalized,
+        "city": site.municipality,
+        "department": site.department,
+        "kind": site.actor_type,
+        "lat": site.lat,
+        "lng": site.lng,
+        "is_partner": payload["is_partner"],
+        "phone": None,
+        "status": site.operational_status,
+        "source": "runt",
+        "source_updated_at": import_run.source_updated_at,
+        "geocode_confidence": site.geocode_confidence,
+        "geocode_provider": site.geocode_provider,
+        "geocode_status": site.geocode_status,
+        "runt_actor_id": site.source_actor_id,
+        "nit": None,
+        "is_bookable": payload["is_bookable"],
+        "booking_mode": payload["booking_mode"],
+        "municipality_code": site.municipality_code,
+        "status_verified": site.status_verified,
+        "location_precision": site.location_precision,
+    }
+
+
+def _import_run_payload(
+    import_run: ImportRun,
+    *,
+    status: str,
+    completed_at: str | None,
+    counts: dict[str, int] | None = None,
+    error_code: str | None = None,
+    error_message: str | None = None,
+    failed_at: str | None = None,
+) -> dict[str, Any]:
+    counts = counts or {}
+    return {
+        "import_run_id": import_run.import_run_id,
+        "source_name": import_run.source_name,
+        "input_filename": import_run.input_filename,
+        "input_sha256": import_run.input_sha256,
+        "started_at": import_run.started_at,
+        "completed_at": completed_at,
+        "status": status,
+        "source_record_count": import_run.source_record_count,
+        "inserted_count": counts.get("inserted", 0),
+        "updated_count": counts.get("updated", 0),
+        "unchanged_count": counts.get("unchanged", 0),
+        "merged_count": import_run.merged_count,
+        "rejected_count": import_run.rejected_count,
+        "review_count": import_run.review_count,
+        "report_path": import_run.report_path,
+        "source_updated_at": import_run.source_updated_at,
+        "snapshot_at": import_run.snapshot_at,
+        "missing_count": counts.get("missing", 0),
+        "reappeared_count": counts.get("reappeared", 0),
+        "error_code": error_code,
+        "error_message": error_message,
+        "failed_at": failed_at,
+    }
 
 
 def _upsert(engine: Engine, table, payload: dict[str, Any], *, pk: str):

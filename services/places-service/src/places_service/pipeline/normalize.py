@@ -57,11 +57,12 @@ def normalize_document(raw: str | None) -> dict:
         result["flags"].append("missing_document")
         return result
 
-    # Try as NIT with trailing verification digit.
+    # Only claim NIT when the trailing verification digit matches the official algorithm.
+    # Never mark a bare number as a valid NIT just because a DV can be computed for it.
     if len(digits) >= 6:
         body, maybe_dv = digits[:-1], digits[-1]
         expected = compute_nit_verification_digit(body)
-        if expected is not None and expected == maybe_dv:
+        if expected is not None and expected == maybe_dv and 8 <= len(body) <= 10:
             result.update(
                 {
                     "document_type": "NIT",
@@ -72,19 +73,28 @@ def normalize_document(raw: str | None) -> dict:
             )
             result["flags"].append("nit_with_verification_digit")
             return result
-
-        expected_body = compute_nit_verification_digit(digits)
-        if expected_body is not None and 8 <= len(digits) <= 10:
-            # Valid body without DV attached — keep as NIT candidate without claiming DV.
+        if expected is not None and expected == maybe_dv:
             result.update(
                 {
                     "document_type": "NIT",
-                    "document_number": digits,
-                    "verification_digit": None,
+                    "document_number": body,
+                    "verification_digit": maybe_dv,
                     "document_valid": True,
                 }
             )
-            result["flags"].append("nit_without_verification_digit")
+            result["flags"].append("nit_with_verification_digit")
+            result["flags"].append("nit_body_length_unusual")
+            return result
+        if 9 <= len(digits) <= 11:
+            # Possible NIT with DV attached but invalid check digit — keep raw digits, do not invent type.
+            result.update(
+                {
+                    "document_type": "UNKNOWN",
+                    "document_number": digits,
+                    "document_valid": False,
+                }
+            )
+            result["flags"].append("possible_nit_invalid_verification_digit")
             return result
 
     if len(digits) in {6, 7, 8, 9, 10}:
@@ -343,6 +353,42 @@ DEPARTMENT_ALIASES: dict[str, str] = {
 }
 
 
+_DIVIPOLA_INDEX: dict[str, dict[str, str]] | None = None
+_DIVIPOLA_BY_NAME: dict[str, list[dict[str, str]]] | None = None
+
+
+def _load_divipola() -> tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]]:
+    global _DIVIPOLA_INDEX, _DIVIPOLA_BY_NAME
+    if _DIVIPOLA_INDEX is not None and _DIVIPOLA_BY_NAME is not None:
+        return _DIVIPOLA_INDEX, _DIVIPOLA_BY_NAME
+    from pathlib import Path
+    import json
+
+    path = Path(__file__).resolve().parents[3] / "data" / "reference" / "divipola_municipios.json"
+    by_code: dict[str, dict[str, str]] = {}
+    by_name: dict[str, list[dict[str, str]]] = {}
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for row in payload.get("municipalities") or []:
+            code = str(row.get("municipality_code") or "").strip()
+            name = title_case_es(str(row.get("municipality") or ""))
+            dept = title_case_es(str(row.get("department") or ""))
+            dcode = str(row.get("department_code") or "").strip() or None
+            if not code or not name:
+                continue
+            item = {
+                "municipality": name,
+                "department": dept,
+                "municipality_code": code,
+                "department_code": dcode or (code[:2] if len(code) >= 2 else None),
+            }
+            by_code[code] = item
+            by_name.setdefault(normalize_text(name), []).append(item)
+    _DIVIPOLA_INDEX = by_code
+    _DIVIPOLA_BY_NAME = by_name
+    return by_code, by_name
+
+
 def resolve_territory(city: str | None, department: str | None) -> dict:
     raw_city = collapse_spaces(city or "")
     raw_department = collapse_spaces(department or "")
@@ -356,12 +402,10 @@ def resolve_territory(city: str | None, department: str | None) -> dict:
     if " - " in raw_city:
         left, right = raw_city.split(" - ", 1)
         left_n = normalize_text(left)
-        right_n = normalize_text(right)
         if left_n in MUNICIPALITY_ALIASES or len(left) <= 40:
             city_n = left_n
             population_center = title_case_es(right)
             flags.append("population_center_split")
-            # If right looks like locality of Bogota
             if left_n.startswith("BOGOTA"):
                 locality = title_case_es(right)
                 population_center = None
@@ -397,6 +441,44 @@ def resolve_territory(city: str | None, department: str | None) -> dict:
             "flags": flags,
         }
 
+    _, by_name = _load_divipola()
+    candidates = by_name.get(city_n) or []
+    if dept_canonical:
+        dept_key = normalize_text(dept_canonical)
+        matched = [c for c in candidates if normalize_text(c["department"]) == dept_key]
+        if len(matched) == 1:
+            hit = matched[0]
+            return {
+                "municipality": hit["municipality"],
+                "department": hit["department"],
+                "municipality_code": hit["municipality_code"],
+                "department_code": hit["department_code"],
+                "population_center": population_center,
+                "locality": locality,
+                "raw_city": raw_city,
+                "raw_department": raw_department,
+                "confidence": "high",
+                "flags": flags + ["divipola_match"],
+            }
+        if len(matched) > 1:
+            flags.append("ambiguous_divipola_match")
+    elif len(candidates) == 1:
+        hit = candidates[0]
+        return {
+            "municipality": hit["municipality"],
+            "department": hit["department"],
+            "municipality_code": hit["municipality_code"],
+            "department_code": hit["department_code"],
+            "population_center": population_center,
+            "locality": locality,
+            "raw_city": raw_city,
+            "raw_department": raw_department,
+            "confidence": "medium",
+            "flags": flags + ["divipola_name_only_match"],
+        }
+    elif len(candidates) > 1:
+        flags.append("ambiguous_municipality_name")
+
     flags.append("unresolved_municipality_code")
     return {
         "municipality": title_case_es(city_n),
@@ -407,6 +489,6 @@ def resolve_territory(city: str | None, department: str | None) -> dict:
         "locality": locality,
         "raw_city": raw_city,
         "raw_department": raw_department,
-        "confidence": "medium",
+        "confidence": "medium" if candidates else "low",
         "flags": flags,
     }

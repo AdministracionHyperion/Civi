@@ -11,7 +11,7 @@ from places_service.slices.list_partners.api import router as partners_router
 
 SERVICE_NAME = "places-service"
 
-app = FastAPI(title="Civi Places Service", version="0.1.0")
+app = FastAPI(title="Civi Places Service", version="0.2.0")
 # Static paths before parameterized {site_id}
 app.include_router(nearest_router)
 app.include_router(partners_router)

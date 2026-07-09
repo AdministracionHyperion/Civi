@@ -60,16 +60,61 @@ def _entity_id(doc: dict, legal_name: str) -> tuple[str, bool]:
     return provisional, True
 
 
-def _site_id(actor_type: str, entity_id: str, municipality_code: str | None, address_normalized: str, name: str) -> tuple[str, bool]:
+_LEGAL_SUFFIX_RE = re.compile(
+    r"\b(S\.?\s*A\.?\s*S\.?|SAS|S\.?\s*A\.?|SA|LTDA\.?|LIMITADA|E\.?\s*U\.?|S\.?\s*C\.?A\.?)\b",
+    re.IGNORECASE,
+)
+
+
+def _name_core(name: str) -> str:
+    text = normalize_text(name)
+    text = _LEGAL_SUFFIX_RE.sub(" ", text)
+    text = re.sub(r"[\"“”'`]", " ", text)
+    text = re.sub(r"\s*-\s*", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _site_id(
+    actor_type: str,
+    entity_id: str,
+    municipality_code: str | None,
+    municipality_normalized: str,
+    address_normalized: str,
+    name_normalized: str,
+) -> tuple[str, bool]:
+    """Stable site identity. Always includes territorial + name cores to avoid silent collisions."""
+    muni_key = (municipality_code or municipality_normalized or "na").strip().upper()
+    addr = address_normalized or "NO-ADDR"
+    name_key = name_normalized or "NO-NAME"
     if municipality_code and address_normalized and "INSUFFICIENT" not in address_normalized:
         return (
-            _stable_id(actor_type, entity_id, municipality_code, address_normalized, prefix=f"site-{actor_type.lower()}"),
+            _stable_id(
+                actor_type,
+                entity_id,
+                muni_key,
+                addr,
+                name_key,
+                prefix=f"site-{actor_type.lower()}",
+            ),
             False,
         )
     return (
-        _stable_id(actor_type, entity_id, municipality_code or "na", address_normalized or name, prefix=f"site-prov-{actor_type.lower()}"),
+        _stable_id(
+            actor_type,
+            entity_id,
+            muni_key,
+            addr,
+            name_key,
+            prefix=f"site-prov-{actor_type.lower()}",
+        ),
         True,
     )
+
+
+def _disambiguate_site_id(site_id: str, *, row_number: int, source_hash: str) -> str:
+    digest = hashlib.sha1(f"{site_id}|{row_number}|{source_hash}".encode("utf-8")).hexdigest()[:10]
+    base = site_id[:110].rstrip("-")
+    return f"{base}-x{digest}"[:128]
 
 
 def _quality_score(*, address_quality: str, doc_valid: bool, phone_valid: bool, status: str) -> float:
@@ -103,6 +148,7 @@ def build_catalog_from_rows(
     duplicate_candidates: list[DuplicateCandidate] = []
     rejected: list[dict[str, Any]] = []
     review_flags: list[dict[str, Any]] = []
+    site_id_collisions: list[dict[str, Any]] = []
 
     # Exact-dupe key -> site_id
     exact_index: dict[str, str] = {}
@@ -112,8 +158,8 @@ def build_catalog_from_rows(
     for idx, row in enumerate(rows, start=1):
         payload = dict(row)
         source_hash = _sha256_text(json.dumps(payload, ensure_ascii=False, sort_keys=True))
-        # Stable across import runs so re-apply upserts instead of duplicating rows.
-        source_record_id = f"src-{idx:05d}-{source_hash[:16]}"
+        # Append-only history: include import_run_id so re-imports do not overwrite prior rows.
+        source_record_id = f"src-{import_run_id[:8]}-{idx:05d}-{source_hash[:12]}"
         flags: list[str] = []
 
         kind = str(payload.get("kind") or "").strip().upper()
@@ -194,18 +240,19 @@ def build_catalog_from_rows(
             kind,
             entity_id,
             territory.get("municipality_code"),
+            normalize_text(territory["municipality"]),
             address["address_normalized"],
-            name,
+            _name_core(name),
         )
 
         exact_key = "|".join(
             [
                 kind,
                 doc.get("document_number") or "",
-                normalize_text(name),
+                _name_core(name),
                 address["address_normalized"],
-                territory["municipality"],
-                territory["department"],
+                normalize_text(territory["municipality"]),
+                normalize_text(territory["department"]),
             ]
         )
 
@@ -216,6 +263,21 @@ def build_catalog_from_rows(
             existing_site_id = exact_index[exact_key]
             processing_status = "merged_duplicate"
             matched_site_id = existing_site_id
+            # Preserve phones from the duplicate row onto the kept site.
+            for phone in phones:
+                contacts.append(
+                    Contact(
+                        contact_id=_stable_id(existing_site_id, phone["value_raw"], prefix="ctc"),
+                        site_id=existing_site_id,
+                        contact_type=phone["contact_type"],
+                        value_raw=phone["value_raw"],
+                        value_normalized=phone["value_normalized"],
+                        e164=phone["e164"],
+                        is_valid=phone["is_valid"],
+                        is_public=False,
+                        source_record_id=source_record_id,
+                    )
+                )
             duplicates_merged.append(
                 {
                     "rule": "exact_normalized_match",
@@ -223,6 +285,7 @@ def build_catalog_from_rows(
                     "kept_site_id": existing_site_id,
                     "merged_source_record_id": source_record_id,
                     "row": idx,
+                    "phones_merged": len(phones),
                 }
             )
             source_records.append(
@@ -240,6 +303,32 @@ def build_catalog_from_rows(
                 )
             )
             continue
+
+        if site_id in sites:
+            # Never overwrite. Disambiguate and keep both sites for review.
+            collision_original = site_id
+            site_id = _disambiguate_site_id(site_id, row_number=idx, source_hash=source_hash)
+            site_provisional = True
+            flags.append("site_id_collision_disambiguated")
+            flags.append("requires_manual_review")
+            site_id_collisions.append(
+                {
+                    "row_number": idx,
+                    "source_record_id": source_record_id,
+                    "original_site_id": collision_original,
+                    "disambiguated_site_id": site_id,
+                    "previous_site_id": collision_original,
+                    "name": name,
+                    "document_number": doc.get("document_number"),
+                    "address_normalized": address["address_normalized"],
+                    "municipality": territory["municipality"],
+                    "actor_type": kind,
+                    "collision_reason": "site_id_hash_collision_without_exact_merge",
+                    "proposed_classification": "kept_both_disambiguated",
+                }
+            )
+            matched_site_id = site_id
+            processing_status = "pending_review"
 
         # Same document + different address => multi-sede (keep) but candidate note
         if doc.get("document_number"):
@@ -269,7 +358,9 @@ def build_catalog_from_rows(
             "ambiguous_document_type",
             "atypical_document_length",
             "invalid_nit_verification_digit",
+            "possible_nit_invalid_verification_digit",
             "document_collision",
+            "nit_body_length_unusual",
         }
         requires_review = (
             entity_review
@@ -278,6 +369,7 @@ def build_catalog_from_rows(
             or "insufficient_for_geocoding" in address["flags"]
             or territory["confidence"] == "none"
             or bool(set(doc.get("flags") or []) & review_doc_flags)
+            or "site_id_collision_disambiguated" in flags
         )
         if requires_review:
             flags.append("requires_manual_review")
@@ -287,6 +379,10 @@ def build_catalog_from_rows(
         geocode_status = "not_attempted"
         if "insufficient_for_geocoding" in address["flags"] or address["address_quality"] in {"missing", "invalid"}:
             geocode_status = "insufficient_address"
+
+        if status_info["exclude_from_normal_search"]:
+            processing_status = "pending_review"
+            flags.append("excluded_from_normal_search")
 
         site = Site(
             site_id=site_id,
@@ -324,9 +420,13 @@ def build_catalog_from_rows(
                 status=status_info["operational_status"],
             ),
             requires_manual_review=requires_review,
+            snapshot_presence="present",
+            last_seen_import_run_id=import_run_id,
             created_at=_utc_now(),
             updated_at=_utc_now(),
         )
+        if site_id in sites:
+            raise RuntimeError(f"refusing silent site_id overwrite: {site_id}")
         sites[site_id] = site
         exact_index[exact_key] = site_id
         entity_sites.setdefault(f"{kind}|{doc.get('document_number') or entity_id}", []).append(site_id)
@@ -346,10 +446,6 @@ def build_catalog_from_rows(
                 )
             )
 
-        if status_info["exclude_from_normal_search"]:
-            processing_status = "pending_review" if requires_review else "imported_as_site"
-            flags.append("excluded_from_normal_search")
-
         source_records.append(
             SourceRecord(
                 source_record_id=source_record_id,
@@ -360,9 +456,7 @@ def build_catalog_from_rows(
                 source_hash=source_hash,
                 matched_entity_id=entity_id,
                 matched_site_id=matched_site_id,
-                processing_status=processing_status if not (requires_review and status_info["exclude_from_normal_search"]) else (
-                    "pending_review" if status_info["exclude_from_normal_search"] else processing_status
-                ),
+                processing_status=processing_status,
                 processing_flags=flags + doc["flags"] + address["flags"] + territory["flags"],
             )
         )
@@ -381,6 +475,7 @@ def build_catalog_from_rows(
         "duplicate_candidates": duplicate_candidates,
         "rejected": rejected,
         "review_flags": review_flags,
+        "site_id_collisions": site_id_collisions,
         "reconciliation": {
             "input_rows": len(rows),
             "source_records": len(source_records),
@@ -389,9 +484,14 @@ def build_catalog_from_rows(
             "unique_sites": len(sites),
             "merged_duplicates": len(duplicates_merged),
             "duplicate_candidates": len(duplicate_candidates),
+            "site_id_collisions_disambiguated": len(site_id_collisions),
             "rejected": len(rejected),
             "sum_check": sum(status_counts.values()),
             "sum_matches_input": sum(status_counts.values()) == len(rows),
+            "non_merged_equals_unique_sites": (
+                status_counts.get("imported_as_site", 0) + status_counts.get("pending_review", 0)
+            )
+            == len(sites),
         },
     }
 
@@ -457,6 +557,7 @@ def write_reports(catalog: dict[str, Any], report_dir: Path, *, import_run: Impo
     dump("merged_duplicates.json", catalog["duplicates_merged"])
     dump("duplicate_candidates.json", [asdict(c) for c in catalog["duplicate_candidates"]])
     dump("rejected_records.json", catalog["rejected"])
+    dump("site_id_collisions.json", catalog.get("site_id_collisions") or [])
     dump(
         "document_review.json",
         [

@@ -2,414 +2,489 @@
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-carrera-10-9n-35-19073a9a5c75",
-    "merged_source_record_id": "src-01735-526c2194486ee310",
-    "row": 1735
+    "kept_site_id": "site-cda-centro-de-diagnostico-au-8973c8330e05",
+    "merged_source_record_id": "src-95f5bbe0-00166-49f9503fff51",
+    "row": 166,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-calle-70-norte-9-11-loca-ca22c21864d1",
-    "merged_source_record_id": "src-01736-afbc7a35a7087c7a",
-    "row": 1736
+    "kept_site_id": "site-cda-cda-divecol-f4b8a023a275",
+    "merged_source_record_id": "src-95f5bbe0-00421-ffbb0a480a97",
+    "row": 421,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-carrera-19-8-05-local-10-225337116eba",
-    "merged_source_record_id": "src-01737-74cbeb687e92091e",
-    "row": 1737
+    "kept_site_id": "site-cea-academia-de-conduccion-v-f01e78e46f57",
+    "merged_source_record_id": "src-95f5bbe0-01735-526c2194486e",
+    "row": 1735,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-calle-2-4-74-59eed67bda91",
-    "merged_source_record_id": "src-01738-4489835812d4b887",
-    "row": 1738
+    "kept_site_id": "site-cea-cea-automovilismo-del-ca-af677f6bce55",
+    "merged_source_record_id": "src-95f5bbe0-01736-afbc7a35a708",
+    "row": 1736,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-carrera-9-6-n-89-barrio--2d7a638363c1",
-    "merged_source_record_id": "src-01739-b0dc889632c8d97e",
-    "row": 1739
+    "kept_site_id": "site-cea-cea-sur-occidente-aad91f6f775a",
+    "merged_source_record_id": "src-95f5bbe0-01737-74cbeb687e92",
+    "row": 1737,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cea-carrera-8-21n-09-ciudad--b7a57a4df722",
-    "merged_source_record_id": "src-01740-25b4f698bca10cb9",
-    "row": 1740
+    "kept_site_id": "site-cea-escuela-de-automovilismo-55dc479d4b91",
+    "merged_source_record_id": "src-95f5bbe0-01738-4489835812d4",
+    "row": 1738,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-prov-cea-calle-7-5-10-barrio-golg-a1abc773554f",
-    "merged_source_record_id": "src-02063-d73ce5ca84ea048d",
-    "row": 2063
+    "kept_site_id": "site-cea-escuela-de-automovilismo-d82acabfa11e",
+    "merged_source_record_id": "src-95f5bbe0-01739-b0dc889632c8",
+    "row": 1739,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-prov-cea-carrera-1-1a-53-barrio-c-a4fa0d4832b0",
-    "merged_source_record_id": "src-02064-ff13fce9560f32c6",
-    "row": 2064
+    "kept_site_id": "site-cea-puchana-dagua-edisson-fe-d432b70a8a32",
+    "merged_source_record_id": "src-95f5bbe0-01740-25b4f698bca1",
+    "row": 1740,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-prov-cea-calle-15-07-24-piso-2-335e5aa1e81a",
-    "merged_source_record_id": "src-02065-2be51bdc40c65183",
-    "row": 2065
+    "kept_site_id": "site-cea-academia-nacional-de-con-24b2e46ffad6",
+    "merged_source_record_id": "src-95f5bbe0-02063-d73ce5ca84ea",
+    "row": 2063,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-prov-cea-calle-16-1-norte-12-barr-1df4ae605da4",
-    "merged_source_record_id": "src-02066-cfd8b6ae2fd3ecd5",
-    "row": 2066
+    "kept_site_id": "site-cea-cea-conductores-la-union-f8a58e05fcc0",
+    "merged_source_record_id": "src-95f5bbe0-02064-ff13fce9560f",
+    "row": 2064,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-prov-cea-carr-14-14-05-cb6d89bffd1e",
-    "merged_source_record_id": "src-02460-c2cb13a58bca5293",
-    "row": 2460
+    "kept_site_id": "site-cea-cea-gran-conductor-7346cb50cbb2",
+    "merged_source_record_id": "src-95f5bbe0-02065-2be51bdc40c6",
+    "row": 2065,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-127-d-bis-a-91-05-a2800b37e081",
-    "merged_source_record_id": "src-02814-fd6f77dae96f1da6",
-    "row": 2814
+    "kept_site_id": "site-cea-centro-de-ensenanza-auto-a9e92ca3560c",
+    "merged_source_record_id": "src-95f5bbe0-02066-cfd8b6ae2fd3",
+    "row": 2066,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-avenida-calle-80-71-59-a732143ddb66",
-    "merged_source_record_id": "src-02815-ca4d7cc708044c75",
-    "row": 2815
+    "kept_site_id": "site-cea-centro-de-ensenanza-auto-6e97d681a94b",
+    "merged_source_record_id": "src-95f5bbe0-02460-c2cb13a58bca",
+    "row": 2460,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-18-77-51-local-202-8e9bf1d9a938",
-    "merged_source_record_id": "src-02816-77923ec99be3d8bf",
-    "row": 2816
+    "kept_site_id": "site-cia-automundo-centro-integra-04dfd4fe8870",
+    "merged_source_record_id": "src-95f5bbe0-02814-fd6f77dae96f",
+    "row": 2814,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-23-c-69-55-lc-1-1d165af05925",
-    "merged_source_record_id": "src-02817-9cf6041ce0db8375",
-    "row": 2817
+    "kept_site_id": "site-cia-automundo-centro-integra-e32a83181a14",
+    "merged_source_record_id": "src-95f5bbe0-02815-ca4d7cc70804",
+    "row": 2815,
+    "phones_merged": 2
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-ac-161-19-24-63eee56ffb92",
-    "merged_source_record_id": "src-02818-7db3846fa5ff4d6f",
-    "row": 2818
+    "kept_site_id": "site-cia-centro-integral-de-atenc-4956236ee1fe",
+    "merged_source_record_id": "src-95f5bbe0-02816-77923ec99be3",
+    "row": 2816,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-69-b-25-01-sur-p-e8c441bb4f06",
-    "merged_source_record_id": "src-02819-23ce5e23e35212e5",
-    "row": 2819
+    "kept_site_id": "site-cia-centro-integral-de-atenc-973327726432",
+    "merged_source_record_id": "src-95f5bbe0-02817-9cf6041ce0db",
+    "row": 2817,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-26-71-b-30-local-04ec1040e287",
-    "merged_source_record_id": "src-02820-88c191df3a527b2f",
-    "row": 2820
+    "kept_site_id": "site-cia-centro-integral-de-atenc-c18fe5b153a8",
+    "merged_source_record_id": "src-95f5bbe0-02818-7db3846fa5ff",
+    "row": 2818,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-transversal-55-98-a-66-l-77e38c787c7e",
-    "merged_source_record_id": "src-02821-a35a026570f507ae",
-    "row": 2821
+    "kept_site_id": "site-cia-centro-integral-de-atenc-86870bc64b40",
+    "merged_source_record_id": "src-95f5bbe0-02819-23ce5e23e352",
+    "row": 2819,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-17-19-16-sur-p2-988a4d0909bd",
-    "merged_source_record_id": "src-02822-005b5a5dc793058f",
-    "row": 2822
+    "kept_site_id": "site-cia-centro-integral-de-atenc-7dfd1b5b71e2",
+    "merged_source_record_id": "src-95f5bbe0-02820-88c191df3a52",
+    "row": 2820,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-17-19-b-48-sur-819a5fde545e",
-    "merged_source_record_id": "src-02823-4240c14c3730c21e",
-    "row": 2823
+    "kept_site_id": "site-cia-centro-integral-de-atenc-253d36d8324c",
+    "merged_source_record_id": "src-95f5bbe0-02821-a35a026570f5",
+    "row": 2821,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-57-45-08-sur-in--da4a9aae880a",
-    "merged_source_record_id": "src-02824-4baaece0fdc6380c",
-    "row": 2824
+    "kept_site_id": "site-cia-centro-integral-de-atenc-c860e3f61ebd",
+    "merged_source_record_id": "src-95f5bbe0-02822-005b5a5dc793",
+    "row": 2822,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-92-146-b-10-of-2-931c67832f17",
-    "merged_source_record_id": "src-02825-8a58abc52fa45f31",
-    "row": 2825
+    "kept_site_id": "site-cia-centro-integral-de-atenc-82f84b16c021",
+    "merged_source_record_id": "src-95f5bbe0-02823-4240c14c3730",
+    "row": 2823,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-23-69-11-modulo-3d54308d5339",
-    "merged_source_record_id": "src-02826-0b51a5a9f25dcd5b",
-    "row": 2826
+    "kept_site_id": "site-cia-centro-integral-de-atenc-cf6201f2b5e4",
+    "merged_source_record_id": "src-95f5bbe0-02824-4baaece0fdc6",
+    "row": 2824,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-45-a-sur-52-c-81-p-29a2ea1d3cbd",
-    "merged_source_record_id": "src-02827-00e36955093e6cb7",
-    "row": 2827
+    "kept_site_id": "site-cia-centro-integral-de-atenc-375e654f8d01",
+    "merged_source_record_id": "src-95f5bbe0-02825-8a58abc52fa4",
+    "row": 2825,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-avenida-calle-75-sur-81--b05e3cafacf0",
-    "merged_source_record_id": "src-02828-397592d1bd6206b1",
-    "row": 2828
+    "kept_site_id": "site-cia-centro-integral-de-atenc-11efcb6c2a2d",
+    "merged_source_record_id": "src-95f5bbe0-02826-0b51a5a9f25d",
+    "row": 2826,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-avenida-carrera-24-73-62-82fdaacfcb77",
-    "merged_source_record_id": "src-02829-c200046498d4d1b8",
-    "row": 2829
+    "kept_site_id": "site-cia-centro-integral-de-atenc-ee9147c07fb9",
+    "merged_source_record_id": "src-95f5bbe0-02827-00e36955093e",
+    "row": 2827,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-transversal-93-64g-07-36c89cc367ba",
-    "merged_source_record_id": "src-02830-94401c0a2b826f09",
-    "row": 2830
+    "kept_site_id": "site-cia-centro-integral-de-atenc-208c41bb231c",
+    "merged_source_record_id": "src-95f5bbe0-02828-397592d1bd62",
+    "row": 2828,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-147-101-56-loc-54-e85672fb00b2",
-    "merged_source_record_id": "src-02831-e22deec261d45184",
-    "row": 2831
+    "kept_site_id": "site-cia-cia-capital-24-38ef0712a08c",
+    "merged_source_record_id": "src-95f5bbe0-02829-c200046498d4",
+    "row": 2829,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-23-69-11-modulo-0758cfb4b9e1",
-    "merged_source_record_id": "src-02832-789a9b25a1ba7ccb",
-    "row": 2832
+    "kept_site_id": "site-cia-cia-coviacol-alamos-ee8e7ed8d7a9",
+    "merged_source_record_id": "src-95f5bbe0-02830-94401c0a2b82",
+    "row": 2830,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-23-69-11-local--45e64bf7e1dc",
-    "merged_source_record_id": "src-02833-04125d8ebb93038d",
-    "row": 2833
+    "kept_site_id": "site-cia-cia-coviacol-bogota-2-22db2e9b1201",
+    "merged_source_record_id": "src-95f5bbe0-02831-e22deec261d4",
+    "row": 2831,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-59-c-sur-51-21-loc-254cd051398a",
-    "merged_source_record_id": "src-02834-78f980c27be31606",
-    "row": 2834
+    "kept_site_id": "site-cia-cia-de-bogota-b1f5a61dd1e8",
+    "merged_source_record_id": "src-95f5bbe0-02832-789a9b25a1ba",
+    "row": 2832,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-19-99-48-local-1-a9fcbf558bf9",
-    "merged_source_record_id": "src-02835-23c99579f8bad07f",
-    "row": 2835
+    "kept_site_id": "site-cia-cia-del-transito-bogota-5ea806212e29",
+    "merged_source_record_id": "src-95f5bbe0-02833-04125d8ebb93",
+    "row": 2833,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-65-sur-78-h-51-loc-c77be45afa46",
-    "merged_source_record_id": "src-02836-403a75f69105adc7",
-    "row": 2836
+    "kept_site_id": "site-cia-cia-digital-el-ensueno-c-696097d1471e",
+    "merged_source_record_id": "src-95f5bbe0-02834-78f980c27be3",
+    "row": 2834,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-18-77-51-local-214-b05544fda703",
-    "merged_source_record_id": "src-02837-b3d472328af42a53",
-    "row": 2837
+    "kept_site_id": "site-cia-cia-digital-fontibon-0347db5f5bc3",
+    "merged_source_record_id": "src-95f5bbe0-02835-23c99579f8ba",
+    "row": 2835,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-ac-28-19b-87-ed-uransa1--51117330da57",
-    "merged_source_record_id": "src-02838-4983a918f50148df",
-    "row": 2838
+    "kept_site_id": "site-cia-cia-digital-gran-plaza-b-70cc2b1d6f59",
+    "merged_source_record_id": "src-95f5bbe0-02836-403a75f69105",
+    "row": 2836,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-10-b-sur-15-a-64-dfff55b3d610",
-    "merged_source_record_id": "src-02839-4feef6e8f1926145",
-    "row": 2839
+    "kept_site_id": "site-cia-cia-digital-meridiano-ca-3a73231f8c5f",
+    "merged_source_record_id": "src-95f5bbe0-02837-b3d472328af4",
+    "row": 2837,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-avenida-carrera-45-106-0-fe4e2df7c6a0",
-    "merged_source_record_id": "src-02840-7595ac516bd49e22",
-    "row": 2840
+    "kept_site_id": "site-cia-cia-digital-teusaquillo-77c0a282dcdf",
+    "merged_source_record_id": "src-95f5bbe0-02838-4983a918f501",
+    "row": 2838,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-15-94-61-bd028dbce08d",
-    "merged_source_record_id": "src-02842-23816bc5d9a26eaa",
-    "row": 2842
+    "kept_site_id": "site-cia-cia-inteligencia-vial-bo-30c48ae36c6c",
+    "merged_source_record_id": "src-95f5bbe0-02839-4feef6e8f192",
+    "row": 2839,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-129-55-24-6a05d922ab2f",
-    "merged_source_record_id": "src-02843-1fdaa38975030b59",
-    "row": 2843
+    "kept_site_id": "site-cia-cia-mitransito-co-norte--a33bdc96178f",
+    "merged_source_record_id": "src-95f5bbe0-02840-7595ac516bd4",
+    "row": 2840,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-37-sur-n-24-06-5cb8b433e890",
-    "merged_source_record_id": "src-02844-9cb555b5d5855eea",
-    "row": 2844
+    "kept_site_id": "site-cia-cia-movilidad-bogota-8ab1aa76ce37",
+    "merged_source_record_id": "src-95f5bbe0-02842-23816bc5d9a2",
+    "row": 2842,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-14-sur-22-48-e49d91be37ad",
-    "merged_source_record_id": "src-02845-67bc38b8953ac628",
-    "row": 2845
+    "kept_site_id": "site-cia-cia-movilidad-bogota-90f4bb546bac",
+    "merged_source_record_id": "src-95f5bbe0-02843-1fdaa3897503",
+    "row": 2843,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-30d-sur-5-a-43-loc-b419ae46fc7c",
-    "merged_source_record_id": "src-02846-9abaf66b6f16e42d",
-    "row": 2846
+    "kept_site_id": "site-cia-cia-movilidad-de-bogota-c8905923b208",
+    "merged_source_record_id": "src-95f5bbe0-02844-9cb555b5d585",
+    "row": 2844,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-19-100-50-locales--c4062cbbf07c",
-    "merged_source_record_id": "src-02847-7160f018f608713f",
-    "row": 2847
+    "kept_site_id": "site-cia-cia-movilidad-restrepo-16a9b15e159f",
+    "merged_source_record_id": "src-95f5bbe0-02845-67bc38b8953a",
+    "row": 2845,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-57-c-sur-62-60--61ef3a01f56e",
-    "merged_source_record_id": "src-02848-2a65a15eeea567ef",
-    "row": 2848
+    "kept_site_id": "site-cia-cia-pago-comparendo-20-d-70b4fe420579",
+    "merged_source_record_id": "src-95f5bbe0-02846-9abaf66b6f16",
+    "row": 2846,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-12-8-65-p-3-6f56be0795df",
-    "merged_source_record_id": "src-02849-d69cab33e768b1b4",
-    "row": 2849
+    "kept_site_id": "site-cia-cia-pago-comparendo-font-a7cdd10383d5",
+    "merged_source_record_id": "src-95f5bbe0-02847-7160f018f608",
+    "row": 2847,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-8-sur-32-16-3927acc70d51",
-    "merged_source_record_id": "src-02850-6e7e1aa358821937",
-    "row": 2850
+    "kept_site_id": "site-cia-cia-paseo-villa-del-rio-fa7fe36c8dca",
+    "merged_source_record_id": "src-95f5bbe0-02848-2a65a15eeea5",
+    "row": 2848,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-13-37-86-d5526211a004",
-    "merged_source_record_id": "src-02851-e49b4223b18530cf",
-    "row": 2851
+    "kept_site_id": "site-cia-cia-stanford-chia-1a5a45beed4c",
+    "merged_source_record_id": "src-95f5bbe0-02849-d69cab33e768",
+    "row": 2849,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-transversal-93-63-32-lc--1b7d1c2fc792",
-    "merged_source_record_id": "src-02852-49c56dc514ba00aa",
-    "row": 2852
+    "kept_site_id": "site-cia-cia-vial-pro-6adff1577837",
+    "merged_source_record_id": "src-95f5bbe0-02850-6e7e1aa35882",
+    "row": 2850,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-ac-19-28-80-lc-d01b-piso-be63ee05d7b2",
-    "merged_source_record_id": "src-02853-e274877f2fa229db",
-    "row": 2853
+    "kept_site_id": "site-cia-ciatran-calle-13-dos-1f749e6f85ae",
+    "merged_source_record_id": "src-95f5bbe0-02851-e49b4223b185",
+    "row": 2851,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-14-sur-22-37-97fdcef977b1",
-    "merged_source_record_id": "src-02854-ae797b7fffe95ee8",
-    "row": 2854
+    "kept_site_id": "site-cia-ciatran-calle-13-tres-a009963008a4",
+    "merged_source_record_id": "src-95f5bbe0-02852-49c56dc514ba",
+    "row": 2852,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-diagonal-23-b-69-a-55-md-5d4a8ecade0e",
-    "merged_source_record_id": "src-02855-6986a4edd185fdcb",
-    "row": 2855
+    "kept_site_id": "site-cia-ciatran-mall-plaza-b6dbca02a1d9",
+    "merged_source_record_id": "src-95f5bbe0-02853-e274877f2fa2",
+    "row": 2853,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-134-55-20-zona-com-b398cbdcca85",
-    "merged_source_record_id": "src-02856-21afd1496843f1d1",
-    "row": 2856
+    "kept_site_id": "site-cia-ciatran-restrepo-c7130068ce06",
+    "merged_source_record_id": "src-95f5bbe0-02854-ae797b7fffe9",
+    "row": 2854,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-14-b-119-92-703ed5852d73",
-    "merged_source_record_id": "src-02857-a289f1687a77e26d",
-    "row": 2857
+    "kept_site_id": "site-cia-ciatran-ba4e3a979787",
+    "merged_source_record_id": "src-95f5bbe0-02855-6986a4edd185",
+    "row": 2855,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-18-11-70-12c5e82b0c27",
-    "merged_source_record_id": "src-02858-d928fda2341570eb",
-    "row": 2858
+    "kept_site_id": "site-cia-ciatran-san-rafael-b81200e44c9b",
+    "merged_source_record_id": "src-95f5bbe0-02856-21afd1496843",
+    "row": 2856,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-carrera-27-27-53-sur-pi--31549c62b638",
-    "merged_source_record_id": "src-02859-a52c9bd65b050e74",
-    "row": 2859
+    "kept_site_id": "site-cia-ciatran-unicentro-e44262a840bc",
+    "merged_source_record_id": "src-95f5bbe0-02857-a289f1687a77",
+    "row": 2857,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-13-36-51-8603b4e5cc84",
-    "merged_source_record_id": "src-02860-91517f22548fef92",
-    "row": 2860
+    "kept_site_id": "site-cia-centro-integral-de-atenc-8b2ba3daa731",
+    "merged_source_record_id": "src-95f5bbe0-02858-d928fda23415",
+    "row": 2858,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-185-45-03-plaza-ec-962d99353f46",
-    "merged_source_record_id": "src-02861-812b556caae122b2",
-    "row": 2861
+    "kept_site_id": "site-cia-descuentos-comparendos-s-96566f6a5302",
+    "merged_source_record_id": "src-95f5bbe0-02859-a52c9bd65b05",
+    "row": 2859,
+    "phones_merged": 1
   },
   {
     "rule": "exact_normalized_match",
     "confidence": 1.0,
-    "kept_site_id": "site-cia-calle-168-22-35-oficina--70ba5b64042e",
-    "merged_source_record_id": "src-02862-9d1facf772d76107",
-    "row": 2862
+    "kept_site_id": "site-cia-formacion-activa-vial-fa-d73438927a8f",
+    "merged_source_record_id": "src-95f5bbe0-02860-91517f22548f",
+    "row": 2860,
+    "phones_merged": 1
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-movilizafacil-1b3363bedd13",
+    "merged_source_record_id": "src-95f5bbe0-02861-812b556caae1",
+    "row": 2861,
+    "phones_merged": 1
+  },
+  {
+    "rule": "exact_normalized_match",
+    "confidence": 1.0,
+    "kept_site_id": "site-cia-tecni-vial-centro-integr-14e4acf92ccb",
+    "merged_source_record_id": "src-95f5bbe0-02862-9d1facf772d7",
+    "row": 2862,
+    "phones_merged": 1
   }
 ]

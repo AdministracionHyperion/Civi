@@ -1,50 +1,52 @@
 {
-  "import_run_id": "10891f34-9256-4ea8-8d4d-ad539c9cf46f",
+  "import_run_id": "95f5bbe0-a27f-45aa-9601-41cc2dd1630c",
   "input_sha256": "457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634",
   "source_records": 4107,
   "unique_entities": 3293,
-  "unique_sites": 4044,
+  "unique_sites": 4046,
   "by_actor_type": {
-    "CDA": 985,
+    "CDA": 987,
     "CEA": 1541,
     "CIA": 724,
     "CRC": 794
   },
   "by_operational_status": {
-    "unknown": 4038,
+    "unknown": 4040,
     "retired": 6
   },
   "partners": 0,
   "bookable": 0,
   "geocoded": 0,
-  "pending_geocoding": 3974,
+  "pending_geocoding": 3976,
   "insufficient_address": 70,
-  "manual_review": 1980,
-  "duplicate_candidates": 2815,
-  "merged_duplicates": 59,
+  "manual_review": 3705,
+  "duplicate_candidates": 2814,
+  "merged_duplicates": 61,
   "invalid_addresses": 2,
   "partial_addresses": 280,
-  "valid_addresses": 3762,
-  "valid_phones": 3882,
+  "valid_addresses": 3764,
+  "valid_phones": 3942,
   "invalid_phones": 169,
-  "valid_documents": 3264,
-  "invalid_documents": 29,
+  "valid_documents": 339,
+  "invalid_documents": 2954,
   "reconciliation": {
     "input_rows": 4107,
     "source_records": 4107,
     "by_processing_status": {
-      "imported_as_site": 4042,
-      "merged_duplicate": 59,
+      "imported_as_site": 4040,
+      "merged_duplicate": 61,
       "pending_review": 6
     },
     "unique_entities": 3293,
-    "unique_sites": 4044,
-    "merged_duplicates": 59,
-    "duplicate_candidates": 2815,
+    "unique_sites": 4046,
+    "merged_duplicates": 61,
+    "duplicate_candidates": 2814,
+    "site_id_collisions_disambiguated": 0,
     "rejected": 0,
     "sum_check": 4107,
-    "sum_matches_input": true
+    "sum_matches_input": true,
+    "non_merged_equals_unique_sites": true
   },
   "source_updated_at": null,
-  "snapshot_at": "2026-07-09T22:59:55.000079+00:00"
+  "snapshot_at": "2026-07-09T23:32:15.984792+00:00"
 }

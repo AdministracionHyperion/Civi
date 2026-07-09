@@ -19,6 +19,7 @@ class CatalogSummaryResponse(BaseModel):
     invalid_addresses: int = 0
     invalid_phones: int | None = None
     invalid_documents: int | None = None
+    absent_from_snapshot: int | None = None
     pending_geocoding_detail: dict | None = None
     latest_import: dict | None = None
     source_updated_at: str | None = None

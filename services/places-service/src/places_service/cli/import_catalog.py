@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
 from places_service.adapters.outbound.catalog_repository import CatalogSqlRepository
+from places_service.adapters.outbound.geocoding.provider import geocoder_from_env
+from places_service.adapters.outbound.migrate import migrate_legacy_places_rows, migrate_schema
 from places_service.domain.models import ImportRun
 from places_service.pipeline.catalog_builder import build_catalog_from_rows, write_reports
 
@@ -26,8 +29,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--report-dir", type=Path, default=Path("services/places-service/data/reports"))
     parser.add_argument("--source-updated-at", default=None)
-    parser.add_argument("--skip-geocoding", action="store_true", default=True)
+    parser.add_argument(
+        "--skip-geocoding",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Skip geocoding (default: true). Use --no-skip-geocoding to attempt configured provider.",
+    )
     parser.add_argument("--database-url", default=None)
+    parser.add_argument("--migrate-legacy", action="store_true", help="Copy legacy places rows into places_sites if empty")
     args = parser.parse_args(argv)
 
     if not args.dry_run and not args.apply:
@@ -52,6 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     recon = catalog["reconciliation"]
     if not recon["sum_matches_input"]:
         raise SystemExit(f"reconciliation mismatch: {recon}")
+    if not recon.get("non_merged_equals_unique_sites", True):
+        raise SystemExit(f"site count mismatch vs non-merged rows: {recon}")
 
     import_run = ImportRun(
         import_run_id=import_run_id,
@@ -62,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
         status="dry_run" if args.dry_run else "applied",
         completed_at=_utc_now(),
         source_record_count=len(rows),
-        inserted_count=recon["unique_sites"],
+        inserted_count=0,
         updated_count=0,
         unchanged_count=0,
         merged_count=recon["merged_duplicates"],
@@ -75,6 +86,31 @@ def main(argv: list[str] | None = None) -> int:
 
     write_reports(catalog, args.report_dir, import_run=import_run)
 
+    geocode_stats = None
+    if not args.skip_geocoding:
+        geocoder = geocoder_from_env()
+        geocode_stats = {"attempted": 0, "success": 0, "failed": 0, "skipped": 0}
+        for site in catalog["sites"]:
+            if site.lat is not None and site.lng is not None:
+                geocode_stats["skipped"] += 1
+                continue
+            if site.geocode_status == "insufficient_address":
+                geocode_stats["skipped"] += 1
+                continue
+            query = f"{site.address_raw}, {site.municipality}, {site.department}, Colombia"
+            result = geocoder.geocode(query, site_id=site.site_id)
+            geocode_stats["attempted"] += 1
+            site.geocode_provider = result.provider
+            site.geocode_status = result.status
+            site.geocode_confidence = result.confidence
+            if result.status == "success" and result.lat is not None and result.lng is not None:
+                site.lat = result.lat
+                site.lng = result.lng
+                site.location_precision = result.precision
+                geocode_stats["success"] += 1
+            else:
+                geocode_stats["failed"] += 1
+
     summary = {
         "mode": "dry_run" if args.dry_run else "apply",
         "input": str(input_path),
@@ -84,15 +120,18 @@ def main(argv: list[str] | None = None) -> int:
         "unique_entities": recon["unique_entities"],
         "report_dir": str(args.report_dir),
         "skip_geocoding": args.skip_geocoding,
+        "geocode_stats": geocode_stats,
+        "site_id_collisions": len(catalog.get("site_id_collisions") or []),
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
     if args.apply:
-        database_url = args.database_url or __import__("os").getenv("PLACES_DATABASE_URL")
+        database_url = args.database_url or os.getenv("PLACES_DATABASE_URL")
         if not database_url:
-            # default local sqlite for apply in tests/dev
             database_url = "sqlite+pysqlite:///services/places-service/data/processed/places_catalog.sqlite"
-        repo = CatalogSqlRepository(database_url, create_schema=True)
+        repo = CatalogSqlRepository(database_url, create_schema=False)
+        migration = migrate_schema(repo.engine)
+        legacy = migrate_legacy_places_rows(repo.engine) if args.migrate_legacy else 0
         counts = repo.apply_import(
             import_run=import_run,
             entities=catalog["entities"],
@@ -101,7 +140,19 @@ def main(argv: list[str] | None = None) -> int:
             source_records=catalog["source_records"],
             duplicate_candidates=catalog["duplicate_candidates"],
         )
-        print(json.dumps({"applied": True, "database_url": database_url, **counts}, ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                {
+                    "applied": True,
+                    "database_url": database_url,
+                    "migration": migration,
+                    "legacy_migrated": legacy,
+                    **counts,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
 
     return 0
 

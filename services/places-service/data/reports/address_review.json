@@ -1,1411 +1,1411 @@
 [
   {
-    "site_id": "site-prov-cda-pd-bomba-la-posesion-ver-2f1a0dcb7db1",
+    "site_id": "site-cda-cda-la-posesion-f749cf12990a",
     "address_raw": "PD. BOMBA LA POSESION VEREDA LAS COLONIAS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-envigado-antioquia-3259eb0b23e7",
+    "site_id": "site-cda-envidiagnostico-56eb74d4df12",
     "address_raw": "Envigado, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-cll28-36-123-99622e1c15b3",
+    "site_id": "site-cda-cda-marinilla-centro-764e36a6f8b3",
     "address_raw": "CLL28#36-123",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-medellin-antioquia-ebffa1ace67e",
+    "site_id": "site-cda-cda-solomotos-c158cd75963b",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-sabaneta-antioquia-8f2cc47cef17",
+    "site_id": "site-cda-centro-de-diagnostico-au-707c1e297139",
     "address_raw": "Sabaneta, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-cir-13-24-local-7-4db091b48961",
+    "site_id": "site-cda-cda-de-san-jeronimo-a6e41ef6bfae",
     "address_raw": "CIR 13 24 LOCAL 7",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-santa-rosa-de-osos-antio-0705f95d359c",
+    "site_id": "site-cda-c-d-a-santa-rosa-de-osos-27960e6ba7e9",
     "address_raw": "Santa Rosa De Osos, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-bolombolo-sector--c5acf981cdaa",
+    "site_id": "site-cda-c-d-a-suroeste-0b2a8a20662d",
     "address_raw": "VEREDA BOLOMBOLO-SECTOR LA COQUERA-LOTE B",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-arauca-arauca-2df9e635fa20",
+    "site_id": "site-cda-centro-de-diagnostico-au-d4bf4190a2fc",
     "address_raw": "Arauca, Arauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-57-r-sur-74-g-15-fea1b5ab0b27",
+    "site_id": "site-cda-cda-autopista-sur-1420429c8ba8",
     "address_raw": "AC 57 R SUR # 74 G 15",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-6-41a-40-y-ac-6-41c-0-a42e8a7ced96",
+    "site_id": "site-cda-cda-avenida-sexta-bc588d952a97",
     "address_raw": "AC 6 NO 41A - 40 Y AC 6 NO 41C - 08",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-6-n-16-60-d10778743812",
+    "site_id": "site-cda-cda-cemoto-4769737386ef",
     "address_raw": "AC 6 N° 16-60",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-bogota-bogota-d-c-779aaf552d0d",
+    "site_id": "site-cda-cda-del-occidente-avenid-0c0d878eaacd",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-comercial-ac-17-81b-29-1237ea9eb8d3",
+    "site_id": "site-cda-cda-la-13-836111cd33c8",
     "address_raw": "COMERCIAL AC 17 NO 81B 29",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-71-sur-3a-83-ce76a60c85fe",
+    "site_id": "site-cda-cda-la-aurora-d899e95d3683",
     "address_raw": "AC 71 SUR # 3A-83",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-26-sur-68-f-54-6ee0197f082d",
+    "site_id": "site-cda-cda-maxi-moto-d6c741471ec5",
     "address_raw": "AC 26 SUR # 68 F - 54",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-bogota-bogota-d-c-d8455f640291",
+    "site_id": "site-cda-cda-morato-10d40fa8c58b",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-22-34-63-57-0ce14e298b75",
+    "site_id": "site-cda-cdacarpool-b6bb994d0bb4",
     "address_raw": "AC 22 34 63 /57",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-bogota-bogota-d-c-1abbb5281ad1",
+    "site_id": "site-cda-centro-de-diagnostico-au-341013f9bc57",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-57-r-sur-64-88-68-98-395cd857a244",
+    "site_id": "site-cda-centro-de-diagnostico-au-39d1306753f7",
     "address_raw": "AC 57 R SUR 64 - 88 / 68 / 98",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-ac-9-50-15-local-e-1114--6fd80c36b861",
+    "site_id": "site-cda-centro-de-diagnostico-au-1551336a894d",
     "address_raw": "AC 9 # 50-15 LOCAL E 1114 LOCAL C 1056 Y LOCAL C 1054",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-bogota-bogota-d-c-9694e175c8d9",
+    "site_id": "site-cda-centro-de-diagnostico-au-1211df8be96f",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-bogota-bogota-d-c-9bef34232d92",
+    "site_id": "site-cda-centro-de-diagnostico-au-c011ba259d08",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-carretera-la-cordialidad-6c8ab993e6fe",
+    "site_id": "site-cda-autocentro-super-car-d6e1a0edf400",
     "address_raw": "CARRETERA LA CORDIALIDAD SECTOR DOÑA MANUELA CONTIGUO AL TERMINAL",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-urbanizacion-portal-de-l-1f9a65c1f1c6",
+    "site_id": "site-cda-cda-la-cordialidad-8562fad3499d",
     "address_raw": "URBANIZACION PORTAL DE LA TERMINAL MZ AD 41H NO 74 66",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-cartagena-bolivar-fe6d4d8f18e6",
+    "site_id": "site-cda-centro-de-diagnostico-au-9e74a2cadc92",
     "address_raw": "Cartagena, Bolivar",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-cartagena-bolivar-8aad762b314c",
+    "site_id": "site-cda-enlace-cda-94f723d13e35",
     "address_raw": "Cartagena, Bolivar",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-c-31-48a-11-91e356f95186",
+    "site_id": "site-cda-revision-tecnico-mecanic-b05f680392c9",
     "address_raw": "C 31 48A-11",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-llave-de-oro-lote-b6b-e6a1f84f67d8",
+    "site_id": "site-cda-cda-inteligencia-vial-ca-cc31b544053b",
     "address_raw": "LLAVE DE ORO LOTE B6B",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vrd-san-onofre-lote-3-f4bcc8b5480e",
+    "site_id": "site-cda-cda-fenix-5877d97b1ed1",
     "address_raw": "VRD SAN ONOFRE LOTE 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-duitama-boyaca-858e21b4e732",
+    "site_id": "site-cda-centro-de-diagnostico-au-9a42fc5430d1",
     "address_raw": "Duitama, Boyaca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-llano-grande-finc-c5378b1c92b0",
+    "site_id": "site-cda-cda-guateque-1afae4ca753b",
     "address_raw": "VDA LLANO GRANDE FINCA BELLA VISTA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-tunja-boyaca-287d3347de32",
+    "site_id": "site-cda-cendicen-9f425c479944",
     "address_raw": "Tunja, Boyaca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-vereda-san-onofre-c95c0fe0ce6a",
+    "site_id": "site-cda-centro-de-diagnostico-au-5ad879225f2e",
     "address_raw": "VEREDA SAN ONOFRE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-manizales-caldas-cbcdd7939de4",
+    "site_id": "site-cda-centro-de-diagnostico-au-3d4eddcf6a62",
     "address_raw": "Manizales, Caldas",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-antigua-piscina-puente-s-d13403e1fcee",
+    "site_id": "site-cda-diagnosticentro-villamar-1a47b910c618",
     "address_raw": "ANTIGUA PISCINA- PUENTE SALIDA VILLAMARIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-centro-empresarial-agora-9fead1aace6f",
+    "site_id": "site-cda-centro-de-diagnostico-au-22c01efe9049",
     "address_raw": "CENTRO EMPRESARIAL AGORAA BODEGA 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-centro-de-diagnostico-au-59ca36936ab0",
+    "site_id": "site-cda-centro-de-diagnostico-au-4026ce33815a",
     "address_raw": "CENTRO DE DIAGNOSTICO AUTOMOTOR YARI ZOMAC SAS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-k-20-35-67-c-36-20-15-el-5ee06b76fbc8",
+    "site_id": "site-cda-centro-de-diagnostico-au-aeea310fbf6b",
     "address_raw": "K 20 35 67 C 36 20 15 - EL 20 DE JULIO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-la-carolina-via-piendamo-2aa2ca2343eb",
+    "site_id": "site-prov-cda-centro-de-diagnostico-au-78e38f43768c",
     "address_raw": "LA CAROLINA VIA PIENDAMO MORALES VEREDA LA FLORIDA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-parque-industrial-el-cof-f6a93b143ef3",
+    "site_id": "site-cda-cda-quilichao-ba11a0f99c7c",
     "address_raw": "PARQUE INDUSTRIAL EL COFRE CENTRO POBLADO DE SAN JOSE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-monteria-cordoba-c3c07e37b975",
+    "site_id": "site-cda-cda-centro-de-diagnostic-0b88b3a5d4e9",
     "address_raw": "Monteria, Cordoba",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-crr-9-a-21-31-a400366b30c4",
+    "site_id": "site-cda-cda-chia-583cc6161b94",
     "address_raw": "CRR 9 A # 21-31",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-cerca-de-piedra-s-8c0a12d16d6b",
+    "site_id": "site-cda-centro-de-diagnostico-au-70ec40270407",
     "address_raw": "VEREDA CERCA DE PIEDRA SECTOR LA RUANA PREDIO CHEOUX",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-susagua-parte-baj-b0bd5ad0ac8e",
+    "site_id": "site-cda-centro-de-diagnostico-au-d3ea5a5ca351",
     "address_raw": "VEREDA SUSAGUA PARTE BAJA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-siberia-auto-mede-5034555dd534",
+    "site_id": "site-cda-cda-tecnosabana-cd319b273827",
     "address_raw": "VEREDA SIBERIA AUTO MEDELLIN CENTRO EMPRESARIAL LOS ROBLES",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-cra9-25-65-cra12-25-72-aae5a7eccea6",
+    "site_id": "site-cda-centro-de-diagnostico-au-d85dadf2ca32",
     "address_raw": "CRA9#25-65/ CRA12#25-72",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-la-aurora-lt-la-c-781f3103ac06",
+    "site_id": "site-cda-cda-el-roble-74557795c3fa",
     "address_raw": "VDA LA AURORA LT LA CORRALEJA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-cda-de-la-terminal-de-tr-8eaaf6c726d7",
+    "site_id": "site-cda-cda-de-la-terminal-de-tr-9554b10d2c9a",
     "address_raw": "CDA DE LA TERMINAL DE TRANSPORTES DE GIRARDOT S.A.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-girardot-cundinamarca-1229dd9ff90d",
+    "site_id": "site-cda-cda-revicar-girardot-4df5b15c1333",
     "address_raw": "Girardot, Cundinamarca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-mosquera-cundinamarca-ba5e536bd28e",
+    "site_id": "site-cda-cda-control-autos-de-mos-ffaf8a025d44",
     "address_raw": "Mosquera, Cundinamarca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-lote-3b-9d55c4ecbb4f",
+    "site_id": "site-cda-cda-tabio-1ed4a05bcd60",
     "address_raw": "LOTE #3B",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-villeta-cundinamarca-df0948ef15b1",
+    "site_id": "site-cda-control-autos-del-gualiv-94e699ad91a2",
     "address_raw": "Villeta, Cundinamarca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-zipaquira-cundinamarca-d2934d0873d0",
+    "site_id": "site-cda-centro-de-diagnostico-au-d7b3fc6f123b",
     "address_raw": "Zipaquira, Cundinamarca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-400-metros-antes-del-ret-6c5ba365706d",
+    "site_id": "site-cda-dismacor-cda-zipaquira-a0a91821f0f5",
     "address_raw": "400 METROS ANTES DEL RETEN LA FRAGUITA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-tranversal-8-a-37-114-f76d0ea5ae7b",
+    "site_id": "site-cda-centro-de-diagnostico-au-a50c6375f182",
     "address_raw": "TRANVERSAL 8 A # 37-114",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-neiva-huila-813aa4507e52",
+    "site_id": "site-cda-centro-de-diagnostico-au-af45c018a1ea",
     "address_raw": "Neiva, Huila",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-acacias-meta-5990d5ca3cc3",
+    "site_id": "site-cda-centro-nacional-de-diagn-4c022612c72c",
     "address_raw": "Acacias, Meta",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-k-10-35-45-d06db2e67cd2",
+    "site_id": "site-cda-sobre-ruedas-cda-d641936e32c2",
     "address_raw": "K 10 # 35-45",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-la-venturosa-pred-ab34474bd54c",
+    "site_id": "site-cda-centro-de-diagnostico-au-c316373cfdf8",
     "address_raw": "VEREDA LA VENTUROSA PREDIO FILADELFIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-k-33-4-27-29-31-k34-24-3-8ab3a7559d20",
+    "site_id": "site-cda-centro-de-diagnostico-au-acfa147b16bc",
     "address_raw": "K 33 # 4 27 29 31 K34 # 24 38 42 BRR SAN BENITO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-ipiales-narino-bd8fb41e0cd0",
+    "site_id": "site-cda-centro-de-diagnostico-au-4a11dd83dc90",
     "address_raw": "Ipiales, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-avenida-variante-sur-bar-7fc9d5f12820",
+    "site_id": "site-cda-centro-de-diagnostico-au-4cd7f4da95ce",
     "address_raw": "AVENIDA VARIANTE SUR BARRIO PANAMERICANO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-pasto-narino-ed344b87dbbb",
+    "site_id": "site-cda-cda-ecomotor-pasto-f2ed38b34761",
     "address_raw": "Pasto, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-pasto-narino-cd7abf504654",
+    "site_id": "site-cda-cda-las-americas-0a151a924c72",
     "address_raw": "Pasto, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-terminal-emtur-barrio-po-450a6b867bbb",
+    "site_id": "site-cda-cda-miramar-pacifico-cf41583fdb83",
     "address_raw": "TERMINAL EMTUR BARRIO PORVENIR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-anillo-vial-oriental-13--06e465157ded",
+    "site_id": "site-cda-c-d-a-certigases-plaza-9ba45c4954b1",
     "address_raw": "ANILLO VIAL ORIENTAL 13 70 CC JARDIN PLAZA UNIDAD COMERCIAL 7",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-cucuta-norte-de-santande-e1dc106704f5",
+    "site_id": "site-cda-centro-de-diagnostico-au-53d0f63ded88",
     "address_raw": "Cucuta, Norte de Santander",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-parcela-7-lote-3-montevi-2578ea2c4a7a",
+    "site_id": "site-cda-c-d-a-certigases-del-rio-b11c2759eb04",
     "address_raw": "PARCELA 7 LOTE 3 MONTEVIDEO BODEGA 4 FUERA DEL MUNICIPIO DEL EL ZULIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-pa-11-mi-tesoro-casa-val-982a6a77db57",
+    "site_id": "site-cda-cda-avanzar-zulia-d0b031da2e59",
     "address_raw": "PA 11 MI TESORO CASA VALE 1- FUERA DEL MUNICIPIO DE EL ZULIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-circunvalar-la-floresta--71cbabcb423a",
+    "site_id": "site-cda-c-d-a-certigases-la-bele-bff83566322f",
     "address_raw": "CIRCUNVALAR LA FLORESTA 37 # 61 BARRIO DOCE OCTUBRE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-via-a-la-universidad-fra-605d18755ee0",
+    "site_id": "site-cda-c-r-t-ocana-a4b611f0c6ad",
     "address_raw": "VIA A LA UNIVERSIDAD FRANCISCO DE PAULA SANTANDER",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-mocoa-putumayo-055592c384b5",
+    "site_id": "site-cda-centro-de-diagnostico-au-9d2b7a264d0c",
     "address_raw": "Mocoa, Putumayo",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-vereda-la-danta-carreter-79406f47c8f7",
+    "site_id": "site-cda-centro-de-diagnostico-au-73ec2ad2a9c0",
     "address_raw": "VEREDA LA DANTA CARRETERA CENTRAL DE PUERTO ASIS PASTO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-barbosa-santander-a8ffbabd4fcd",
+    "site_id": "site-cda-centro-de-diagnostico-au-10d38c6b0b89",
     "address_raw": "Barbosa, Santander",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-san-gil-santander-84a35ca2ba75",
+    "site_id": "site-cda-centro-de-diagnostico-au-21d87d8dec76",
     "address_raw": "San Gil, Santander",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-c-28-n-23-60-lo-3a-93105a1ad133",
+    "site_id": "site-cda-centro-de-diagnostico-au-2df798b98286",
     "address_raw": "C 28 N 23-60 LO 3A",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-car-70-1-03-2e7c3e5aa71e",
+    "site_id": "site-cda-cda-los-cerros-6f3d2bfe7b87",
     "address_raw": "CAR 70 NO 1-03",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-a-2b-28-n-37-f9649a8cbca8",
+    "site_id": "site-cda-cda-vasquez-cobo-152a93300a0c",
     "address_raw": "A 2B # 28 N 37",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cda-cali-valle-del-cauca-e7947a6a75cf",
+    "site_id": "site-cda-grupo-previmoto-3258db462bce",
     "address_raw": "Cali, Valle del Cauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-lt-5-finca-veracruz-lt-d-c4ebf3fac7ca",
+    "site_id": "site-cda-centro-de-diagnostico-au-b1b72ee81b79",
     "address_raw": "LT NO. 5 FINCA VERACRUZ LT DE TERRERO DEL MUNICIPIO DE CANDELARIA VALLE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-variante-sec-del-cedro-s-ad19d8d4f32f",
+    "site_id": "site-cda-cda-santa-ana-2d8ec6e6ddfd",
     "address_raw": "VARIANTE SEC. DEL CEDRO SANTA ANA LOTE 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-crt-central-en-norte-de--416bf49fbfc7",
+    "site_id": "site-cda-centrovalle-3eb3b5088678",
     "address_raw": "CRT CENTRAL EN NORTE DE LA CIUDAD",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-lote-3-condominio-la-uni-d3917324ca82",
+    "site_id": "site-cda-centro-de-diagnostico-au-c99274d4c057",
     "address_raw": "LOTE 3 CONDOMINIO LA UNION",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cda-roldanillo-valle-del-cau-1216551cc626",
+    "site_id": "site-cda-centro-de-diagnostico-au-9fac2853941c",
     "address_raw": "Roldanillo, Valle del Cauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-car-103-98-09-barrio-ort-c4f851c7212e",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e65b7e92dd1b",
     "address_raw": "CAR 103 98 09 BRR ORTIZ",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-call51-45-60-2fda67284f94",
+    "site_id": "site-cea-condunova-7012d53e8622",
     "address_raw": "CALL51 NUM 45 -60",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-calle52no-47-69-cb245773d233",
+    "site_id": "site-cea-maneauto-58078380e367",
     "address_raw": "CALLE52NO 47 69",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-medellin-antioquia-43f041bd4890",
+    "site_id": "site-cea-academia-de-conduccion-a-b7d52f2f308d",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-medellin-antioquia-c80b5574ddb4",
+    "site_id": "site-cea-autolider-escuela-de-con-86e7a1d45a75",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-trasversal-42-65d-21-3f58b050e638",
+    "site_id": "site-cea-centro-de-esenanza-autom-fd04f99241fd",
     "address_raw": "TRASVERSAL 42 65D 21",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-circular-2-73-22-094817ef50da",
+    "site_id": "site-cea-conducar-46c30826508f",
     "address_raw": "CIRCULAR 2 NO 73 22",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-medellin-antioquia-5e4304364802",
+    "site_id": "site-cea-educamos-conduciendo-e0fa213db144",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-medellin-antioquia-7b8be8831402",
+    "site_id": "site-cea-escuela-internacional-de-527d01ab10d3",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-medellin-antioquia-0a48bd31694e",
+    "site_id": "site-cea-escuela-vial-de-conducci-5860c0d7286e",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-cll55-46-13-oficina-201-1de961fd7c8d",
+    "site_id": "site-cea-cea-american-driver-fd0d016b4498",
     "address_raw": "CLL55#46-13 OFICINA 201",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-crr-47-61-47-p-2-97f6f6a06620",
+    "site_id": "site-cea-centro-de-ensenanza-auto-02ad0b8165c9",
     "address_raw": "CRR 47 # 61 47 P 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-carrera-la-pola-8d8e07c1c2ec",
+    "site_id": "site-cea-centro-de-ensenanza-auto-4dbd438e47cf",
     "address_raw": "CR LA POLA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-clle-14-19-28-50d291418ed6",
+    "site_id": "site-cea-centro-de-ensenanza-auto-6b71f774a074",
     "address_raw": "CLLE 14 NRO 19-28",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-cr27-68-4-640018166cc7",
+    "site_id": "site-cea-centro-de-ensenanza-auto-3d6069e27115",
     "address_raw": "CR27 NO 68-4",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-crr-38-74-112-3e8128ded5a3",
+    "site_id": "site-cea-centro-de-ensenaza-autom-5d71975a05d1",
     "address_raw": "CRR 38 # 74-112",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-cll10-20-30-6961939fdf83",
+    "site_id": "site-cea-centro-de-ensenanza-auto-463d46a1a7b2",
     "address_raw": "CLL10 # 20-30",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-lote-9b2-local-b-2-c015f938f18f",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e3cb108747b9",
     "address_raw": "LOTE 9B2 LOCAL B-2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-cr79no41c39-sur-70263bf05d7b",
+    "site_id": "site-cea-academia-de-automovilism-09c58fe21579",
     "address_raw": "CR79Nº41C39 SUR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-avenida15-114-09-de4b286e54ab",
+    "site_id": "site-cea-academia-de-automovilism-027f92652e01",
     "address_raw": "AV.15 NO. 114-09",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-bogota-bogota-d-c-78274eaf8afa",
+    "site_id": "site-cea-academia-universal-de-au-5055d3f345ff",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-transv-44-49-60-sur-606146431cd2",
+    "site_id": "site-cea-auto-escuela-los-tres-as-83fc6b1b580f",
     "address_raw": "TRANSV 44 # 49-60 SUR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-145-101-12-locales-10-643efada484c",
+    "site_id": "site-cea-autocettt-bogota-dd768187f066",
     "address_raw": "AC 145# 101-12 LOCALES 10 Y 11",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-24-40-28-p2-16cc76d50abd",
+    "site_id": "site-cea-c-e-a-bumblebee-drivers-700ba0ddb18d",
     "address_raw": "AC 24 40 28 P2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-145-n-91-19-lc-3-110-c7de61d48b73",
+    "site_id": "site-cea-c-e-a-conductores-la-flo-078bcd61e61f",
     "address_raw": "AC 145 N 91 19 LC 3 110",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-trasv-18-bis-14-36-sur-p-6e0df09f2311",
+    "site_id": "site-cea-cea-autonitro-cra-14-5136d198f4a0",
     "address_raw": "TRASV. 18 BIS 14 - 36 SUR PISO 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-bogota-bogota-d-c-7eec8e3dd562",
+    "site_id": "site-cea-cea-formula-3-65a72eaebeef",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-clll-129-54-48-40eee3d80910",
+    "site_id": "site-cea-centro-de-ensenanza-auto-84a3de72bfbc",
     "address_raw": "CLLL 129 NO 54-48",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-26-sur-69-a-45-piso-2-fe14845e8e5f",
+    "site_id": "site-cea-centro-de-ensenanza-auto-74b7576bd633",
     "address_raw": "AC 26 SUR # 69 A - 45 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-bogota-bogota-d-c-6e9981173bc5",
+    "site_id": "site-cea-centro-de-ensenanza-auto-de9aaf869dcb",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-45-a-sur-53-69-local--5dca9054226a",
+    "site_id": "site-cea-centro-de-ensenanza-auto-4fa587b53ad3",
     "address_raw": "AC 45 A SUR # 53 - 69 LOCAL 71",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-dig-49-sur-53-19-piso-2-23dc807fa9d9",
+    "site_id": "site-cea-centro-de-ensenanza-auto-623a82080c5b",
     "address_raw": "DIG 49 SUR # 53 19 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-tranversal-60-49-40-sur--fac8e4ee80d5",
+    "site_id": "site-cea-centro-de-ensenanza-auto-0f144404daef",
     "address_raw": "TRANVERSAL 60 Nº 49 - 40 SUR PISO 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-80-70-f-09-piso-2-7c3ea4cb93de",
+    "site_id": "site-cea-centro-de-ensenanza-auto-6bc0f9e7682b",
     "address_raw": "AC 80 NO. 70 F - 09 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-26-sur-68-d-23-pi-2-397ae93e7a93",
+    "site_id": "site-cea-centro-de-ensenanza-auto-cc6be4797406",
     "address_raw": "AC 26 SUR # 68 D 23 PI 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-12-81d-38-piso-3-7f5b03b22158",
+    "site_id": "site-cea-centro-de-ensenanza-auto-09052a443f83",
     "address_raw": "AC 12 # 81D-38 PISO 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-45-a-sur-52-c-10-p-3-76652c525f21",
+    "site_id": "site-cea-centro-de-ensenanza-auto-b1ee8dc0bf0c",
     "address_raw": "AC 45 A SUR # 52 C 10 P 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-k-71-d-n-8-20-sur4-p-lc--c912c13ad879",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f6b436356d6f",
     "address_raw": "K 71 D N° 8-20 SUR4 P LC F 02",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-ac-86-n-6-37-local-223-4b3bde37f47e",
+    "site_id": "site-cea-centro-de-ensenanza-auto-5b08f60bade0",
     "address_raw": "AC 86 N 6-37 LOCAL 223",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-bogota-bogota-d-c-c631cb9a28b4",
+    "site_id": "site-cea-escuela-de-automovilismo-45d5c4c7491d",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-blas-de-lezo-m-11-t-casa-07624c792441",
+    "site_id": "site-cea-auto-escuela-martin-diaz-470ebbf530eb",
     "address_raw": "BLAS DE LEZO M. 11 T CASA N? 20 ETAPA 4A.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-urbanizacion-san-pedro-m-cf1740dbff29",
+    "site_id": "site-cea-cea-nuevo-conducar-carta-aa2f717a1e72",
     "address_raw": "URBANIZACION SAN PEDRO MANZANA LOTE 10 LOTE 7",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-manga-primer-callejon-ca-25aa8070f071",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e086ba380303",
     "address_raw": "MANGA PRIMER CALLEJON CRA.18A # 26-179 APTO 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-transv-45-21-a-09-local--8f05eb49f559",
+    "site_id": "site-cea-centro-de-ensenanza-auto-db923587958b",
     "address_raw": "TRANSV 45 NRO 21 A 09 LOCAL 4",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-mz-f-lt-17-los-corales-d36c3bf5a5e7",
+    "site_id": "site-cea-centro-de-ensenanza-auto-092e6ad90cea",
     "address_raw": "MZ F LT 17 LOS CORALES",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-71-b-31-a-8-barrio-la-co-aeae7c85b044",
+    "site_id": "site-cea-centro-de-ensenanza-auto-d8e4f88cf0ce",
     "address_raw": "71 B - 31 A - 8 BARRIO LA CONCEPCION",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-mz-4-lt-2-piso-2-br-san--c4ff6fcddf96",
+    "site_id": "site-cea-centro-de-ensenanza-auto-b2cc6d425343",
     "address_raw": "MZ 4 LT 2 PISO 2 BR SAN PEDRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-mz-10-lote-7-piso-2-4e66e34d54fa",
+    "site_id": "site-cea-conducar-cartagena-47c379e298fa",
     "address_raw": "MZ 10 LOTE 7 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-manzana-12-15-piso-1-apa-d9ff7b7f415c",
+    "site_id": "site-cea-centro-de-ensenaza-autom-ebeda3117fcd",
     "address_raw": "MANZANA # 12 - 15 PISO 1 APARTAMENTO 1 SECTOR 5 URBANIZACION VILLA GRANDE DE INDIAS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-lt-herederos-daza-cubide-8913da43d9f1",
+    "site_id": "site-cea-centro-de-ensenanza-auto-6e65e60b7088",
     "address_raw": "LT HEREDEROS DAZA CUBIDES MZ G LT 8",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-transv-36-21-14-barrio-a-019a45c86782",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f8f41f332038",
     "address_raw": "TRANSV 36 # 21 14 BARRIO ALTAMIRA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-puerto-boyaca-boyaca-e720fbf56950",
+    "site_id": "site-cea-academia-superior-de-con-b2f02f768c62",
     "address_raw": "Puerto Boyaca, Boyaca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-antigua-k-6-37-12-l-2-ac-aefd6bd613e4",
+    "site_id": "site-cea-cea-drivecenter-be197220e0b8",
     "address_raw": "ANTIGUA K 6 37 12 L 2 ACTUAL K 6 37 108",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-clle-13-6-37-41-centro-af4bc5468031",
+    "site_id": "site-cea-centro-de-ensenanza-auto-7ac3df94982d",
     "address_raw": "CLLE 13 6 37/41 - CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-k-5-3e-16-82e8b4279867",
+    "site_id": "site-cea-cea-el-fenix-98940cd06a3b",
     "address_raw": "K 5 NO 3E 16",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-manzana-7-lote-nro2-barr-bf4352fb279d",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e39e6b6b0d7b",
     "address_raw": "MANZANA 7 LOTE NRO2 BARRIO NUEVO TAMBO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-santander-de-quilichao-c-0d4fe51a7bb8",
+    "site_id": "site-cea-centro-de-ensenanza-auto-4c9701310a85",
     "address_raw": "Santander De Quilichao, Cauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-valledupar-cesar-0da13b9d6bbe",
+    "site_id": "site-cea-academia-de-choferes-de--64b41e57a8a1",
     "address_raw": "Valledupar, Cesar",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-crr-11-13b-68-barrio-obr-1666191cfb0e",
+    "site_id": "site-cea-centro-de-ensenanza-auto-5ff76c1fb23b",
     "address_raw": "CRR 11 13B 68 BRR OBRERO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-b-san-diego-1de213f7e941",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f483ccbe6f0b",
     "address_raw": "B/ SAN DIEGO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-calle55-6-44-b-la-castel-70b5e4168b72",
+    "site_id": "site-cea-centro-de-ensenanza-auto-5bcaf03b0b9c",
     "address_raw": "CL.55 NRO. 6-44 B/ LA CASTELLANA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-manzana-a-casa-5-piso-2--1e793fe83ca7",
+    "site_id": "site-cea-academia-de-automovilism-5a4009a54c79",
     "address_raw": "MANZANA A CASA 5 PISO 2 BARRIO DIAMANTE POPULAR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-manzana-28-casa-8-barrio-c65627c779e0",
+    "site_id": "site-cea-c-e-a-certicars-f533c0e15f9f",
     "address_raw": "MANZANA 28 CASA 8 BARRIO DIAMANTE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-cll18-9-23-piso2-c6f323601989",
+    "site_id": "site-cea-c-e-a-safety-car-9f4860ccbde2",
     "address_raw": "CLL18 9-23 PISO2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-crr-1-n-2-61-37e4e82d08c3",
+    "site_id": "site-cea-centro-de-ensenanza-auto-25dd5456f9a8",
     "address_raw": "CRR 1 N 2 61",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-vereda-la-cabrera-parte--3c5ff533b0c3",
+    "site_id": "site-cea-autocettt-rionegro-c4a9c3ffb9ba",
     "address_raw": "VEREDA LA CABRERA PARTE BAJA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-vereda-la-yeguera-predio-1c42a9a94ac9",
+    "site_id": "site-cea-escats-cbaceb3d3946",
     "address_raw": "VEREDA LA YEGUERA PREDIO DEMONIDA MANGASECA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-cll33-n5p-04-a8edd614ed8a",
+    "site_id": "site-cea-academia-tecnica-de-cond-13b767105d22",
     "address_raw": "CLL33 N5P-04",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-car-16-17-53-c61a211effb6",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e9f645320c72",
     "address_raw": "CAR 16#17-53",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-calle12-12-06-bar-centro-fa3d93418a19",
+    "site_id": "site-cea-centro-de-ensenanza-auto-dd51f9c31741",
     "address_raw": "CALLE12 # 12-06 BAR CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-santa-marta-magdalena-5492858b7ac7",
+    "site_id": "site-cea-cea-escuela-mixta-de-cho-b60d6aadf3b4",
     "address_raw": "Santa Marta, Magdalena",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-tranv-37a-24a-168-170-17-d7f72e5c6fd4",
+    "site_id": "site-cea-centro-de-ensenanza-auto-a10a394d1d8d",
     "address_raw": "TRANV 37A #24A-168-170-174 OFICINA 201 Y 202 BARRIO SAN BENITO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-ipiales-narino-9e932fb9611d",
+    "site_id": "site-cea-escuela-de-ensenanza-aut-6e2af49de069",
     "address_raw": "Ipiales, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-ipiales-las-cruces-narin-07935952733c",
+    "site_id": "site-cea-escuela-de-ensenanza-aut-427be101e618",
     "address_raw": "Ipiales - Las Cruces, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-mz-c-cs-9-urbanizacion-p-cd686f9e4584",
+    "site_id": "site-cea-escuela-de-conduccion-au-c828f65ba00c",
     "address_raw": "MZ C CS 9 URBANIZACION PRADOS DE SAN NICOLAS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-call9-0-14-p1-p2-barrio--85a0f4f39427",
+    "site_id": "site-cea-cea-academia-automovil-c-66d872171c09",
     "address_raw": "CALL9 0-14 P1-P2 BARRIO LATINO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-centro-comercial-bolivar-3f79ecf28c05",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e1ccb8fd3620",
     "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL E-8 SAN MATEO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-bodega-4-modulo-3-nueva--a25c680c4bd9",
+    "site_id": "site-cea-centro-de-ensenanza-auto-8da11e13a138",
     "address_raw": "BODEGA 4 MODULO 3 NUEVA SEXTA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-cc-bolivar-local-c-12-ba-f6d6d439fb19",
+    "site_id": "site-cea-centro-de-ensenanza-auto-942af98c07e3",
     "address_raw": "CC BOLIVAR LOCAL C 12 BARRIO SAN MATEO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-centro-comercial-bolivar-61489728d95a",
+    "site_id": "site-cea-centro-de-ensenanza-auto-284666bed33f",
     "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL E7",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-kra10-n19a-75-villa-del--ecf320cf1225",
+    "site_id": "site-cea-centro-de-ensenanza-auto-d56e0aca6104",
     "address_raw": "KRA10 N19A-75 VILLA DEL RIO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-clle-26-17-45-f9f6fe08098d",
+    "site_id": "site-cea-centro-de-ensenanza-auto-ba0d921919f5",
     "address_raw": "CLLE 26 17-45",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-clle-10-n-9-42-a6115723a725",
+    "site_id": "site-cea-centro-de-ensenanza-auto-061d70efbcf6",
     "address_raw": "CLLE 10 N 9- 42",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-trasversal-6-8-48-e0fd695ccf8d",
+    "site_id": "site-cea-academia-automovilistica-a1da8470e8e1",
     "address_raw": "TRASVERSAL 6 NO 8-48",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-trnsversal-7-n-554-centr-ea90feff3bbc",
+    "site_id": "site-cea-cea-el-conductor-la-virg-77c749af496a",
     "address_raw": "TRNSVERSAL 7 N. 554 CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-tvs-7-n-5-56-757a93742b58",
+    "site_id": "site-cea-centro-de-ensenanza-auto-999c0a7aca26",
     "address_raw": "TVS 7 N 5-56",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-manzana-12-casa-19-del-b-3e7cfc0cf9f0",
+    "site_id": "site-cea-cea-cafe-de-cuba-b126fb981278",
     "address_raw": "MANZANA 12 CASA 19 DEL BARRIO SAN FERNANDO DE CUBA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-calle18-12-27-c77b5510a685",
+    "site_id": "site-cea-cea-colombiana-de-conduc-1644a2a72a34",
     "address_raw": "CALLE18 NO 12 27",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-calle18-14-50-66243637ad56",
+    "site_id": "site-cea-centro-de-ensenanza-auto-cc43b0dbfc04",
     "address_raw": "CALLE18 #14 - 50",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-carrera4-n-16-20-b1422470448e",
+    "site_id": "site-cea-centro-de-ensenanza-auto-aa8c4eed7738",
     "address_raw": "CRA.4 N. 16-20",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-boulevar-bolivar-25-71-l-fa9122c70b0d",
+    "site_id": "site-cea-centro-de-ensenanza-auto-57191577e2a5",
     "address_raw": "BOULEVAR BOLIVAR # 25 - 71 LOCAL 101",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-aut-floridablanca-147-78-b225e1b8ad1d",
+    "site_id": "site-cea-cea-grupo-empresarial-ka-65f3b274b404",
     "address_raw": "AUT FLORIDABLANCA 147 78 LC 15 ETAPA I CONJUNTO MULTIF CERROS CAMPESTRE PH",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-carrere-23-n-36-24-giron-e603e756a737",
+    "site_id": "site-cea-academia-de-conduccion-l-e89e6a270142",
     "address_raw": "CARRERE 23 N 36 24 GIRÓN (SANTANDER)",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-mz-c-6-ca-5-sec-1-urb-ri-c4307e0a770c",
+    "site_id": "site-cea-centro-de-ensenanza-auto-8eaad6ad7888",
     "address_raw": "MZ C 6 CA 5 SEC 1 - URB RINCO PIEDRA PINTADA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-kr100-5-169ec-134b-3ba065422bb6",
+    "site_id": "site-cea-cea-cali-al-volante-07db15e72872",
     "address_raw": "KR100 #5-169EC-134B",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-diagonal23-10b-80-piso-2-12542f755f55",
+    "site_id": "site-cea-centro-de-ensenanza-auto-19e3bb20be52",
     "address_raw": "DIAG.23 NO. 10B-80 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cea-cali-valle-del-cauca-4c3ea4f8937b",
+    "site_id": "site-cea-escuela-de-automovilismo-734b7ceed5aa",
     "address_raw": "Cali, Valle del Cauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-carr-14-14-05-cb6d89bffd1e",
+    "site_id": "site-cea-centro-de-ensenanza-auto-6e97d681a94b",
     "address_raw": "CARR 14 NRO 14 - 05",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-clle-94-8a-29-juanchito-0a41197c8ccd",
+    "site_id": "site-cea-centro-de-ensenanza-auto-0ab6341287d5",
     "address_raw": "CLLE 94 8A 29 JUANCHITO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-carrera49-47-68-5bdd7fbbf2ba",
+    "site_id": "site-cea-cea-escuela-de-conduccio-abe976b84cde",
     "address_raw": "CARRERA49#47-68",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cea-carr-31-24-70-40ca08a518c8",
+    "site_id": "site-cea-escuela-de-conduccion-di-d03f2900c893",
     "address_raw": "CARR 31 24-70",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cra50-n100b-sur-360-f7a3a786fbba",
+    "site_id": "site-cia-abc-carrocerias-y-furgon-27135ab59a5a",
     "address_raw": "CRA50 N100B SUR 360",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-calle49-48-b-98-local-20-10d22e561263",
+    "site_id": "site-prov-cia-cia-municipal-san-pedro-d311226aa6af",
     "address_raw": "CALLE49 # 48 B 98 LOCAL 202",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-cra38-n74-324-f3a4c992344c",
+    "site_id": "site-cia-cia-formando-conductores-7ae40c5befff",
     "address_raw": "CRA38 N74-324",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-car-38-74-61-local-106-0a86e8929f2a",
+    "site_id": "site-cia-ciafortt-barranquilla-21beeee95122",
     "address_raw": "CAR 38 # 74-61 LOCAL 106",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-161-19-24-63eee56ffb92",
+    "site_id": "site-cia-centro-integral-de-atenc-c18fe5b153a8",
     "address_raw": "AC 161 # 19 - 24",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-9-50-15-lc-c-218-salo-db5fb526ca3c",
+    "site_id": "site-cia-centro-integral-de-atenc-9997cb424de3",
     "address_raw": "AC 9 50 15 LC C 218 SALON SANTANDER SALON DORADO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-k46-128-c-57-of-202-4e3b193e127c",
+    "site_id": "site-cia-centro-integral-de-forma-5eb8c16ab214",
     "address_raw": "K46 128 C 57 OF 202",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-clle-22-sur-n-29-b-38-lo-e700293dd7bc",
+    "site_id": "site-cia-cia-bogota-316d78cc844a",
     "address_raw": "CLLE 22 SUR N 29 B 38 LOC 301",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-26-sur-69-a-45-piso-3-274b78ebe211",
+    "site_id": "site-cia-cia-cursos-vial-1-2743061711d7",
     "address_raw": "AC 26 SUR # 69 A-45 PISO 3",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-carrera13-65c-58sur-lc14-ab3bd34fa891",
+    "site_id": "site-cia-cia-digital-altavista-us-b9ec4c7965bd",
     "address_raw": "CARRERA13 #65C -58SUR LC148-164-166",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-28-19b-87-ed-uransa1--51117330da57",
+    "site_id": "site-cia-cia-digital-teusaquillo-77c0a282dcdf",
     "address_raw": "AC 28 # 19B - 87 ED URANSA1 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-aven-145-n101-12-lc-1-et-b8dcc6a54bcc",
+    "site_id": "site-cia-cia-vialseg-suba-a75868e7ac6f",
     "address_raw": "AVEN 145 N101 12 LC 1 ET 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-19-28-80-lc-d01b-piso-be63ee05d7b2",
+    "site_id": "site-cia-ciatran-mall-plaza-b6dbca02a1d9",
     "address_raw": "AC 19 # 28 - 80 LC D01B PISO 4",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-145-101-12-lc-332a-33-fc1ee3641490",
+    "site_id": "site-cia-ciatran-suba-ac17eb9a6f0b",
     "address_raw": "AC 145#101 12 LC 332A 332B",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-ac-1-25-a-30-efbba128d23f",
+    "site_id": "site-cia-red-vial-santa-isabel-ab0bd49735fc",
     "address_raw": "AC 1 25 A 30",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-carretera-troncal-de-occ-16244cf9ad7e",
+    "site_id": "site-cia-centro-integral-de-atenc-f3f872cdc51a",
     "address_raw": "CARRETERA TRONCAL DE OCCIDENTE K 46 # 57-160",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-centro-comercial-ronda-r-029ffe92f2dd",
+    "site_id": "site-cia-cia-ronda-real-062b5c6211c6",
     "address_raw": "CENTRO COMERCIAL RONDA REAL LOCAL 141",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cc-la-dorada-plaza-local-7adfe1d554a9",
+    "site_id": "site-cia-ciafortt-la-dorada-fc1d9408ebf7",
     "address_raw": "CC LA DORADA PLAZA LOCAL S 201 - 7 CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-crr-2-22cn-127-local-2-53759406dff0",
+    "site_id": "site-cia-centro-integral-de-atenc-b6cfe2cb0953",
     "address_raw": "CRR 2 NRO.22CN-127 LOCAL 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-kra17-n-7-69-barrio-vale-040df5f692c1",
+    "site_id": "site-cia-cia-gutierrez-085f0f850981",
     "address_raw": "KRA17 N°7-69 BARRIO VALENCIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-clle-5-10-57-7fe9ff377b50",
+    "site_id": "site-cia-centro-integral-de-atenc-395e19d8f7e6",
     "address_raw": "CLLE 5 # 10-57",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-mercabasto-bloque-admini-26eb748e54ae",
+    "site_id": "site-cia-ciatran-valledupar-c18e84d5050c",
     "address_raw": "MERCABASTO BLOQUE ADMINISTRATIVO LOCAL COMERCIAL 5",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-carerra-11-15-41-local-2-36728db34503",
+    "site_id": "site-cia-cursos-viales-del-cesar-c85540f2026a",
     "address_raw": "CARERRA 11 # 15-41 LOCAL 2 BARRIO LOPERENA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-centro-comercial-local-2-a7da421c81aa",
+    "site_id": "site-cia-ciatran-cota-1c043c7fba60",
     "address_raw": "CENTRO COMERCIAL LOCAL 25 MALL COMERCIAL MERIDIANO COTA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-mz-b-ca-18-lc-101-barrio-5876a5776f6a",
+    "site_id": "site-cia-centro-administrativo-in-4d4270ddcf5d",
     "address_raw": "MZ B CA 18 LC 101 BRR DIAMANTE POPULAR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-disgonal-7-n-14a-66-barr-b1745c5410d1",
+    "site_id": "site-cia-centro-administrativo-in-27b1abf36d4f",
     "address_raw": "DISGONAL 7 N. 14A 66 BARRIO CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-tras-7-16-a-68-oficina-2-1fed19db3307",
+    "site_id": "site-cia-cia-alfa-romeo-5dd495513533",
     "address_raw": "TRAS 7 NO. 16 A 68 OFICINA 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-carrera6-6-38-piso-2-932deec3109c",
+    "site_id": "site-cia-centro-integral-de-atenc-e812d2571546",
     "address_raw": "CRA.6 NO.6-38 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-el-banco-cl9-12-78-barri-4f7e8fe00cc8",
+    "site_id": "site-cia-cia-el-banco-formacion-v-80a230b45d1d",
     "address_raw": "EL BANCO CL9 #12 -78 BRR EL HUERTO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-cl41-31-17-local-32a-fbef84b8bb8e",
+    "site_id": "site-cia-ciavil-santa-marta-43455ad25860",
     "address_raw": "CL41 #31-17 LOCAL 32A",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cll15-a-31-41-local-101--86af6149466e",
+    "site_id": "site-cia-cia-casacol-acacias-3560e7f2ee48",
     "address_raw": "CLL15 A NO 31-41 LOCAL 101 BACHUE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-pasto-narino-c5ef8f4d41f7",
+    "site_id": "site-cia-centro-de-reconocimiento-ad1955381fa3",
     "address_raw": "Pasto, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-cl18-19-55-piso-2-centro-846acd395960",
+    "site_id": "site-cia-acondu-cia-9f8a7da88c9e",
     "address_raw": "CL18 19 55 PISO 2- CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-pasto-narino-e4d3b4efaf08",
+    "site_id": "site-cia-sociedad-de-transporte-d-218ec00b4727",
     "address_raw": "Pasto, Narino",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-b-porvenir-casa-5-n-3-06-25f85f0dbe53",
+    "site_id": "site-cia-cia-miramar-0e5d569f40ab",
     "address_raw": "B/PORVENIR CASA 5 N: 3-06",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-centro-comercial-bolivar-850f6c3ae85a",
+    "site_id": "site-cia-centro-integral-de-atenc-71e0d003c8a2",
     "address_raw": "CENTRO COMERCIAL BOLIVAR LC # 2 SAN LUIS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-calle8-3-67-piso-2-8ab4a2ab0a2d",
+    "site_id": "site-cia-centro-de-atencion-integ-f0d8f6bc8606",
     "address_raw": "CALLE8 #3-67 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-cl62-17e-103-piso-2-1541603d8b7b",
+    "site_id": "site-cia-centro-integral-de-atenc-758d8981209f",
     "address_raw": "CL62 #17E -103 PISO 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-cia-avda-la-rosita-25-53-pis-513bfc45868b",
+    "site_id": "site-cia-cia-los-santanderes-4cd8eb6be898",
     "address_raw": "AVDA LA ROSITA # 25-53 PISO DOS BARRIO BOLIVAR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cl3a-8-151local-4-segund-33f8e672041d",
+    "site_id": "site-cia-centro-integral-de-atenc-056fceb00a2c",
     "address_raw": "CL3A #8-151LOCAL 4 SEGUNDO NIVEL",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-ac-12-a-15-107-lc-24-6ada2e0dd25f",
+    "site_id": "site-cia-centro-integral-de-atenc-9e82c08a20fa",
     "address_raw": "AC 12 A 15 107 LC 24",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cll9-8-50-34b8da8c2ff2",
+    "site_id": "site-cia-cia-tu-tamite-d58ae3d889b8",
     "address_raw": "CLL9 8-50",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-cc-llano-grande-local-20-3cf7b56d9431",
+    "site_id": "site-cia-centrointegral-de-atenci-55e02c07f115",
     "address_raw": "CC LLANO GRANDE LOCAL 206-207-211",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-cia-c-10-8-81-1ec34f9e1a39",
+    "site_id": "site-cia-cia-eje-cafetero-zarzal-83146ea08c23",
     "address_raw": "C 10 8-81",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-medellin-antioquia-b2eb0a29d951",
+    "site_id": "site-crc-centro-de-reconocimiento-2bbb01fd521d",
     "address_raw": "Medellin, Antioquia",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-clle-23-19-42-fd17ef2247c3",
+    "site_id": "site-crc-certimedicos-nacionales-9073ec308b54",
     "address_raw": "CLLE 23 NRO 19-42",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-barranquilla-atlantico-e5efbdd1b588",
+    "site_id": "site-crc-centro-de-reconocimiento-3c16ed146909",
     "address_raw": "Barranquilla, Atlantico",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-barranquilla-atlantico-c50ef4f696c6",
+    "site_id": "site-crc-ips-centro-de-reconocimi-ac6747775135",
     "address_raw": "Barranquilla, Atlantico",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-arrera-47-84-27-lo-12-13-dda3976300e1",
+    "site_id": "site-crc-simetric-barranquilla-e9ea23f630b5",
     "address_raw": "ARRERA 47 # 84 - 27 LO 12 13 14",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-carrrea-46-39-04-22c67be337ee",
+    "site_id": "site-crc-so-simetric-bc316f6bd9e2",
     "address_raw": "CARRREA 46 # 39-04",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-26-sur-69-a-45-piso-1-6f6127a59c89",
+    "site_id": "site-crc-acertar-soluciones-prime-fa58ab3eaec0",
     "address_raw": "AC 26 SUR NO 69 A - 45 PISO 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-68-20-41-piso-2-ofici-307dd4ffa32e",
+    "site_id": "site-crc-azul-medica-81ba2a0422a7",
     "address_raw": "AC 68 # 20-41 PISO 2 OFICINA 201",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-bogota-bogota-d-c-1dbd0f13defb",
+    "site_id": "site-crc-centro-de-evaluacion-med-8fbf7339e129",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-26-sur-69-a-31-pi-2-046bb3b61d6b",
+    "site_id": "site-crc-centro-de-reconocimiento-dd63a0b82b0e",
     "address_raw": "AC 26 SUR # 69 A - 31 PI 2",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-145-101-12-lc-5-9e8c4459043e",
+    "site_id": "site-crc-centro-de-reconocimiento-31a07d7e330a",
     "address_raw": "AC 145 # 101 - 12 LC 5",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-13-25-48-int-4-21c95facc421",
+    "site_id": "site-crc-centro-de-reconocimiento-dd06b570d02f",
     "address_raw": "AC 13 # 25 - 48 INT 4",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-28-29-b-91-378d3bd3e0a2",
+    "site_id": "site-crc-certificar-conductores-i-9cb6c99710ec",
     "address_raw": "AC 28 NO 29 B 91",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-bogota-bogota-d-c-7cabf56fdcf4",
+    "site_id": "site-crc-certificar-org-4a15c5831e96",
     "address_raw": "Bogota, Bogota D.C.",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-45-a-sur-59-14-p-1-475d4ae7df4d",
+    "site_id": "site-crc-condupase-ips-1eedd25c25bb",
     "address_raw": "AC 45 A SUR NO 59 14 P 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-68-23-63-pi-1-6626c027abde",
+    "site_id": "site-crc-crc-7-de-agosto-edecb04fc4ab",
     "address_raw": "AC 68 23-63 PI 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-161-19-36-lc-40179b07897f",
+    "site_id": "site-crc-crc-a-prueba-u-t-bogota--eea1081c0cc8",
     "address_raw": "AC 161 NO 19 36 LC",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-calle14-sur-22-27-0b8129c9b826",
+    "site_id": "site-crc-crc-avalar-conductores-r-f6554d580565",
     "address_raw": "CALLE14 SUR 22 27",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-28-19-b-87-p1-lc-101-c0a16ed2945a",
+    "site_id": "site-crc-crc-condumedical-group-t-087a1e2a4bf4",
     "address_raw": "AC 28 NO 19 B 87 P1 LC 101",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-traversal-35-n-32-b-36-s-b98ea98c1863",
+    "site_id": "site-crc-crc-profesionales-de-la--72020edc5f9d",
     "address_raw": "TRAVERSAL 35 N 32 B 36 SUR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-161-20-18-piso-1-entr-9cb04680018d",
+    "site_id": "site-crc-ips-bogota-1-805d88175026",
     "address_raw": "AC 161 NRO 20-18 PISO 1 ENTRADA 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-68-23-63-01c2ff9b5738",
+    "site_id": "site-crc-medicina-vial-e411f65f578d",
     "address_raw": "AC 68 NO 23 63",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac-13-8-a-44-of-801-7a4396cc7681",
+    "site_id": "site-crc-soluciones-conduarms-92107fe236e7",
     "address_raw": "AC 13 # 8 A 44 OF 801",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-ac134-55-32-local-s1-l-1-4d64830945bd",
+    "site_id": "site-crc-zonamedica-crc-san-rafae-2ea95e87e1a2",
     "address_raw": "AC134-55-32 LOCAL S1 L 1",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-d-31-54-71-local-1a-barr-0761de5de406",
+    "site_id": "site-crc-centro-de-reconocimiento-c1c41e2d5033",
     "address_raw": "D 31 # 54-71 LOCAL 1A BRR. S. LUCIA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-manzana-10-lote-7-san-pe-8715ed651e5b",
+    "site_id": "site-crc-inprosalud-cartagena-el--bb5e60a454c9",
     "address_raw": "MANZANA 10 LOTE 7 SAN PEDRO CARTAGENA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-carretera-troncal-de-occ-cc0cb4d09526",
+    "site_id": "site-crc-certificaciones-a-conduc-5b343d7d6f04",
     "address_raw": "CARRETERA TRONCAL DE OCCIDENTE N° 13A 62 CAMPO ALEGRE",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-chiquinquira-boyaca-b16b690643b8",
+    "site_id": "site-crc-grupo-medicas-gran-plaza-5cdb85c38e33",
     "address_raw": "Chiquinquira, Boyaca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-0-949fb000cd97",
+    "site_id": "site-crc-centro-de-reconocimiento-b17ae8714463",
     "address_raw": "0",
     "address_quality": "invalid"
   },
   {
-    "site_id": "site-crc-trv-18-b-20-32-las-delic-cdfe7e76bc07",
+    "site_id": "site-crc-aprehsi-group-b23be5a6c775",
     "address_raw": "TRV 18 B # 20-32 LAS DELICIAS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-manz-a-casa-4-b-diamante-09d2ddd53e67",
+    "site_id": "site-crc-licenciar-ffea673571f2",
     "address_raw": "MANZ A CASA 4 B DIAMANTE POPULAR",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-call11-n-4-13-98dab80cc065",
+    "site_id": "site-crc-movisalud-2-7ff648ff907f",
     "address_raw": "CALL11 N 4 13",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-d-3-3-209-local-3-villet-c30abba699f3",
+    "site_id": "site-crc-crc-tu-medico-retirado-5b7e068d2e88",
     "address_raw": "D 3 3 - 209 LOCAL 3 VILLETA",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-garzon-huila-5a3ca0ff24c1",
+    "site_id": "site-crc-inversiones-salas-hernan-bb711e47bdc3",
     "address_raw": "Garzon, Huila",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-mercaneiva-local-22-29-7dc49a8bd02b",
+    "site_id": "site-crc-crc-a-prueba-neiva-03accfdad7aa",
     "address_raw": "MERCANEIVA LOCAL 22 - 29",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-cle-9-n-1e-03-afad0f43bfd3",
+    "site_id": "site-crc-crc-evaluamos-del-huila-98b439813676",
     "address_raw": "CLE 9 N 1E 03",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-santa-marta-magdalena-e53768fbd273",
+    "site_id": "site-crc-cenac-santa-marta-b3299c771318",
     "address_raw": "Santa Marta, Magdalena",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-calle15-3-74-local-01-ce-e59b04b34672",
+    "site_id": "site-crc-centro-de-reconocimiento-71a97e6ee7a0",
     "address_raw": "CALLE15 # 3-74 LOCAL 01 CENTRO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-c-39-19b-10-mz-s4-cs-6-b-3396894c0dcc",
+    "site_id": "site-crc-crc-express-ips-13b4d82aeb5b",
     "address_raw": "C 39 19B 10 MZ S4 CS 6 BARRIO PARAISO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-villavicencio-meta-b6d37820a21d",
+    "site_id": "site-crc-simetric-villavicencio-0271e376042f",
     "address_raw": "Villavicencio, Meta",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-k-20-36-a-40-0b1cdb2f250d",
+    "site_id": "site-crc-vialsalud-crc-8e7082afc315",
     "address_raw": "K 20 36 A 40",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-clle-5e-n-1n-39-ipiales-0c9373601cb6",
+    "site_id": "site-crc-centro-de-reconocimiento-44b46e2b32cc",
     "address_raw": "CLLE 5E N 1N-39 IPIALES",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-avenida-de-los-estudiant-a6922a500e83",
+    "site_id": "site-crc-valoramos-tumaco-a50e19596561",
     "address_raw": "AVENIDA DE LOS ESTUDIANTES TUMACO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-cc-bolivar-lc-e-21-san-m-fb042622fe2d",
+    "site_id": "site-crc-centro-de-reconocimiento-978566351c13",
     "address_raw": "CC BOLIVAR LC E-21 SAN MATEO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-centro-comercial-bolivar-58eeba86531d",
+    "site_id": "site-crc-certintegral-cucuta-ba50cdd259b2",
     "address_raw": "CENTRO COMERCIAL BOLIVAR L-23",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-nueva-sexta-modulo-2-bod-d18250e8c5f2",
+    "site_id": "site-crc-evaluacion-y-tecnologia-504841b5c94a",
     "address_raw": "NUEVA SEXTA MODULO 2 BODEGA 23 URB GARCIAHERREROS",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-c-c-bolivar-lc-e-21-san--b613f125ae1b",
+    "site_id": "site-crc-kayros-n-s-54171c1c1c08",
     "address_raw": "C.C. BOLIVAR LC E-21 SAN MATEO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-centro-comercial-bolivar-2a2ef493ae68",
+    "site_id": "site-crc-salud-certificada-cucuta-7f4a9644ed06",
     "address_raw": "CENTRO COMERCIAL BOLIVAR LOCAL C-14 SAN MATEO",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-armenia-quindio-7fcf233de4c5",
+    "site_id": "site-crc-crc-transitar-cc42ba2dd707",
     "address_raw": "Armenia, Quindio",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-crc-centro-empresarial-innov-a0946bd0fcd0",
+    "site_id": "site-crc-certificamos-y-examinamo-a8f73c884e57",
     "address_raw": "CENTRO EMPRESARIAL INNOVA MERCADEO Y LOGISTICA LOTE R 1 LC 9 Y 10 URB BERLIN",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-buenaventura-valle-del-c-c41ab79f7904",
+    "site_id": "site-crc-crc-356-buenaventura-774c36b8806d",
     "address_raw": "Buenaventura, Valle del Cauca",
     "address_quality": "partial"
   },
   {
-    "site_id": "site-prov-crc-0-85928cac5855",
+    "site_id": "site-crc-pase-ya-florida-aafd5ca23d96",
     "address_raw": "0",
     "address_quality": "invalid"
   }

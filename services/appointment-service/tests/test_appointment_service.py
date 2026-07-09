@@ -38,6 +38,8 @@ class FakePlacesEligibilityClient:
                 "is_bookable": False,
                 "booking_mode": "unavailable",
                 "operational_status": "unknown",
+                "eligible_for_civi_booking": False,
+                "eligibility_reason": "place_not_found",
             }
         return {
             "site_id": site_id,
@@ -46,6 +48,10 @@ class FakePlacesEligibilityClient:
             "is_bookable": self.bookable,
             "booking_mode": "civi" if self.bookable else "information_only",
             "operational_status": "unknown",
+            "eligible_for_civi_booking": self.bookable,
+            "eligibility_reason": "eligible" if self.bookable else "not_bookable",
+            "source_presence_status": "present",
+            "present_in_latest_snapshot": True,
             "canonical_name": "CDA Centro Bucaramanga",
             "canonical_address": "Calle 36 # 15-20",
             "canonical_city": "Bucaramanga",
@@ -195,7 +201,7 @@ async def test_create_appointment_rejects_non_bookable_place() -> None:
             places_client=FakePlacesEligibilityClient(bookable=False),
         )
     assert exc.value.status_code == 422
-    assert exc.value.detail == "place_not_bookable"
+    assert exc.value.detail in {"place_not_bookable", "not_bookable"}
 
 
 @pytest.mark.asyncio

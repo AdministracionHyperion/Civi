@@ -51,6 +51,10 @@ def test_nit_verification_digit_algorithm() -> None:
     assert doc["document_valid"] is True
     assert doc["document_number"] == "800197268"
     assert doc["verification_digit"] == "1"
+    # Bare numbers must NOT be auto-classified as valid NIT without DV evidence.
+    bare = normalize_document("900123456")
+    assert bare["document_valid"] is False
+    assert bare["document_type"] in {"CC_OR_NIT_UNKNOWN", "UNKNOWN"}
 
 
 def test_fake_phones_are_invalid() -> None:
@@ -80,6 +84,11 @@ def test_build_catalog_reconciliation_and_rules() -> None:
     assert recon["input_rows"] == 4107
     assert recon["sum_matches_input"] is True
     assert recon["sum_check"] == 4107
+    assert recon["non_merged_equals_unique_sites"] is True
+    assert recon["unique_sites"] == (
+        recon["by_processing_status"].get("imported_as_site", 0)
+        + recon["by_processing_status"].get("pending_review", 0)
+    )
 
     sites = catalog["sites"]
     assert len({s.site_id for s in sites}) == len(sites)
@@ -253,12 +262,15 @@ def test_import_apply_idempotent(tmp_path: Path) -> None:
     summary = repo.catalog_summary()
     assert summary["unique_sites"] == catalog["reconciliation"]["unique_sites"]
     assert summary["unique_entities"] == catalog["reconciliation"]["unique_entities"]
-    assert summary["source_records"] == 4107
+    # First apply stores 4107 source rows; second apply appends another 4107 (history preserved).
+    assert summary["source_records"] == 8214
     assert first["inserted"] > 0
-    # Second apply must not grow source_records / sites (stable IDs + upsert).
+    # Second apply must not grow unique sites (stable IDs + upsert).
     assert summary["unique_sites"] == len({s.site_id for s in catalog2["sites"]})
     assert second["inserted"] == 0
-    assert second["updated"] > 0
+    assert second["unchanged"] == catalog["reconciliation"]["unique_sites"]
+    assert second["updated"] == 0
+    assert catalog["reconciliation"].get("non_merged_equals_unique_sites") is True
     # Partner flags preserved: mark one site partner then re-import
     site_id = catalog["sites"][0].site_id
     with repo.engine.begin() as conn:
@@ -397,8 +409,48 @@ async def test_booking_eligibility_and_summary_endpoints(monkeypatch: pytest.Mon
     body = elig.json()
     assert body["exists"] is True
     assert body["is_bookable"] is True
+    assert body["eligible_for_civi_booking"] is True
     assert body["booking_mode"] == "civi"
 
     summary = client.get("/internal/places/catalog/summary", headers=headers)
     assert summary.status_code == 200
     assert summary.json()["unique_sites"] >= 1
+
+    from sqlalchemy import update
+    from places_service.adapters.outbound.schema import places_sites
+
+    with repo.engine.begin() as conn:
+        conn.execute(
+            update(places_sites)
+            .where(places_sites.c.site_id == "site-bookable")
+            .values(operational_status="retired")
+        )
+    retired = repo.booking_eligibility("site-bookable")
+    assert retired["eligible_for_civi_booking"] is False
+    assert retired["eligibility_reason"] == "operational_status_retired"
+
+    with repo.engine.begin() as conn:
+        conn.execute(
+            update(places_sites)
+            .where(places_sites.c.site_id == "site-bookable")
+            .values(operational_status="unknown")
+        )
+    missing_run = ImportRun(
+        import_run_id="api-2",
+        source_name="test",
+        input_filename="x",
+        input_sha256="y",
+        started_at=now,
+        status="applied",
+    )
+    repo.apply_import(
+        import_run=missing_run,
+        entities=[],
+        sites=[],
+        contacts=[],
+        source_records=[],
+        duplicate_candidates=[],
+    )
+    missing = repo.booking_eligibility("site-bookable")
+    assert missing["eligible_for_civi_booking"] is False
+    assert missing["eligibility_reason"] == "missing_from_latest_snapshot"

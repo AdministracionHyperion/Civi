@@ -40,8 +40,12 @@ async def create_appointment(
     eligibility = await (places_client or PlacesClient()).booking_eligibility(payload.place.id)
     if not eligibility.get("exists"):
         raise HTTPException(status_code=404, detail="place_not_found")
-    if not eligibility.get("is_bookable") or eligibility.get("booking_mode") != "civi":
-        raise HTTPException(status_code=422, detail="place_not_bookable")
+    eligible = eligibility.get("eligible_for_civi_booking")
+    if eligible is None:
+        eligible = bool(eligibility.get("is_bookable")) and eligibility.get("booking_mode") == "civi"
+    if not eligible:
+        reason = str(eligibility.get("eligibility_reason") or "place_not_bookable")
+        raise HTTPException(status_code=422, detail=reason)
 
     place_name = str(eligibility.get("canonical_name") or payload.place.name)
     place_address = str(eligibility.get("canonical_address") or payload.place.address)

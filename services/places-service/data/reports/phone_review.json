@@ -1,1861 +1,1861 @@
 [
   {
-    "contact_id": "ctc-0-14e702bdd6a6",
-    "site_id": "site-prov-cda-diagonal-52-10-115-7fecbf79972e",
+    "contact_id": "ctc-0-55591cd89e7d",
+    "site_id": "site-cda-cda-autonorte-c8b17d601b63",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00016-de83168cacd46061"
+    "source_record_id": "src-95f5bbe0-00016-de83168cacd4"
   },
   {
-    "contact_id": "ctc-9999999-b9a33e65b22a",
-    "site_id": "site-prov-cda-calle-39-sur-0-carrera-4-16e699e9315f",
+    "contact_id": "ctc-9999999-4244d1e3d577",
+    "site_id": "site-cda-cda-motos-envigado-fa7d7d14183f",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00037-a2dd44a75b812d15"
+    "source_record_id": "src-95f5bbe0-00037-a2dd44a75b81"
   },
   {
-    "contact_id": "ctc-1111111-3e504cf7f9f5",
-    "site_id": "site-cda-carrera-80-64-9-46260dd0879a",
+    "contact_id": "ctc-1111111-7b77d1fa1ef5",
+    "site_id": "site-cda-cda-motos-robledo-e7a6bca6602c",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00100-a6813002b211c290"
+    "source_record_id": "src-95f5bbe0-00100-a6813002b211"
   },
   {
-    "contact_id": "ctc-9999999-08449c0364db",
-    "site_id": "site-cda-carrera-65-101-67-e8789857f49c",
+    "contact_id": "ctc-9999999-d31b1337f242",
+    "site_id": "site-cda-centro-de-diagnostico-au-0b261089c5be",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00114-e08960489d31fd2b"
+    "source_record_id": "src-95f5bbe0-00114-e08960489d31"
   },
   {
-    "contact_id": "ctc-9999999-71383abe2a15",
-    "site_id": "site-prov-cda-doble-calzada-sajonia-ae-f4d6de89bd5e",
+    "contact_id": "ctc-9999999-831ad78f7e4d",
+    "site_id": "site-cda-cda-aeropuerto-jmc-539e646dbad6",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00139-d878f93f3a2dd4bc"
+    "source_record_id": "src-95f5bbe0-00139-d878f93f3a2d"
   },
   {
-    "contact_id": "ctc-9999999-5f872711cd42",
-    "site_id": "site-prov-cda-calle-58-44-60-fcedb99a3497",
+    "contact_id": "ctc-9999999-3b14674405f8",
+    "site_id": "site-cda-centro-de-diagnostico-au-317f960ce3e4",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00146-3b2d0fddda565d61"
+    "source_record_id": "src-95f5bbe0-00146-3b2d0fddda56"
   },
   {
-    "contact_id": "ctc-9999999-6b35fca6336d",
-    "site_id": "site-prov-cda-calle-70-sur-n-46cc-29-a62056eb431d",
+    "contact_id": "ctc-9999999-5ec5c7be56c6",
+    "site_id": "site-cda-cda-motos-y-carros-saban-934bd4e11626",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00148-6b18767c6826c8f6"
+    "source_record_id": "src-95f5bbe0-00148-6b18767c6826"
   },
   {
-    "contact_id": "ctc-3000000-aaaf41453172",
-    "site_id": "site-cda-calle-110-n-34-3-667e886d97c3",
+    "contact_id": "ctc-3000000-b1825ff5686e",
+    "site_id": "site-cda-centro-de-diagnostico-au-8c9251705ca4",
     "contact_type": "unknown",
     "value_raw": "3000000",
     "value_normalized": "3000000",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00183-26f21a13cc883325"
+    "source_record_id": "src-95f5bbe0-00183-26f21a13cc88"
   },
   {
-    "contact_id": "ctc-0-2c6026df508f",
-    "site_id": "site-cda-carrera-18-18-34-c55c3995c8cc",
+    "contact_id": "ctc-0-eb314102990e",
+    "site_id": "site-cda-cda-18-con-18-b6c0a65246e6",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00211-1559899bdd14ddf0"
+    "source_record_id": "src-95f5bbe0-00211-1559899bdd14"
   },
   {
-    "contact_id": "ctc-0-4176a1b3f3a3",
-    "site_id": "site-cda-carrera-91-127-60-c5d620a09247",
+    "contact_id": "ctc-0-09eba235f726",
+    "site_id": "site-cda-cda-auto-suba-6963e3b56b7a",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00215-aad241f10c07532c"
+    "source_record_id": "src-95f5bbe0-00215-aad241f10c07"
   },
   {
-    "contact_id": "ctc-0-18df71420aa1",
-    "site_id": "site-cda-carrera-24-45-65-sur-d3d3e0faea58",
+    "contact_id": "ctc-0-deba41f32d28",
+    "site_id": "site-cda-cda-de-la-24-82a697573acb",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00244-5e09585e44057316"
+    "source_record_id": "src-95f5bbe0-00244-5e09585e4405"
   },
   {
-    "contact_id": "ctc--bae635461c0b",
-    "site_id": "site-cda-carrera-73-a-77a-32-f2e90a650419",
+    "contact_id": "ctc--b05d9b34d182",
+    "site_id": "site-cda-cda-movilidad-bogota-4137c7671790",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00283-7e3a1cde91032f53"
+    "source_record_id": "src-95f5bbe0-00283-7e3a1cde9103"
   },
   {
-    "contact_id": "ctc-0-a5c4a82e4033",
-    "site_id": "site-cda-calle-63-105-48-fadee020f8f2",
+    "contact_id": "ctc-0-7184b4f0bf63",
+    "site_id": "site-cda-cda-ruta-63-f0c649b028aa",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00297-0349152acaa70215"
+    "source_record_id": "src-95f5bbe0-00297-0349152acaa7"
   },
   {
-    "contact_id": "ctc--6876766d85ce",
-    "site_id": "site-cda-calle-99-60-27-d75c17481ebe",
+    "contact_id": "ctc--342093cb8631",
+    "site_id": "site-cda-cda-sobreruedas-autos-5c0a41ee9473",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00302-46925cfb60a60b45"
+    "source_record_id": "src-95f5bbe0-00302-46925cfb60a6"
   },
   {
-    "contact_id": "ctc-0-3551473b32ef",
-    "site_id": "site-cda-ac-57-r-sur-64-88-68-98-395cd857a244",
+    "contact_id": "ctc-0-b1a26e8a139d",
+    "site_id": "site-cda-centro-de-diagnostico-au-39d1306753f7",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00321-9e476663e446853d"
+    "source_record_id": "src-95f5bbe0-00321-9e476663e446"
   },
   {
-    "contact_id": "ctc-0-e7cf5dfcaf9d",
-    "site_id": "site-prov-cda-carrera-7-7-56-59465916a56b",
+    "contact_id": "ctc-0-5606ef6b00fc",
+    "site_id": "site-cda-cda-andino-f012e0e6459c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00443-4981719804eb2b20"
+    "source_record_id": "src-95f5bbe0-00443-4981719804eb"
   },
   {
-    "contact_id": "ctc-0-a94c6c40f561",
-    "site_id": "site-prov-cda-kilometro-2-via-variante-87af0cf56c65",
+    "contact_id": "ctc-0-777736881d14",
+    "site_id": "site-cda-inversiones-quintero-ver-081f2b354ead",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00487-58389dedf2f4cecb"
+    "source_record_id": "src-95f5bbe0-00487-58389dedf2f4"
   },
   {
-    "contact_id": "ctc-7777777-f43b855af282",
-    "site_id": "site-cda-carrera-14-40-20-b-brisa-1bf4122f467d",
+    "contact_id": "ctc-7777777-fb6ec8d00ef4",
+    "site_id": "site-cda-cda-la-bendicion-64634ed51a51",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00503-bf3d6eb8bbea88b1"
+    "source_record_id": "src-95f5bbe0-00503-bf3d6eb8bbea"
   },
   {
-    "contact_id": "ctc-7777777-1ea06d175822",
-    "site_id": "site-prov-cda-avenida-7-24-296-barrio--5c7fd58a0685",
+    "contact_id": "ctc-7777777-6e376e2043c6",
+    "site_id": "site-cda-cda-del-san-jorge-d52639006a81",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00512-e9f980a9718a1a58"
+    "source_record_id": "src-95f5bbe0-00512-e9f980a9718a"
   },
   {
-    "contact_id": "ctc-1111111-9ed3646c5ee9",
-    "site_id": "site-prov-cda-vereda-tausuta-1-predio--44bbbd300c8d",
+    "contact_id": "ctc-1111111-d65a00e5d834",
+    "site_id": "site-cda-cda-rtv-caqueza-66a6ae1e0b9e",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00519-43da371fca652d92"
+    "source_record_id": "src-95f5bbe0-00519-43da371fca65"
   },
   {
-    "contact_id": "ctc-0-712974dbfa2a",
-    "site_id": "site-prov-cda-diagonal-9-18-295-barrio-4cbc473d1496",
+    "contact_id": "ctc-0-e713558ef9b4",
+    "site_id": "site-cda-cda-villa-de-guaduas-am-e27d0b28de1c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00551-a5d799c845aa1885"
+    "source_record_id": "src-95f5bbe0-00551-a5d799c845aa"
   },
   {
-    "contact_id": "ctc-0-3b1474032a5e",
-    "site_id": "site-prov-cda-vereda-la-venturosa-pred-ab34474bd54c",
+    "contact_id": "ctc-0-121f1fdb17d2",
+    "site_id": "site-cda-centro-de-diagnostico-au-c316373cfdf8",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00637-4775651312ab258d"
+    "source_record_id": "src-95f5bbe0-00637-4775651312ab"
   },
   {
-    "contact_id": "ctc-0-56ef1dd7f8ef",
-    "site_id": "site-cda-carrera-33-23-57-barrio--d60fc6ad83fb",
+    "contact_id": "ctc-0-a7543d14720d",
+    "site_id": "site-cda-cda-llano-verde-f60652239799",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00644-ddc57214df074be9"
+    "source_record_id": "src-95f5bbe0-00644-ddc57214df07"
   },
   {
-    "contact_id": "ctc--027fe43e8bbf",
-    "site_id": "site-prov-cda-calle-3-1-38-barrio-cent-ab4aff8d6a84",
+    "contact_id": "ctc--2faf4f546ffb",
+    "site_id": "site-cda-cda-panamericano-b084081b26ad",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00655-2025920c65592380"
+    "source_record_id": "src-95f5bbe0-00655-2025920c6559"
   },
   {
-    "contact_id": "ctc-0-cf46ffe881ec",
-    "site_id": "site-cda-calle-22-n-17-este-436-v-d5f4d1d03420",
+    "contact_id": "ctc-0-376d67b1b9f2",
+    "site_id": "site-cda-cda-la-estrella-eff800887cc9",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00663-e5af589c38f73829"
+    "source_record_id": "src-95f5bbe0-00663-e5af589c38f7"
   },
   {
-    "contact_id": "ctc-999999999-d45add39c84d",
-    "site_id": "site-cda-carrera-18-13-15-45-47-a-bdc8fab953b4",
+    "contact_id": "ctc-999999999-2aa98a217e7a",
+    "site_id": "site-cda-cda-centro-de-diagnostic-51ecb40f5ea2",
     "contact_type": "unknown",
     "value_raw": "999999999",
     "value_normalized": "999999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00717-524214a59dd2bdb1"
+    "source_record_id": "src-95f5bbe0-00717-524214a59dd2"
   },
   {
-    "contact_id": "ctc-3000000-9121bd83c462",
-    "site_id": "site-prov-cda-carrera-33-n-55a-96-las--cc1506bafd69",
+    "contact_id": "ctc-3000000-4e9ed1b04d75",
+    "site_id": "site-cda-cda-motos-av-el-ferrocar-32c6998c0f61",
     "contact_type": "unknown",
     "value_raw": "3000000",
     "value_normalized": "3000000",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00763-4e16ad9b8f36d0a1"
+    "source_record_id": "src-95f5bbe0-00763-4e16ad9b8f36"
   },
   {
-    "contact_id": "ctc-315-cd395e24f793",
-    "site_id": "site-prov-cda-calle-9-11-60-y-11-66-ca-9b0778252e9f",
+    "contact_id": "ctc-315-0a8adfee8e93",
+    "site_id": "site-cda-cda-motos-de-la-cuesta-17808a920c3b",
     "contact_type": "unknown",
     "value_raw": "315",
     "value_normalized": "315",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00806-9ced99f8f6c301bc"
+    "source_record_id": "src-95f5bbe0-00806-9ced99f8f6c3"
   },
   {
-    "contact_id": "ctc-222222222-3c529e144a2a",
-    "site_id": "site-cda-transversal-1-sur-18-14--86e41cf84e0c",
+    "contact_id": "ctc-222222222-21b93c017748",
+    "site_id": "site-cda-cda-del-centro-14ea09c06e2f",
     "contact_type": "unknown",
     "value_raw": "222222222",
     "value_normalized": "222222222",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00834-b6d4b06badbc676f"
+    "source_record_id": "src-95f5bbe0-00834-b6d4b06badbc"
   },
   {
-    "contact_id": "ctc-0-bda68d002e62",
-    "site_id": "site-prov-cda-calle-2-2-15-23-f77edcdb0bd7",
+    "contact_id": "ctc-0-1544e3e8709e",
+    "site_id": "site-cda-nuevo-cda-lerida-zomac-8a4b72ef2838",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00850-5909ab32789fa597"
+    "source_record_id": "src-95f5bbe0-00850-5909ab32789f"
   },
   {
-    "contact_id": "ctc-0-afcc9eae9d8f",
-    "site_id": "site-prov-cda-calle-5-9-65-b-los-cambu-2fbec0e0e119",
+    "contact_id": "ctc-0-469e63f245b0",
+    "site_id": "site-cda-centro-de-diagnostico-au-91bf673b5385",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00857-811d0cccceb4984a"
+    "source_record_id": "src-95f5bbe0-00857-811d0cccceb4"
   },
   {
-    "contact_id": "ctc-1234567-a840e27b0cb9",
-    "site_id": "site-prov-cda-carrera-14-18-22-d5674ceeadd7",
+    "contact_id": "ctc-1234567-90fe665e55d5",
+    "site_id": "site-cda-cda-olmo-80fe6b7f37c7",
     "contact_type": "unknown",
     "value_raw": "1234567",
     "value_normalized": "1234567",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00860-795457267aa736ea"
+    "source_record_id": "src-95f5bbe0-00860-795457267aa7"
   },
   {
-    "contact_id": "ctc-0-f1bc33ccf611",
-    "site_id": "site-cda-carrera-7-a-24-55-7fafe0f871ac",
+    "contact_id": "ctc-0-a85162475c17",
+    "site_id": "site-cda-cda-auto-valle-800947c3fe7e",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00864-ccf3d6dec1410fce"
+    "source_record_id": "src-95f5bbe0-00864-ccf3d6dec141"
   },
   {
-    "contact_id": "ctc-1234567-a55df05a2221",
-    "site_id": "site-cda-car-70-1-03-2e7c3e5aa71e",
+    "contact_id": "ctc-1234567-e0a00ae1e9e5",
+    "site_id": "site-cda-cda-los-cerros-6f3d2bfe7b87",
     "contact_type": "unknown",
     "value_raw": "1234567",
     "value_normalized": "1234567",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00881-5e7be2af909bce81"
+    "source_record_id": "src-95f5bbe0-00881-5e7be2af909b"
   },
   {
-    "contact_id": "ctc-0-aab46c8a665a",
-    "site_id": "site-cda-carrera-42-8-a-18-503643067ce9",
+    "contact_id": "ctc-0-a9a3b8cb16f1",
+    "site_id": "site-cda-cda-revimax-la-novena-cac54bcdff60",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00891-07131c45b06b32bf"
+    "source_record_id": "src-95f5bbe0-00891-07131c45b06b"
   },
   {
-    "contact_id": "ctc-0-5f9ff9df6255",
-    "site_id": "site-cda-avenida-3-40n-65-fed27b90a075",
+    "contact_id": "ctc-0-4a3435dd49c5",
+    "site_id": "site-cda-cda-revinorte-a5d027cd7a57",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00892-7eb88c95291ef02b"
+    "source_record_id": "src-95f5bbe0-00892-7eb88c95291e"
   },
   {
-    "contact_id": "ctc-0-9306981538b5",
-    "site_id": "site-prov-cda-variante-sec-del-cedro-s-ad19d8d4f32f",
+    "contact_id": "ctc-0-d5cd132e0057",
+    "site_id": "site-cda-cda-santa-ana-2d8ec6e6ddfd",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-00946-9de8c5d04ecc3213"
+    "source_record_id": "src-95f5bbe0-00946-9de8c5d04ecc"
   },
   {
-    "contact_id": "ctc-0-1b234b6eb842",
-    "site_id": "site-prov-cea-diagonal-57-avenida-33-9-e79e65d20474",
+    "contact_id": "ctc-0-38c0d03b0e36",
+    "site_id": "site-cea-cea-autonorte-escuela-de-7707e409529e",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01002-e69a90051244ea2d"
+    "source_record_id": "src-95f5bbe0-01002-e69a90051244"
   },
   {
-    "contact_id": "ctc-0-3313be6c83df",
-    "site_id": "site-prov-cea-carrera-49-51-40-int-301-66a34267dd23",
+    "contact_id": "ctc-0-79f1f90c196d",
+    "site_id": "site-cea-centro-de-ensenanza-auto-2127a40db283",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01006-3829a208bb66d53d"
+    "source_record_id": "src-95f5bbe0-01006-3829a208bb66"
   },
   {
-    "contact_id": "ctc-0-50a5ac58a7c8",
-    "site_id": "site-prov-cea-calle-50-50-54-lc-201-dc48afa64ef0",
+    "contact_id": "ctc-0-a48dc62ceea9",
+    "site_id": "site-cea-centro-ensenanza-automov-60219146033b",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01007-5d685104d10b7d9a"
+    "source_record_id": "src-95f5bbe0-01007-5d685104d10b"
   },
   {
-    "contact_id": "ctc-0-806579293432",
-    "site_id": "site-prov-cea-carrera-42-67-a-191-lo-1-92fb5957f966",
+    "contact_id": "ctc-0-f42f72e5be25",
+    "site_id": "site-cea-cea-conduescuela-antioqu-1d7017591601",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01047-35fa54cfde998cf0"
+    "source_record_id": "src-95f5bbe0-01047-35fa54cfde99"
   },
   {
-    "contact_id": "ctc-9999999-3a306cadc450",
-    "site_id": "site-prov-cea-carrera-22a-13-10-2e54e5f5e214",
+    "contact_id": "ctc-9999999-a7db2e96348f",
+    "site_id": "site-cea-centro-de-ensenanza-auto-5f155865f62e",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01061-a1d9cdc76d926880"
+    "source_record_id": "src-95f5bbe0-01061-a1d9cdc76d92"
   },
   {
-    "contact_id": "ctc-0-b44e4336df50",
-    "site_id": "site-cea-carrera-76-32-e-33-0d78ff9fa917",
+    "contact_id": "ctc-0-32778db2225d",
+    "site_id": "site-cea-condubelen-ed76c6d9280a",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01108-306204aa1414dd34"
+    "source_record_id": "src-95f5bbe0-01108-306204aa1414"
   },
   {
-    "contact_id": "ctc-0-2d48337497cf",
-    "site_id": "site-cea-carrera-80-48-69-3e9581f2ce57",
+    "contact_id": "ctc-0-e477dc37c38b",
+    "site_id": "site-cea-imperio-vial-d071e70b58de",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01126-5b5ca6478d5d8074"
+    "source_record_id": "src-95f5bbe0-01126-5b5ca6478d5d"
   },
   {
-    "contact_id": "ctc-0-4d9db9f042af",
-    "site_id": "site-prov-cea-calle-63-a-47-76-lote-10-677067cb7cc2",
+    "contact_id": "ctc-0-d5d305f82753",
+    "site_id": "site-cea-cea-good-drive-san-nicol-efae82ea044f",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01141-f9a8369630703f09"
+    "source_record_id": "src-95f5bbe0-01141-f9a836963070"
   },
   {
-    "contact_id": "ctc-0-3bc80ceff09b",
-    "site_id": "site-prov-cea-calle-47-76-3-lc-2035-20-2b4b6e07f8ca",
+    "contact_id": "ctc-0-4131bd718432",
+    "site_id": "site-cea-condutruji-dddcc730f9a6",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01150-9519ef3e85660f37"
+    "source_record_id": "src-95f5bbe0-01150-9519ef3e8566"
   },
   {
-    "contact_id": "ctc-0-023bf0f98750",
-    "site_id": "site-prov-cea-calle-38-55-a-101-8f826c85ea9a",
+    "contact_id": "ctc-0-e4247e0cefbf",
+    "site_id": "site-cea-transita-cea-323e91cc482c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01154-a26a4e21dc7ffbde"
+    "source_record_id": "src-95f5bbe0-01154-a26a4e21dc7f"
   },
   {
-    "contact_id": "ctc-0-58eeaec68d02",
-    "site_id": "site-prov-cea-calle-9-6-62-40327538bc1f",
+    "contact_id": "ctc-0-831b5b0f24d9",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f8a5ebbf8b4a",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01165-8e502c89e2ab4a86"
+    "source_record_id": "src-95f5bbe0-01165-8e502c89e2ab"
   },
   {
-    "contact_id": "ctc-0-697d8a878fad",
-    "site_id": "site-prov-cea-carrera-50-49-58-la-bomb-581202d464ce",
+    "contact_id": "ctc-0-8b88c4bf07a0",
+    "site_id": "site-cea-cea-auto-vegachi-8b10586dcb7a",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01169-21475ea83557007b"
+    "source_record_id": "src-95f5bbe0-01169-21475ea83557"
   },
   {
-    "contact_id": "ctc-0-18abf52a19d7",
-    "site_id": "site-prov-cea-calle-17-21-36-ce1be5beb0f3",
+    "contact_id": "ctc-0-873037663dd1",
+    "site_id": "site-cea-cea-nortena-de-conduccio-e92b2bb9dc59",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01170-9eec0f388d1a0ebf"
+    "source_record_id": "src-95f5bbe0-01170-9eec0f388d1a"
   },
   {
-    "contact_id": "ctc-0-bf6d851d030c",
-    "site_id": "site-cea-carrera-44-59-60-7e4e6e24a8ba",
+    "contact_id": "ctc-0-f56974782409",
+    "site_id": "site-cea-centro-de-ensenanza-auto-d5ce8c4e1837",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01191-576af77753faef2c"
+    "source_record_id": "src-95f5bbe0-01191-576af77753fa"
   },
   {
-    "contact_id": "ctc-0-f24e01a7ce0b",
-    "site_id": "site-cea-calle-45-n-18-45-local-1-3371175f9c18",
+    "contact_id": "ctc-0-20a7aef0ad48",
+    "site_id": "site-cea-conduzcamos-puerta-de-or-f9ffca477c10",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01210-e2fcda51fc2bbd96"
+    "source_record_id": "src-95f5bbe0-01210-e2fcda51fc2b"
   },
   {
-    "contact_id": "ctc-2295615-4826070-06e23d3c21c1",
-    "site_id": "site-cea-carrera-112a-75d-13-b8539aa540f7",
+    "contact_id": "ctc-2295615-4826070-0dd4920380ff",
+    "site_id": "site-cea-academia-de-automovilism-061fa8c4733c",
     "contact_type": "unknown",
     "value_raw": "2295615-4826070",
     "value_normalized": "22956154826070",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01238-9b42d9e97e31e51d"
+    "source_record_id": "src-95f5bbe0-01238-9b42d9e97e31"
   },
   {
-    "contact_id": "ctc-1111111111-88dd46f51a70",
-    "site_id": "site-cea-carrera-107-b-134-19-pis-16027019a450",
+    "contact_id": "ctc-1111111111-4f691c01bf75",
+    "site_id": "site-cea-cea-auto-ferrari-3b7bbea27c9f",
     "contact_type": "unknown",
     "value_raw": "1111111111",
     "value_normalized": "1111111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01290-949c88fa3c5d4b10"
+    "source_record_id": "src-95f5bbe0-01290-949c88fa3c5d"
   },
   {
-    "contact_id": "ctc-0-c3cce517a823",
-    "site_id": "site-cea-avenida-calle-26-sur-71--f6649e5bbd44",
+    "contact_id": "ctc-0-343e4ddfa9fc",
+    "site_id": "site-cea-cea-circular-3b7efd78af81",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01310-3947f9e7bdfd263d"
+    "source_record_id": "src-95f5bbe0-01310-3947f9e7bdfd"
   },
   {
-    "contact_id": "ctc-0-eb3c25b270a1",
-    "site_id": "site-cea-avenida-calle-68-59-a-32-10fab9bd3014",
+    "contact_id": "ctc-0-c0f323113c00",
+    "site_id": "site-cea-cea-santafe-de-bogota-no-edd3f88fa42d",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01337-b59fb695d69aa244"
+    "source_record_id": "src-95f5bbe0-01337-b59fb695d69a"
   },
   {
-    "contact_id": "ctc-0-5c4001b0d376",
-    "site_id": "site-cea-bogota-bogota-d-c-6e9981173bc5",
+    "contact_id": "ctc-0-662639151406",
+    "site_id": "site-cea-centro-de-ensenanza-auto-de9aaf869dcb",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01357-c4c4752518334fbd"
+    "source_record_id": "src-95f5bbe0-01357-c4c475251833"
   },
   {
-    "contact_id": "ctc-0-c816868f64d7",
-    "site_id": "site-cea-carrera-69-a-n-71-a-35-p-e4267d74daed",
+    "contact_id": "ctc-0-3e0e48389d24",
+    "site_id": "site-cea-centro-de-ensenanza-auto-1076f3e1b400",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01379-31bbc37a090af67f"
+    "source_record_id": "src-95f5bbe0-01379-31bbc37a090a"
   },
   {
-    "contact_id": "ctc-0-6f3146974fa2",
-    "site_id": "site-cea-calle-79-b-28-b-37-piso--19a3c4c9022f",
+    "contact_id": "ctc-0-93bc4b17e85b",
+    "site_id": "site-cea-centro-de-ensenanza-auto-15b66a93c54c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01385-d94ac295859b81be"
+    "source_record_id": "src-95f5bbe0-01385-d94ac295859b"
   },
   {
-    "contact_id": "ctc-0-c7f12e83b055",
-    "site_id": "site-cea-calle-129-54-52-lo-117-056826a59dd5",
+    "contact_id": "ctc-0-de2f2912327c",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f101d6c8cbbf",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01386-75c03eaa6ab081c7"
+    "source_record_id": "src-95f5bbe0-01386-75c03eaa6ab0"
   },
   {
-    "contact_id": "ctc-0-3a8fd9ec7440",
-    "site_id": "site-cea-avenida-calle-75-sur-81--bead73328b49",
+    "contact_id": "ctc-0-eb7f881c1731",
+    "site_id": "site-cea-centro-de-ensenanza-auto-cdcf44f935a4",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01455-b9800f81635a8fee"
+    "source_record_id": "src-95f5bbe0-01455-b9800f81635a"
   },
   {
-    "contact_id": "ctc-0-c637bf8c05d8",
-    "site_id": "site-cea-calle-90-sur-0-15-este-78a8c92c69d2",
+    "contact_id": "ctc-0-d2e09b3c4bd3",
+    "site_id": "site-cea-centro-de-ensenanza-auto-389ffb56e610",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01472-f39990f9978bbef0"
+    "source_record_id": "src-95f5bbe0-01472-f39990f9978b"
   },
   {
-    "contact_id": "ctc-0-5e6e4f9feaf5",
-    "site_id": "site-cea-carrera-8-11-39-p-2-51e39d21b749",
+    "contact_id": "ctc-0-09a600ee01e0",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e05d259e4be2",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01492-02bd447a6e11075a"
+    "source_record_id": "src-95f5bbe0-01492-02bd447a6e11"
   },
   {
-    "contact_id": "ctc-0-479d34ff8378",
-    "site_id": "site-cea-avenida-carrera-72-6-b-5-c5bf468709f0",
+    "contact_id": "ctc-0-6ff113c4e0b5",
+    "site_id": "site-cea-centro-de-ensenanza-auto-3b9699f854bf",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01497-b388d469db44b3a6"
+    "source_record_id": "src-95f5bbe0-01497-b388d469db44"
   },
   {
-    "contact_id": "ctc-6491825-6491826-f447643a3df3",
-    "site_id": "site-cea-calle-140-20-50-local-47-b18674d196a1",
+    "contact_id": "ctc-6491825-6491826-c4cdbe185263",
+    "site_id": "site-cea-escuela-de-automovilismo-86b59c184a83",
     "contact_type": "unknown",
     "value_raw": "6491825-6491826",
     "value_normalized": "64918256491826",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01505-c7c0b538fe530645"
+    "source_record_id": "src-95f5bbe0-01505-c7c0b538fe53"
   },
   {
-    "contact_id": "ctc-098-31cfdb5ee13c",
-    "site_id": "site-cea-carrera-10-26-89-213c32dd6aac",
+    "contact_id": "ctc-098-8fa3e3134d6d",
+    "site_id": "site-cea-escad-tunja-3afa8b2f33d0",
     "contact_type": "unknown",
     "value_raw": "098",
     "value_normalized": "098",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01617-d20450e52efe6b5f"
+    "source_record_id": "src-95f5bbe0-01617-d20450e52efe"
   },
   {
-    "contact_id": "ctc-0-ed6146749902",
-    "site_id": "site-cea-carrera-24-53-20-fc5abfe445ed",
+    "contact_id": "ctc-0-4687451c1266",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e263c8b65aab",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01643-bfff4ae25b813fa6"
+    "source_record_id": "src-95f5bbe0-01643-bfff4ae25b81"
   },
   {
-    "contact_id": "ctc-999999999-bd0158cb1b76",
-    "site_id": "site-cea-calle-2-8-26-7a336b0fbc5a",
+    "contact_id": "ctc-999999999-df0a26b20cff",
+    "site_id": "site-cea-cea-escuela-de-automovil-fcd3a0b76220",
     "contact_type": "unknown",
     "value_raw": "999999999",
     "value_normalized": "999999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01716-6ad439f2ce5242b6"
+    "source_record_id": "src-95f5bbe0-01716-6ad439f2ce52"
   },
   {
-    "contact_id": "ctc-0-2354ea8707b1",
-    "site_id": "site-cea-calle-18-13-24-piso-2-8dc8c4b91aaf",
+    "contact_id": "ctc-0-08362f66520f",
+    "site_id": "site-cea-centro-de-ensenanza-auto-9ce569d3c5c4",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01767-a5320d0b2db01fa0"
+    "source_record_id": "src-95f5bbe0-01767-a5320d0b2db0"
   },
   {
-    "contact_id": "ctc-7777777-ac97cbd4593b",
-    "site_id": "site-cea-calle-56-8-41-barrio-la--14aec1bc033c",
+    "contact_id": "ctc-7777777-2876ce55c965",
+    "site_id": "site-cea-centro-de-ensenanza-auto-e3586635be67",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01796-c67a8d4e935660b7"
+    "source_record_id": "src-95f5bbe0-01796-c67a8d4e9356"
   },
   {
-    "contact_id": "ctc-0-1fcae9b9347b",
-    "site_id": "site-prov-cea-carrera-7-5-09-p2-lc-102-6451093b0cf6",
+    "contact_id": "ctc-0-ebb9741e53c4",
+    "site_id": "site-cea-centro-de-ensenanza-auto-aa3a0af6589b",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01801-513dc0fd5a424282"
+    "source_record_id": "src-95f5bbe0-01801-513dc0fd5a42"
   },
   {
-    "contact_id": "ctc-0-cb8deccc11eb",
-    "site_id": "site-prov-cea-carrera-6-1-05-local-205-3f74516790b1",
+    "contact_id": "ctc-0-f78b168f5ed5",
+    "site_id": "site-cea-cea-conducajica-721616f129b8",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01803-d931e7218e0abe19"
+    "source_record_id": "src-95f5bbe0-01803-d931e7218e0a"
   },
   {
-    "contact_id": "ctc-0-c758e9a10a82",
-    "site_id": "site-prov-cea-carrera-8-6-b-42-7e5b432861c2",
+    "contact_id": "ctc-0-1250bc48d2bb",
+    "site_id": "site-cea-cea-centro-de-ensenanza--c239a3e055fb",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01820-6473163b8c1fe5ae"
+    "source_record_id": "src-95f5bbe0-01820-6473163b8c1f"
   },
   {
-    "contact_id": "ctc-0-e50c7c988c8b",
-    "site_id": "site-prov-cea-calle-6-16-21-piso-4-2fecd0792ff9",
+    "contact_id": "ctc-0-062cc24159e3",
+    "site_id": "site-cea-centro-de-ensenanza-auto-73a2d2136157",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01876-d437a30bf74a7c33"
+    "source_record_id": "src-95f5bbe0-01876-d437a30bf74a"
   },
   {
-    "contact_id": "ctc-9999999-a6d9656fcbac",
-    "site_id": "site-prov-cea-calle-25-7-36-50271b6c3d19",
+    "contact_id": "ctc-9999999-78f471b0672f",
+    "site_id": "site-cea-cea-buen-piloto-e17a5229c576",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01882-de18e6379743e452"
+    "source_record_id": "src-95f5bbe0-01882-de18e6379743"
   },
   {
-    "contact_id": "ctc-31420298079-7db6b8052901",
-    "site_id": "site-prov-cea-calle-3-5-14-f5bdab01c7d9",
+    "contact_id": "ctc-31420298079-ab9f02fc7778",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f2fd9722109e",
     "contact_type": "unknown",
     "value_raw": "31420298079",
     "value_normalized": "31420298079",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-01891-45a91138968805a4"
+    "source_record_id": "src-95f5bbe0-01891-45a911389688"
   },
   {
-    "contact_id": "ctc-0-87123ef67b2d",
-    "site_id": "site-prov-cea-calle-6-3-09-abel-rey-39551a3b0068",
+    "contact_id": "ctc-0-9b167520dddb",
+    "site_id": "site-cea-academia-de-conduccion-m-8a7e06517a0e",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02011-0bad161b057df23f"
+    "source_record_id": "src-95f5bbe0-02011-0bad161b057d"
   },
   {
-    "contact_id": "ctc-1234567-ad7e886854e4",
-    "site_id": "site-cea-carrera-20-37a-05-parais-610a963178d5",
+    "contact_id": "ctc-1234567-2355b5c9b301",
+    "site_id": "site-cea-academia-de-ensenanza-au-50bd25fa7f90",
     "contact_type": "unknown",
     "value_raw": "1234567",
     "value_normalized": "1234567",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02017-7dc6b856a9300012"
+    "source_record_id": "src-95f5bbe0-02017-7dc6b856a930"
   },
   {
-    "contact_id": "ctc-7777777-5fd1141cd760",
-    "site_id": "site-cea-calle-26b-39-42-40-br-si-77127ba14bde",
+    "contact_id": "ctc-7777777-2af337514f80",
+    "site_id": "site-cea-cea-de-los-andes-col-c2498a10bc42",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02019-5bca0efeb4169d81"
+    "source_record_id": "src-95f5bbe0-02019-5bca0efeb416"
   },
   {
-    "contact_id": "ctc-0-ad84da6a9688",
-    "site_id": "site-cea-carrera-20-36a-52-b-jord-04db8dc27447",
+    "contact_id": "ctc-0-6bf2b3c5acc0",
+    "site_id": "site-cea-centro-de-ensenanza-auto-bcba8e631aab",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02024-9afa68c41c5e83e1"
+    "source_record_id": "src-95f5bbe0-02024-9afa68c41c5e"
   },
   {
-    "contact_id": "ctc-0-60a22b21b34b",
-    "site_id": "site-prov-cea-carrera-4-7-17-barrio-ob-7c712572de43",
+    "contact_id": "ctc-0-d5bd4e619be9",
+    "site_id": "site-cea-centro-de-ensenanza-auto-f915e575987d",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02095-a1ad70cd5d40aed5"
+    "source_record_id": "src-95f5bbe0-02095-a1ad70cd5d40"
   },
   {
-    "contact_id": "ctc-0-bd0ae45e4dec",
-    "site_id": "site-prov-cea-calle-6-8-52-f9cb9e876fe5",
+    "contact_id": "ctc-0-f7da0038d147",
+    "site_id": "site-cea-centro-de-ensenanza-auto-0e8acf3cd1d5",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02148-43641dc40c6707b9"
+    "source_record_id": "src-95f5bbe0-02148-43641dc40c67"
   },
   {
-    "contact_id": "ctc-0-d23c414f2d68",
-    "site_id": "site-prov-cea-carrera-7-10-27-ed-el-fa-4c6e474b2e75",
+    "contact_id": "ctc-0-1cf6ec18593b",
+    "site_id": "site-cea-centro-de-ensenanza-auto-2d1aec045273",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02183-c3b9696d2bb57d9d"
+    "source_record_id": "src-95f5bbe0-02183-c3b9696d2bb5"
   },
   {
-    "contact_id": "ctc-0-dae8fe7215a7",
-    "site_id": "site-prov-cea-calle-8-7-25-barrio-el-c-7588a5766ed0",
+    "contact_id": "ctc-0-bf28abdb281b",
+    "site_id": "site-cea-c-e-a-dukaty-03e37ea1f135",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02337-07f44a1cb7749e22"
+    "source_record_id": "src-95f5bbe0-02337-07f44a1cb774"
   },
   {
-    "contact_id": "ctc-0-d518462e325e",
-    "site_id": "site-cea-calle-44-norte-3-143-a5e91aac7e46",
+    "contact_id": "ctc-0-20ef15d105ac",
+    "site_id": "site-cea-cea-kar-school-420ef927c643",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02402-ce21be2162b896c2"
+    "source_record_id": "src-95f5bbe0-02402-ce21be2162b8"
   },
   {
-    "contact_id": "ctc-6657901-6810611-2237aaf897c4",
-    "site_id": "site-cea-avenida-2an-44n-109-barr-98928f94ef95",
+    "contact_id": "ctc-6657901-6810611-83a3be7d713c",
+    "site_id": "site-cea-centro-de-ensenanza-auto-383b1e82a0e6",
     "contact_type": "unknown",
     "value_raw": "6657901-6810611",
     "value_normalized": "66579016810611",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02418-946d3782ffa51fdc"
+    "source_record_id": "src-95f5bbe0-02418-946d3782ffa5"
   },
   {
-    "contact_id": "ctc-0-b98d08a2d019",
-    "site_id": "site-prov-cea-calle-30a-n-39-48-barrio-fecbe75f79e4",
+    "contact_id": "ctc-0-66adfa06d8ca",
+    "site_id": "site-cea-academia-automovilistica-895e7a50d665",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02499-51292248f6384896"
+    "source_record_id": "src-95f5bbe0-02499-51292248f638"
   },
   {
-    "contact_id": "ctc-0-2aab29833340",
-    "site_id": "site-prov-cia-calle-104-100-16-barrio--27ee2db49741",
+    "contact_id": "ctc-0-c369a1bf630c",
+    "site_id": "site-cia-cia-cefana-1-apartado-c82281181447",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02548-776e831408eef9b4"
+    "source_record_id": "src-95f5bbe0-02548-776e831408ee"
   },
   {
-    "contact_id": "ctc-0-f3a298b9574b",
-    "site_id": "site-prov-cia-carrera-21-13-22-59bdfaf8fb6e",
+    "contact_id": "ctc-0-bba4a5d99992",
+    "site_id": "site-cia-cia-educar-barbosa-3310cdf2d30c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02550-ed74279202b0345e"
+    "source_record_id": "src-95f5bbe0-02550-ed74279202b0"
   },
   {
-    "contact_id": "ctc-0-ffe9b1a22ba7",
-    "site_id": "site-prov-cia-carrera-50-38-a-185-6138f385b0ea",
+    "contact_id": "ctc-0-7c8309bb8abe",
+    "site_id": "site-cia-centro-integral-de-atenc-2c783bc322c2",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02552-077dc0ddd2111ffb"
+    "source_record_id": "src-95f5bbe0-02552-077dc0ddd211"
   },
   {
-    "contact_id": "ctc-0-eda80b20f7b2",
-    "site_id": "site-prov-cia-avenida-42a-50-51-52-16640abbc6cb",
+    "contact_id": "ctc-0-aec00fb2f733",
+    "site_id": "site-cia-cia-megatram-f37309373701",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02560-e7c603393c5071a2"
+    "source_record_id": "src-95f5bbe0-02560-e7c603393c50"
   },
   {
-    "contact_id": "ctc-0-2fa8d984db75",
-    "site_id": "site-prov-cia-avenida-42-a-50-42-int-2-fdb40c60f7c9",
+    "contact_id": "ctc-0-63cfe44c6477",
+    "site_id": "site-cia-cia-tramibello-88665b06f315",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02564-2466c2e0171fef7f"
+    "source_record_id": "src-95f5bbe0-02564-2466c2e0171f"
   },
   {
-    "contact_id": "ctc-0-f122169bd514",
-    "site_id": "site-prov-cia-diagonal-51-42-142-c16b41ec8b14",
+    "contact_id": "ctc-0-a21bafd6db06",
+    "site_id": "site-cia-ciat-centro-integral-de--80015b30a6ec",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02565-6c50db057b6dbf43"
+    "source_record_id": "src-95f5bbe0-02565-6c50db057b6d"
   },
   {
-    "contact_id": "ctc-9999999-13431a4b15f3",
-    "site_id": "site-prov-cia-carrera-50-132-sur-79-in-2b922811cd4e",
+    "contact_id": "ctc-9999999-14cae5721e21",
+    "site_id": "site-cia-centro-integral-de-atenc-6815f1af9efa",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02568-12ac9559076c04ff"
+    "source_record_id": "src-95f5bbe0-02568-12ac9559076c"
   },
   {
-    "contact_id": "ctc-9999999-8e21bbb95ceb",
-    "site_id": "site-prov-cia-calle-36-d-sur-27-a-105--4f124b551f95",
+    "contact_id": "ctc-9999999-5b4099c1d78c",
+    "site_id": "site-cia-centro-integral-de-atenc-50251c77c8ea",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02586-f5f28a9ff7453c70"
+    "source_record_id": "src-95f5bbe0-02586-f5f28a9ff745"
   },
   {
-    "contact_id": "ctc-9999999-3465bc772d6f",
-    "site_id": "site-prov-cia-calle-49-sur-n-45-a-300--89ee12fe2c9a",
+    "contact_id": "ctc-9999999-e29cbc6e4667",
+    "site_id": "site-cia-cia-envigado-f44d9cd06671",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02588-0382b5445a9b318f"
+    "source_record_id": "src-95f5bbe0-02588-0382b5445a9b"
   },
   {
-    "contact_id": "ctc-0-14d40cc48049",
-    "site_id": "site-prov-cia-calle-49-sur-46-17-680f004cfe81",
+    "contact_id": "ctc-0-74a7c18a495a",
+    "site_id": "site-cia-soluciones-integrales-vi-829bfa3e069d",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02591-447305653b8c7ca4"
+    "source_record_id": "src-95f5bbe0-02591-447305653b8c"
   },
   {
-    "contact_id": "ctc-0-0a414b004542",
-    "site_id": "site-prov-cia-calle-43-n-51-18-54b91e3c7281",
+    "contact_id": "ctc-0-c34ccd9b684e",
+    "site_id": "site-cia-cia-municipal-fed9654559d2",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02594-df43138e0abfed62"
+    "source_record_id": "src-95f5bbe0-02594-df43138e0abf"
   },
   {
-    "contact_id": "ctc-0-e48b75039c93",
-    "site_id": "site-prov-cia-carrera-48-a-calle-45-40-ababb05ba8d3",
+    "contact_id": "ctc-0-aa4080207b02",
+    "site_id": "site-cia-cia-transito-guarne-1381a9440573",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02595-20e81558a155966c"
+    "source_record_id": "src-95f5bbe0-02595-20e81558a155"
   },
   {
-    "contact_id": "ctc-0-d107528c0f58",
-    "site_id": "site-prov-cia-calle-85-carrera-48-01-b-cb933c547d33",
+    "contact_id": "ctc-0-2abeffe4aeaf",
+    "site_id": "site-cia-cia-naranja-mayorista-20fbcba2b0c4",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02605-94707ae9ad67f2db"
+    "source_record_id": "src-95f5bbe0-02605-94707ae9ad67"
   },
   {
-    "contact_id": "ctc-0-7fd6131fac6e",
-    "site_id": "site-prov-cia-calle-50-43-26-in-201-880990cc52d2",
+    "contact_id": "ctc-0-a016bbc31fe7",
+    "site_id": "site-cia-cia-sura-autos-itagui-46ed9bb9cd7d",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02606-06b1f8350160a706"
+    "source_record_id": "src-95f5bbe0-02606-06b1f8350160"
   },
   {
-    "contact_id": "ctc-9999999-2d11c309d532",
-    "site_id": "site-prov-cia-calle-72-42-57-cc-capric-d8d86aca212c",
+    "contact_id": "ctc-9999999-694808dcb687",
+    "site_id": "site-cia-soluciones-integrales-vi-c6a3301da6fb",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02610-9927f6d2855a7c3f"
+    "source_record_id": "src-95f5bbe0-02610-9927f6d2855a"
   },
   {
-    "contact_id": "ctc-999999999-7e2733c9eebd",
-    "site_id": "site-prov-cia-carrera-9-13-63-24014865e4ae",
+    "contact_id": "ctc-999999999-1da9c303ce18",
+    "site_id": "site-cia-centro-integral-de-atenc-7a1293f50c30",
     "contact_type": "unknown",
     "value_raw": "999999999",
     "value_normalized": "999999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02618-46d2b17a35b6fe31"
+    "source_record_id": "src-95f5bbe0-02618-46d2b17a35b6"
   },
   {
-    "contact_id": "ctc-0-483adcaf3ac8",
-    "site_id": "site-cia-carrera-64-c-74-32-int-2-7b5ab7622de0",
+    "contact_id": "ctc-0-e7553de996e0",
+    "site_id": "site-cia-autociat-810b78064db2",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02625-b4ee37923f996caa"
+    "source_record_id": "src-95f5bbe0-02625-b4ee37923f99"
   },
   {
-    "contact_id": "ctc-0-91b979d69252",
-    "site_id": "site-cia-diagonal-74b-32f-05-5c667abf0dce",
+    "contact_id": "ctc-0-2b84dec5a3a1",
+    "site_id": "site-cia-c-i-a-capacitamos-vial-dd104590707c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02627-84a798b0d6233a69"
+    "source_record_id": "src-95f5bbe0-02627-84a798b0d623"
   },
   {
-    "contact_id": "ctc-0-ee0b76fc7c73",
-    "site_id": "site-cia-calle-34-n-56-74-a770b7412c52",
+    "contact_id": "ctc-0-27cabc492d39",
+    "site_id": "site-cia-centro-integral-de-atenc-27c01053c642",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02641-eb8610ae46f2ea57"
+    "source_record_id": "src-95f5bbe0-02641-eb8610ae46f2"
   },
   {
-    "contact_id": "ctc-7777777-91cd98e51119",
-    "site_id": "site-prov-cia-calle49-48-b-98-local-20-10d22e561263",
+    "contact_id": "ctc-7777777-2e6c2827a0ea",
+    "site_id": "site-prov-cia-cia-municipal-san-pedro-d311226aa6af",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02652-80fc24d058427586"
+    "source_record_id": "src-95f5bbe0-02652-80fc24d05842"
   },
   {
-    "contact_id": "ctc-3000000-8524e83946ae",
-    "site_id": "site-cia-calle-30-13-65-lo-01229--5017d8fd4537",
+    "contact_id": "ctc-3000000-8292da07c711",
+    "site_id": "site-cia-cia-educacion-vial-f6baef23ebcb",
     "contact_type": "unknown",
     "value_raw": "3000000",
     "value_normalized": "3000000",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02674-51064d9a77dba0e7"
+    "source_record_id": "src-95f5bbe0-02674-51064d9a77db"
   },
   {
-    "contact_id": "ctc-1111111-e9cdf5735b9d",
-    "site_id": "site-prov-cia-calle-8-5-06-0f80a0bc4c0b",
+    "contact_id": "ctc-1111111-f5584ce8d27b",
+    "site_id": "site-cia-centro-integral-de-atenc-626e1ae6e36a",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02886-31959d89d2e66432"
+    "source_record_id": "src-95f5bbe0-02886-31959d89d2e6"
   },
   {
-    "contact_id": "ctc-0-df3b6b853cd3",
-    "site_id": "site-cia-calle-21-19-27-centro-79bfec4fa658",
+    "contact_id": "ctc-0-428d5032a39a",
+    "site_id": "site-cia-centro-integral-de-atenc-038abde0906d",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02909-30b95f61607cfc71"
+    "source_record_id": "src-95f5bbe0-02909-30b95f61607c"
   },
   {
-    "contact_id": "ctc-0-e42fbb838337",
-    "site_id": "site-cia-via-panamericana-66-41-e-96d1b1740460",
+    "contact_id": "ctc-0-ef346eb4111f",
+    "site_id": "site-cia-cia-terminal-manizales-996486af37db",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02913-f2d11c87969376cb"
+    "source_record_id": "src-95f5bbe0-02913-f2d11c879693"
   },
   {
-    "contact_id": "ctc-0-43638a81ce33",
-    "site_id": "site-cia-carrera-19-64a-19a-d94c71463305",
+    "contact_id": "ctc-0-5c2582fd07cc",
+    "site_id": "site-cia-cimyc-manizales-70629c8cbc32",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02916-b8b1d4613b837264"
+    "source_record_id": "src-95f5bbe0-02916-b8b1d4613b83"
   },
   {
-    "contact_id": "ctc-0-a3736051400e",
-    "site_id": "site-prov-cia-carrera-8-7-60-ed-banco--bf7bc6acdfcb",
+    "contact_id": "ctc-0-6985bfca912f",
+    "site_id": "site-cia-ejevial-riosucio-02a30086c4a8",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02919-97afe4af5de93f96"
+    "source_record_id": "src-95f5bbe0-02919-97afe4af5de9"
   },
   {
-    "contact_id": "ctc-0-9ad901ac0a96",
-    "site_id": "site-prov-cia-calle-8-6-77-p-2-centro-bf27de94a292",
+    "contact_id": "ctc-0-036a8df5e795",
+    "site_id": "site-cia-cia-norte-de-caldas-92d8dbd21fe9",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02920-f306dfdc83298e2b"
+    "source_record_id": "src-95f5bbe0-02920-f306dfdc8329"
   },
   {
-    "contact_id": "ctc-0-5cbc64df6d65",
-    "site_id": "site-prov-cia-calle-14-2-38-lc-1-49cc0b2b63b2",
+    "contact_id": "ctc-0-58a004d322d4",
+    "site_id": "site-cia-cia-elite-584f05ba48e4",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02922-96f75cb5f44e7f9b"
+    "source_record_id": "src-95f5bbe0-02922-96f75cb5f44e"
   },
   {
-    "contact_id": "ctc-0-03ab73e43dc3",
-    "site_id": "site-prov-cia-carrera-1-15-102-lc-1-c--98c679d229a0",
+    "contact_id": "ctc-0-943da0ff65b9",
+    "site_id": "site-cia-cia-villamaria-d578497b1cd8",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02923-1b7b7b0ae302d18f"
+    "source_record_id": "src-95f5bbe0-02923-1b7b7b0ae302"
   },
   {
-    "contact_id": "ctc-0-7b12591ca72e",
-    "site_id": "site-cia-carrera-17-8-12-local-2--28c52744271b",
+    "contact_id": "ctc-0-d8f0f6796780",
+    "site_id": "site-cia-cia-ciudad-blanca-2331b1e59e3f",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02946-73072718b251ee55"
+    "source_record_id": "src-95f5bbe0-02946-73072718b251"
   },
   {
-    "contact_id": "ctc-7777777-41f4c14fa7e5",
-    "site_id": "site-prov-cia-carrera-16-25-99-calle-2-395e0da199c6",
+    "contact_id": "ctc-7777777-7c10277e091b",
+    "site_id": "site-cia-cia-codazzi-0a614409b0b1",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02959-50e1e850758c5137"
+    "source_record_id": "src-95f5bbe0-02959-50e1e850758c"
   },
   {
-    "contact_id": "ctc-7777777-ced85a4a7b63",
-    "site_id": "site-cia-calle-57-8-83-92edc7c5a4bd",
+    "contact_id": "ctc-7777777-35bff18fe6ff",
+    "site_id": "site-cia-cia-la-castellana-127578fc2a2e",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-02978-3071daae0c9fac96"
+    "source_record_id": "src-95f5bbe0-02978-3071daae0c9f"
   },
   {
-    "contact_id": "ctc-1111111-6e6832eb2b2a",
-    "site_id": "site-prov-cia-calle-1-10-04-piso-3-cen-adc076374479",
+    "contact_id": "ctc-1111111-1ae330bd278e",
+    "site_id": "site-cia-empresa-de-servicios-de--448805b73e4d",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03043-3831293318c119db"
+    "source_record_id": "src-95f5bbe0-03043-3831293318c1"
   },
   {
-    "contact_id": "ctc-0-fe651835593c",
-    "site_id": "site-prov-cia-calle-9a-19-26-32613c25eb58",
+    "contact_id": "ctc-0-c4b2ea96943a",
+    "site_id": "site-cia-centro-integral-de-trans-9001b99a8df3",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03045-39c9306b0fcaa57e"
+    "source_record_id": "src-95f5bbe0-03045-39c9306b0fca"
   },
   {
-    "contact_id": "ctc-0-cd0d6fbddd5e",
-    "site_id": "site-prov-cia-calle-12-11-59-piso-2-ap-30b1ecbcca30",
+    "contact_id": "ctc-0-662a32f2d462",
+    "site_id": "site-cia-centro-integral-de-atenc-0b4736d611d9",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03065-2ff017e1c0bb5b52"
+    "source_record_id": "src-95f5bbe0-03065-2ff017e1c0bb"
   },
   {
-    "contact_id": "ctc-0-26604fcddcaa",
-    "site_id": "site-prov-cia-carrera-10-17-16-b-el-ch-4fb914280f12",
+    "contact_id": "ctc-0-1314eca93c35",
+    "site_id": "site-cia-cia-senda-vial-7f058274b60f",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03080-9485a08f84eac6b9"
+    "source_record_id": "src-95f5bbe0-03080-9485a08f84ea"
   },
   {
-    "contact_id": "ctc-0-37b01efa74a2",
-    "site_id": "site-cia-avenida-gran-colombia-6--a0dcf1d49033",
+    "contact_id": "ctc-0-c197f2758c36",
+    "site_id": "site-cia-cianorte-b0c18948e45c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03130-3c7593a43ac38e6d"
+    "source_record_id": "src-95f5bbe0-03130-3c7593a43ac3"
   },
   {
-    "contact_id": "ctc-0-3932daa9fb65",
-    "site_id": "site-prov-cia-carrera-11-19-332-lc-303-736b753826b4",
+    "contact_id": "ctc-0-00105c30752d",
+    "site_id": "site-cia-centro-integral-de-atenc-daeecea9fe2b",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03139-d162f299275ad009"
+    "source_record_id": "src-95f5bbe0-03139-d162f299275a"
   },
   {
-    "contact_id": "ctc-0-488ddfd9ca7f",
-    "site_id": "site-cia-carrera-18-59-37-cc-san--8df8c54b2cbb",
+    "contact_id": "ctc-0-2195fcd9506f",
+    "site_id": "site-cia-centro-integral-de-atenc-40e4aee39fb7",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03148-49cd19769a7fcc1d"
+    "source_record_id": "src-95f5bbe0-03148-49cd19769a7f"
   },
   {
-    "contact_id": "ctc-0-aadce6312dfb",
-    "site_id": "site-cia-cl62-17e-103-piso-2-1541603d8b7b",
+    "contact_id": "ctc-0-27dbd0fda378",
+    "site_id": "site-cia-centro-integral-de-atenc-758d8981209f",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03187-62386132d5f56e04"
+    "source_record_id": "src-95f5bbe0-03187-62386132d5f5"
   },
   {
-    "contact_id": "ctc-0-56b5107e9f71",
-    "site_id": "site-prov-cia-carrera-8-n-9-06-piso-2-efa3570ac740",
+    "contact_id": "ctc-0-5b61c7f962b0",
+    "site_id": "site-cia-centro-integral-de-atenc-5f74037dd1ca",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03198-ddbaca41703aa398"
+    "source_record_id": "src-95f5bbe0-03198-ddbaca41703a"
   },
   {
-    "contact_id": "ctc-0-13d2f43a4b11",
-    "site_id": "site-prov-cia-cl3a-8-151local-4-segund-33f8e672041d",
+    "contact_id": "ctc-0-56b92b0614c7",
+    "site_id": "site-cia-centro-integral-de-atenc-056fceb00a2c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03210-42ed16bf7c461d63"
+    "source_record_id": "src-95f5bbe0-03210-42ed16bf7c46"
   },
   {
-    "contact_id": "ctc-0-8ce26c3057bd",
-    "site_id": "site-prov-cia-ac-12-a-15-107-lc-24-6ada2e0dd25f",
+    "contact_id": "ctc-0-1d2dd9417289",
+    "site_id": "site-cia-centro-integral-de-atenc-9e82c08a20fa",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03234-cd65731214c46c9e"
+    "source_record_id": "src-95f5bbe0-03234-cd65731214c4"
   },
   {
-    "contact_id": "ctc-0-1e720ba1afd2",
-    "site_id": "site-prov-cia-carrera-24-n-5-39-local--c7a5ba0a62ed",
+    "contact_id": "ctc-0-7544fd5b63f3",
+    "site_id": "site-cia-cia-5g-90fe667eef5c",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03246-59c4cf18474171d7"
+    "source_record_id": "src-95f5bbe0-03246-59c4cf184741"
   },
   {
-    "contact_id": "ctc-0-38683a0ac76f",
-    "site_id": "site-prov-cia-calle-10-14-131-e51544d7abff",
+    "contact_id": "ctc-0-6bb2a4fee1f6",
+    "site_id": "site-cia-centro-integral-de-atenc-3cf4fe63f5b7",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03281-c9454e16362375a9"
+    "source_record_id": "src-95f5bbe0-03281-c9454e163623"
   },
   {
-    "contact_id": "ctc-7777777-b5763088f81b",
-    "site_id": "site-prov-cia-carrera-3-15-b-26-48db6eeb0635",
+    "contact_id": "ctc-7777777-95274e2e6528",
+    "site_id": "site-cia-cia-infractor-municipal--f5b3c1153b55",
     "contact_type": "unknown",
     "value_raw": "7777777",
     "value_normalized": "7777777",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03310-8796a15b10ccc8c8"
+    "source_record_id": "src-95f5bbe0-03310-8796a15b10cc"
   },
   {
-    "contact_id": "ctc-0-75a9b0de8598",
-    "site_id": "site-prov-cia-c-10-8-81-1ec34f9e1a39",
+    "contact_id": "ctc-0-bc359fe80f71",
+    "site_id": "site-cia-cia-eje-cafetero-zarzal-83146ea08c23",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03313-ed3ddb169be42063"
+    "source_record_id": "src-95f5bbe0-03313-ed3ddb169be4"
   },
   {
-    "contact_id": "ctc-0-a74acd067778",
-    "site_id": "site-prov-crc-carrera-48-52-5-9d4bd9179d5f",
+    "contact_id": "ctc-0-4c10d3863146",
+    "site_id": "site-crc-crc-condumedica-4a22abc3d212",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03324-3fb399a5375b931d"
+    "source_record_id": "src-95f5bbe0-03324-3fb399a5375b"
   },
   {
-    "contact_id": "ctc-9999999-05de51ba72ec",
-    "site_id": "site-prov-crc-calle-136-sur-carrera-48-bb95ba2dee3a",
+    "contact_id": "ctc-9999999-91ebeb03c64a",
+    "site_id": "site-crc-crc-competente-ab5bafd1f410",
     "contact_type": "unknown",
     "value_raw": "9999999",
     "value_normalized": "9999999",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03328-ae322b3c3b8ebf5c"
+    "source_record_id": "src-95f5bbe0-03328-ae322b3c3b8e"
   },
   {
-    "contact_id": "ctc--4ca6635004df",
-    "site_id": "site-prov-crc-carrera-51-42a-31-fa419ef93d70",
+    "contact_id": "ctc--4e5ab5df30f5",
+    "site_id": "site-crc-certioriente-679295c6a420",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03341-98d29f8786c62180"
+    "source_record_id": "src-95f5bbe0-03341-98d29f8786c6"
   },
   {
-    "contact_id": "ctc-0-bcd3d2f7e8f1",
-    "site_id": "site-prov-crc-calle-72-42-110-of-103-4aa071a775f8",
+    "contact_id": "ctc-0-2f4f219976da",
+    "site_id": "site-crc-salud-cert-b880c3b042c3",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03346-df71964a28838750"
+    "source_record_id": "src-95f5bbe0-03346-df71964a2883"
   },
   {
-    "contact_id": "ctc--bfc8e872694f",
-    "site_id": "site-crc-carrera-77c-52-37-4d8a6588dcff",
+    "contact_id": "ctc--4fb85a1ad567",
+    "site_id": "site-crc-centro-de-reconocimiento-d77d5e3050b9",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03361-c703e373d65b9179"
+    "source_record_id": "src-95f5bbe0-03361-c703e373d65b"
   },
   {
-    "contact_id": "ctc--ae55ac44bc34",
-    "site_id": "site-crc-carrera-43a-34-95-local--d06e03b9e371",
+    "contact_id": "ctc--979b83eef4e9",
+    "site_id": "site-crc-inversiones-ludimax-044b367df6c2",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03390-ebf09c1275b3f00d"
+    "source_record_id": "src-95f5bbe0-03390-ebf09c1275b3"
   },
   {
-    "contact_id": "ctc-0-6b0174da849d",
-    "site_id": "site-crc-calle-20-sur-18-03-ef9d01048bd7",
+    "contact_id": "ctc-0-c734b71aa3eb",
+    "site_id": "site-crc-centro-de-reconocimiento-359cbf8c37d7",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03476-7a568f61d9ab7149"
+    "source_record_id": "src-95f5bbe0-03476-7a568f61d9ab"
   },
   {
-    "contact_id": "ctc-0-8ce9d7e94dce",
-    "site_id": "site-crc-diagonal-23-69-60-lc-103-abfc3d07c8b9",
+    "contact_id": "ctc-0-dbbc5d3bcae6",
+    "site_id": "site-crc-centro-de-reconocimiento-ab27a15f9e06",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03486-9f123015fe99c2c1"
+    "source_record_id": "src-95f5bbe0-03486-9f123015fe99"
   },
   {
-    "contact_id": "ctc-0-c05b18a45942",
-    "site_id": "site-crc-carrera-22-13-19-sur-ce1789f8b3fc",
+    "contact_id": "ctc-0-bf1c41f9c61b",
+    "site_id": "site-crc-certiandes-e8840ef170fe",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03492-27122a98bc68f564"
+    "source_record_id": "src-95f5bbe0-03492-27122a98bc68"
   },
   {
-    "contact_id": "ctc-3000000-5bb209470ce3",
-    "site_id": "site-crc-avenida-carrera-24-71-a--f84b5b44a5df",
+    "contact_id": "ctc-3000000-da92b4cb083d",
+    "site_id": "site-crc-condumedical-hub-group-9a0f8a291ae2",
     "contact_type": "unknown",
     "value_raw": "3000000",
     "value_normalized": "3000000",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03505-a76045a355c04811"
+    "source_record_id": "src-95f5bbe0-03505-a76045a355c0"
   },
   {
-    "contact_id": "ctc-2222222-8fc62b2f3300",
-    "site_id": "site-crc-ac-45-a-sur-59-14-p-1-475d4ae7df4d",
+    "contact_id": "ctc-2222222-205d30b0dc47",
+    "site_id": "site-crc-condupase-ips-1eedd25c25bb",
     "contact_type": "unknown",
     "value_raw": "2222222",
     "value_normalized": "2222222",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03506-1809c36de7d35a7b"
+    "source_record_id": "src-95f5bbe0-03506-1809c36de7d3"
   },
   {
-    "contact_id": "ctc--704bbfb6a9a4",
-    "site_id": "site-crc-avenida-calle-80-69q-35--e21ed19395b7",
+    "contact_id": "ctc--7a9862bf54cf",
+    "site_id": "site-crc-crc-cerecon-4a352dd9c81f",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03526-ede21bbadb334120"
+    "source_record_id": "src-95f5bbe0-03526-ede21bbadb33"
   },
   {
-    "contact_id": "ctc-1111111-810dfe4f1e43",
-    "site_id": "site-crc-transversal-60-51-sur-36-450d39bb93d8",
+    "contact_id": "ctc-1111111-3c65a1c2d716",
+    "site_id": "site-crc-crc-certificamos-013c91317b72",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03527-2a72a92436686dc3"
+    "source_record_id": "src-95f5bbe0-03527-2a72a9243668"
   },
   {
-    "contact_id": "ctc-0-632355f084d2",
-    "site_id": "site-crc-calle-21-sur-16-84-07035f332c88",
+    "contact_id": "ctc-0-805606582c4e",
+    "site_id": "site-crc-crc-driving-test-cad9e301e260",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03535-e2605847eeb87908"
+    "source_record_id": "src-95f5bbe0-03535-e2605847eeb8"
   },
   {
-    "contact_id": "ctc-7552561-3123520690-977fd4800b5d",
-    "site_id": "site-crc-avenida-calle-26-sur-69--aee060b0e722",
+    "contact_id": "ctc-7552561-3123520690-e2697784573d",
+    "site_id": "site-crc-crc-medicsalud-47d65ac4cb98",
     "contact_type": "unknown",
     "value_raw": "7552561-3123520690",
     "value_normalized": "75525613123520690",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03545-8ff782be90ae0d72"
+    "source_record_id": "src-95f5bbe0-03545-8ff782be90ae"
   },
   {
-    "contact_id": "ctc-0-6a674706c6be",
-    "site_id": "site-crc-carrera-17-19-26-17f3f2cb48aa",
+    "contact_id": "ctc-0-017b0b9a9e8d",
+    "site_id": "site-crc-crc-social-017a8ef1e006",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03550-db6c0c3e88f417e7"
+    "source_record_id": "src-95f5bbe0-03550-db6c0c3e88f4"
   },
   {
-    "contact_id": "ctc--30fcd2509329",
-    "site_id": "site-crc-calle-30-16-a16-4f8c405329ab",
+    "contact_id": "ctc--4b0e5f5ec247",
+    "site_id": "site-crc-crc-teusaquillo-2a3bf440232b",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03552-063156809d878c42"
+    "source_record_id": "src-95f5bbe0-03552-063156809d87"
   },
   {
-    "contact_id": "ctc-0-fa73985ced0c",
-    "site_id": "site-crc-calle-20-sur-18-36-prime-c12e08739458",
+    "contact_id": "ctc-0-ca68e8d3ae00",
+    "site_id": "site-crc-sersalud-restrepo-2858d096fae8",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03609-8c777e2b6d0d18e6"
+    "source_record_id": "src-95f5bbe0-03609-8c777e2b6d0d"
   },
   {
-    "contact_id": "ctc-2222222-18b9e451bfe5",
-    "site_id": "site-crc-carrera-81-b-24-246-2-do-e0bd9e969665",
+    "contact_id": "ctc-2222222-b9af72aaa3b8",
+    "site_id": "site-crc-centro-de-reconocimiento-2f28886c8584",
     "contact_type": "unknown",
     "value_raw": "2222222",
     "value_normalized": "2222222",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03632-d166a7852a823ac8"
+    "source_record_id": "src-95f5bbe0-03632-d166a7852a82"
   },
   {
-    "contact_id": "ctc-0-e10fe90e431a",
-    "site_id": "site-crc-calle-26-17-83-loc-1-ave-3dbc81167da4",
+    "contact_id": "ctc-0-a7ed939d4477",
+    "site_id": "site-crc-crc-remegen-cartagena-78c4aed52b31",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03638-0d8984d4f1901a5f"
+    "source_record_id": "src-95f5bbe0-03638-0d8984d4f190"
   },
   {
-    "contact_id": "ctc-744330-3e88535ac534",
-    "site_id": "site-crc-manzana-10-lote-7-san-pe-8715ed651e5b",
+    "contact_id": "ctc-744330-5bac8598f0bb",
+    "site_id": "site-crc-inprosalud-cartagena-el--bb5e60a454c9",
     "contact_type": "unknown",
     "value_raw": "744330",
     "value_normalized": "744330",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03640-231385ab1c925131"
+    "source_record_id": "src-95f5bbe0-03640-231385ab1c92"
   },
   {
-    "contact_id": "ctc-0-ad59ed69b185",
-    "site_id": "site-prov-crc-calle-20-20-05-p-1-b73eaae31b3a",
+    "contact_id": "ctc-0-f45d3e4ad9ee",
+    "site_id": "site-crc-centro-de-reconocimiento-351d425f2b53",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03655-8b94cb753908c558"
+    "source_record_id": "src-95f5bbe0-03655-8b94cb753908"
   },
   {
-    "contact_id": "ctc-0-8f3f316dd37d",
-    "site_id": "site-prov-crc-carrera-5-17-112-085717c8227e",
+    "contact_id": "ctc-0-0847b560ce96",
+    "site_id": "site-crc-centro-de-reconocimiento-c5c7f7e56ec2",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03660-fb738aa15b5cf45f"
+    "source_record_id": "src-95f5bbe0-03660-fb738aa15b5c"
   },
   {
-    "contact_id": "ctc-0-79e15041b606",
-    "site_id": "site-prov-crc-calle-3-15-04-88fb9e1444cf",
+    "contact_id": "ctc-0-1f91a3fccf7c",
+    "site_id": "site-crc-centro-de-reconocimiento-e2ec8191c582",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03726-e90bdbf38ef044ec"
+    "source_record_id": "src-95f5bbe0-03726-e90bdbf38ef0"
   },
   {
-    "contact_id": "ctc-0-b10251b9bf9b",
-    "site_id": "site-prov-crc-calle-6-4-51-1fbf17d26595",
+    "contact_id": "ctc-0-19c532ef2db3",
+    "site_id": "site-crc-salud-vial-oriente-96e3909bcb23",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03762-7e0e71b06a8ec68b"
+    "source_record_id": "src-95f5bbe0-03762-7e0e71b06a8e"
   },
   {
-    "contact_id": "ctc--d0008a38f4cb",
-    "site_id": "site-prov-crc-carrera-3-2-43-d82f0fa701fc",
+    "contact_id": "ctc--573293d25870",
+    "site_id": "site-crc-k-p-facatativa-6c500625d123",
     "contact_type": "unknown",
     "value_raw": "-",
     "value_normalized": null,
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03772-2636c28c8a3a91c7"
+    "source_record_id": "src-95f5bbe0-03772-2636c28c8a3a"
   },
   {
-    "contact_id": "ctc-1111111-a0bcf37c5276",
-    "site_id": "site-prov-crc-carrera-10-n-1-86-6fe5eb55bfd3",
+    "contact_id": "ctc-1111111-822beb6d3c34",
+    "site_id": "site-crc-certimedic-vialcar-d432ae1fb481",
     "contact_type": "unknown",
     "value_raw": "1111111",
     "value_normalized": "1111111",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03816-0851a73b55137d49"
+    "source_record_id": "src-95f5bbe0-03816-0851a73b5513"
   },
   {
-    "contact_id": "ctc-8-e1843624fe27",
-    "site_id": "site-prov-crc-carrera-5-4-37-8c020033ff05",
+    "contact_id": "ctc-8-163bc906e95d",
+    "site_id": "site-crc-centro-de-reconocimiento-8adcfb290df4",
     "contact_type": "unknown",
     "value_raw": "8",
     "value_normalized": "8",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03839-1b04fb219736c63e"
+    "source_record_id": "src-95f5bbe0-03839-1b04fb219736"
   },
   {
-    "contact_id": "ctc-37e-40-9d05dd97bbca",
-    "site_id": "site-prov-crc-carrera-5-4-37-8c020033ff05",
+    "contact_id": "ctc-37e-40-f11591c9989a",
+    "site_id": "site-crc-centro-de-reconocimiento-8adcfb290df4",
     "contact_type": "unknown",
     "value_raw": "37E+40",
     "value_normalized": "3740",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03839-1b04fb219736c63e"
+    "source_record_id": "src-95f5bbe0-03839-1b04fb219736"
   },
   {
-    "contact_id": "ctc-0-81c80957b4e2",
-    "site_id": "site-prov-crc-carrera-19-40-18-5a9b1b9323c3",
+    "contact_id": "ctc-0-2f36838ae323",
+    "site_id": "site-crc-centro-de-reconocimiento-1d493f0b616b",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03955-fb899b2eec9bdf4b"
+    "source_record_id": "src-95f5bbe0-03955-fb899b2eec9b"
   },
   {
-    "contact_id": "ctc-0-7437f80924e6",
-    "site_id": "site-prov-crc-carrera-22-42-04-br-caci-c7253b172ddc",
+    "contact_id": "ctc-0-9ecf38dbcaef",
+    "site_id": "site-crc-centro-de-reconocimiento-8fc66719e08a",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03956-48125cfb47e243d4"
+    "source_record_id": "src-95f5bbe0-03956-48125cfb47e2"
   },
   {
-    "contact_id": "ctc-3265051-3258880-3349ee39e5a4",
-    "site_id": "site-prov-crc-carrera-34-14-52-barrio--69a242b41c49",
+    "contact_id": "ctc-3265051-3258880-79bbf555062f",
+    "site_id": "site-crc-centro-de-reconocimiento-ae0aba26b804",
     "contact_type": "unknown",
     "value_raw": "3265051-3258880",
     "value_normalized": "32650513258880",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03960-29daf67a95e06d62"
+    "source_record_id": "src-95f5bbe0-03960-29daf67a95e0"
   },
   {
-    "contact_id": "ctc-3265051-3258880-cbc8614f6c52",
-    "site_id": "site-crc-carrera-9-38b-57-barrio--566637a73ed3",
+    "contact_id": "ctc-3265051-3258880-82176e39a26e",
+    "site_id": "site-crc-centro-de-reconocimiento-3bf78697ce57",
     "contact_type": "unknown",
     "value_raw": "3265051-3258880",
     "value_normalized": "32650513258880",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-03967-2a723dc13c1705c4"
+    "source_record_id": "src-95f5bbe0-03967-2a723dc13c17"
   },
   {
-    "contact_id": "ctc-0-26a8ae160dc8",
-    "site_id": "site-crc-carrera-4c-n-33-44-local-fb5df7c77ce7",
+    "contact_id": "ctc-0-fd996df18d32",
+    "site_id": "site-crc-crc-condumedica-del-toli-a36ef9e22218",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-04055-53d0c65c9c5ef2e8"
+    "source_record_id": "src-95f5bbe0-04055-53d0c65c9c5e"
   },
   {
-    "contact_id": "ctc-0-456478cbddca",
-    "site_id": "site-prov-crc-calle-94-n-8a-23-correji-fce6f4ed6d0a",
+    "contact_id": "ctc-0-7e56a874dd67",
+    "site_id": "site-crc-certimedica-juanchito-i--0ea3835a7f5b",
     "contact_type": "unknown",
     "value_raw": "0",
     "value_normalized": "0",
     "e164": null,
     "is_valid": false,
     "is_public": false,
-    "source_record_id": "src-04068-29e25a177d621259"
+    "source_record_id": "src-95f5bbe0-04068-29e25a177d62"
   }
 ]

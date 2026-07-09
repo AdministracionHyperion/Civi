@@ -34,6 +34,7 @@ class Entity:
     legal_name_normalized: str
     entity_status: str = "unknown"
     requires_manual_review: bool = False
+    content_hash: str | None = None
     created_at: str | None = None
     updated_at: str | None = None
 
@@ -74,6 +75,16 @@ class Site:
     booking_mode: str = "information_only"
     quality_score: float = 0.0
     requires_manual_review: bool = False
+    snapshot_presence: str = "present"
+    last_seen_import_run_id: str | None = None
+    source_presence_status: str = "present"
+    present_in_latest_snapshot: bool = True
+    first_seen_import_run: str | None = None
+    last_seen_import_run: str | None = None
+    missing_since_import_run: str | None = None
+    content_hash: str | None = None
+    first_seen_at: str | None = None
+    last_seen_at: str | None = None
     created_at: str | None = None
     updated_at: str | None = None
 
@@ -103,6 +114,7 @@ class SourceRecord:
     matched_site_id: str | None = None
     processing_status: str = "pending_review"
     processing_flags: list[str] = field(default_factory=list)
+    observed_at: str | None = None
 
 
 @dataclass
@@ -136,3 +148,8 @@ class ImportRun:
     report_path: str | None = None
     source_updated_at: str | None = None
     snapshot_at: str | None = None
+    missing_count: int = 0
+    reappeared_count: int = 0
+    error_code: str | None = None
+    error_message: str | None = None
+    failed_at: str | None = None

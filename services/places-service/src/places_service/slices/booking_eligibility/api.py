@@ -23,6 +23,8 @@ async def booking_eligibility(site_id: str) -> BookingEligibilityResponse:
             exists=False,
             is_partner=False,
             is_bookable=False,
+            eligible_for_civi_booking=False,
+            eligibility_reason="catalog_repository_unavailable",
             booking_mode="unavailable",
             operational_status="unknown",
             error="catalog_repository_unavailable",

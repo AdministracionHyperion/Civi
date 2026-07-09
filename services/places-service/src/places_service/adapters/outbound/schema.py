@@ -6,6 +6,7 @@ from sqlalchemy import (
     Float,
     Integer,
     MetaData,
+    PrimaryKeyConstraint,
     String,
     Table,
     Text,
@@ -29,6 +30,7 @@ places_entities = Table(
     Column("legal_name_normalized", String(512), nullable=False),
     Column("entity_status", String(32), nullable=False),
     Column("requires_manual_review", Boolean, nullable=False, default=False),
+    Column("content_hash", String(64), nullable=True, index=True),
     Column("created_at", String(64), nullable=True),
     Column("updated_at", String(64), nullable=True),
 )
@@ -70,6 +72,16 @@ places_sites = Table(
     Column("booking_mode", String(32), nullable=False),
     Column("quality_score", Float, nullable=False),
     Column("requires_manual_review", Boolean, nullable=False, index=True),
+    Column("snapshot_presence", String(32), nullable=False, default="present", index=True),
+    Column("last_seen_import_run_id", String(64), nullable=True, index=True),
+    Column("source_presence_status", String(32), nullable=False, default="present", index=True),
+    Column("present_in_latest_snapshot", Boolean, nullable=False, default=True, index=True),
+    Column("first_seen_import_run", String(64), nullable=True, index=True),
+    Column("last_seen_import_run", String(64), nullable=True, index=True),
+    Column("missing_since_import_run", String(64), nullable=True, index=True),
+    Column("content_hash", String(64), nullable=True, index=True),
+    Column("first_seen_at", String(64), nullable=True),
+    Column("last_seen_at", String(64), nullable=True),
     Column("created_at", String(64), nullable=True),
     Column("updated_at", String(64), nullable=True),
 )
@@ -103,6 +115,48 @@ places_source_records = Table(
     Column("processing_flags", Text, nullable=False),
 )
 
+places_schema_migrations = Table(
+    "places_schema_migrations",
+    metadata,
+    Column("version", String(64), primary_key=True),
+    Column("name", String(256), nullable=False),
+    Column("applied_at", String(64), nullable=False),
+    Column("checksum", String(64), nullable=False),
+)
+
+places_import_source_records = Table(
+    "places_import_source_records",
+    metadata,
+    Column("import_run_id", String(64), nullable=False),
+    Column("source_record_id", String(128), nullable=False),
+    Column("source_row_number", Integer, nullable=False),
+    Column("source_hash", String(64), nullable=False),
+    Column("observed_payload", Text, nullable=False),
+    Column("processing_status", String(64), nullable=False, index=True),
+    Column("processing_flags", Text, nullable=False),
+    Column("matched_entity_id", String(128), nullable=True),
+    Column("matched_site_id", String(128), nullable=True),
+    Column("observed_at", String(64), nullable=False),
+    PrimaryKeyConstraint("import_run_id", "source_record_id"),
+)
+
+places_geocode_attempts = Table(
+    "places_geocode_attempts",
+    metadata,
+    Column("attempt_id", String(64), primary_key=True),
+    Column("site_id", String(128), nullable=False, index=True),
+    Column("import_run_id", String(64), nullable=True, index=True),
+    Column("provider", String(64), nullable=False),
+    Column("query", Text, nullable=True),
+    Column("status", String(32), nullable=False, index=True),
+    Column("lat", Float, nullable=True),
+    Column("lng", Float, nullable=True),
+    Column("confidence", Float, nullable=True),
+    Column("precision", String(32), nullable=True),
+    Column("response_payload", Text, nullable=True),
+    Column("attempted_at", String(64), nullable=False),
+)
+
 places_import_runs = Table(
     "places_import_runs",
     metadata,
@@ -123,6 +177,11 @@ places_import_runs = Table(
     Column("report_path", String(512), nullable=True),
     Column("source_updated_at", String(64), nullable=True),
     Column("snapshot_at", String(64), nullable=True),
+    Column("missing_count", Integer, nullable=False, default=0),
+    Column("reappeared_count", Integer, nullable=False, default=0),
+    Column("error_code", String(128), nullable=True),
+    Column("error_message", Text, nullable=True),
+    Column("failed_at", String(64), nullable=True),
 )
 
 places_duplicate_candidates = Table(
