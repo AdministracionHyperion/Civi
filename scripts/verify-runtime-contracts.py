@@ -5,7 +5,6 @@ from pathlib import Path
 import sys
 
 import yaml
-from fastapi.routing import APIRoute
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +28,13 @@ PYTHON_SERVICES = {
 }
 
 HTTP_METHODS = {"get", "post", "put", "patch", "delete"}
+# FastAPI auto-registers these; contracts describe product routes only.
+FRAMEWORK_DOC_PATHS = {
+    "/docs",
+    "/docs/oauth2-redirect",
+    "/openapi.json",
+    "/redoc",
+}
 
 
 def main() -> None:
@@ -65,10 +71,17 @@ def _runtime_routes(module_name: str) -> set[tuple[str, str]]:
     app = getattr(module, "app")
     routes: set[tuple[str, str]] = set()
     for route in app.routes:
-        if not isinstance(route, APIRoute):
+        # Duck-type instead of isinstance(APIRoute): CI can resolve two FastAPI
+        # installs, making isinstance fail and reporting every OpenAPI route missing.
+        path = getattr(route, "path", None)
+        methods = getattr(route, "methods", None)
+        endpoint = getattr(route, "endpoint", None)
+        if not path or not methods or not callable(endpoint):
             continue
-        for method in route.methods - {"HEAD", "OPTIONS"}:
-            routes.add((method.lower(), route.path))
+        if path in FRAMEWORK_DOC_PATHS:
+            continue
+        for method in set(methods) - {"HEAD", "OPTIONS"}:
+            routes.add((str(method).lower(), str(path)))
     return routes
 
 

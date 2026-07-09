@@ -7,7 +7,7 @@ SHA fuente: `457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634`
 
 ## READY_TO_MERGE=NO
 
-Motivo: falta evidencia remota de CI verde en el PR tras este push, y smoke Compose del stack completo (no solo `postgres`/`redis` + `config --quiet`).
+Motivo: CI GitHub falló en `verify-runtime-contracts.py` por `isinstance(APIRoute)` con dos instalaciones de FastAPI en Actions. El dry-run de catálogo sí pasó. Fix subido en el siguiente commit; smoke parcial local: `places-service` `/health/live` y `/health/ready` = 200.
 
 ## Evidencia ejecutada
 
