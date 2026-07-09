@@ -49,9 +49,7 @@ jobs:
           print(path)
           Path("/tmp/civi_pythonpath.txt").write_text(path)
           PY
-          echo "PYTHONPATH<<EOF" >> "$GITHUB_ENV"
-          cat /tmp/civi_pythonpath.txt >> "$GITHUB_ENV"
-          echo "EOF" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$(cat /tmp/civi_pythonpath.txt)" >> "$GITHUB_ENV"
       - name: Install Node deps
         run: |
           if [ -f package.json ]; then npm ci || npm install; fi
