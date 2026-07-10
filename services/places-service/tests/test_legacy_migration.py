@@ -1,11 +1,11 @@
-"""Prove migration from a main-era legacy `places` schema into v2 national catalog tables."""
+"""Prove migration from a main-era legacy `places` schema into v2/v3 national catalog tables."""
 
 from __future__ import annotations
 
 from sqlalchemy import Column, Float, MetaData, String, Table, Boolean, create_engine, select, text
 
 from places_service.adapters.outbound.migrate import migrate_legacy_places_rows, migrate_schema
-from places_service.adapters.outbound.schema import places_sites
+from places_service.adapters.outbound.schema import places_schema_migrations, places_sites
 
 
 def test_migrate_from_main_legacy_places_schema(tmp_path) -> None:
@@ -44,7 +44,20 @@ def test_migrate_from_main_legacy_places_schema(tmp_path) -> None:
         )
 
     report = migrate_schema(engine)
-    assert "v1_baseline" in report.get("migrations", []) or "v2_national_catalog" in report.get("migrations", []) or True
+    migrations = report.get("migrations") or []
+    assert "v1_baseline" in migrations
+    assert "v2_national_catalog" in migrations
+    assert "v3_places_production_hardening" in migrations
+
+    with engine.begin() as conn:
+        applied = {
+            row[0]
+            for row in conn.execute(select(places_schema_migrations.c.version)).all()
+        }
+    assert "v1_baseline" in applied
+    assert "v2_national_catalog" in applied
+    assert "v3_places_production_hardening" in applied
+
     migrated = migrate_legacy_places_rows(engine)
     assert migrated == 1
 
@@ -60,5 +73,6 @@ def test_migrate_from_main_legacy_places_schema(tmp_path) -> None:
         assert row2["lat"] is None and row2["lng"] is None
 
     # Idempotent second migration
-    migrate_schema(engine)
+    second = migrate_schema(engine)
+    assert second.get("migrations") == []
     assert migrate_legacy_places_rows(engine) == 0

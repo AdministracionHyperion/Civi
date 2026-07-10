@@ -3,7 +3,8 @@ from __future__ import annotations
 """Lightweight schema migration helpers for places-service.
 
 Does not replace a full Alembic history, but upgrades existing installs beyond
-create_all() by adding nullable columns required by the national catalog model.
+create_all() by adding nullable columns required by the national catalog model
+and relaxing legacy NOT NULL constraints that block national imports.
 """
 
 from datetime import datetime, timezone
@@ -52,7 +53,10 @@ _PLACES_SITES_EXTRA = (
     ("last_seen_at", "VARCHAR(64)"),
 )
 
-_PLACES_ENTITIES_EXTRA = (("content_hash", "VARCHAR(64)"),)
+_PLACES_ENTITIES_EXTRA = (
+    ("content_hash", "VARCHAR(64)"),
+    ("document_validation_status", "VARCHAR(32)"),
+)
 
 _PLACES_IMPORT_RUNS_EXTRA = (
     ("missing_count", "INTEGER DEFAULT 0"),
@@ -79,9 +83,15 @@ _LEGACY_PLACES_EXTRA = (
     ("nit", "VARCHAR(64)"),
 )
 
+_MIGRATION_DEFINITIONS = (
+    ("v1_baseline", "create_all baseline schema"),
+    ("v2_national_catalog", "national catalog history and presence columns"),
+    ("v3_places_production_hardening", "nullable legacy lat/lng, presence events, document validation status"),
+)
+
 
 def migrate_schema(engine: Engine) -> dict[str, list[str]]:
-    """Apply the baseline and national-catalog migrations exactly once."""
+    """Apply baseline, national-catalog, and production-hardening migrations."""
     create_all_tables(engine)
     added: dict[str, list[str]] = {
         "places_sites": [],
@@ -89,6 +99,7 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
         "places_import_runs": [],
         "places": [],
         "migrations": [],
+        "legacy_nullability": [],
     }
     inspector = inspect(engine)
     tables = set(inspector.get_table_names())
@@ -109,16 +120,15 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
     add_missing_columns("places_import_runs", _PLACES_IMPORT_RUNS_EXTRA)
     add_missing_columns("places", _LEGACY_PLACES_EXTRA)
 
-    migration_definitions = (
-        ("v1_baseline", "create_all baseline schema"),
-        ("v2_national_catalog", "national catalog history and presence columns"),
-    )
+    nullability = _relax_legacy_places_coordinates(engine)
+    added["legacy_nullability"].extend(nullability)
+
     with engine.begin() as conn:
         applied = {
             str(row[0])
             for row in conn.execute(select(places_schema_migrations.c.version)).all()
         }
-        for version, name in migration_definitions:
+        for version, name in _MIGRATION_DEFINITIONS:
             if version not in applied:
                 checksum = hashlib.sha256(f"{version}:{name}".encode()).hexdigest()
                 conn.execute(
@@ -132,6 +142,116 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
                 added["migrations"].append(version)
 
     return added
+
+
+def _relax_legacy_places_coordinates(engine: Engine) -> list[str]:
+    """Allow NULL lat/lng on legacy places (Strategy A)."""
+    inspector = inspect(engine)
+    if "places" not in set(inspector.get_table_names()):
+        return []
+    columns = {c["name"]: c for c in inspector.get_columns("places")}
+    changed: list[str] = []
+    dialect = engine.dialect.name
+
+    for col_name in ("lat", "lng"):
+        column = columns.get(col_name)
+        if column is None or column.get("nullable", True):
+            continue
+        if dialect == "postgresql":
+            with engine.begin() as conn:
+                conn.execute(text(f"ALTER TABLE places ALTER COLUMN {col_name} DROP NOT NULL"))
+            changed.append(f"{col_name}:drop_not_null")
+        elif dialect == "sqlite":
+            # SQLite cannot DROP NOT NULL in place; rebuild the table once.
+            if "sqlite_rebuild_places_nullable_coords" in changed:
+                continue
+            _rebuild_sqlite_places_nullable_coords(engine)
+            changed.append("sqlite_rebuild_places_nullable_coords")
+            break
+        else:
+            with engine.begin() as conn:
+                conn.execute(text(f"ALTER TABLE places ALTER COLUMN {col_name} DROP NOT NULL"))
+            changed.append(f"{col_name}:drop_not_null")
+    return changed
+
+
+def _rebuild_sqlite_places_nullable_coords(engine: Engine) -> None:
+    """Recreate SQLite legacy places with nullable lat/lng while preserving rows."""
+    with engine.begin() as conn:
+        conn.execute(text("PRAGMA foreign_keys=OFF"))
+        conn.execute(
+            text(
+                """
+                CREATE TABLE places_nullable_coords (
+                    id VARCHAR(128) PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    address VARCHAR(512) NOT NULL,
+                    city VARCHAR(128) NOT NULL,
+                    department VARCHAR(128) NOT NULL,
+                    kind VARCHAR(32) NOT NULL,
+                    lat FLOAT,
+                    lng FLOAT,
+                    is_partner BOOLEAN NOT NULL,
+                    phone VARCHAR(64),
+                    status VARCHAR(32),
+                    source VARCHAR(32),
+                    source_updated_at VARCHAR(64),
+                    geocode_confidence FLOAT,
+                    geocode_provider VARCHAR(32),
+                    geocode_status VARCHAR(32),
+                    runt_actor_id VARCHAR(128),
+                    nit VARCHAR(64),
+                    is_bookable BOOLEAN,
+                    booking_mode VARCHAR(32),
+                    municipality_code VARCHAR(16),
+                    status_verified BOOLEAN,
+                    location_precision VARCHAR(32)
+                )
+                """
+            )
+        )
+        existing = {c["name"] for c in inspect(engine).get_columns("places")}
+        select_cols = [
+            "id",
+            "name",
+            "address",
+            "city",
+            "department",
+            "kind",
+            "lat",
+            "lng",
+            "is_partner",
+        ]
+        optional = [
+            "phone",
+            "status",
+            "source",
+            "source_updated_at",
+            "geocode_confidence",
+            "geocode_provider",
+            "geocode_status",
+            "runt_actor_id",
+            "nit",
+            "is_bookable",
+            "booking_mode",
+            "municipality_code",
+            "status_verified",
+            "location_precision",
+        ]
+        for col in optional:
+            if col in existing:
+                select_cols.append(col)
+            else:
+                select_cols.append(f"NULL AS {col}")
+        conn.execute(
+            text(
+                f"INSERT INTO places_nullable_coords ({', '.join(c.split(' AS ')[-1] for c in select_cols)}) "
+                f"SELECT {', '.join(select_cols)} FROM places"
+            )
+        )
+        conn.execute(text("DROP TABLE places"))
+        conn.execute(text("ALTER TABLE places_nullable_coords RENAME TO places"))
+        conn.execute(text("PRAGMA foreign_keys=ON"))
 
 
 def migrate_legacy_places_rows(engine: Engine) -> int:
@@ -148,6 +268,44 @@ def migrate_legacy_places_rows(engine: Engine) -> int:
         migrated = 0
         for row in rows:
             site_id = str(row["id"])
+            entity_id = f"ent-legacy-{site_id}"
+            if "places_entities" in tables:
+                conn.execute(
+                    text(
+                        """
+                        INSERT INTO places_entities (
+                            entity_id, document_type, document_number, verification_digit,
+                            document_raw, document_valid, document_validation_status,
+                            legal_name, legal_name_normalized,
+                            entity_status, requires_manual_review
+                        ) VALUES (
+                            :entity_id, 'UNKNOWN', NULL, NULL,
+                            NULL, NULL, 'missing', :legal_name, :legal_name_normalized,
+                            'unknown', 1
+                        )
+                        ON CONFLICT(entity_id) DO NOTHING
+                        """
+                        if engine.dialect.name == "sqlite"
+                        else """
+                        INSERT INTO places_entities (
+                            entity_id, document_type, document_number, verification_digit,
+                            document_raw, document_valid, document_validation_status,
+                            legal_name, legal_name_normalized,
+                            entity_status, requires_manual_review
+                        ) VALUES (
+                            :entity_id, 'UNKNOWN', NULL, NULL,
+                            NULL, NULL, 'missing', :legal_name, :legal_name_normalized,
+                            'unknown', true
+                        )
+                        ON CONFLICT (entity_id) DO NOTHING
+                        """
+                    ),
+                    {
+                        "entity_id": entity_id,
+                        "legal_name": str(row["name"]),
+                        "legal_name_normalized": str(row["name"]).upper(),
+                    },
+                )
             conn.execute(
                 text(
                     """
@@ -174,7 +332,7 @@ def migrate_legacy_places_rows(engine: Engine) -> int:
                 ),
                 {
                     "site_id": site_id,
-                    "entity_id": f"ent-legacy-{site_id}",
+                    "entity_id": entity_id,
                     "actor_type": str(row["kind"]),
                     "name": str(row["name"]),
                     "name_normalized": str(row["name"]).upper(),
