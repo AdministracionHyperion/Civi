@@ -334,13 +334,49 @@ def _first_list(payload: dict[str, Any], keys: tuple[str, ...]) -> list[Any]:
     return []
 
 
-def _format_distance(distance_km: object) -> str | None:
+def _format_distance(place_or_km: object, duration_min: object = None, distance_source: object = None) -> str | None:
+    """Format distance for WhatsApp copy.
+
+    Accepts either a place dict or a raw distance_km value (legacy call sites).
+    """
+    distance_km: object
+    source: object = distance_source
+    minutes: object = duration_min
+    if isinstance(place_or_km, dict):
+        distance_km = place_or_km.get("distance_km")
+        source = place_or_km.get("distance_source") if source is None else source
+        minutes = place_or_km.get("duration_min") if minutes is None else minutes
+    else:
+        distance_km = place_or_km
+
     if distance_km is None:
         return None
     try:
         km = float(distance_km)
     except (TypeError, ValueError):
         return None
+
+    if str(source or "").lower() == "osrm":
+        if km < 1:
+            base = f"{int(round(km * 1000))} m por carretera"
+        elif km < 10:
+            base = f"{km:.1f} km por carretera"
+        else:
+            base = f"{int(round(km))} km por carretera"
+        try:
+            mins = float(minutes) if minutes is not None else None
+        except (TypeError, ValueError):
+            mins = None
+        if mins is not None and mins > 0:
+            if mins < 60:
+                return f"{base} (~{int(round(mins))} min)"
+            hours = int(mins // 60)
+            rem = int(round(mins - hours * 60))
+            if rem == 0:
+                return f"{base} (~{hours} h)"
+            return f"{base} (~{hours} h {rem} min)"
+        return base
+
     if km < 1:
         return f"{int(round(km * 1000))} m aprox. (linea recta)"
     if km < 10:
@@ -358,7 +394,7 @@ def format_place_response(place: dict[str, object]) -> str:
     nombre = str(place.get("name") or "").strip() or "Centro"
     direccion = str(place.get("address") or "").strip()
     ciudad = str(place.get("city") or "").strip()
-    distancia = _format_distance(place.get("distance_km"))
+    distancia = _format_distance(place)
 
     lines = [
         "Con la ubicacion que mandaste, esta es la opcion agendable que mejor encaja:",
@@ -400,7 +436,7 @@ def format_place_options_response(places: list[dict[str, object]], *, starts_at:
         nombre = str(place.get("name") or "").strip() or "Centro"
         ciudad = str(place.get("city") or "").strip()
         direccion = str(place.get("address") or "").strip()
-        distancia = _format_distance(place.get("distance_km"))
+        distancia = _format_distance(place)
         if tipo_hint is None:
             tipo_hint = _tipo_label(place)
         parts = [f"{idx}. *{nombre}*"]

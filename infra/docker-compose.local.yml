@@ -233,6 +233,9 @@ services:
       PLACES_AUTO_SEED_CATALOG: "false"
       PLACES_SEARCH_RADIUS_KM: "40"
       PLACES_GEOCODING_MODE: disabled
+      OSRM_BASE_URL: https://router.project-osrm.org
+      OSRM_TIMEOUT_S: "4"
+      OSRM_MAX_DESTINATIONS: "16"
     ports:
       - "8085:8085"
     depends_on:

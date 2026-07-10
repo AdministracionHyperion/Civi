@@ -18,6 +18,8 @@ class PendingAppointmentSelection:
     starts_at: str | None = None
     selected_index: int | None = None
     mentioned_crc: bool = False
+    lat: float | None = None
+    lng: float | None = None
 
 
 @dataclass
@@ -93,19 +95,36 @@ class SharedPendingAppointmentStore:
             self._sql = _pending_store_from_env()
         return self._sql
 
-    def save(self, *, user_key: str, channel: str, procedure: str) -> None:
+    def save(
+        self,
+        *,
+        user_key: str,
+        channel: str,
+        procedure: str,
+        lat: float | None = None,
+        lng: float | None = None,
+    ) -> None:
         store = self._get_sql()
         if store is not None:
-            store.save(user_key=user_key, channel=channel, procedure=procedure)
+            store.save(
+                user_key=user_key,
+                channel=channel,
+                procedure=procedure,
+                lat=lat,
+                lng=lng,
+            )
 
     def pop_pending_procedure(self, *, user_key: str) -> str | None:
-        store = self._get_sql()
-        if store is None:
-            return None
-        row = store.get_and_clear(user_key=user_key)
+        row = self.pop_pending(user_key=user_key)
         if row is None:
             return None
         return row["procedure"]
+
+    def pop_pending(self, *, user_key: str) -> dict[str, Any] | None:
+        store = self._get_sql()
+        if store is None:
+            return None
+        return store.get_and_clear(user_key=user_key)
 
 
 def _pending_store_from_env() -> Any | None:

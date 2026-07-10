@@ -792,6 +792,44 @@ async def test_agent_uses_whatsapp_location_metadata_without_city(monkeypatch: p
 
 
 @pytest.mark.asyncio
+async def test_agent_reuses_persisted_pin_on_next_text_turn(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
+
+    pin_turn = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="573009998877",
+            text="Acabo de compartir mi ubicacion actual por WhatsApp.",
+            channel="whatsapp",
+            metadata={"location_lat": 5.0689, "location_lng": -75.5174},
+        )
+    )
+    assert pin_turn.mode == "appointment_missing_procedure"
+    pending = appointment_selection_store.get(user_key="573009998877", channel="whatsapp")
+    assert pending is not None
+    assert pending.lat == pytest.approx(5.0689)
+    assert pending.lng == pytest.approx(-75.5174)
+
+    follow = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="573009998877",
+            text="tecnomecanica el 2026-08-15 09:00",
+            channel="whatsapp",
+        )
+    )
+    assert follow.mode == "appointment_place_selection_required"
+    assert FakePlacesClient.calls[-1]["lat"] == pytest.approx(5.0689)
+    assert FakePlacesClient.calls[-1]["lng"] == pytest.approx(-75.5174)
+    assert FakePlacesClient.calls[-1]["city"] is None
+
+
+def test_format_distance_osrm_vs_haversine() -> None:
+    from bot_orchestrator.slices.run_turn.formatters import _format_distance
+
+    assert "por carretera" in (_format_distance({"distance_km": 2.4, "distance_source": "osrm", "duration_min": 7}) or "")
+    assert "linea recta" in (_format_distance({"distance_km": 2.4, "distance_source": "haversine"}) or "")
+
+
+@pytest.mark.asyncio
 async def test_agent_asks_city_when_places_requires_location(monkeypatch: pytest.MonkeyPatch) -> None:
     class EmptyPlacesClient(FakePlacesClient):
         async def find_nearest(

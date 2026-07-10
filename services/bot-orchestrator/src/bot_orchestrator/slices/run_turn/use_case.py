@@ -117,6 +117,9 @@ async def run_agent_turn(
     placa = fresh_placa
     documento = fresh_documento
 
+    # Persist WhatsApp/GPS pin across turns before any appointment branching.
+    _capture_turn_location(payload)
+
     lowered = text.lower()
     partner_response = await _maybe_handle_partner_decision(payload)
     if partner_response is not None:
@@ -348,6 +351,7 @@ async def run_agent_turn(
         procedure = procedure_for_text(text)
         crc_hint = mentions_crc(text)
         if procedure is None:
+            loc = location_for_turn(payload)
             appointment_selection_store.save(
                 PendingAppointmentSelection(
                     user_key=payload.user_key,
@@ -355,6 +359,8 @@ async def run_agent_turn(
                     procedure=AWAITING_PROCEDURE,
                     places=[],
                     mentioned_crc=crc_hint,
+                    lat=loc[0] if loc else None,
+                    lng=loc[1] if loc else None,
                 )
             )
             return AgentTurnResponse(
@@ -523,12 +529,18 @@ async def run_agent_turn(
             tool_calls.append("quote.create")
 
         if intent == "tecnomecanica" and _vigencia_needs_agenda(intent=intent, data=data):
+            existing = appointment_selection_store.get(
+                user_key=payload.user_key, channel=payload.channel
+            )
+            loc = location_for_turn(payload)
             appointment_selection_store.save(
                 PendingAppointmentSelection(
                     user_key=payload.user_key,
                     channel=payload.channel,
                     procedure="tecnomecanica",
                     places=[],
+                    lat=(loc[0] if loc else (existing.lat if existing else None)),
+                    lng=(loc[1] if loc else (existing.lng if existing else None)),
                 )
             )
 
@@ -732,18 +744,26 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
     pending = appointment_selection_store.get(user_key=payload.user_key, channel=payload.channel)
     was_just_loaded = False
     if pending is None:
-        procedure = shared_pending_store.pop_pending_procedure(user_key=payload.user_key)
-        if procedure:
+        row = shared_pending_store.pop_pending(user_key=payload.user_key)
+        if row:
             pending = PendingAppointmentSelection(
                 user_key=payload.user_key,
                 channel=payload.channel,
-                procedure=procedure,
+                procedure=row["procedure"],
                 places=[],
+                lat=row.get("lat"),
+                lng=row.get("lng"),
             )
             appointment_selection_store.save(pending)
             was_just_loaded = True
         else:
             return None
+
+    # Refresh pin from this turn's metadata if present.
+    meta_loc = _location_from_metadata(payload)
+    if meta_loc is not None:
+        pending.lat, pending.lng = meta_loc
+        appointment_selection_store.save(pending)
 
     if mentions_crc(payload.text):
         pending.mentioned_crc = True
@@ -753,11 +773,16 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
         resolved = procedure_for_text(payload.text)
         if resolved is None:
             appointment_selection_store.save(pending)
-            return AgentTurnResponse(
-                text="Claro. Dime si la cita es para tecnomecanica, licencia o curso por multa.",
-                state_version=1,
-                mode="appointment_missing_procedure",
-            )
+            # Pin-first or explicit "agendar" without procedure → ask.
+            # Otherwise keep lat/lng silently and let other intents run.
+            pin_this_turn = _location_from_metadata(payload) is not None
+            if wants_appointment(payload.text) or pin_this_turn:
+                return AgentTurnResponse(
+                    text="Claro. Dime si la cita es para tecnomecanica, licencia o curso por multa.",
+                    state_version=1,
+                    mode="appointment_missing_procedure",
+                )
+            return None
         pending.procedure = resolved
         appointment_selection_store.save(pending)
 
@@ -942,6 +967,8 @@ async def _find_places_and_continue_appointment(
                 places=[dict(place) for place in bookable_places],
                 starts_at=starts_at,
                 mentioned_crc=mentioned_crc,
+                lat=lat,
+                lng=lng,
             )
         )
         return AgentTurnResponse(
@@ -959,6 +986,8 @@ async def _find_places_and_continue_appointment(
                 procedure=procedure,
                 places=[dict(bookable_places[0])],
                 mentioned_crc=mentioned_crc,
+                lat=lat,
+                lng=lng,
             )
         )
         return AgentTurnResponse(
@@ -1171,7 +1200,7 @@ def notification_to_for_turn(payload: AgentTurnRequest) -> str | None:
     return None
 
 
-def location_for_turn(payload: AgentTurnRequest) -> tuple[float, float] | None:
+def _location_from_metadata(payload: AgentTurnRequest) -> tuple[float, float] | None:
     metadata = payload.metadata or {}
     for lat_key, lng_key in (
         ("location_lat", "location_lng"),
@@ -1187,6 +1216,45 @@ def location_for_turn(payload: AgentTurnRequest) -> tuple[float, float] | None:
             continue
         if is_colombia_latlng(lat, lng):
             return lat, lng
+    return None
+
+
+def _capture_turn_location(payload: AgentTurnRequest) -> None:
+    """Persist pin from this turn into pending so later text turns keep GPS."""
+    loc = _location_from_metadata(payload)
+    if loc is None:
+        return
+    pending = appointment_selection_store.get(user_key=payload.user_key, channel=payload.channel)
+    if pending is None:
+        pending = PendingAppointmentSelection(
+            user_key=payload.user_key,
+            channel=payload.channel,
+            procedure=AWAITING_PROCEDURE,
+            places=[],
+            lat=loc[0],
+            lng=loc[1],
+        )
+    else:
+        pending.lat, pending.lng = loc
+    appointment_selection_store.save(pending)
+    if pending.procedure and pending.procedure != AWAITING_PROCEDURE:
+        shared_pending_store.save(
+            user_key=payload.user_key,
+            channel=payload.channel,
+            procedure=pending.procedure,
+            lat=pending.lat,
+            lng=pending.lng,
+        )
+
+
+def location_for_turn(payload: AgentTurnRequest) -> tuple[float, float] | None:
+    meta = _location_from_metadata(payload)
+    if meta is not None:
+        return meta
+    pending = appointment_selection_store.get(user_key=payload.user_key, channel=payload.channel)
+    if pending is not None and pending.lat is not None and pending.lng is not None:
+        if is_colombia_latlng(pending.lat, pending.lng):
+            return pending.lat, pending.lng
     return None
 
 

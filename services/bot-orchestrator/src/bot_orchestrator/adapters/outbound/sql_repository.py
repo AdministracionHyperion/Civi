@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from sqlalchemy import Column, MetaData, String, Table, Text, create_engine, select, text, update
+from sqlalchemy import Column, Float, MetaData, String, Table, Text, create_engine, select, text, update
 from sqlalchemy.engine import Engine
 
 from bot_orchestrator.shared.consult_jobs import ConsultJob, ConsultJobStatus
@@ -35,6 +35,8 @@ bot_pending_appointments = Table(
     Column("channel", String(32), nullable=False),
     Column("procedure", String(32), nullable=False),
     Column("created_at", String(64), nullable=False),
+    Column("lat", Float, nullable=True),
+    Column("lng", Float, nullable=True),
 )
 
 
@@ -280,10 +282,28 @@ class SqlPendingAppointmentStore:
             with self.engine.begin() as conn:
                 conn.execute(text("SELECT pg_advisory_xact_lock(hashtext('civi_bot_pending_schema'))"))
                 metadata.create_all(conn)
+                conn.execute(text("ALTER TABLE bot_pending_appointments ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION"))
+                conn.execute(text("ALTER TABLE bot_pending_appointments ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION"))
             return
         metadata.create_all(self.engine)
+        if self.engine.dialect.name == "sqlite":
+            with self.engine.begin() as conn:
+                cols = conn.execute(text("PRAGMA table_info(bot_pending_appointments)")).fetchall()
+                names = {str(row[1]) for row in cols}
+                if "lat" not in names:
+                    conn.execute(text("ALTER TABLE bot_pending_appointments ADD COLUMN lat REAL"))
+                if "lng" not in names:
+                    conn.execute(text("ALTER TABLE bot_pending_appointments ADD COLUMN lng REAL"))
 
-    def save(self, *, user_key: str, channel: str, procedure: str) -> None:
+    def save(
+        self,
+        *,
+        user_key: str,
+        channel: str,
+        procedure: str,
+        lat: float | None = None,
+        lng: float | None = None,
+    ) -> None:
         created_at = datetime.now(timezone.utc).isoformat()
         with self.engine.begin() as conn:
             if self.engine.dialect.name == "postgresql":
@@ -294,10 +314,18 @@ class SqlPendingAppointmentStore:
                     channel=channel,
                     procedure=procedure,
                     created_at=created_at,
+                    lat=lat,
+                    lng=lng,
                 )
                 stmt = stmt.on_conflict_do_update(
                     index_elements=["user_key"],
-                    set_={"procedure": procedure, "channel": channel, "created_at": created_at},
+                    set_={
+                        "procedure": procedure,
+                        "channel": channel,
+                        "created_at": created_at,
+                        "lat": lat,
+                        "lng": lng,
+                    },
                 )
                 conn.execute(stmt)
             else:
@@ -310,6 +338,8 @@ class SqlPendingAppointmentStore:
                         channel=channel,
                         procedure=procedure,
                         created_at=created_at,
+                        lat=lat,
+                        lng=lng,
                     )
                 )
 
@@ -323,8 +353,12 @@ class SqlPendingAppointmentStore:
             conn.execute(
                 bot_pending_appointments.delete().where(bot_pending_appointments.c.user_key == user_key)
             )
+        lat = row.get("lat")
+        lng = row.get("lng")
         return {
             "user_key": str(row["user_key"]),
             "channel": str(row["channel"]),
             "procedure": str(row["procedure"]),
+            "lat": float(lat) if lat is not None else None,
+            "lng": float(lng) if lng is not None else None,
         }

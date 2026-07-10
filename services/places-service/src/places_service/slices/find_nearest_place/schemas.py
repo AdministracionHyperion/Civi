@@ -20,6 +20,8 @@ class PlaceResult(BaseModel):
     department: str
     kind: str
     distance_km: float | None = None
+    distance_source: str | None = None
+    duration_min: float | None = None
     municipality_code: str | None = None
     status: str | None = None
     status_verified: bool | None = None

@@ -637,15 +637,40 @@ class CatalogSqlRepository:
                 if distance <= radius_km:
                     ranked.append((distance, row))
             ranked.sort(key=lambda item: (item[0], not item[1]["is_bookable"], not item[1]["is_partner"]))
-            top = ranked[:limit]
-            with_contact = self._ops_contact_site_ids([row["site_id"] for _, row in top])
+
+            from places_service.adapters.outbound import osrm_client
+
+            osrm_n = osrm_client.max_destinations()
+            prefilter = ranked[: max(limit, osrm_n)]
+            enriched: list[tuple[float, dict[str, Any], str, float | None]] = []
+            routes = None
+            if prefilter and osrm_client.is_enabled():
+                dests = [(float(row["lat"]), float(row["lng"])) for _, row in prefilter]
+                routes = osrm_client.table((lat, lng), dests)
+            if routes is not None and len(routes) == len(prefilter):
+                for (hav_km, row), route in zip(prefilter, routes):
+                    if route is None:
+                        enriched.append((hav_km, row, "haversine", None))
+                    else:
+                        road_km, minutes = route
+                        enriched.append((road_km, row, "osrm", minutes))
+                enriched.sort(
+                    key=lambda item: (item[0], not item[1]["is_bookable"], not item[1]["is_partner"])
+                )
+            else:
+                enriched = [(hav_km, row, "haversine", None) for hav_km, row in prefilter]
+
+            top = enriched[:limit]
+            with_contact = self._ops_contact_site_ids([row["site_id"] for _, row, _, _ in top])
             places = [
                 _site_to_place_result(
                     row,
                     distance_km=dist,
                     contact_available=row["site_id"] in with_contact,
+                    distance_source=source,
+                    duration_min=duration,
                 )
-                for dist, row in top
+                for dist, row, source, duration in top
             ]
             if not places:
                 no_results_reason = "no_sites_within_radius"
@@ -995,6 +1020,8 @@ def _site_to_place_result(
     *,
     distance_km: float | None = None,
     contact_available: bool = False,
+    distance_source: str | None = None,
+    duration_min: float | None = None,
 ) -> dict[str, Any]:
     from places_service.domain.models import CONFIRMED_VALIDATION_STATUSES
 
@@ -1011,6 +1038,8 @@ def _site_to_place_result(
         "department": row["department"],
         "kind": row["actor_type"],
         "distance_km": round(distance_km, 2) if distance_km is not None else None,
+        "distance_source": distance_source,
+        "duration_min": round(duration_min, 1) if duration_min is not None else None,
         "municipality_code": row.get("municipality_code"),
         "status": row.get("operational_status"),
         "status_verified": row.get("status_verified"),
