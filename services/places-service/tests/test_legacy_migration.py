@@ -48,6 +48,7 @@ def test_migrate_from_main_legacy_places_schema(tmp_path) -> None:
     assert "v1_baseline" in migrations
     assert "v2_national_catalog" in migrations
     assert "v3_places_production_hardening" in migrations
+    assert "v4_geocode_attempts_and_presence_source" in migrations
 
     with engine.begin() as conn:
         applied = {
@@ -57,6 +58,7 @@ def test_migrate_from_main_legacy_places_schema(tmp_path) -> None:
     assert "v1_baseline" in applied
     assert "v2_national_catalog" in applied
     assert "v3_places_production_hardening" in applied
+    assert "v4_geocode_attempts_and_presence_source" in applied
 
     migrated = migrate_legacy_places_rows(engine)
     assert migrated == 1

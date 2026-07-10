@@ -83,10 +83,26 @@ _LEGACY_PLACES_EXTRA = (
     ("nit", "VARCHAR(64)"),
 )
 
+_GEOCODE_ATTEMPTS_EXTRA = (
+    ("attempt_number", "INTEGER"),
+    ("provider_record_id", "VARCHAR(128)"),
+    ("http_status", "INTEGER"),
+    ("error_code", "VARCHAR(128)"),
+    ("error_message", "TEXT"),
+    ("completed_at", "VARCHAR(64)"),
+)
+
+_PRESENCE_EVENTS_EXTRA = (
+    ("source", "VARCHAR(64)"),
+    ("actor", "VARCHAR(128)"),
+    ("reason", "VARCHAR(512)"),
+)
+
 _MIGRATION_DEFINITIONS = (
     ("v1_baseline", "create_all baseline schema"),
     ("v2_national_catalog", "national catalog history and presence columns"),
     ("v3_places_production_hardening", "nullable legacy lat/lng, presence events, document validation status"),
+    ("v4_geocode_attempts_and_presence_source", "geocode attempt detail columns and presence event source"),
 )
 
 
@@ -98,6 +114,8 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
         "places_entities": [],
         "places_import_runs": [],
         "places": [],
+        "places_geocode_attempts": [],
+        "places_presence_events": [],
         "migrations": [],
         "legacy_nullability": [],
     }
@@ -119,6 +137,8 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
     add_missing_columns("places_entities", _PLACES_ENTITIES_EXTRA)
     add_missing_columns("places_import_runs", _PLACES_IMPORT_RUNS_EXTRA)
     add_missing_columns("places", _LEGACY_PLACES_EXTRA)
+    add_missing_columns("places_geocode_attempts", _GEOCODE_ATTEMPTS_EXTRA)
+    add_missing_columns("places_presence_events", _PRESENCE_EVENTS_EXTRA)
 
     nullability = _relax_legacy_places_coordinates(engine)
     added["legacy_nullability"].extend(nullability)

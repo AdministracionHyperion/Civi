@@ -150,6 +150,9 @@ places_geocode_attempts = Table(
     Column("provider", String(64), nullable=False),
     Column("query", Text, nullable=True),
     Column("status", String(32), nullable=False, index=True),
+    Column("attempt_number", Integer, nullable=True),
+    Column("provider_record_id", String(128), nullable=True),
+    Column("http_status", Integer, nullable=True),
     Column("lat", Float, nullable=True),
     Column("lng", Float, nullable=True),
     Column("confidence", Float, nullable=True),
@@ -172,6 +175,7 @@ places_presence_events = Table(
     Column("event_type", String(64), nullable=False, index=True),
     Column("reason", String(512), nullable=True),
     Column("actor", String(128), nullable=True),
+    Column("source", String(64), nullable=True),
     Column("created_at", String(64), nullable=False),
 )
 

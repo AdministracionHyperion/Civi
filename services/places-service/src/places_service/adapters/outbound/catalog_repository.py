@@ -750,6 +750,7 @@ def _insert_presence_event(
             event_type=event_type,
             reason=reason,
             actor="import_catalog",
+            source="import_catalog",
             created_at=created_at,
         )
     )
