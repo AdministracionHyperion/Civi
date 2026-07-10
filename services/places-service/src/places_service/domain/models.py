@@ -11,7 +11,15 @@ OPERATIONAL_STATUSES = frozenset(
 )
 BOOKING_MODES = frozenset({"civi", "external_contact", "information_only", "unavailable"})
 GEOCODE_STATUSES = frozenset(
-    {"not_attempted", "insufficient_address", "pending", "success", "failed", "manual"}
+    {
+        "not_attempted",
+        "insufficient_address",
+        "pending",
+        "success",
+        "failed",
+        "manual",
+        "low_confidence",
+    }
 )
 LOCATION_PRECISIONS = frozenset(
     {"rooftop", "address", "street", "neighborhood", "municipality", "unknown"}
@@ -29,11 +37,12 @@ class Entity:
     document_number: str | None
     verification_digit: str | None
     document_raw: str | None
-    document_valid: bool
+    document_valid: bool | None
     legal_name: str
     legal_name_normalized: str
     entity_status: str = "unknown"
     requires_manual_review: bool = False
+    document_validation_status: str | None = None
     content_hash: str | None = None
     created_at: str | None = None
     updated_at: str | None = None

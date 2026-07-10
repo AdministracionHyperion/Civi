@@ -1,0 +1,52 @@
+{
+  "generator": "scripts/places-catalog/generate_http_attempts_report.py",
+  "total_attempts_persisted_across_cases": 10,
+  "cases": [
+    {
+      "case": "success_first_attempt",
+      "status": "success",
+      "attempts": 1,
+      "passed": true
+    },
+    {
+      "case": "timeout_all_retries",
+      "status": "timeout",
+      "attempts": 3,
+      "passed": true
+    },
+    {
+      "case": "rate_limited_then_success",
+      "status": "success",
+      "attempts": 2,
+      "statuses": [
+        "rate_limited",
+        "success"
+      ],
+      "passed": true
+    },
+    {
+      "case": "provider_5xx",
+      "status": "provider_5xx",
+      "attempts": 2,
+      "passed": true
+    },
+    {
+      "case": "outside_colombia",
+      "status": "outside_colombia",
+      "attempts": 1,
+      "passed": true
+    },
+    {
+      "case": "low_confidence",
+      "status": "low_confidence",
+      "attempts": 1,
+      "passed": true
+    },
+    {
+      "case": "sanitize_no_secrets",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "secrets_persisted": false
+}

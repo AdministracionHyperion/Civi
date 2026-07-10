@@ -53,3 +53,33 @@ Geocoding defaults to `PLACES_GEOCODING_MODE=disabled`. No external calls in tes
 | `dataset` | Reserved; use CLI import, not silent container start |
 
 Legacy `PLACES_AUTO_SEED_CATALOG=true` maps to `sample`.
+
+## Manual geocode import (`import_geocodes`)
+
+CSV columns: `site_id,lat,lng,confidence,provider,precision`.
+
+```powershell
+python -m places_service.cli.import_geocodes `
+  --input path/to/geocodes.csv `
+  --apply --database-url $env:PLACES_DATABASE_URL `
+  --report-path services/places-service/data/reports/geocode_import_report.json
+```
+
+### Default: strict atomic
+
+Validate all rows (CSV + DB rules) first. On any rejection, abort with **no writes** (`atomic_aborted=true`).
+
+Flags:
+
+- `--allow-partial` — apply valid rows; skip/reject others
+- `--force` — overwrite when incoming confidence is lower than existing
+- `--force-manual` — overwrite sites with `geocode_status=manual`
+
+### Exit codes
+
+| Code | Meaning |
+| ---: | --- |
+| 0 | Success (all applicable rows OK) |
+| 1 | Validation / blocked rows in strict mode (no write) |
+| 2 | Partial apply (`--allow-partial` with some rejects) |
+| 3 | Infrastructure error (DB/IO) |

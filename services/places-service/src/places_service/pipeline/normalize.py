@@ -43,6 +43,13 @@ def compute_nit_verification_digit(number: str) -> str | None:
 
 
 def normalize_document(raw: str | None) -> dict:
+    """Normalize identity documents with tri-state validity.
+
+    document_valid:
+      - True  → verified NIT with matching DV
+      - False → demonstrably invalid
+      - None  → missing, candidate, or ambiguous (not invented as valid)
+    """
     document_raw = collapse_spaces(raw or "") if raw else None
     digits = re.sub(r"\D", "", document_raw or "")
     result = {
@@ -50,11 +57,13 @@ def normalize_document(raw: str | None) -> dict:
         "document_type": "UNKNOWN",
         "document_number": None,
         "verification_digit": None,
-        "document_valid": False,
+        "document_valid": None,
+        "document_validation_status": "missing",
         "flags": [],
     }
     if not digits:
         result["flags"].append("missing_document")
+        result["document_validation_status"] = "missing"
         return result
 
     # Only claim NIT when the trailing verification digit matches the official algorithm.
@@ -69,6 +78,7 @@ def normalize_document(raw: str | None) -> dict:
                     "document_number": body,
                     "verification_digit": maybe_dv,
                     "document_valid": True,
+                    "document_validation_status": "valid_with_dv",
                 }
             )
             result["flags"].append("nit_with_verification_digit")
@@ -80,21 +90,34 @@ def normalize_document(raw: str | None) -> dict:
                     "document_number": body,
                     "verification_digit": maybe_dv,
                     "document_valid": True,
+                    "document_validation_status": "valid_with_dv",
                 }
             )
             result["flags"].append("nit_with_verification_digit")
             result["flags"].append("nit_body_length_unusual")
             return result
-        if 9 <= len(digits) <= 11:
-            # Possible NIT with DV attached but invalid check digit — keep raw digits, do not invent type.
+        if 9 <= len(digits) <= 11 and expected is not None and expected != maybe_dv:
             result.update(
                 {
                     "document_type": "UNKNOWN",
                     "document_number": digits,
                     "document_valid": False,
+                    "document_validation_status": "invalid",
                 }
             )
             result["flags"].append("possible_nit_invalid_verification_digit")
+            return result
+        if 8 <= len(digits) <= 10:
+            # Compatible with NIT body length but no verified DV present.
+            result.update(
+                {
+                    "document_type": "NIT_CANDIDATE",
+                    "document_number": digits,
+                    "document_valid": None,
+                    "document_validation_status": "candidate_without_dv",
+                }
+            )
+            result["flags"].append("nit_candidate_without_dv")
             return result
 
     if len(digits) in {6, 7, 8, 9, 10}:
@@ -102,13 +125,16 @@ def normalize_document(raw: str | None) -> dict:
             {
                 "document_type": "CC_OR_NIT_UNKNOWN",
                 "document_number": digits,
-                "document_valid": False,
+                "document_valid": None,
+                "document_validation_status": "ambiguous",
             }
         )
         result["flags"].append("ambiguous_document_type")
         return result
 
     result["document_number"] = digits
+    result["document_valid"] = None
+    result["document_validation_status"] = "ambiguous"
     result["flags"].append("atypical_document_length")
     return result
 

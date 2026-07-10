@@ -55,3 +55,7 @@ data/places/*.json
 services/places-service/data/processed/*.sqlite
 services/places-service/data/processed/*.sqlite-*
 scratch/
+
+# Local scrape scratch artifacts
+scratch_runt_result.html
+scratch/

@@ -25,7 +25,8 @@ places_entities = Table(
     Column("document_number", String(64), nullable=True, index=True),
     Column("verification_digit", String(4), nullable=True),
     Column("document_raw", String(128), nullable=True),
-    Column("document_valid", Boolean, nullable=False),
+    Column("document_valid", Boolean, nullable=True),
+    Column("document_validation_status", String(32), nullable=True, index=True),
     Column("legal_name", String(512), nullable=False),
     Column("legal_name_normalized", String(512), nullable=False),
     Column("entity_status", String(32), nullable=False),
@@ -149,12 +150,33 @@ places_geocode_attempts = Table(
     Column("provider", String(64), nullable=False),
     Column("query", Text, nullable=True),
     Column("status", String(32), nullable=False, index=True),
+    Column("attempt_number", Integer, nullable=True),
+    Column("provider_record_id", String(128), nullable=True),
+    Column("http_status", Integer, nullable=True),
     Column("lat", Float, nullable=True),
     Column("lng", Float, nullable=True),
     Column("confidence", Float, nullable=True),
     Column("precision", String(32), nullable=True),
     Column("response_payload", Text, nullable=True),
+    Column("error_code", String(128), nullable=True),
+    Column("error_message", Text, nullable=True),
     Column("attempted_at", String(64), nullable=False),
+    Column("completed_at", String(64), nullable=True),
+)
+
+places_presence_events = Table(
+    "places_presence_events",
+    metadata,
+    Column("event_id", String(64), primary_key=True),
+    Column("site_id", String(128), nullable=False, index=True),
+    Column("import_run_id", String(64), nullable=True, index=True),
+    Column("previous_status", String(32), nullable=True),
+    Column("new_status", String(32), nullable=False),
+    Column("event_type", String(64), nullable=False, index=True),
+    Column("reason", String(512), nullable=True),
+    Column("actor", String(128), nullable=True),
+    Column("source", String(64), nullable=True),
+    Column("created_at", String(64), nullable=False),
 )
 
 places_import_runs = Table(

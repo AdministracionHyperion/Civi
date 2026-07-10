@@ -6,7 +6,7 @@ from fastapi import HTTPException
 
 from civi_common.events import EventPublisher, event_publisher_from_env
 from appointment_service.adapters.outbound.notification_client import NotificationClient
-from appointment_service.adapters.outbound.places_client import PlacesClient
+from appointment_service.adapters.outbound.places_client import PlacesCatalogUnavailable, PlacesClient
 from appointment_service.shared.mappers import appointment_to_dict
 from appointment_service.shared.repository import repository
 
@@ -37,7 +37,10 @@ async def create_appointment(
     event_publisher: EventPublisher | None = None,
     places_client: PlacesEligibilityClient | None = None,
 ) -> CreateAppointmentResponse:
-    eligibility = await (places_client or PlacesClient()).booking_eligibility(payload.place.id)
+    try:
+        eligibility = await (places_client or PlacesClient()).booking_eligibility(payload.place.id)
+    except PlacesCatalogUnavailable:
+        raise HTTPException(status_code=503, detail="places_catalog_unavailable") from None
     if not eligibility.get("exists"):
         raise HTTPException(status_code=404, detail="place_not_found")
     eligible = eligibility.get("eligible_for_civi_booking")

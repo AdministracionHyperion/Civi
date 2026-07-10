@@ -1,7 +1,7 @@
-name: verify
+﻿name: verify
 on:
   push:
-    branches: [main, "feat/**"]
+    branches: [main, "feat/**", "fix/**"]
   pull_request:
     branches: [main]
 
@@ -86,6 +86,82 @@ jobs:
       - name: Run verify.ps1 via pwsh
         shell: pwsh
         run: ./scripts/verify.ps1
+      - name: Geocode CLI dry-run valid
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          path = Path("/tmp/geocode_smoke.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": "smoke-site",
+                      "lat": "7.1193",
+                      "lng": "-73.1227",
+                      "confidence": "0.9",
+                      "provider": "manual",
+                      "precision": "address",
+                  }
+              )
+          print(path)
+          PY
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_smoke.csv \
+            --dry-run \
+            --report-path /tmp/geocode_smoke_report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/geocode_smoke_report.json").read_text())
+          assert report["mode"] == "dry_run"
+          assert report["rows"] == 1
+          assert report["outside_colombia"] == 0
+          print("geocode_dry_run_ok", report)
+          PY
+      - name: Geocode CLI dry-run invalid expects fail
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          path = Path("/tmp/geocode_invalid.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": "smoke-site",
+                      "lat": "40.0",
+                      "lng": "-74.0",
+                      "confidence": "0.9",
+                      "provider": "manual",
+                      "precision": "address",
+                  }
+              )
+          PY
+          set +e
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_invalid.csv \
+            --dry-run \
+            --report-path /tmp/geocode_invalid_report.json
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/geocode_invalid_report.json").read_text())
+          assert report["atomic_aborted"] is True
+          assert report["outside_colombia"] == 1
+          print("geocode_dry_run_invalid_ok", report)
+          PY
       - name: PostgreSQL import idempotency
         env:
           PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
@@ -122,3 +198,441 @@ jobs:
           assert int(counts.get("unchanged") or 0) > 0, counts
           print("postgres_idempotency_ok", counts)
           PY
+      - name: Geocode apply + idempotency on postgres
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              site_id = conn.execute(text("SELECT site_id FROM places_sites LIMIT 1")).scalar_one()
+          path = Path("/tmp/geocode_apply.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": site_id,
+                      "lat": "7.1193",
+                      "lng": "-73.1227",
+                      "confidence": "0.91",
+                      "provider": "manual_ci",
+                      "precision": "address",
+                  }
+              )
+          Path("/tmp/geocode_site_id.txt").write_text(site_id)
+          print(site_id)
+          PY
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_apply.csv \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_apply_1.json
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_apply.csv \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_apply_2.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          first = json.loads(Path("/tmp/geocode_apply_1.json").read_text())
+          second = json.loads(Path("/tmp/geocode_apply_2.json").read_text())
+          assert first["atomic_aborted"] is False
+          assert first["inserted"] + first["updated"] >= 1
+          assert second["unchanged"] >= 1
+          assert second["inserted"] == 0
+          print("geocode_apply_idempotent_ok", first, second)
+          PY
+      - name: Geocode strict mixed abort
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          # CSV apply marks geocode_status=manual; clear it so this step isolates
+          # unknown-site abort (manual protection is covered in a later step).
+          python - <<'PY'
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.begin() as conn:
+              conn.execute(
+                  text(
+                      "UPDATE places_sites SET geocode_status='ok', "
+                      "geocode_confidence=0.91 WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              )
+          print("cleared_manual_for_mixed", site_id)
+          PY
+          python - <<PY
+          import csv
+          from pathlib import Path
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          path = Path("/tmp/geocode_mixed.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": site_id,
+                      "lat": "7.2",
+                      "lng": "-73.2",
+                      "confidence": "0.99",
+                      "provider": "manual_ci",
+                      "precision": "address",
+                  }
+              )
+              writer.writerow(
+                  {
+                      "site_id": "does-not-exist-ci",
+                      "lat": "7.3",
+                      "lng": "-73.3",
+                      "confidence": "0.9",
+                      "provider": "manual_ci",
+                      "precision": "address",
+                  }
+              )
+          PY
+          set +e
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_mixed.csv \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_mixed_report.json
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          report = json.loads(Path("/tmp/geocode_mixed_report.json").read_text())
+          assert report["atomic_aborted"] is True
+          assert report["applied_rows"] == 0
+          assert report["unknown_site_ids"] == 1
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              conf = conn.execute(
+                  text("SELECT geocode_confidence FROM places_sites WHERE site_id=:s"),
+                  {"s": site_id},
+              ).scalar_one()
+          assert float(conf) == 0.91, conf
+          print("geocode_strict_mixed_abort_ok", report)
+          PY
+      - name: Geocode allow-partial
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          set +e
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_mixed.csv \
+            --apply --allow-partial --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_partial_report.json
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/geocode_partial_report.json").read_text())
+          assert report["atomic_aborted"] is False
+          assert report["allow_partial"] is True
+          assert report["unknown_site_ids"] == 1
+          assert report["inserted"] + report["updated"] >= 1
+          assert report["applied_rows"] >= 1
+          print("geocode_allow_partial_ok", report)
+          PY
+      - name: Geocode manual protected without --force-manual
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          SITE_ID=$(cat /tmp/geocode_site_id.txt)
+          python - <<PY
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.begin() as conn:
+              conn.execute(
+                  text(
+                      "UPDATE places_sites SET geocode_status='manual', "
+                      "geocode_provider='manual', geocode_confidence=0.91 "
+                      "WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              )
+              conf = conn.execute(
+                  text("SELECT geocode_confidence FROM places_sites WHERE site_id=:s"),
+                  {"s": site_id},
+              ).scalar_one()
+          Path("/tmp/geocode_manual_conf_before.txt").write_text(str(conf))
+          print("manual_protect_prepared", site_id, conf)
+          PY
+          python - <<PY
+          import csv
+          from pathlib import Path
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          path = Path("/tmp/geocode_manual_overwrite.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": site_id,
+                      "lat": "7.25",
+                      "lng": "-73.25",
+                      "confidence": "0.95",
+                      "provider": "manual_ci",
+                      "precision": "address",
+                  }
+              )
+          PY
+          set +e
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_manual_overwrite.csv \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_manual_blocked.json
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          report = json.loads(Path("/tmp/geocode_manual_blocked.json").read_text())
+          assert report["atomic_aborted"] is True
+          assert report["manual_protected"] == 1
+          assert report["applied_rows"] == 0
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              row = conn.execute(
+                  text(
+                      "SELECT lat, lng, geocode_provider, geocode_confidence "
+                      "FROM places_sites WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              ).mappings().one()
+          assert float(row["geocode_confidence"]) == 0.91
+          assert row["geocode_provider"] == "manual"
+          assert float(row["lat"]) != 7.25
+          print("geocode_manual_protected_ok", report)
+          PY
+      - name: Geocode --force-manual succeeds
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_manual_overwrite.csv \
+            --apply --force-manual --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_force_manual.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          report = json.loads(Path("/tmp/geocode_force_manual.json").read_text())
+          assert report["atomic_aborted"] is False
+          assert report["inserted"] + report["updated"] >= 1
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              row = conn.execute(
+                  text(
+                      "SELECT lat, lng, geocode_confidence, geocode_provider "
+                      "FROM places_sites WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              ).mappings().one()
+          assert float(row["lat"]) == 7.25
+          assert float(row["lng"]) == -73.25
+          assert float(row["geocode_confidence"]) == 0.95
+          print("geocode_force_manual_ok", report)
+          PY
+      - name: Geocode lower confidence without --force
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          # Clear manual status so this step isolates lower-confidence protection.
+          python - <<'PY'
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.begin() as conn:
+              conn.execute(
+                  text(
+                      "UPDATE places_sites SET geocode_status='ok' WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              )
+          PY
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          path = Path("/tmp/geocode_lower_conf.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": site_id,
+                      "lat": "7.30",
+                      "lng": "-73.30",
+                      "confidence": "0.50",
+                      "provider": "manual_ci",
+                      "precision": "address",
+                  }
+              )
+          PY
+          set +e
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_lower_conf.csv \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_lower_blocked.json
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          report = json.loads(Path("/tmp/geocode_lower_blocked.json").read_text())
+          assert report["atomic_aborted"] is True
+          assert report["lower_confidence_skipped"] == 1
+          assert report["applied_rows"] == 0
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              conf = conn.execute(
+                  text("SELECT geocode_confidence FROM places_sites WHERE site_id=:s"),
+                  {"s": site_id},
+              ).scalar_one()
+          assert float(conf) == 0.95, conf
+          print("geocode_lower_confidence_blocked_ok", report)
+          PY
+      - name: Geocode --force succeeds for lower confidence
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_lower_conf.csv \
+            --apply --force --database-url "$PLACES_DATABASE_URL" \
+            --report-path /tmp/geocode_force_lower.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          report = json.loads(Path("/tmp/geocode_force_lower.json").read_text())
+          assert report["atomic_aborted"] is False
+          assert report["inserted"] + report["updated"] >= 1
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.connect() as conn:
+              row = conn.execute(
+                  text(
+                      "SELECT lat, lng, geocode_confidence "
+                      "FROM places_sites WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              ).mappings().one()
+          assert float(row["lat"]) == 7.30
+          assert float(row["lng"]) == -73.30
+          assert float(row["geocode_confidence"]) == 0.50
+          print("geocode_force_lower_ok", report)
+          PY
+
+  postgres-legacy-migration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: civi
+          POSTGRES_PASSWORD: civi
+          POSTGRES_DB: civi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U civi -d civi"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            pytest pytest-asyncio httpx fastapi uvicorn sqlalchemy \
+            pydantic-settings "psycopg[binary]" asyncpg PyYAML redis greenlet
+          python -m pip install -e packages/python-common
+          python - <<'PY'
+          from pathlib import Path
+          roots = [Path("packages/python-common/src")]
+          roots.extend(sorted(p / "src" for p in Path("services").iterdir() if (p / "src").is_dir()))
+          path = ":".join(str(p.resolve()) for p in roots)
+          Path("/tmp/civi_pythonpath.txt").write_text(path)
+          PY
+          echo "PYTHONPATH=$(cat /tmp/civi_pythonpath.txt)" >> "$GITHUB_ENV"
+      - name: Run PostgreSQL legacy migration gate
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          python scripts/places-catalog/validate_postgres_legacy.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(
+              Path("services/places-service/data/reports/postgresql_legacy_migration_report.json").read_text()
+          )
+          assert report.get("passed") is True, report
+          print("postgres_legacy_migration_ok", report.get("second_apply"))
+          PY
+
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compose smoke gate
+        env:
+          INTERNAL_SERVICE_TOKEN: change-me-local-only
+          WHATSAPP_VERIFY_TOKEN: change-me-local-only
+          EVENT_PUBLISHER_MODE: disabled
+          LLM_PROVIDER_MODE: disabled
+          WHATSAPP_PROVIDER_MODE: disabled
+        run: |
+          python scripts/places-catalog/compose_smoke.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("services/places-service/data/reports/compose_smoke_report.json").read_text())
+          print(json.dumps({"passed": report.get("passed"), "cases": list((report.get("cases") or {}).keys()), "error": report.get("error")}, indent=2))
+          assert report.get("passed") is True, report
+          PY
+      - name: Compose teardown
+        if: always()
+        env:
+          INTERNAL_SERVICE_TOKEN: change-me-local-only
+        run: |
+          docker compose -f infra/docker-compose.local.yml down --remove-orphans || true
