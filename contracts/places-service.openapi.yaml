@@ -57,6 +57,25 @@ paths:
       responses:
         "200":
           description: partners
+  /internal/places/geojson:
+    get:
+      summary: GeoJSON FeatureCollection for map rendering (Manizales first)
+      security:
+        - internalBearer: []
+      parameters:
+        - name: city
+          in: query
+          schema:
+            type: string
+            default: Manizales
+        - name: department
+          in: query
+          schema:
+            type: string
+            default: Caldas
+      responses:
+        "200":
+          description: GeoJSON features with lat/lng, precision, validation_status, location_confirmed
   /internal/places/catalog/summary:
     get:
       summary: Catalog statistics for admin and operations

@@ -39,7 +39,9 @@ _PLACES_SITES_EXTRA = (
     ("geocode_status", "VARCHAR(32) DEFAULT 'not_attempted'"),
     ("geocode_provider", "VARCHAR(64)"),
     ("geocode_confidence", "FLOAT"),
-    ("location_precision", "VARCHAR(32) DEFAULT 'unknown'"),
+    ("location_precision", "VARCHAR(64) DEFAULT 'unknown'"),
+    ("source_place_id", "VARCHAR(128)"),
+    ("geocode_validation_status", "VARCHAR(64)"),
     ("operational_status", "VARCHAR(32) DEFAULT 'unknown'"),
     ("status_verified", "BOOLEAN DEFAULT 0"),
     ("status_source", "VARCHAR(64)"),
@@ -103,6 +105,10 @@ _MIGRATION_DEFINITIONS = (
     ("v2_national_catalog", "national catalog history and presence columns"),
     ("v3_places_production_hardening", "nullable legacy lat/lng, presence events, document validation status"),
     ("v4_geocode_attempts_and_presence_source", "geocode attempt detail columns and presence event source"),
+    (
+        "v5_manizales_geocode_validation",
+        "source_place_id and geocode_validation_status for Manizales validated geocode import",
+    ),
 )
 
 

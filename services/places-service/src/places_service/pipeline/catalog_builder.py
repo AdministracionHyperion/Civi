@@ -391,6 +391,7 @@ def build_catalog_from_rows(
             entity_id=entity_id,
             actor_type=kind,
             source_actor_id=str(source_actor_id) if source_actor_id else None,
+            source_place_id=str(payload.get("id") or "") or None,
             name=name,
             name_normalized=normalize_text(name),
             address_raw=address["address_raw"],

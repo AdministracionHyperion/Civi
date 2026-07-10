@@ -22,8 +22,30 @@ GEOCODE_STATUSES = frozenset(
     }
 )
 LOCATION_PRECISIONS = frozenset(
-    {"rooftop", "address", "street", "neighborhood", "municipality", "unknown"}
+    {
+        # Generic precisions used across the catalog.
+        "rooftop",
+        "address",
+        "street",
+        "neighborhood",
+        "municipality",
+        "manual",
+        "unknown",
+        # Precisions emitted by the validated Manizales geocode file.
+        "street_intersection",
+        "building",
+        "business",
+        "street_interpolation",
+        "address_neighbour",
+        "business_complex",
+    }
 )
+# Geocode VALIDATION statuses (distinct from operational status). `approximate_*`
+# must never be surfaced as a confirmed location.
+GEOCODE_VALIDATION_STATUSES = frozenset(
+    {"confirmed_business", "confirmed_address", "approximate_not_confirmed"}
+)
+CONFIRMED_VALIDATION_STATUSES = frozenset({"confirmed_business", "confirmed_address"})
 ADDRESS_QUALITIES = frozenset({"valid", "partial", "missing", "invalid"})
 PROCESSING_STATUSES = frozenset(
     {"imported_as_site", "merged_duplicate", "pending_review", "rejected_with_reason"}
@@ -63,6 +85,7 @@ class Site:
     raw_city: str
     raw_department: str
     source_actor_id: str | None = None
+    source_place_id: str | None = None
     trade_name: str | None = None
     department_code: str | None = None
     municipality_code: str | None = None
@@ -74,6 +97,7 @@ class Site:
     geocode_provider: str | None = None
     geocode_confidence: float | None = None
     location_precision: str = "unknown"
+    geocode_validation_status: str | None = None
     operational_status: str = "unknown"
     status_verified: bool = False
     status_source: str | None = None
