@@ -235,6 +235,27 @@ def _seed_places_sql() -> dict:
       booking_mode = EXCLUDED.booking_mode,
       source_presence_status = EXCLUDED.source_presence_status,
       present_in_latest_snapshot = EXCLUDED.present_in_latest_snapshot;
+
+    -- Bookable smoke sites need ops_whatsapp after partner-notify gate
+    INSERT INTO places_contacts (
+      contact_id, site_id, contact_type, value_raw, value_normalized, e164,
+      is_valid, is_public, source_record_id
+    ) VALUES
+    (
+      'ops-smoke-near-01', 'smoke-near-01', 'ops_whatsapp',
+      '+573001112201', '573001112201', '573001112201',
+      true, false, NULL
+    ),
+    (
+      'ops-smoke-far-01', 'smoke-far-01', 'ops_whatsapp',
+      '+573001112202', '573001112202', '573001112202',
+      true, false, NULL
+    )
+    ON CONFLICT (contact_id) DO UPDATE SET
+      e164 = EXCLUDED.e164,
+      value_normalized = EXCLUDED.value_normalized,
+      value_raw = EXCLUDED.value_raw,
+      is_valid = EXCLUDED.is_valid;
     """
     ps = _run([*COMPOSE, "ps", "-q", "postgres"], check=False)
     container = (ps.stdout or "").strip().splitlines()
@@ -253,6 +274,7 @@ def _seed_places_sql() -> dict:
     return {
         "seeded": True,
         "sites": ["smoke-near-01", "smoke-far-01", "smoke-nobook-01", "smoke-bogota-01"],
+        "ops_contacts": ["smoke-near-01", "smoke-far-01"],
     }
 
 
@@ -669,7 +691,21 @@ def main() -> int:
 
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"passed": report.get("passed"), "path": str(REPORT)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "passed": report.get("passed"),
+                "path": str(REPORT),
+                "failed_cases": report.get("failed_cases"),
+                "error": report.get("error"),
+                "cases": {
+                    k: {"passed": (report.get("cases") or {}).get(k, {}).get("passed")}
+                    for k in REQUIRED_CASES
+                },
+            },
+            indent=2,
+        )
+    )
     return 0 if report.get("passed") else 1
 
 

@@ -630,8 +630,17 @@ jobs:
           import json
           from pathlib import Path
           report = json.loads(Path("services/places-service/data/reports/compose_smoke_report.json").read_text())
-          print(json.dumps({"passed": report.get("passed"), "cases": list((report.get("cases") or {}).keys()), "error": report.get("error")}, indent=2))
-          assert report.get("passed") is True, report
+          summary = {
+              "passed": report.get("passed"),
+              "failed_cases": report.get("failed_cases"),
+              "error": report.get("error"),
+              "cases": {
+                  k: v.get("passed")
+                  for k, v in (report.get("cases") or {}).items()
+              },
+          }
+          print(json.dumps(summary, indent=2))
+          assert report.get("passed") is True, summary
           PY
       - name: Compose teardown
         if: always()
