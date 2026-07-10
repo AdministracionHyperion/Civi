@@ -136,6 +136,14 @@ Map (local): open `services/places-service/static/santander_map.html?api=http://
 GeoJSON (one call per municipality):  
 `GET /internal/places/geojson?city=Bucaramanga&department=Santander` (also Floridablanca, Giron, Piedecuesta)
 
+### Ephemeral dry-run validation evidence
+
+Sanitized dry-run reports (Manizales 44/44 + Santander 153/153 against an isolated local Postgres copy of the national catalog) live under:
+
+`services/places-service/data/reports/validation/`
+
+Reproduce with `scripts/places-catalog/geocode_validation_tmp.py` (localhost-only; credentials via env). See that folder’s `README.md`. Never use `--apply` / `--force*` on geocode CLIs for this check.
+
 ## Local CI gates (Postgres legacy + compose smoke)
 
 PostgreSQL legacy nullable lat/lng + re-apply idempotency:
