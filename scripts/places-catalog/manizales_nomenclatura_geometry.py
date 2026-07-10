@@ -98,19 +98,133 @@ def _point_in_ring(x: float, y: float, ring: list[tuple[float, float]]) -> bool:
     return inside
 
 
+def ring_signed_area(ring: list[list[float]] | list[tuple[float, float]]) -> float:
+    """Signed area of a ring (x=lng, y=lat). Positive ≈ counterclockwise."""
+    part = _ring_signed_area_and_centroid(ring)
+    return 0.0 if part is None else part[0]
+
+
+def classify_esri_rings(
+    geom: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Group Esri rings into exterior polygons with holes (multipart-safe).
+
+    Does not assume rings[0] is the only exterior. A ring is nested in another
+    if a representative vertex lies inside that other ring. Top-level rings
+    (not nested) are exteriors; rings nested in an exterior are holes.
+    Orientation (CW/CCW) is recorded but nesting decides the role.
+    """
+    rings_raw = geom.get("rings") or []
+    prepared: list[dict[str, Any]] = []
+    for idx, ring in enumerate(rings_raw):
+        pts = _normalize_ring(ring)
+        if len(pts) < 3:
+            prepared.append(
+                {
+                    "index": idx,
+                    "pts": pts,
+                    "degenerate": True,
+                    "signed_area": 0.0,
+                    "orientation": "degenerate",
+                }
+            )
+            continue
+        area = ring_signed_area(pts)
+        prepared.append(
+            {
+                "index": idx,
+                "pts": pts,
+                "degenerate": abs(area) < AREA_EPS,
+                "signed_area": area,
+                "orientation": "ccw" if area > 0 else "cw",
+            }
+        )
+
+    def _contains(outer_pts: list[tuple[float, float]], inner_pts: list[tuple[float, float]]) -> bool:
+        if len(outer_pts) < 3 or len(inner_pts) < 3:
+            return False
+        # Test first vertex of inner against outer ring only.
+        x, y = inner_pts[0]
+        return _point_in_ring(x, y, outer_pts)
+
+    n = len(prepared)
+    parent = [-1] * n
+    for i in range(n):
+        if prepared[i]["degenerate"]:
+            continue
+        best_j = -1
+        best_abs_area = None
+        for j in range(n):
+            if i == j or prepared[j]["degenerate"]:
+                continue
+            if not _contains(prepared[j]["pts"], prepared[i]["pts"]):
+                continue
+            abs_area = abs(prepared[j]["signed_area"])
+            # Choose the smallest enclosing ring as direct parent.
+            if best_abs_area is None or abs_area < best_abs_area:
+                best_abs_area = abs_area
+                best_j = j
+        parent[i] = best_j
+
+    exteriors: list[dict[str, Any]] = []
+    exterior_index_map: dict[int, int] = {}
+    for i, ring in enumerate(prepared):
+        if ring["degenerate"]:
+            continue
+        if parent[i] == -1:
+            exterior_index_map[i] = len(exteriors)
+            exteriors.append(
+                {
+                    "exterior_index": ring["index"],
+                    "exterior": ring["pts"],
+                    "orientation": ring["orientation"],
+                    "holes": [],
+                    "hole_indices": [],
+                }
+            )
+
+    for i, ring in enumerate(prepared):
+        if ring["degenerate"] or parent[i] == -1:
+            continue
+        # Walk up to top-level exterior.
+        p = parent[i]
+        while p != -1 and parent[p] != -1:
+            p = parent[p]
+        if p == -1 or p not in exterior_index_map:
+            continue
+        # Direct children of an exterior are holes; deeper nesting (island in hole)
+        # is treated as additional exterior content via even-odd PIP.
+        if parent[i] == p:
+            ext = exteriors[exterior_index_map[p]]
+            ext["holes"].append(ring["pts"])
+            ext["hole_indices"].append(ring["index"])
+
+    return exteriors
+
+
 def point_in_polygon(lat: float, lng: float, geom: dict[str, Any]) -> bool:
-    """True if (lat,lng) is inside exterior and outside holes."""
+    """True if (lat,lng) is in the filled region of an Esri (multi)polygon.
+
+    Uses even-odd fill across all non-degenerate rings so that:
+    - multiple exterior parts are supported;
+    - holes punch out of their containing exterior;
+    - CW/CCW orientation does not matter;
+    - rings[0] is not assumed to be the sole exterior.
+    """
     rings = geom.get("rings") or []
     if not rings:
         return False
     x, y = lng, lat
-    exterior = _normalize_ring(rings[0])
-    if not _point_in_ring(x, y, exterior):
-        return False
-    for hole in rings[1:]:
-        if _point_in_ring(x, y, hole):
-            return False
-    return True
+    inside = False
+    for ring in rings:
+        pts = _normalize_ring(ring)
+        if len(pts) < 3:
+            continue
+        if abs(ring_signed_area(pts)) < AREA_EPS:
+            continue
+        if _point_in_ring(x, y, pts):
+            inside = not inside
+    return inside
 
 
 def _bbox(ring: list[tuple[float, float]]) -> tuple[float, float, float, float]:
@@ -145,35 +259,52 @@ def _horizontal_intersections(y: float, ring: list[tuple[float, float]]) -> list
 
 
 def deterministic_point_on_surface(geom: dict[str, Any], scan_lines: int = 21) -> tuple[float, float] | None:
-    """Deterministic interior point: midpoint of the longest interior scan segment."""
-    rings = geom.get("rings") or []
-    if not rings:
+    """Deterministic interior point: midpoint of the longest interior scan segment.
+
+    Scans each exterior part (multipart-aware). Falls back to combined bbox.
+    """
+    parts = classify_esri_rings(geom)
+    scan_targets: list[list[tuple[float, float]]] = [p["exterior"] for p in parts] if parts else []
+    if not scan_targets:
+        rings = geom.get("rings") or []
+        for ring in rings:
+            pts = _normalize_ring(ring)
+            if len(pts) >= 3 and abs(ring_signed_area(pts)) >= AREA_EPS:
+                scan_targets.append(pts)
+    if not scan_targets:
         return None
-    exterior = _normalize_ring(rings[0])
-    if len(exterior) < 3:
-        return None
-    xmin, ymin, xmax, ymax = _bbox(exterior)
-    if abs(ymax - ymin) < COORD_EPS or abs(xmax - xmin) < COORD_EPS:
-        # Degenerate thin polygon: use first vertex.
-        return exterior[0][1], exterior[0][0]
+
     best: tuple[float, float, float] | None = None  # (length, x, y)
-    for i in range(scan_lines):
-        y = ymin + (i + 0.5) * (ymax - ymin) / scan_lines
-        xs = _horizontal_intersections(y, exterior)
-        # Pair consecutive intersections as interior segments (even-odd).
-        for j in range(0, len(xs) - 1, 2):
-            x_left, x_right = xs[j], xs[j + 1]
-            if x_right <= x_left:
-                continue
-            mid_x = (x_left + x_right) / 2.0
-            mid_y = y
-            if not point_in_polygon(mid_y, mid_x, geom):
-                continue
-            length = x_right - x_left
-            if best is None or length > best[0] + COORD_EPS or (
-                abs(length - best[0]) <= COORD_EPS and (mid_y, mid_x) < (best[2], best[1])
-            ):
-                best = (length, mid_x, mid_y)
+    for exterior in scan_targets:
+        xmin, ymin, xmax, ymax = _bbox(exterior)
+        if abs(ymax - ymin) < COORD_EPS or abs(xmax - xmin) < COORD_EPS:
+            cand = (exterior[0][1], exterior[0][0])
+            if point_in_polygon(cand[0], cand[1], geom):
+                return cand
+            continue
+        for i in range(scan_lines):
+            y = ymin + (i + 0.5) * (ymax - ymin) / scan_lines
+            # Intersect against ALL rings so holes are respected (even-odd pairing).
+            xs: list[float] = []
+            for ring in geom.get("rings") or []:
+                pts = _normalize_ring(ring)
+                if len(pts) < 3:
+                    continue
+                xs.extend(_horizontal_intersections(y, pts))
+            xs.sort()
+            for j in range(0, len(xs) - 1, 2):
+                x_left, x_right = xs[j], xs[j + 1]
+                if x_right <= x_left:
+                    continue
+                mid_x = (x_left + x_right) / 2.0
+                mid_y = y
+                if not point_in_polygon(mid_y, mid_x, geom):
+                    continue
+                length = x_right - x_left
+                if best is None or length > best[0] + COORD_EPS or (
+                    abs(length - best[0]) <= COORD_EPS and (mid_y, mid_x) < (best[2], best[1])
+                ):
+                    best = (length, mid_x, mid_y)
     if best is None:
         return None
     return best[2], best[1]  # lat, lng

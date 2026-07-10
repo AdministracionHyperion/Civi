@@ -1,7 +1,7 @@
 {
   "city": "Manizales",
-  "canonical_csv_modified": false,
-  "scope_counts_unchanged": true,
+  "canonical_csv_modified": true,
+  "scope_counts_unchanged": false,
   "tests_unchanged": true,
   "official_reports_unchanged": true,
   "geoportal_service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
@@ -11,8 +11,8 @@
   "secondary_geocoder_not_used_as_persistent_provider": true,
   "hypothetical_counts": {
     "current_csv_counts": {
-      "approximate_not_confirmed": 12,
-      "confirmed_address": 13,
+      "approximate_not_confirmed": 7,
+      "confirmed_address": 18,
       "confirmed_business": 19
     },
     "proposals_on_approximate_12": {
@@ -24,6 +24,11 @@
       "approximate_not_confirmed": 7,
       "confirmed_business": 19,
       "note": "Hipotético; CSV canónico no modificado."
+    },
+    "applied_in_fix_manizales_geocode_quality": {
+      "confirmed_address_from_exact": 5,
+      "approximate_interpolations_coords_updated": 3,
+      "unchanged_approximate": 4
     }
   },
   "rows": [
@@ -2208,5 +2213,6 @@
       "reason": "Edificio/dirección base K 19 18 27 confirmada (OBJECTID 81323–81334); local RUNT distinto y sin fusión. proposed=approximate_not_confirmed."
     }
   ],
-  "probe_file": "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json"
+  "probe_file": "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json",
+  "canonical_csv_modification_note": "fix/manizales-geocode-quality: applied 5 confirmed_address (building) + 3 approximate interpolations; left Socicar/Evaluando/Agustinos/CIMYC unchanged. Counts now 19/18/7."
 }

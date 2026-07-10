@@ -1,5 +1,8 @@
 # Inventario Manizales aproximadas — geometría oficial NOMENCLATURA PREDIAL
 
+> **CSV canónico actualizado** en ix/manizales-geocode-quality: 5 confirmed_address + 3 interpolaciones; quedan 7 pproximate_not_confirmed. Conteos 19/18/7.
+
+
 **CSV canónico no modificado.** Punto representativo = centroide de área (shoelace) o `point_on_surface` si el centroide cae fuera.
 
 Servicio: `https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10`

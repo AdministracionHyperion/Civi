@@ -293,7 +293,9 @@ def main() -> None:
         by_status[r["validation_status"]] = by_status.get(r["validation_status"], 0) + 1
 
     by_id = {r["id"]: r for r in approx}
-    assert len(by_id) == 12
+    assert len(by_id) == len(approx)
+    if len(approx) == 0:
+        raise SystemExit("no approximate rows to audit")
 
     probe: dict = {
         "service": SERVICE,

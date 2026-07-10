@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from manizales_nomenclatura_geometry import (  # noqa: E402
+    classify_esri_rings,
     deterministic_point_on_surface,
     interpolate_representative_points,
     point_in_polygon,
@@ -169,6 +170,59 @@ def test_clockwise_ring_same_centroid():
     lat2, lng2 = polygon_area_centroid(cw)
     assert abs(lat1 - lat2) < 1e-9
     assert abs(lng1 - lng2) < 1e-9
+
+
+def _square_ring(x0: float, y0: float, size: float, closed: bool = True) -> list[list[float]]:
+    ring = [
+        [x0, y0],
+        [x0 + size, y0],
+        [x0 + size, y0 + size],
+        [x0, y0 + size],
+    ]
+    if closed:
+        ring.append([x0, y0])
+    return ring
+
+
+def test_polygon_with_hole():
+    # Outer 0..4, hole 1..3 — point in hole is outside filled region.
+    geom = {
+        "rings": [
+            _square_ring(0.0, 0.0, 4.0),
+            list(reversed(_square_ring(1.0, 1.0, 2.0))),  # opposite orientation hole
+        ]
+    }
+    assert point_in_polygon(0.5, 0.5, geom) is True
+    assert point_in_polygon(2.0, 2.0, geom) is False  # inside hole
+    assert point_in_polygon(3.5, 3.5, geom) is True
+    # Hole listed first should still work (no rings[0]-only assumption).
+    geom_swapped = {"rings": [geom["rings"][1], geom["rings"][0]]}
+    assert point_in_polygon(0.5, 0.5, geom_swapped) is True
+    assert point_in_polygon(2.0, 2.0, geom_swapped) is False
+
+
+def test_two_separate_exteriors_and_point_in_second():
+    geom = {
+        "rings": [
+            _square_ring(0.0, 0.0, 1.0),
+            _square_ring(5.0, 5.0, 1.0),
+        ]
+    }
+    assert point_in_polygon(0.5, 0.5, geom) is True
+    assert point_in_polygon(2.0, 2.0, geom) is False
+    assert point_in_polygon(5.5, 5.5, geom) is True  # second exterior
+    parts = classify_esri_rings(geom)
+    assert len(parts) == 2
+    assert all(len(p["holes"]) == 0 for p in parts)
+
+
+def test_degenerate_polygon():
+    geom = {"rings": [[[0.0, 0.0], [1.0, 1.0], [0.0, 0.0]]]}  # zero area
+    assert point_in_polygon(0.5, 0.5, geom) is False
+    assert polygon_area_centroid(geom) is None
+    rep = representative_point(geom)
+    assert rep["needs_review"] is True
+    assert rep["lat"] is not None
 
 
 if __name__ == "__main__":

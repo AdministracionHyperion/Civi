@@ -105,8 +105,8 @@ MANIZALES_SCOPE = GeocodeScope(
         by_kind={"CDA": 14, "CEA": 15, "CIA": 8, "CRC": 7},
         by_validation_status={
             "confirmed_business": 19,
-            "confirmed_address": 13,
-            "approximate_not_confirmed": 12,
+            "confirmed_address": 18,
+            "approximate_not_confirmed": 7,
         },
     ),
 )

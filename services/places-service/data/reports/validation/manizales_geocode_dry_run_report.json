@@ -40,8 +40,9 @@
   "blocked_rows": [],
   "unknown_ids": [],
   "resolution": {
-    "source_place_id": 0,
+    "source_place_id": 44,
     "source_records_fallback": 0
   },
-  "applied_rows": 0
+  "applied_rows": 0,
+  "database_url": "postgresql+psycopg://civi:***@127.0.0.1:55441/civi_geocode_validation_tmp"
 }
