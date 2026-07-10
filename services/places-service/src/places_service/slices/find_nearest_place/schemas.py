@@ -29,6 +29,14 @@ class PlaceResult(BaseModel):
     location_precision: str | None = None
     data_quality: float | None = None
     contact_available: bool | None = None
+    # Geocode surface. `confirmed_*` may be presented as confirmed; approximate must not.
+    lat: float | None = None
+    lng: float | None = None
+    confidence: float | None = None
+    provider: str | None = None
+    precision: str | None = None
+    validation_status: str | None = None
+    location_confirmed: bool | None = None
 
 
 class FindNearestPlaceResponse(BaseModel):

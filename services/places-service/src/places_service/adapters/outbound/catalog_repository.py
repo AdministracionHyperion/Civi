@@ -607,6 +607,57 @@ class CatalogSqlRepository:
             for r in rows
         ]
 
+    def list_geojson_features(
+        self, *, city: str, department: str | None = None
+    ) -> list[dict[str, Any]]:
+        """Return GeoJSON features for sites with coordinates in a municipality."""
+        from places_service.domain.models import CONFIRMED_VALIDATION_STATUSES
+
+        city_norm = (city or "").strip().casefold()
+        dept_norm = (department or "").strip().casefold() or None
+        with self.engine.begin() as conn:
+            rows = conn.execute(
+                select(places_sites)
+                .where(places_sites.c.lat.is_not(None))
+                .where(places_sites.c.lng.is_not(None))
+                .where(_effective_presence_clause())
+                .order_by(places_sites.c.actor_type, places_sites.c.name)
+            ).mappings().all()
+        features: list[dict[str, Any]] = []
+        for row in rows:
+            if (row.get("municipality") or "").strip().casefold() != city_norm:
+                continue
+            if dept_norm and (row.get("department") or "").strip().casefold() != dept_norm:
+                continue
+            validation = row.get("geocode_validation_status")
+            location_confirmed = (
+                str(validation) in CONFIRMED_VALIDATION_STATUSES if validation else False
+            )
+            features.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [float(row["lng"]), float(row["lat"])],
+                    },
+                    "properties": {
+                        "id": row["site_id"],
+                        "source_place_id": row.get("source_place_id"),
+                        "name": row["name"],
+                        "kind": row["actor_type"],
+                        "address": row["address_raw"],
+                        "city": row["municipality"],
+                        "department": row["department"],
+                        "precision": row.get("location_precision"),
+                        "validation_status": validation,
+                        "confidence": row.get("geocode_confidence"),
+                        "provider": row.get("geocode_provider"),
+                        "location_confirmed": location_confirmed,
+                    },
+                }
+            )
+        return features
+
 
 _HASH_EXCLUDED_FIELDS = frozenset(
     {
@@ -783,6 +834,13 @@ def _effective_presence_clause():
 
 
 def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = None) -> dict[str, Any]:
+    from places_service.domain.models import CONFIRMED_VALIDATION_STATUSES
+
+    validation_status = row.get("geocode_validation_status")
+    location_confirmed = (
+        str(validation_status) in CONFIRMED_VALIDATION_STATUSES if validation_status else None
+    )
+    precision = row.get("location_precision")
     result = {
         "id": row["site_id"],
         "name": row["name"],
@@ -797,9 +855,17 @@ def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = No
         "is_partner": row.get("is_partner"),
         "is_bookable": row.get("is_bookable"),
         "booking_mode": row.get("booking_mode"),
-        "location_precision": row.get("location_precision"),
+        "location_precision": precision,
         "data_quality": row.get("quality_score"),
         "contact_available": False,
+        "lat": row.get("lat"),
+        "lng": row.get("lng"),
+        "confidence": row.get("geocode_confidence"),
+        "provider": row.get("geocode_provider"),
+        "precision": precision,
+        "validation_status": validation_status,
+        # approximate_not_confirmed must never be presented as confirmed
+        "location_confirmed": location_confirmed,
     }
     return result
 

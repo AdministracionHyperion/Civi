@@ -58,6 +58,42 @@ Event types:
 
 `import_geocodes` is **strict atomic by default**: any validation error aborts with exit 1 and no writes. Use `--allow-partial` for best-effort apply (exit 2). Exit 0 = OK, 3 = infra. See `PLACES_IMPORT_PIPELINE.md`.
 
+### Manizales validated geocodes (first city rollout)
+
+Input (committed): `services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv`
+
+- 44 establishments (14 CDA, 15 CEA, 8 CIA, 7 CRC)
+- Resolves exclusively by official source `id` → `places_sites.source_place_id`
+- Validates Colombia / Caldas / Manizales + bbox before any write
+- Persists `lat`, `lng`, `confidence`, `provider`, `precision`, `geocode_validation_status`
+- `approximate_not_confirmed` is never presented as confirmed (`location_confirmed=false`)
+- Does **not** touch other cities; does **not** enable `--force` by default
+
+Dry-run (CSV validation only, no DB):
+
+```powershell
+$env:PYTHONPATH="services/places-service/src;packages/python-common/src"
+python -m places_service.cli.import_manizales_geocodes `
+  --input services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv `
+  --dry-run `
+  --report-path services/places-service/data/reports/manizales_geocode_import_report.json
+```
+
+Apply (after national catalog is already imported so `source_place_id` exists):
+
+```powershell
+$env:PYTHONPATH="services/places-service/src;packages/python-common/src"
+python -m places_service.cli.import_manizales_geocodes `
+  --input services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv `
+  --apply --database-url $env:PLACES_DATABASE_URL `
+  --report-path services/places-service/data/reports/manizales_geocode_import_report.json
+```
+
+Map (local): open `services/places-service/static/manizales_map.html?api=http://127.0.0.1:8085&token=<INTERNAL_SERVICE_TOKEN>`  
+GeoJSON: `GET /internal/places/geojson?city=Manizales&department=Caldas`
+
+Santander / Bucaramanga metro constants exist as stubs only — do not process them yet.
+
 ## Local CI gates (Postgres legacy + compose smoke)
 
 PostgreSQL legacy nullable lat/lng + re-apply idempotency:

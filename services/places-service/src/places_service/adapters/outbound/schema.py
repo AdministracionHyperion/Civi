@@ -43,6 +43,9 @@ places_sites = Table(
     Column("entity_id", String(128), nullable=False, index=True),
     Column("actor_type", String(8), nullable=False, index=True),
     Column("source_actor_id", String(128), nullable=True, index=True),
+    # Official RUNT/source JSON `id` (NOT the hashed site_id). Enables resolving
+    # authoritative geocode files (e.g. Manizales) back to catalog sites.
+    Column("source_place_id", String(128), nullable=True, index=True),
     Column("name", String(512), nullable=False),
     Column("name_normalized", String(512), nullable=False),
     Column("trade_name", String(512), nullable=True),
@@ -62,7 +65,10 @@ places_sites = Table(
     Column("geocode_status", String(32), nullable=False, index=True),
     Column("geocode_provider", String(64), nullable=True),
     Column("geocode_confidence", Float, nullable=True),
-    Column("location_precision", String(32), nullable=False),
+    Column("location_precision", String(64), nullable=False),
+    # Geocode VALIDATION result (not operational status): confirmed_business,
+    # confirmed_address, approximate_not_confirmed. Nullable until validated.
+    Column("geocode_validation_status", String(64), nullable=True, index=True),
     Column("operational_status", String(32), nullable=False, index=True),
     Column("status_verified", Boolean, nullable=False),
     Column("status_source", String(64), nullable=True),
