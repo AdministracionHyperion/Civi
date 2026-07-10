@@ -56,10 +56,15 @@ def test_nit_verification_digit_algorithm() -> None:
     assert doc["document_valid"] is True
     assert doc["document_number"] == "800197268"
     assert doc["verification_digit"] == "1"
-    # Bare numbers must NOT be auto-classified as valid NIT without DV evidence.
+    # Bare 9-digit strings are interpreted as body+DV; wrong DV → invalid (not invented valid).
     bare = normalize_document("900123456")
     assert bare["document_valid"] is False
+    assert bare["document_validation_status"] == "invalid"
     assert bare["document_type"] in {"CC_OR_NIT_UNKNOWN", "UNKNOWN"}
+    # Explicit candidate path: 8–10 digits that are not treated as body+DV mismatch.
+    candidate = normalize_document("90012345")
+    assert candidate["document_valid"] is None
+    assert candidate["document_validation_status"] == "candidate_without_dv"
 
 
 def test_fake_phones_are_invalid() -> None:

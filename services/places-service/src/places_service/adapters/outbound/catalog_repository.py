@@ -7,6 +7,7 @@ import os
 from dataclasses import asdict
 from datetime import datetime, timezone
 from typing import Any
+from uuid import uuid4
 
 from sqlalchemy import and_, case, func, or_, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
@@ -22,6 +23,7 @@ from places_service.adapters.outbound.schema import (
     places_entities,
     places_import_source_records,
     places_import_runs,
+    places_presence_events,
     places_sites,
     places_source_records,
 )
@@ -112,6 +114,16 @@ class CatalogSqlRepository:
                             updated_at=payload["updated_at"] or now,
                         )
                         conn.execute(places_sites.insert().values(**payload))
+                        _insert_presence_event(
+                            conn,
+                            site_id=site.site_id,
+                            import_run_id=import_run.import_run_id,
+                            previous_status=None,
+                            new_status="present",
+                            event_type="first_seen",
+                            reason="inserted_from_snapshot",
+                            created_at=now,
+                        )
                         counts["inserted"] += 1
                         changed = True
                     elif current.get("content_hash") == payload["content_hash"]:
@@ -124,7 +136,18 @@ class CatalogSqlRepository:
                             )
                         }
                         if current.get("source_presence_status") == "missing":
+                            lifecycle["source_presence_status"] = "reappeared"
                             counts["reappeared"] += 1
+                            _insert_presence_event(
+                                conn,
+                                site_id=site.site_id,
+                                import_run_id=import_run.import_run_id,
+                                previous_status="missing",
+                                new_status="reappeared",
+                                event_type="reappeared",
+                                reason="returned_in_snapshot",
+                                created_at=now,
+                            )
                         conn.execute(
                             places_sites.update().where(places_sites.c.site_id == site.site_id).values(**lifecycle)
                         )
@@ -132,7 +155,18 @@ class CatalogSqlRepository:
                         changed = False
                     else:
                         if current.get("source_presence_status") == "missing":
+                            payload["source_presence_status"] = "reappeared"
                             counts["reappeared"] += 1
+                            _insert_presence_event(
+                                conn,
+                                site_id=site.site_id,
+                                import_run_id=import_run.import_run_id,
+                                previous_status="missing",
+                                new_status="reappeared",
+                                event_type="reappeared",
+                                reason="returned_in_snapshot",
+                                created_at=now,
+                            )
                         payload["created_at"] = current["created_at"]
                         payload["first_seen_import_run"] = current["first_seen_import_run"]
                         payload["first_seen_at"] = current["first_seen_at"]
@@ -152,6 +186,7 @@ class CatalogSqlRepository:
                         continue
                     if row.get("source_presence_status") == "missing":
                         continue
+                    previous_status = str(row.get("source_presence_status") or "present")
                     conn.execute(
                         places_sites.update()
                         .where(places_sites.c.site_id == row["site_id"])
@@ -164,6 +199,16 @@ class CatalogSqlRepository:
                             booking_mode="unavailable",
                             updated_at=now,
                         )
+                    )
+                    _insert_presence_event(
+                        conn,
+                        site_id=row["site_id"],
+                        import_run_id=import_run.import_run_id,
+                        previous_status=previous_status,
+                        new_status="missing",
+                        event_type="missing",
+                        reason="absent_from_snapshot",
+                        created_at=now,
                     )
                     counts["missing"] += 1
 
@@ -238,7 +283,7 @@ class CatalogSqlRepository:
                 "canonical_city": None,
             }
         status = str(site.get("operational_status") or "unknown")
-        presence = str(site.get("source_presence_status") or site.get("snapshot_presence") or "present")
+        presence = str(site.get("source_presence_status") or "unknown")
         is_partner = bool(site["is_partner"])
         booking_mode = str(site.get("booking_mode") or "information_only")
         is_bookable = bool(site["is_bookable"])
@@ -248,7 +293,7 @@ class CatalogSqlRepository:
             is_bookable = False
             booking_mode = "unavailable"
             reason = f"operational_status_{status}"
-        elif presence == "missing":
+        elif presence not in {"present", "reappeared", "manually_preserved"}:
             is_bookable = False
             booking_mode = "unavailable"
             reason = "missing_from_latest_snapshot"
@@ -269,9 +314,9 @@ class CatalogSqlRepository:
             "eligibility_reason": reason,
             "booking_mode": booking_mode,
             "operational_status": status,
-            "snapshot_presence": presence,
+            "snapshot_presence": site.get("snapshot_presence"),
             "source_presence_status": presence,
-            "present_in_latest_snapshot": bool(site.get("present_in_latest_snapshot", presence == "present")),
+            "present_in_latest_snapshot": bool(site.get("present_in_latest_snapshot")),
             "canonical_name": site["name"],
             "canonical_address": site["address_raw"],
             "canonical_city": site["municipality"],
@@ -280,11 +325,40 @@ class CatalogSqlRepository:
     def catalog_summary(self) -> dict[str, Any]:
         with self.engine.begin() as conn:
             entities = conn.execute(select(func.count()).select_from(places_entities)).scalar_one()
+            valid_documents = conn.execute(
+                select(func.count())
+                .select_from(places_entities)
+                .where(places_entities.c.document_valid == True)  # noqa: E712
+            ).scalar_one()
             invalid_documents = conn.execute(
                 select(func.count())
                 .select_from(places_entities)
                 .where(places_entities.c.document_valid == False)  # noqa: E712
             ).scalar_one()
+            candidate_documents = conn.execute(
+                select(func.count())
+                .select_from(places_entities)
+                .where(places_entities.c.document_validation_status == "candidate_without_dv")
+            ).scalar_one()
+            ambiguous_documents = conn.execute(
+                select(func.count())
+                .select_from(places_entities)
+                .where(places_entities.c.document_validation_status == "ambiguous")
+            ).scalar_one()
+            missing_documents = conn.execute(
+                select(func.count())
+                .select_from(places_entities)
+                .where(places_entities.c.document_validation_status == "missing")
+            ).scalar_one()
+            by_document_validation = {
+                str(value): int(count)
+                for value, count in conn.execute(
+                    select(places_entities.c.document_validation_status, func.count())
+                    .select_from(places_entities)
+                    .group_by(places_entities.c.document_validation_status)
+                ).all()
+                if value is not None
+            }
             source_records = conn.execute(select(func.count()).select_from(places_source_records)).scalar_one()
             dupes = conn.execute(select(func.count()).select_from(places_duplicate_candidates)).scalar_one()
             invalid_phones = conn.execute(
@@ -318,6 +392,10 @@ class CatalogSqlRepository:
                         0,
                     ).label("pending_geocoding"),
                     func.coalesce(
+                        func.sum(_bool_as_int(places_sites.c.geocode_status == "low_confidence")),
+                        0,
+                    ).label("low_confidence_geocodes"),
+                    func.coalesce(
                         func.sum(_bool_as_int(places_sites.c.requires_manual_review)),
                         0,
                     ).label("manual_review"),
@@ -341,21 +419,23 @@ class CatalogSqlRepository:
                     func.coalesce(
                         func.sum(
                             _bool_as_int(
-                                or_(
-                                    places_sites.c.snapshot_presence == "present",
-                                    places_sites.c.source_presence_status.in_(
-                                        ("present", "reappeared", "manually_preserved")
-                                    ),
+                                places_sites.c.source_presence_status.in_(
+                                    ("present", "reappeared", "manually_preserved")
                                 )
                             )
                         ),
                         0,
                     ).label("present_sites"),
+                    func.coalesce(
+                        func.sum(_bool_as_int(places_sites.c.source_presence_status == "reappeared")),
+                        0,
+                    ).label("reappeared_sites"),
                 ).select_from(places_sites)
             ).mappings().one()
             by_type = _grouped_counts(conn, places_sites.c.actor_type)
             by_status = _grouped_counts(conn, places_sites.c.operational_status)
             by_presence = _grouped_counts(conn, places_sites.c.source_presence_status)
+            by_geocode = _grouped_counts(conn, places_sites.c.geocode_status)
         return {
             "source_records": int(source_records or 0),
             "unique_entities": int(entities or 0),
@@ -363,18 +443,26 @@ class CatalogSqlRepository:
             "by_actor_type": by_type,
             "by_operational_status": by_status,
             "by_source_presence_status": by_presence,
+            "by_geocode_status": by_geocode,
+            "by_document_validation_status": by_document_validation,
             "partners": int(site_counts["partners"] or 0),
             "bookable": int(site_counts["bookable"] or 0),
             "geocoded": int(site_counts["geocoded"] or 0),
             "pending_geocoding": int(site_counts["pending_geocoding"] or 0),
+            "low_confidence_geocodes": int(site_counts["low_confidence_geocodes"] or 0),
             "manual_review": int(site_counts["manual_review"] or 0),
             "duplicate_candidates": int(dupes or 0),
             "invalid_addresses": int(site_counts["invalid_addresses"] or 0),
             "invalid_phones": int(invalid_phones or 0),
+            "valid_documents": int(valid_documents or 0),
             "invalid_documents": int(invalid_documents or 0),
+            "candidate_documents": int(candidate_documents or 0),
+            "ambiguous_documents": int(ambiguous_documents or 0),
+            "missing_documents": int(missing_documents or 0),
             "absent_from_snapshot": int(site_counts["absent_from_snapshot"] or 0),
             "missing": int(site_counts["absent_from_snapshot"] or 0),
             "present_sites": int(site_counts["present_sites"] or 0),
+            "reappeared_sites": int(site_counts["reappeared_sites"] or 0),
             "latest_import": dict(latest) if latest else None,
             "source_updated_at": (latest or {}).get("source_updated_at") if latest else None,
             "snapshot_at": (latest or {}).get("snapshot_at") if latest else None,
@@ -505,6 +593,7 @@ class CatalogSqlRepository:
                 select(places_sites)
                 .where(places_sites.c.is_partner == True)  # noqa: E712
                 .where(places_sites.c.operational_status.notin_(list(EXCLUDED_STATUSES)))
+                .where(_effective_presence_clause())
                 .order_by(places_sites.c.municipality, places_sites.c.name)
             ).mappings().all()
         return [
@@ -640,6 +729,32 @@ def _bool_as_int(condition):
     return case((condition, 1), else_=0)
 
 
+def _insert_presence_event(
+    conn,
+    *,
+    site_id: str,
+    import_run_id: str,
+    previous_status: str | None,
+    new_status: str,
+    event_type: str,
+    reason: str,
+    created_at: str,
+) -> None:
+    conn.execute(
+        places_presence_events.insert().values(
+            event_id=str(uuid4()),
+            site_id=site_id,
+            import_run_id=import_run_id,
+            previous_status=previous_status,
+            new_status=new_status,
+            event_type=event_type,
+            reason=reason,
+            actor="import_catalog",
+            created_at=created_at,
+        )
+    )
+
+
 def _grouped_counts(conn, column) -> dict[str, int]:
     rows = conn.execute(
         select(column, func.count()).select_from(places_sites).group_by(column)
@@ -652,20 +767,18 @@ def _searchable_sites_statement(actor_type: str | None):
     stmt = (
         select(places_sites)
         .where(places_sites.c.operational_status.notin_(list(EXCLUDED_STATUSES)))
-        .where(
-            or_(
-                places_sites.c.source_presence_status.in_(
-                    ("present", "reappeared", "manually_preserved")
-                ),
-                places_sites.c.snapshot_presence == "present",
-                places_sites.c.source_presence_status.is_(None),
-                places_sites.c.snapshot_presence.is_(None),
-            )
-        )
+        .where(_effective_presence_clause())
     )
     if actor_type:
         stmt = stmt.where(places_sites.c.actor_type == actor_type.upper())
     return stmt
+
+
+def _effective_presence_clause():
+    """Single presence rule shared by nearest, partners, and eligibility surfaces."""
+    return places_sites.c.source_presence_status.in_(
+        ("present", "reappeared", "manually_preserved")
+    )
 
 
 def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = None) -> dict[str, Any]:

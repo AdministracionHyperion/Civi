@@ -5,9 +5,10 @@ from __future__ import annotations
 import csv
 import json
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 from civi_common.geo import is_colombia_latlng
 
@@ -89,7 +90,7 @@ class ManualImportGeocoder:
         min_conf = float(os.getenv("PLACES_GEOCODING_MIN_CONFIDENCE", "0.6"))
         status = "success"
         if confidence is not None and confidence < min_conf:
-            status = "manual"
+            status = "low_confidence"
         self._by_site[site_id] = GeocodeResult(
             lat=lat,
             lng=lng,
@@ -99,6 +100,7 @@ class ManualImportGeocoder:
             status=status,
             query=site_id,
             site_id=site_id,
+            error="low_confidence" if status == "low_confidence" else None,
         )
 
     def geocode(self, query: str, *, site_id: str | None = None) -> GeocodeResult:
@@ -121,12 +123,27 @@ class ManualImportGeocoder:
 class HttpGeocoder:
     """HTTP geocoder behind env config. Never used unless mode=http and URL is set."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, transport: Any | None = None) -> None:
         self.api_url = os.getenv("PLACES_GEOCODING_API_URL", "").strip()
         self.api_key = os.getenv("PLACES_GEOCODING_API_KEY", "").strip()
         self.timeout = float(os.getenv("PLACES_GEOCODING_TIMEOUT_SECONDS", "10"))
         self.retries = int(os.getenv("PLACES_GEOCODING_RETRIES", "1"))
         self.min_confidence = float(os.getenv("PLACES_GEOCODING_MIN_CONFIDENCE", "0.7"))
+        # Requests per second; sleep between calls to respect provider limits.
+        self.rate_limit = float(os.getenv("PLACES_GEOCODING_RATE_LIMIT", "0") or "0")
+        self._transport = transport
+        self._last_request_at: float | None = None
+
+    def _throttle(self) -> None:
+        if self.rate_limit <= 0:
+            return
+        min_interval = 1.0 / self.rate_limit
+        now = time.monotonic()
+        if self._last_request_at is not None:
+            elapsed = now - self._last_request_at
+            if elapsed < min_interval:
+                time.sleep(min_interval - elapsed)
+        self._last_request_at = time.monotonic()
 
     def geocode(self, query: str, *, site_id: str | None = None) -> GeocodeResult:
         if not self.api_url:
@@ -161,9 +178,14 @@ class HttpGeocoder:
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
         last_error = None
-        for _ in range(max(1, self.retries)):
+        attempts = max(1, self.retries)
+        for attempt in range(attempts):
             try:
-                with httpx.Client(timeout=self.timeout) as client:
+                self._throttle()
+                client_kwargs: dict[str, Any] = {"timeout": self.timeout}
+                if self._transport is not None:
+                    client_kwargs["transport"] = self._transport
+                with httpx.Client(**client_kwargs) as client:
                     response = client.get(
                         self.api_url,
                         params={"q": query, "format": "json", "limit": 1},
@@ -204,9 +226,9 @@ class HttpGeocoder:
                         lat=lat,
                         lng=lng,
                         confidence=confidence,
-                        precision="unknown",
+                        precision=str(item.get("precision") or "unknown"),
                         provider="http",
-                        status="manual",
+                        status="low_confidence",
                         query=query,
                         error="low_confidence",
                         site_id=site_id,
@@ -223,6 +245,9 @@ class HttpGeocoder:
                 )
             except Exception as exc:  # noqa: BLE001
                 last_error = str(exc)
+                if attempt + 1 < attempts:
+                    # Exponential backoff between retries (0.5s, 1s, 2s, ...).
+                    time.sleep(0.5 * (2**attempt))
         return GeocodeResult(
             lat=None,
             lng=None,
@@ -236,7 +261,7 @@ class HttpGeocoder:
         )
 
 
-def geocoder_from_env() -> Geocoder:
+def geocoder_from_env(*, transport: Any | None = None) -> Geocoder:
     mode = os.getenv("PLACES_GEOCODING_MODE", "disabled").strip().lower()
     if mode in {"", "disabled", "off", "none"}:
         return DisabledGeocoder()
@@ -248,5 +273,5 @@ def geocoder_from_env() -> Geocoder:
     if mode == "http":
         if not os.getenv("PLACES_GEOCODING_API_URL", "").strip():
             return DisabledGeocoder()
-        return HttpGeocoder()
+        return HttpGeocoder(transport=transport)
     return DisabledGeocoder()

@@ -55,7 +55,8 @@ def _entity_id(doc: dict, legal_name: str) -> tuple[str, bool]:
     # multiple provisional entities keyed only by name.
     if doc.get("document_number"):
         dtype = str(doc.get("document_type") or "UNKNOWN").lower()
-        return (f"ent-{dtype}-{doc['document_number']}"[:128], not bool(doc.get("document_valid")))
+        # Review when not explicitly valid (False or None both need attention).
+        return (f"ent-{dtype}-{doc['document_number']}"[:128], doc.get("document_valid") is not True)
     provisional = _stable_id(legal_name or "unknown", prefix="ent-prov")
     return provisional, True
 
@@ -117,13 +118,13 @@ def _disambiguate_site_id(site_id: str, *, row_number: int, source_hash: str) ->
     return f"{base}-x{digest}"[:128]
 
 
-def _quality_score(*, address_quality: str, doc_valid: bool, phone_valid: bool, status: str) -> float:
+def _quality_score(*, address_quality: str, doc_valid: bool | None, phone_valid: bool, status: str) -> float:
     score = 0.2
     if address_quality == "valid":
         score += 0.35
     elif address_quality == "partial":
         score += 0.15
-    if doc_valid:
+    if doc_valid is True:
         score += 0.2
     if phone_valid:
         score += 0.15
@@ -222,7 +223,8 @@ def build_catalog_from_rows(
                 document_number=doc["document_number"],
                 verification_digit=doc["verification_digit"],
                 document_raw=doc["document_raw"],
-                document_valid=bool(doc["document_valid"]),
+                document_valid=doc["document_valid"],
+                document_validation_status=doc.get("document_validation_status"),
                 legal_name=name,
                 legal_name_normalized=normalize_text(name),
                 entity_status="unknown",
@@ -415,7 +417,7 @@ def build_catalog_from_rows(
             booking_mode="information_only",
             quality_score=_quality_score(
                 address_quality=address["address_quality"],
-                doc_valid=bool(doc["document_valid"]),
+                doc_valid=doc["document_valid"],
                 phone_valid=phone_valid,
                 status=status_info["operational_status"],
             ),
@@ -546,8 +548,20 @@ def write_reports(catalog: dict[str, Any], report_dir: Path, *, import_run: Impo
         "valid_addresses": sum(1 for s in sites if s.address_quality == "valid"),
         "valid_phones": sum(1 for c in contacts if c.is_valid),
         "invalid_phones": sum(1 for c in contacts if not c.is_valid),
-        "valid_documents": sum(1 for e in entities if e.document_valid),
-        "invalid_documents": sum(1 for e in entities if not e.document_valid),
+        "valid_documents": sum(1 for e in entities if e.document_valid is True),
+        "invalid_documents": sum(1 for e in entities if e.document_valid is False),
+        "candidate_documents": sum(
+            1 for e in entities if e.document_validation_status == "candidate_without_dv"
+        ),
+        "ambiguous_documents": sum(
+            1 for e in entities if e.document_validation_status == "ambiguous"
+        ),
+        "missing_documents": sum(
+            1 for e in entities if e.document_validation_status == "missing"
+        ),
+        "by_document_validation_status": _count_by(
+            e.document_validation_status or "unknown" for e in entities
+        ),
         "reconciliation": catalog["reconciliation"],
         "source_updated_at": import_run.source_updated_at,
         "snapshot_at": import_run.snapshot_at,
@@ -563,7 +577,7 @@ def write_reports(catalog: dict[str, Any], report_dir: Path, *, import_run: Impo
         [
             asdict(e)
             for e in entities
-            if e.requires_manual_review or not e.document_valid
+            if e.requires_manual_review or e.document_valid is not True
         ],
     )
     dump(
@@ -608,6 +622,14 @@ def write_reports(catalog: dict[str, Any], report_dir: Path, *, import_run: Impo
             "note": "Geocoding disabled by default; no external calls made.",
         },
     )
+
+
+def _count_by(values) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for value in values:
+        key = str(value)
+        counts[key] = counts.get(key, 0) + 1
+    return counts
 
 
 def asdict_default(obj: Any) -> Any:
