@@ -22,8 +22,14 @@ from places_service.geocoding.validated_geocode_import import read_csv_rows, val
 CSV_PATH = Path(
     "services/places-service/data/geocodes/santander/geocodes_santander_priorizado_validado.csv"
 )
-EXPECTED_SHA256 = "72291268902f96b6acbfa9c36edfbb2c4fef2507e08249b0dae5f71e098bdabe"
+# Canonical hash of the LF-normalized CSV (Windows CRLF copies hash differently).
+EXPECTED_SHA256 = "814a59c71899b250362c42a8ffe087cc6d0a7c12d0b3a0f6b1954c27c9cf06d0"
 TARGET_GIRON_ID = "cea-giron-centro-de-ensenanza-automovilistica-san--b354b75834"
+
+
+def _sha256_lf(path: Path) -> str:
+    data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(data).hexdigest()
 
 
 def _now() -> str:
@@ -137,8 +143,7 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
 
 
 def test_csv_sha_counts_bbox_and_target_row() -> None:
-    digest = hashlib.sha256(CSV_PATH.read_bytes()).hexdigest()
-    assert digest == EXPECTED_SHA256
+    assert _sha256_lf(CSV_PATH) == EXPECTED_SHA256
 
     rows = read_csv_rows(CSV_PATH)
     assert len(rows) == 153
