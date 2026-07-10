@@ -18,8 +18,12 @@ class AppointmentRecord:
     place_address: str
     place_city: str
     starts_at: str
-    status: str = "scheduled"
+    status: str = "pending_partner"
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat(timespec="seconds"))
+    partner_notified_at: str | None = None
+    partner_confirmed_at: str | None = None
+    client_notification_to: str | None = None
+    partner_notification_to: str | None = None
 
 
 class AppointmentRepository(Protocol):
@@ -33,13 +37,29 @@ class AppointmentRepository(Protocol):
         place_address: str,
         place_city: str,
         starts_at: str,
+        status: str = "pending_partner",
+        client_notification_to: str | None = None,
+        partner_notification_to: str | None = None,
+        partner_notified_at: str | None = None,
     ) -> AppointmentRecord:
+        ...
+
+    def get(self, *, appointment_id: int) -> AppointmentRecord | None:
         ...
 
     def list_for_user(self, *, user_key: str) -> list[AppointmentRecord]:
         ...
 
     def cancel(self, *, user_key: str, appointment_id: int) -> AppointmentRecord | None:
+        ...
+
+    def confirm(self, *, appointment_id: int) -> AppointmentRecord | None:
+        ...
+
+    def reject(self, *, appointment_id: int) -> AppointmentRecord | None:
+        ...
+
+    def mark_partner_notified(self, *, appointment_id: int, notified_at: str) -> AppointmentRecord | None:
         ...
 
 
@@ -59,6 +79,10 @@ class InMemoryAppointmentRepository:
         place_address: str,
         place_city: str,
         starts_at: str,
+        status: str = "pending_partner",
+        client_notification_to: str | None = None,
+        partner_notification_to: str | None = None,
+        partner_notified_at: str | None = None,
     ) -> AppointmentRecord:
         with self._lock:
             record = AppointmentRecord(
@@ -70,15 +94,22 @@ class InMemoryAppointmentRepository:
                 place_address=place_address,
                 place_city=place_city,
                 starts_at=starts_at,
+                status=status,
+                client_notification_to=client_notification_to,
+                partner_notification_to=partner_notification_to,
+                partner_notified_at=partner_notified_at,
             )
             self._records[record.id] = record
             return record
+
+    def get(self, *, appointment_id: int) -> AppointmentRecord | None:
+        return self._records.get(appointment_id)
 
     def list_for_user(self, *, user_key: str) -> list[AppointmentRecord]:
         return [
             record
             for record in sorted(self._records.values(), key=lambda item: item.starts_at)
-            if record.user_key == user_key and record.status != "cancelled"
+            if record.user_key == user_key and record.status not in {"cancelled", "rejected"}
         ]
 
     def cancel(self, *, user_key: str, appointment_id: int) -> AppointmentRecord | None:
@@ -87,6 +118,32 @@ class InMemoryAppointmentRepository:
             if not record or record.user_key != user_key or record.status == "cancelled":
                 return None
             record.status = "cancelled"
+            return record
+
+    def confirm(self, *, appointment_id: int) -> AppointmentRecord | None:
+        with self._lock:
+            record = self._records.get(appointment_id)
+            if not record or record.status != "pending_partner":
+                return None
+            record.status = "confirmed"
+            record.partner_confirmed_at = datetime.now(UTC).isoformat(timespec="seconds")
+            return record
+
+    def reject(self, *, appointment_id: int) -> AppointmentRecord | None:
+        with self._lock:
+            record = self._records.get(appointment_id)
+            if not record or record.status != "pending_partner":
+                return None
+            record.status = "rejected"
+            record.partner_confirmed_at = datetime.now(UTC).isoformat(timespec="seconds")
+            return record
+
+    def mark_partner_notified(self, *, appointment_id: int, notified_at: str) -> AppointmentRecord | None:
+        with self._lock:
+            record = self._records.get(appointment_id)
+            if not record:
+                return None
+            record.partner_notified_at = notified_at
             return record
 
 

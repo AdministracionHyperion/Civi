@@ -84,6 +84,29 @@ class SqlNotificationRepository:
             rows = conn.execute(stmt).mappings().all()
         return [_outbox_from_row(row) for row in rows]
 
+    def claim_queued_batch(self, *, limit: int = 50) -> list[OutboxMessage]:
+        with self.engine.begin() as conn:
+            subq = (
+                select(outbox.c.id)
+                .where(outbox.c.status == "queued")
+                .order_by(outbox.c.id)
+                .limit(limit)
+            )
+            claimed = conn.execute(
+                update(outbox)
+                .where(outbox.c.id.in_(subq))
+                .values(status="sending")
+            )
+            if claimed.rowcount == 0:
+                return []
+            rows = conn.execute(
+                select(outbox)
+                .where(outbox.c.status == "sending")
+                .order_by(outbox.c.id)
+                .limit(limit)
+            ).mappings().all()
+        return [_outbox_from_row(row, status="sending") for row in rows]
+
     def mark_sent(self, message_id: int) -> OutboxMessage | None:
         sent_at = datetime.now(UTC).isoformat(timespec="seconds")
         with self.engine.begin() as conn:
@@ -187,13 +210,13 @@ class SqlNotificationRepository:
         return reminder, message
 
 
-def _outbox_from_row(row) -> OutboxMessage:
+def _outbox_from_row(row, *, status: str | None = None) -> OutboxMessage:
     return OutboxMessage(
         id=int(row["id"]),
         to=str(row["to"]),
         body=str(row["body"]),
         channel=str(row["channel"]),
-        status=str(row["status"]),
+        status=status or str(row["status"]),
         created_at=str(row["created_at"]),
         sent_at=row["sent_at"],
     )

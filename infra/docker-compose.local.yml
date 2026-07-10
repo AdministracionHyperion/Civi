@@ -106,17 +106,33 @@ services:
       QUOTE_SERVICE_URL: http://quote-service:8091
       BILLING_SERVICE_URL: http://billing-service:8092
       HANDOFF_SERVICE_URL: http://handoff-service:8093
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      BOT_CONSULT_REPOSITORY_MODE: sql
+      BOT_CONSULT_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      BOT_CONSULT_AUTO_CREATE_SCHEMA: "true"
     ports:
       - "8082:8082"
     depends_on:
-      - vehicle-service
-      - places-service
-      - appointment-service
-      - media-service
-      - knowledge-service
-      - quote-service
-      - billing-service
-      - handoff-service
+      postgres:
+        condition: service_healthy
+      vehicle-service:
+        condition: service_started
+      places-service:
+        condition: service_started
+      appointment-service:
+        condition: service_started
+      media-service:
+        condition: service_started
+      knowledge-service:
+        condition: service_started
+      quote-service:
+        condition: service_started
+      billing-service:
+        condition: service_started
+      handoff-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
 
   vehicle-service:
     build:
@@ -191,6 +207,11 @@ services:
       SIMIT_BROWSER_TIMEOUT_SECONDS: ${SIMIT_BROWSER_TIMEOUT_SECONDS:-75}
       SIMIT_BROWSER_HEADLESS: ${SIMIT_BROWSER_HEADLESS:-true}
       SIMIT_BROWSER_EXECUTABLE_PATH: ${SIMIT_BROWSER_EXECUTABLE_PATH:-}
+      MANIZALES_PROVIDER_MODE: ${MANIZALES_PROVIDER_MODE:-local}
+      MANIZALES_BROWSER_URL: ${MANIZALES_BROWSER_URL:-https://www.movilidadmanizales.com.co/portal-servicios/}
+      MANIZALES_BROWSER_TIMEOUT_SECONDS: ${MANIZALES_BROWSER_TIMEOUT_SECONDS:-75}
+      MANIZALES_BROWSER_HEADLESS: ${MANIZALES_BROWSER_HEADLESS:-true}
+      MANIZALES_BROWSER_EXECUTABLE_PATH: ${MANIZALES_BROWSER_EXECUTABLE_PATH:-}
     ports:
       - "8090:8090"
 
@@ -237,12 +258,43 @@ services:
       EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
       EVENT_REDIS_URL: redis://redis:6379/1
       EVENT_CHANNEL_PREFIX: civi.events
+      APPOINTMENT_REMINDER_LEAD_MINUTES: "30"
+      APPOINTMENT_PARTNER_REMINDER_LEAD_MINUTES: "60"
     ports:
       - "8086:8086"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_started
+      places-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
+
+  bot-consult-worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/bot-orchestrator
+        SERVICE_MODULE: bot_orchestrator.main:app
+    command: ["python", "-m", "bot_orchestrator.workers.consult_worker"]
+    environment:
+      APP_ENV: development
+      LOG_LEVEL: INFO
+      INTERNAL_SERVICE_TOKEN: change-me-local-only
+      VEHICLE_SERVICE_URL: http://vehicle-service:8083
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      QUOTE_SERVICE_URL: http://quote-service:8091
+      BOT_CONSULT_WORKER_INTERVAL_SECONDS: "5"
+      BOT_CONSULT_REPOSITORY_MODE: sql
+      BOT_CONSULT_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
+      BOT_CONSULT_AUTO_CREATE_SCHEMA: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      vehicle-service:
         condition: service_started
       notification-service:
         condition: service_started
@@ -300,6 +352,7 @@ services:
       NOTIFICATION_WORKER_INTERVAL_SECONDS: "30"
       NOTIFICATION_WORKER_LIMIT: "50"
       NOTIFICATION_WORKER_DISPATCH_OUTBOX: "false"
+      APPOINTMENT_REMINDER_LEAD_MINUTES: "30"
       EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-disabled}
       EVENT_REDIS_URL: redis://redis:6379/1
       EVENT_CHANNEL_PREFIX: civi.events

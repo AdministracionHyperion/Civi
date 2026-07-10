@@ -29,6 +29,27 @@ paths:
       responses:
         "200":
           description: normalized SIMIT result
+  /internal/simit/multas/manizales:
+    post:
+      summary: Check Manizales local fines portal
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documento:
+                  type: string
+                placa:
+                  type: string
+      responses:
+        "200":
+          description: Manizales multas result
+        "502":
+          description: Manizales provider unavailable
 components:
   securitySchemes:
     internalBearer:

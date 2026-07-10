@@ -61,3 +61,40 @@ def test_knowledge_internal_info_requires_token(monkeypatch: pytest.MonkeyPatch)
     )
     assert response.status_code == 200
     assert response.json()["success"] is True
+
+
+@pytest.mark.parametrize(
+    ("query", "expected_token"),
+    [
+        ("que pasa si me paso un semaforo en rojo", "semaforo"),
+        ("que cubre el SOAT en un accidente", "soat"),
+        ("choque simple sin heridos que debo hacer", "accidente"),
+        ("puedo circular con pico y placa si tengo cita medica", "pico"),
+    ],
+)
+def test_search_corpus_finds_relevant_chunks(query: str, expected_token: str) -> None:
+    from knowledge_service.shared.search import search_corpus
+
+    hits = search_corpus(query=query, limit=5)
+    assert hits
+    joined = " ".join(f"{hit.title} {hit.body} {hit.domain}".lower() for hit in hits)
+    assert expected_token in joined
+
+
+def test_knowledge_internal_search_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("INTERNAL_SERVICE_TOKEN", "internal-test-token")
+    client = TestClient(app)
+
+    payload = {"query": "descuentos CIA fotomulta", "limit": 3}
+    assert client.post("/internal/knowledge/search", json=payload).status_code == 401
+
+    response = client.post(
+        "/internal/knowledge/search",
+        json=payload,
+        headers={"Authorization": "Bearer internal-test-token"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["hits"]
+    assert "score" in body["hits"][0]

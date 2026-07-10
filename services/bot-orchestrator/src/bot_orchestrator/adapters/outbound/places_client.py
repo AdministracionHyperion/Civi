@@ -25,12 +25,24 @@ class PlacesClient:
         lat: float | None = None,
         lng: float | None = None,
     ) -> dict[str, Any]:
-        payload = {"procedure": procedure, "city": city, "lat": lat, "lng": lng}
+        payload = {"procedure": procedure, "city": city, "lat": lat, "lng": lng, "limit": 5}
         async with httpx.AsyncClient(timeout=20.0) as client:
             response = await client.post(
                 f"{self.base_url}/internal/places/nearest",
                 json=payload,
                 headers=self._headers,
             )
+            response.raise_for_status()
+            return response.json()
+
+    async def lookup_ops_contact(self, *, e164: str) -> dict[str, Any] | None:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(
+                f"{self.base_url}/internal/places/ops-contact/lookup",
+                json={"e164": e164},
+                headers=self._headers,
+            )
+            if response.status_code == 404:
+                return None
             response.raise_for_status()
             return response.json()

@@ -264,6 +264,129 @@ class CatalogSqlRepository:
             row = conn.execute(select(places_sites).where(places_sites.c.site_id == site_id)).mappings().first()
         return dict(row) if row else None
 
+    def get_ops_contact(self, site_id: str) -> dict[str, Any] | None:
+        with self.engine.begin() as conn:
+            row = (
+                conn.execute(
+                    select(
+                        places_sites.c.site_id,
+                        places_sites.c.name,
+                        places_contacts.c.e164,
+                    )
+                    .select_from(
+                        places_sites.join(
+                            places_contacts,
+                            places_contacts.c.site_id == places_sites.c.site_id,
+                        )
+                    )
+                    .where(places_sites.c.site_id == site_id)
+                    .where(places_contacts.c.contact_type == "ops_whatsapp")
+                    .where(places_contacts.c.e164.is_not(None))
+                    .where(places_contacts.c.e164 != "")
+                    .where(places_contacts.c.is_valid == True)  # noqa: E712
+                    .limit(1)
+                )
+                .mappings()
+                .first()
+            )
+        if row is None:
+            return None
+        return {
+            "site_id": str(row["site_id"]),
+            "name": str(row["name"]),
+            "e164": _normalize_e164(str(row["e164"])),
+        }
+
+    def lookup_by_ops_whatsapp(self, e164: str) -> dict[str, Any] | None:
+        needle = _normalize_e164(e164)
+        if not needle:
+            return None
+        with self.engine.begin() as conn:
+            rows = (
+                conn.execute(
+                    select(
+                        places_sites.c.site_id,
+                        places_sites.c.name,
+                        places_contacts.c.e164,
+                    )
+                    .select_from(
+                        places_sites.join(
+                            places_contacts,
+                            places_contacts.c.site_id == places_sites.c.site_id,
+                        )
+                    )
+                    .where(places_contacts.c.contact_type == "ops_whatsapp")
+                    .where(places_contacts.c.is_valid == True)  # noqa: E712
+                    .where(places_contacts.c.e164.is_not(None))
+                    .where(places_contacts.c.e164 != "")
+                )
+                .mappings()
+                .all()
+            )
+        for row in rows:
+            if _normalize_e164(str(row["e164"])) == needle:
+                return {
+                    "site_id": str(row["site_id"]),
+                    "name": str(row["name"]),
+                    "e164": needle,
+                }
+        return None
+
+    def set_partner(self, *, site_id: str, ops_whatsapp: str) -> dict[str, Any]:
+        e164 = _normalize_e164(ops_whatsapp)
+        if len(e164) < 10:
+            raise ValueError("ops_whatsapp must be a valid E.164 phone (digits only, min 10)")
+        now = datetime.now(timezone.utc).isoformat()
+        with self.engine.begin() as conn:
+            site = (
+                conn.execute(select(places_sites).where(places_sites.c.site_id == site_id))
+                .mappings()
+                .first()
+            )
+            if site is None:
+                raise LookupError(f"site not found: {site_id}")
+            conn.execute(
+                places_sites.update()
+                .where(places_sites.c.site_id == site_id)
+                .values(
+                    is_partner=True,
+                    is_bookable=True,
+                    booking_mode="civi",
+                    updated_at=now,
+                )
+            )
+            existing = (
+                conn.execute(
+                    select(places_contacts)
+                    .where(places_contacts.c.site_id == site_id)
+                    .where(places_contacts.c.contact_type == "ops_whatsapp")
+                    .limit(1)
+                )
+                .mappings()
+                .first()
+            )
+            contact_id = str(existing["contact_id"]) if existing else f"ops-{site_id}"
+            payload = {
+                "contact_id": contact_id,
+                "site_id": site_id,
+                "contact_type": "ops_whatsapp",
+                "value_raw": ops_whatsapp.strip(),
+                "value_normalized": e164,
+                "e164": e164,
+                "is_valid": True,
+                "is_public": False,
+                "source_record_id": None,
+            }
+            conn.execute(_upsert(self.engine, places_contacts, payload, pk="contact_id"))
+        return {
+            "site_id": site_id,
+            "is_partner": True,
+            "is_bookable": True,
+            "booking_mode": "civi",
+            "ops_whatsapp": e164,
+            "name": str(site["name"]),
+        }
+
     def booking_eligibility(self, site_id: str) -> dict[str, Any]:
         site = self.get_site(site_id)
         if site is None:
@@ -514,7 +637,16 @@ class CatalogSqlRepository:
                 if distance <= radius_km:
                     ranked.append((distance, row))
             ranked.sort(key=lambda item: (item[0], not item[1]["is_bookable"], not item[1]["is_partner"]))
-            places = [_site_to_place_result(row, distance_km=dist) for dist, row in ranked[:limit]]
+            top = ranked[:limit]
+            with_contact = self._ops_contact_site_ids([row["site_id"] for _, row in top])
+            places = [
+                _site_to_place_result(
+                    row,
+                    distance_km=dist,
+                    contact_available=row["site_id"] in with_contact,
+                )
+                for dist, row in top
+            ]
             if not places:
                 no_results_reason = "no_sites_within_radius"
             return {
@@ -576,7 +708,12 @@ class CatalogSqlRepository:
                 r.get("name") or "",
             )
         )
-        places = [_site_to_place_result(row) for row in filtered[:limit]]
+        top = filtered[:limit]
+        with_contact = self._ops_contact_site_ids([row["site_id"] for row in top])
+        places = [
+            _site_to_place_result(row, contact_available=row["site_id"] in with_contact)
+            for row in top
+        ]
         return {
             "places": places,
             "match_scope": match_scope,
@@ -586,6 +723,21 @@ class CatalogSqlRepository:
             "total_candidates": len(filtered),
             "geocoded_candidates": sum(1 for r in filtered if r.get("lat") is not None),
         }
+
+    def _ops_contact_site_ids(self, site_ids: list[Any]) -> set[str]:
+        ids = [str(site_id) for site_id in site_ids if site_id]
+        if not ids:
+            return set()
+        with self.engine.begin() as conn:
+            rows = conn.execute(
+                select(places_contacts.c.site_id)
+                .where(places_contacts.c.site_id.in_(ids))
+                .where(places_contacts.c.contact_type == "ops_whatsapp")
+                .where(places_contacts.c.is_valid == True)  # noqa: E712
+                .where(places_contacts.c.e164.is_not(None))
+                .where(places_contacts.c.e164 != "")
+            ).all()
+        return {str(row[0]) for row in rows}
 
     def list_partners(self) -> list[dict[str, Any]]:
         with self.engine.begin() as conn:
@@ -833,7 +985,17 @@ def _effective_presence_clause():
     )
 
 
-def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = None) -> dict[str, Any]:
+def _normalize_e164(value: str) -> str:
+    digits = "".join(ch for ch in (value or "").strip() if ch.isdigit())
+    return digits
+
+
+def _site_to_place_result(
+    row: dict[str, Any],
+    *,
+    distance_km: float | None = None,
+    contact_available: bool = False,
+) -> dict[str, Any]:
     from places_service.domain.models import CONFIRMED_VALIDATION_STATUSES
 
     validation_status = row.get("geocode_validation_status")
@@ -857,7 +1019,7 @@ def _site_to_place_result(row: dict[str, Any], *, distance_km: float | None = No
         "booking_mode": row.get("booking_mode"),
         "location_precision": precision,
         "data_quality": row.get("quality_score"),
-        "contact_available": False,
+        "contact_available": contact_available,
         "lat": row.get("lat"),
         "lng": row.get("lng"),
         "confidence": row.get("geocode_confidence"),

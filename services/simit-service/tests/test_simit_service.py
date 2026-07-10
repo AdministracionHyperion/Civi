@@ -75,3 +75,96 @@ def test_simit_browser_parser_extracts_summary_and_details() -> None:
     assert parsed["tieneMultas"] is True
     assert parsed["resumen"] == {"comparendos": 2, "multas": 1, "acuerdosPago": 0, "total": 350000}
     assert parsed["detalles"] == [{"numero": "ABC", "valor": "$350.000"}]
+
+
+def test_manizales_parser_and_local_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    from simit_service.adapters.outbound.manizales_provider import parse_manizales_text
+
+    parsed = parse_manizales_text(
+        """
+        Estado de cuenta
+        Comparendos: 1
+        Multas: 1
+        Total: $180.000
+        """
+    )
+    assert parsed["tieneMultas"] is True
+    assert parsed["resumen"]["total"] == 180000
+
+
+def test_manizales_parser_detects_audiencia_row_with_zero_total() -> None:
+    from simit_service.adapters.outbound.manizales_provider import parse_manizales_text
+
+    parsed = parse_manizales_text(
+        """
+        Consulta de comparendos y multas
+        QLX871
+        D04 No detenerse ante luz roja o amarilla
+        19/05/2026
+        Audiencia
+        No aplica
+        Total multas ( 0 ) = COP 0
+        """
+    )
+    assert parsed["tieneMultas"] is True
+    assert parsed["resumen"]["total"] == 0
+    assert parsed["detalles"]
+    assert parsed["detalles"][0]["codigo"] == "D04"
+    assert parsed["detalles"][0]["placa"] == "QLX871"
+    assert "Audiencia" in str(parsed["detalles"][0].get("estado") or "")
+
+
+def test_manizales_parser_joins_split_code_and_description() -> None:
+    from simit_service.adapters.outbound.manizales_provider import parse_manizales_text
+
+    parsed = parse_manizales_text(
+        "Total multas ( 0 ) COP 0",
+        details=[
+            {
+                "col_0": "Placa o documento\nQLX871\nDetalle fotodetección",
+                "col_1": (
+                    "Infracción\nD04 \n"
+                    "No detenerse ante una luz roja o amarilla de semáf...\n"
+                    "martes 19 de mayo 2026"
+                ),
+                "col_2": "Estado\nAudiencia",
+                "col_3": "Valor multa\nNo aplica",
+            }
+        ],
+    )
+    assert parsed["tieneMultas"] is True
+    assert parsed["detalles"][0]["codigo"] == "D04"
+    assert "luz roja" in str(parsed["detalles"][0]["infraccion"]).lower()
+    assert "19 de mayo" in str(parsed["detalles"][0]["fecha"]).lower()
+    assert parsed["detalles"][0]["tipo"] == "fotodeteccion"
+
+
+def test_manizales_parser_ignores_total_multas_zero_alone() -> None:
+    from simit_service.adapters.outbound.manizales_provider import parse_manizales_text
+
+    parsed = parse_manizales_text(
+        """
+        Estado de cuenta
+        Total multas ( 0 ) = COP 0
+        No se encontraron registros
+        """
+    )
+    assert parsed["tieneMultas"] is False
+    assert parsed["detalles"] == []
+
+
+@pytest.mark.asyncio
+async def test_manizales_endpoint_local_mode(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("INTERNAL_SERVICE_TOKEN", "test-token")
+    monkeypatch.setenv("MANIZALES_PROVIDER_MODE", "local")
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        response = await client.post(
+            "/internal/simit/multas/manizales",
+            headers={"Authorization": "Bearer test-token"},
+            json={"documento": "1234567890"},
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert "tieneMultas" in body
+    assert "resumen" in body

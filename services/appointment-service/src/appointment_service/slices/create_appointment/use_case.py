@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Protocol
+from datetime import UTC, datetime
+from typing import Any, Protocol
 
 from fastapi import HTTPException
 
@@ -13,32 +14,29 @@ from appointment_service.shared.repository import repository
 from .schemas import CreateAppointmentRequest, CreateAppointmentResponse
 
 
-class ReminderClient(Protocol):
-    async def schedule_reminder(
-        self,
-        *,
-        user_key: str,
-        to: str,
-        body: str,
-        remind_at: str,
-    ) -> dict[str, object]:
+class NotificationPort(Protocol):
+    async def send_whatsapp_message(self, *, to: str, body: str) -> dict[str, object]:
         ...
 
 
-class PlacesEligibilityClient(Protocol):
+class PlacesPort(Protocol):
     async def booking_eligibility(self, site_id: str) -> dict[str, object]:
+        ...
+
+    async def get_ops_contact(self, site_id: str) -> dict[str, Any] | None:
         ...
 
 
 async def create_appointment(
     payload: CreateAppointmentRequest,
     *,
-    notification_client: ReminderClient | None = None,
+    notification_client: NotificationPort | None = None,
+    places_client: PlacesPort | None = None,
     event_publisher: EventPublisher | None = None,
-    places_client: PlacesEligibilityClient | None = None,
 ) -> CreateAppointmentResponse:
+    places = places_client or PlacesClient()
     try:
-        eligibility = await (places_client or PlacesClient()).booking_eligibility(payload.place.id)
+        eligibility = await places.booking_eligibility(payload.place.id)
     except PlacesCatalogUnavailable:
         raise HTTPException(status_code=503, detail="places_catalog_unavailable") from None
     if not eligibility.get("exists"):
@@ -54,6 +52,14 @@ async def create_appointment(
     place_address = str(eligibility.get("canonical_address") or payload.place.address)
     place_city = str(eligibility.get("canonical_city") or payload.place.city)
 
+    try:
+        ops = await places.get_ops_contact(payload.place.id)
+    except PlacesCatalogUnavailable:
+        raise HTTPException(status_code=503, detail="places_catalog_unavailable") from None
+    if ops is None or not ops.get("e164"):
+        raise HTTPException(status_code=422, detail="place_not_notifiable")
+
+    partner_to = str(ops["e164"])
     record = repository.create(
         user_key=payload.user_key,
         procedure=payload.procedure,
@@ -62,7 +68,11 @@ async def create_appointment(
         place_address=place_address,
         place_city=place_city,
         starts_at=payload.starts_at,
+        status="pending_partner",
+        client_notification_to=payload.notification_to,
+        partner_notification_to=partner_to,
     )
+
     await (event_publisher or event_publisher_from_env()).publish(
         "appointment.created",
         {
@@ -70,6 +80,7 @@ async def create_appointment(
             "user_key": record.user_key,
             "procedure": record.procedure,
             "starts_at": record.starts_at,
+            "status": record.status,
             "place": {
                 "id": record.place_id,
                 "name": record.place_name,
@@ -78,40 +89,49 @@ async def create_appointment(
         },
         producer="appointment-service",
     )
-    # Use canonical place fields for reminder text
-    reminder_payload = payload.model_copy(
-        update={"place": payload.place.model_copy(update={"name": place_name, "address": place_address, "city": place_city})}
+
+    notification = await _notify_partner(
+        record_id=record.id,
+        procedure=record.procedure,
+        starts_at=record.starts_at,
+        place_name=record.place_name,
+        place_city=record.place_city,
+        partner_to=partner_to,
+        notification_client=notification_client,
     )
-    notification = await _schedule_reminder(reminder_payload, notification_client=notification_client)
-    return CreateAppointmentResponse(appointment=appointment_to_dict(record), notification=notification)
+    if notification.get("status") == "sent":
+        notified_at = datetime.now(UTC).isoformat(timespec="seconds")
+        updated = repository.mark_partner_notified(appointment_id=record.id, notified_at=notified_at)
+        if updated is not None:
+            record = updated
+
+    return CreateAppointmentResponse(
+        appointment=appointment_to_dict(record),
+        notification=notification,
+    )
 
 
-async def _schedule_reminder(
-    payload: CreateAppointmentRequest,
+async def _notify_partner(
     *,
-    notification_client: ReminderClient | None = None,
+    record_id: int,
+    procedure: str,
+    starts_at: str,
+    place_name: str,
+    place_city: str,
+    partner_to: str,
+    notification_client: NotificationPort | None = None,
 ) -> dict[str, object]:
-    if not payload.notification_to:
-        return {"status": "skipped", "reason": "notification_to not provided"}
-
+    body = (
+        f"Nueva solicitud Civi #{record_id}\n"
+        f"Tramite: {procedure}\n"
+        f"Centro: {place_name} ({place_city})\n"
+        f"Fecha: {starts_at}\n\n"
+        f"Responde:\nCONFIRMAR {record_id}\no\nRECHAZAR {record_id}"
+    )
     client = notification_client
     try:
         client = client or NotificationClient()
-        response = await client.schedule_reminder(
-            user_key=payload.user_key,
-            to=payload.notification_to,
-            body=(
-                f"Recordatorio Civi: cita de {payload.procedure} en "
-                f"{payload.place.name}, {payload.place.city}, {payload.starts_at}."
-            ),
-            remind_at=payload.starts_at,
-        )
+        await client.send_whatsapp_message(to=partner_to, body=body)
     except Exception as exc:
-        return {"status": "failed", "reason": str(exc)}
-
-    reminder = response.get("reminder", {}) if isinstance(response, dict) else {}
-    return {
-        "status": "scheduled",
-        "reminder_id": reminder.get("id"),
-        "to_tail": reminder.get("to_tail"),
-    }
+        return {"status": "failed", "reason": str(exc), "to": partner_to}
+    return {"status": "sent", "to": partner_to, "kind": "partner_request"}

@@ -66,6 +66,25 @@ paths:
       responses:
         "200":
           description: city knowledge response
+  /internal/knowledge/search:
+    post:
+      summary: Search knowledge corpus
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                limit:
+                  type: integer
+      responses:
+        "200":
+          description: knowledge search hits
 components:
   securitySchemes:
     internalBearer:

@@ -23,21 +23,20 @@ class BrowserRuntProvider:
     def __init__(
         self,
         *,
-        captcha_api_key: str,
+        captcha_api_key: str = "",
         portal_url: str = RUNT_URL,
         timeout_seconds: float = 75.0,
         captcha_retries: int = 5,
         headless: bool = True,
         browser_executable_path: str | None = None,
     ) -> None:
-        self.captcha_api_key = captcha_api_key.strip()
+        self.captcha_api_key = (captcha_api_key or "").strip()
         self.portal_url = portal_url.strip() or RUNT_URL
         self.timeout_ms = int(timeout_seconds * 1000)
         self.captcha_retries = max(1, captcha_retries)
         self.headless = headless
         self.browser_executable_path = (browser_executable_path or "").strip() or None
-        if not self.captcha_api_key:
-            raise RuntimeError("CAPTCHA_API_KEY is required when RUNT_PROVIDER_MODE=browser")
+        self._ocr: Any = None
 
     @classmethod
     def from_env(cls) -> "BrowserRuntProvider":
@@ -97,7 +96,7 @@ class BrowserRuntProvider:
 
                 completed = False
                 for _ in range(self.captcha_retries):
-                    captcha_text = await _solve_captcha(page, self.captcha_api_key)
+                    captcha_text = await self._solve_captcha(page)
                     if len(captcha_text) < 3:
                         await _refresh_captcha(page)
                         continue
@@ -133,6 +132,20 @@ class BrowserRuntProvider:
                 )
             finally:
                 await browser.close()
+
+    async def _solve_captcha(self, page: Any) -> str:
+        captcha = page.locator(CAPTCHA_SELECTOR).first
+        image_bytes = await captcha.screenshot(timeout=10000)
+
+        if self.captcha_api_key:
+            try:
+                result = await _anti_captcha_solve(image_bytes, self.captcha_api_key)
+                if len(result) >= 3:
+                    return result
+            except Exception:
+                pass
+
+        return await _ocr_captcha_solve(image_bytes, self)
 
 
 def extract_info_general(text: str) -> dict[str, Any]:
@@ -220,9 +233,7 @@ async def _set_input_value(page: Any, selector: str, value: str) -> None:
     )
 
 
-async def _solve_captcha(page: Any, api_key: str) -> str:
-    captcha = page.locator(CAPTCHA_SELECTOR).first
-    image_bytes = await captcha.screenshot(timeout=10000)
+async def _anti_captcha_solve(image_bytes: bytes, api_key: str) -> str:
     encoded = base64.b64encode(image_bytes).decode("ascii")
     async with httpx.AsyncClient(timeout=45.0) as client:
         task_response = await client.post(
@@ -260,6 +271,18 @@ async def _solve_captcha(page: Any, api_key: str) -> str:
             if result_data.get("status") == "ready":
                 return re.sub(r"[^A-Za-z0-9]", "", str((result_data.get("solution") or {}).get("text") or ""))
     raise RuntimeError("Anti-Captcha timed out")
+
+
+async def _ocr_captcha_solve(image_bytes: bytes, provider: BrowserRuntProvider) -> str:
+    try:
+        if provider._ocr is None:
+            from ddddocr import DdddOcr
+
+            provider._ocr = DdddOcr(show_ad=False)
+    except ImportError:
+        raise RuntimeError("ddddocr is required for OCR captcha fallback")
+    result = provider._ocr.classification(image_bytes) or ""
+    return re.sub(r"[^A-Za-z0-9]", "", str(result))
 
 
 async def _refresh_captcha(page: Any) -> None:

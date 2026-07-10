@@ -185,8 +185,29 @@ def remove_preservation(
     }
 
 
+def set_partner(
+    *,
+    database_url: str,
+    site_id: str,
+    ops_whatsapp: str,
+) -> dict[str, object]:
+    repo = CatalogSqlRepository(database_url, create_schema=False)
+    migrate_schema(repo.engine)
+    try:
+        result = repo.set_partner(site_id=site_id, ops_whatsapp=ops_whatsapp)
+    except LookupError as exc:
+        raise SystemExit(str(exc)) from exc
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    return {
+        "action": "set_partner",
+        **result,
+        "database_url": _sanitize_database_url(database_url),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Manage manually_preserved site presence")
+    parser = argparse.ArgumentParser(description="Manage site presence and partner booking")
     sub = parser.add_subparsers(dest="command", required=True)
 
     def add_common(p: argparse.ArgumentParser) -> None:
@@ -202,11 +223,30 @@ def main(argv: list[str] | None = None) -> int:
     )
     add_common(remove_parser)
 
+    partner_parser = sub.add_parser(
+        "set-partner",
+        help="Mark site as Civi affiliate and set ops WhatsApp for booking notifications",
+    )
+    partner_parser.add_argument("--site-id", required=True)
+    partner_parser.add_argument("--ops-whatsapp", required=True)
+    partner_parser.add_argument("--database-url", default=None)
+
     args = parser.parse_args(argv)
+    database_url = _resolve_database_url(args.database_url)
+
+    if args.command == "set-partner":
+        site_id = _require_text(args.site_id, field="site-id")
+        result = set_partner(
+            database_url=database_url,
+            site_id=site_id,
+            ops_whatsapp=str(args.ops_whatsapp),
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
+
     site_id = _require_text(args.site_id, field="site-id")
     actor = _require_text(args.actor, field="actor")
     reason = _require_text(args.reason, field="reason")
-    database_url = _resolve_database_url(args.database_url)
 
     if args.command == "preserve":
         result = preserve_site(

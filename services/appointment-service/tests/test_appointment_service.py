@@ -1,32 +1,54 @@
 import pytest
 from civi_common.events import InMemoryEventPublisher
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from appointment_service.main import app
 from appointment_service.adapters.outbound.sql_repository import SqlAppointmentRepository
 from appointment_service.slices.cancel_appointment.use_case import cancel_appointment
+from appointment_service.slices.confirm_appointment.use_case import confirm_appointment
 from appointment_service.slices.create_appointment.schemas import (
     AppointmentPlace,
     CreateAppointmentRequest,
 )
 from appointment_service.slices.create_appointment.use_case import create_appointment
+import appointment_service.slices.create_appointment.use_case as create_use_case
 from appointment_service.slices.list_appointments.use_case import list_appointments
+from appointment_service.slices.reject_appointment.use_case import reject_appointment
+from appointment_service.shared.repository import InMemoryAppointmentRepository
 
 
 class FakeNotificationClient:
     def __init__(self) -> None:
-        self.calls: list[dict[str, object]] = []
+        self.whatsapp: list[dict[str, object]] = []
+        self.reminders: list[dict[str, object]] = []
+
+    async def send_whatsapp_message(self, *, to: str, body: str) -> dict[str, object]:
+        self.whatsapp.append({"to": to, "body": body})
+        return {"success": True, "message": {"id": 1}}
 
     async def schedule_reminder(self, **payload: object) -> dict[str, object]:
-        self.calls.append(payload)
-        return {"reminder": {"id": 42, "to_tail": "****2233"}}
+        self.reminders.append(payload)
+        return {"reminder": {"id": 42 + len(self.reminders), "to_tail": "****2233"}}
 
 
-class FakePlacesEligibilityClient:
-    def __init__(self, *, bookable: bool = True, exists: bool = True) -> None:
+class FakePlacesClient:
+    def __init__(
+        self,
+        *,
+        e164: str | None = "573009998877",
+        bookable: bool = True,
+        exists: bool = True,
+    ) -> None:
+        self.e164 = e164
         self.bookable = bookable
         self.exists = exists
         self.calls: list[str] = []
+
+    async def get_ops_contact(self, site_id: str) -> dict[str, object] | None:
+        if self.e164 is None:
+            return None
+        return {"site_id": site_id, "name": "CDA Centro", "e164": self.e164}
 
     async def booking_eligibility(self, site_id: str) -> dict[str, object]:
         self.calls.append(site_id)
@@ -58,6 +80,33 @@ class FakePlacesEligibilityClient:
         }
 
 
+@pytest.fixture(autouse=True)
+def _fresh_repo(monkeypatch: pytest.MonkeyPatch):
+    repo = InMemoryAppointmentRepository()
+    monkeypatch.setattr(create_use_case, "repository", repo)
+    monkeypatch.setattr(
+        "appointment_service.slices.confirm_appointment.use_case.repository",
+        repo,
+    )
+    monkeypatch.setattr(
+        "appointment_service.slices.reject_appointment.use_case.repository",
+        repo,
+    )
+    monkeypatch.setattr(
+        "appointment_service.slices.cancel_appointment.use_case.repository",
+        repo,
+    )
+    monkeypatch.setattr(
+        "appointment_service.slices.list_appointments.use_case.repository",
+        repo,
+    )
+    return repo
+
+
+# Backward-compatible alias used by eligibility-focused tests.
+FakePlacesEligibilityClient = FakePlacesClient
+
+
 @pytest.mark.asyncio
 async def test_create_list_cancel_appointment() -> None:
     created = await create_appointment(
@@ -71,11 +120,14 @@ async def test_create_list_cancel_appointment() -> None:
                 address="Bucaramanga, Santander",
                 city="Bucaramanga",
             ),
+            notification_to="573001112233",
         ),
-        places_client=FakePlacesEligibilityClient(),
+        places_client=FakePlacesClient(),
+        notification_client=FakeNotificationClient(),
     )
 
     appointment_id = int(created.appointment["id"])
+    assert created.appointment["status"] == "pending_partner"
     listed = await list_appointments(user_key="user-1")
     assert len(listed.appointments) == 1
 
@@ -87,7 +139,7 @@ async def test_create_list_cancel_appointment() -> None:
 
 
 @pytest.mark.asyncio
-async def test_create_appointment_schedules_notification_when_destination_exists() -> None:
+async def test_create_notifies_partner_without_client_reminder() -> None:
     fake_client = FakeNotificationClient()
     publisher = InMemoryEventPublisher()
 
@@ -105,16 +157,102 @@ async def test_create_appointment_schedules_notification_when_destination_exists
             ),
         ),
         notification_client=fake_client,
+        places_client=FakePlacesClient(),
         event_publisher=publisher,
-        places_client=FakePlacesEligibilityClient(),
     )
 
-    assert created.notification == {"status": "scheduled", "reminder_id": 42, "to_tail": "****2233"}
-    assert fake_client.calls[0]["to"] == "573001112233"
-    assert fake_client.calls[0]["remind_at"] == "2026-07-11T10:00"
+    assert created.appointment["status"] == "pending_partner"
+    assert created.notification == {
+        "status": "sent",
+        "to": "573009998877",
+        "kind": "partner_request",
+    }
+    assert len(fake_client.whatsapp) == 1
+    assert "CONFIRMAR" in str(fake_client.whatsapp[0]["body"])
+    assert fake_client.reminders == []
     assert publisher.events[0]["event_type"] == "appointment.created"
-    assert publisher.events[0]["producer"] == "appointment-service"
-    assert publisher.events[0]["procedure"] == "soat"
+
+
+@pytest.mark.asyncio
+async def test_create_without_ops_whatsapp_returns_422() -> None:
+    with pytest.raises(HTTPException) as exc:
+        await create_appointment(
+            CreateAppointmentRequest(
+                user_key="user-3",
+                procedure="tecnomecanica",
+                starts_at="2026-07-11T10:00",
+                place=AppointmentPlace(
+                    id="ghost",
+                    name="Ghost",
+                    address="X",
+                    city="Bucaramanga",
+                ),
+            ),
+            places_client=FakePlacesClient(e164=None),
+            notification_client=FakeNotificationClient(),
+        )
+    assert exc.value.status_code == 422
+    assert exc.value.detail == "place_not_notifiable"
+
+
+@pytest.mark.asyncio
+async def test_confirm_schedules_dual_reminders_and_notifies_client() -> None:
+    fake_client = FakeNotificationClient()
+    created = await create_appointment(
+        CreateAppointmentRequest(
+            user_key="user-4",
+            procedure="tecnomecanica",
+            starts_at="2026-07-12T11:00",
+            notification_to="573001112233",
+            place=AppointmentPlace(
+                id="bga-cda-centro-01",
+                name="CDA Centro Bucaramanga",
+                address="Bucaramanga, Santander",
+                city="Bucaramanga",
+            ),
+        ),
+        places_client=FakePlacesClient(),
+        notification_client=fake_client,
+    )
+    appointment_id = int(created.appointment["id"])
+    confirmed = await confirm_appointment(
+        appointment_id=appointment_id,
+        notification_client=fake_client,
+        event_publisher=InMemoryEventPublisher(),
+    )
+    assert confirmed.success
+    assert confirmed.appointment["status"] == "confirmed"
+    assert any("confirmada" in str(m["body"]).lower() for m in fake_client.whatsapp)
+    assert len(fake_client.reminders) == 2
+
+
+@pytest.mark.asyncio
+async def test_reject_notifies_client() -> None:
+    fake_client = FakeNotificationClient()
+    created = await create_appointment(
+        CreateAppointmentRequest(
+            user_key="user-5",
+            procedure="tecnomecanica",
+            starts_at="2026-07-12T11:00",
+            notification_to="573001112233",
+            place=AppointmentPlace(
+                id="bga-cda-centro-01",
+                name="CDA Centro Bucaramanga",
+                address="Bucaramanga, Santander",
+                city="Bucaramanga",
+            ),
+        ),
+        places_client=FakePlacesClient(),
+        notification_client=fake_client,
+    )
+    rejected = await reject_appointment(
+        appointment_id=int(created.appointment["id"]),
+        notification_client=fake_client,
+        event_publisher=InMemoryEventPublisher(),
+    )
+    assert rejected.success
+    assert rejected.appointment["status"] == "rejected"
+    assert any("no pudo confirmar" in str(m["body"]).lower() for m in fake_client.whatsapp)
 
 
 @pytest.mark.asyncio
@@ -131,8 +269,10 @@ async def test_cancel_appointment_publishes_cancelled_event() -> None:
                 address="Bucaramanga, Santander",
                 city="Bucaramanga",
             ),
+            notification_to="573001112233",
         ),
-        places_client=FakePlacesEligibilityClient(),
+        places_client=FakePlacesClient(),
+        notification_client=FakeNotificationClient(),
     )
 
     cancelled = await cancel_appointment(
@@ -158,9 +298,15 @@ def test_sql_appointment_repository_persists_and_cancels() -> None:
         place_name="CDA Centro Bucaramanga",
         place_address="Bucaramanga, Santander",
         place_city="Bucaramanga",
+        partner_notification_to="573009998877",
+        client_notification_to="573001112233",
     )
 
+    assert record.status == "pending_partner"
     assert repo.list_for_user(user_key="user-sql")[0].id == record.id
+    confirmed = repo.confirm(appointment_id=record.id)
+    assert confirmed is not None
+    assert confirmed.status == "confirmed"
     cancelled = repo.cancel(user_key="user-sql", appointment_id=record.id)
     assert cancelled is not None
     assert cancelled.status == "cancelled"
@@ -235,6 +381,9 @@ async def test_create_appointment_returns_503_when_places_catalog_unavailable() 
 
     class UnavailablePlacesClient:
         async def booking_eligibility(self, site_id: str) -> dict[str, object]:
+            raise PlacesCatalogUnavailable("places_catalog_timeout")
+
+        async def get_ops_contact(self, site_id: str) -> dict[str, object] | None:
             raise PlacesCatalogUnavailable("places_catalog_timeout")
 
     with pytest.raises(HTTPException) as exc:

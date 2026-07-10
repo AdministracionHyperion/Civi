@@ -114,6 +114,34 @@ paths:
       responses:
         "200":
           description: cancellation result
+  /internal/appointments/{appointment_id}/confirm:
+    post:
+      summary: Confirm appointment (partner ops)
+      security:
+        - internalBearer: []
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: appointment confirmed
+  /internal/appointments/{appointment_id}/reject:
+    post:
+      summary: Reject appointment (partner ops)
+      security:
+        - internalBearer: []
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: appointment rejected
 components:
   schemas:
     ErrorDetail:

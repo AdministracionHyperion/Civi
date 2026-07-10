@@ -122,8 +122,6 @@ def _format_soat_response(data: dict[str, Any], *, quote: dict[str, Any] | None)
 
     if soat_needs_quote(data):
         parts.append("Quieres que te ayude con la renovacion del SOAT?")
-    else:
-        parts.append("Te ayudo con algo mas?")
     return " ".join(parts)
 
 
@@ -177,8 +175,6 @@ def _format_tecno_response(data: dict[str, Any], *, quote: dict[str, Any] | None
 
     if tecno_needs_quote(data):
         parts.append("Quieres que te ayude a agendar la cita?")
-    else:
-        parts.append("Te ayudo con algo mas?")
     return " ".join(parts)
 
 
@@ -206,14 +202,92 @@ def soat_needs_quote(data: dict[str, Any]) -> bool:
 
 
 def format_multas_response(data: dict[str, Any]) -> str:
-    if not data.get("tieneMultas"):
-        return "No aparecen multas activas en la consulta SIMIT para ese documento."
+    parts: list[str] = []
 
-    resumen = data.get("resumen") or {}
-    total = resumen.get("total") or "sin total claro"
-    comparendos = resumen.get("comparendos", 0)
-    multas = resumen.get("multas", 0)
-    return f"En SIMIT aparecen multas/comparendos: total *${total}* ({comparendos} comparendos, {multas} multas)."
+    simit = data.get("simit") if isinstance(data.get("simit"), dict) else data
+    if isinstance(simit, dict):
+        if not simit.get("tieneMultas"):
+            parts.append("En *SIMIT* no aparecen multas activas para ese documento.")
+        else:
+            resumen = simit.get("resumen") or {}
+            total = resumen.get("total") or "sin total claro"
+            comparendos = resumen.get("comparendos", 0)
+            multas = resumen.get("multas", 0)
+            parts.append(
+                f"En *SIMIT* aparecen multas/comparendos: total *${total}* "
+                f"({comparendos} comparendos, {multas} multas)."
+            )
+
+    local = data.get("local") if isinstance(data.get("local"), dict) else None
+    if local:
+        city = str(local.get("city") or "").strip() or "esa ciudad"
+        if local.get("consulted"):
+            if local.get("tieneMultas"):
+                resumen = local.get("resumen") or {}
+                total = resumen.get("total")
+                detail_bits = _format_local_multa_details(local.get("detalles"))
+                if isinstance(total, int) and total > 0:
+                    parts.append(
+                        f"En *{city}* (portal local) hay registros: total *${total}*."
+                    )
+                else:
+                    parts.append(
+                        f"En *{city}* (portal local) hay registros "
+                        f"(pueden estar en audiencia o sin valor liquidado)."
+                    )
+                if detail_bits:
+                    parts.append(detail_bits)
+            else:
+                parts.append(f"En el portal de *{city}* no aparecen pendientes adicionales.")
+        portal_url = str(local.get("portalUrl") or "").strip()
+        if portal_url:
+            parts.append(f"Por si acaso tambien puedes revisarla aqui: {portal_url}")
+
+    if not parts:
+        return "No pude armar un resumen claro de multas. Verifica la cedula y la ciudad."
+    return " ".join(parts)
+
+
+def _format_local_multa_details(detalles: object) -> str:
+    if not isinstance(detalles, list) or not detalles:
+        return ""
+    snippets: list[str] = []
+    for item in detalles[:3]:
+        if not isinstance(item, dict):
+            continue
+        codigo = str(item.get("codigo") or "").strip()
+        placa = str(item.get("placa") or "").strip()
+        estado = str(item.get("estado") or "").strip()
+        infraccion = str(item.get("infraccion") or item.get("Infracción") or "").strip()
+        fecha = str(item.get("fecha") or "").strip()
+        tipo = str(item.get("tipo") or "").strip().lower()
+        valor = str(item.get("valor") or "").strip()
+
+        bits: list[str] = []
+        if infraccion and codigo and codigo.upper() in infraccion.upper():
+            bits.append(infraccion)
+        elif codigo and infraccion:
+            bits.append(f"{codigo} {infraccion}")
+        elif codigo:
+            bits.append(codigo)
+        elif infraccion:
+            bits.append(infraccion[:90])
+
+        if placa:
+            bits.append(f"placa {placa}")
+        if tipo in {"fotodeteccion", "fotodetección", "fotomulta"}:
+            bits.append("fotodeteccion")
+        if fecha:
+            bits.append(fecha)
+        if estado:
+            bits.append(f"estado {estado}")
+        if valor:
+            bits.append(f"valor {valor}")
+        if bits:
+            snippets.append(", ".join(bits))
+    if not snippets:
+        return ""
+    return "Detalle: " + "; ".join(snippets) + "."
 
 
 def format_runt_profile_response(data: dict[str, Any]) -> str:
@@ -297,7 +371,7 @@ def format_place_response(place: dict[str, object]) -> str:
         lines.append(f"Ciudad: {ciudad}")
     if distancia:
         lines.append(f"Distancia: {distancia}")
-    lines.append("Te sirve o buscamos otra opcion?")
+    lines.append("Te sirve o buscamos otra opcion afiliada?")
     return "\n".join(lines)
 
 
@@ -338,7 +412,11 @@ def format_place_options_response(places: list[dict[str, object]], *, starts_at:
             parts.append(f"   Distancia: {distancia}")
         options.append("\n".join(parts))
 
-    header = f"Tengo estas opciones de *{tipo_hint}*:" if tipo_hint else "Tengo estas opciones:"
+    header = (
+        f"Estos son centros afiliados Civi de *{tipo_hint}* cerca de ti:"
+        if tipo_hint
+        else "Estos son centros afiliados Civi cerca de ti:"
+    )
     suffix = (
         f"Ya tengo la fecha *{starts_at}*. Dime el numero del centro que prefieres."
         if starts_at
@@ -356,10 +434,36 @@ def format_pending_place_date_request(place: dict[str, object]) -> str:
 
 def format_appointment_response(appointment: dict[str, object]) -> str:
     place = appointment.get("place") or {}
+    status = str(appointment.get("status") or "")
+    if status == "pending_partner":
+        return (
+            f"Listo, solicite la cita *#{appointment.get('id')}* para *{appointment.get('starts_at')}* "
+            f"en *{place.get('name')}*, {place.get('address')}. "
+            "El centro afiliado debe confirmarla; te aviso cuando respondan."
+        )
     return (
-        f"Listo, cita creada para *{appointment.get('starts_at')}* en "
+        f"Listo, cita *#{appointment.get('id')}* confirmada para *{appointment.get('starts_at')}* en "
         f"*{place.get('name')}*, {place.get('address')}."
     )
+
+
+def format_no_affiliate_coverage() -> str:
+    return (
+        "Aun no tengo afiliados Civi en tu zona para agendar. "
+        "Puedo orientarte sobre el tramite o pasarte con un asesor."
+    )
+
+
+def format_partner_decision_response(*, action: str, appointment_id: int, success: bool, error: str | None = None) -> str:
+    if success:
+        if action == "confirmar":
+            return f"Cita {appointment_id} confirmada. Ya avise al cliente."
+        return f"Cita {appointment_id} rechazada. Ya avise al cliente."
+    if error == "not_found":
+        return f"No encontre la cita {appointment_id}."
+    if error == "not_pending":
+        return f"La cita {appointment_id} ya no esta pendiente de confirmacion."
+    return f"No pude procesar la cita {appointment_id}. Intentalo de nuevo."
 
 
 def format_appointments_list(data: dict[str, object]) -> str:
@@ -443,3 +547,37 @@ def format_payment_intent_response(data: dict[str, object]) -> str:
 
 def format_handoff_response(data: dict[str, object]) -> str:
     return str(data.get("message") or "Te paso con un asesor.")
+
+
+def format_infraccion_detail_response(data: dict[str, object]) -> str:
+    if not data.get("success"):
+        return str(data.get("message") or "No encontre esa infraccion en la base de datos.")
+
+    codigo = str(data.get("codigo") or "")
+    descripcion = str(data.get("descripcion") or "")
+    categoria = str(data.get("categoria") or "")
+    monto = data.get("monto_cop_2026")
+    smdlv = data.get("smdlv")
+    articulo = str(data.get("articulo") or "")
+    admite_descuento = bool(data.get("admite_descuento_curso"))
+    consejo = str(data.get("consejo") or "")
+
+    parts = [
+        f"Infraccion *{codigo}* (categoria {categoria}): {descripcion}.",
+    ]
+    if monto:
+        smdlv_text = f" ({smdlv} SMDLV)" if smdlv else ""
+        parts.append(f"Valor aproximado 2026: *${monto:,.0f} COP*{smdlv_text}.")
+    if articulo:
+        parts.append(f"Base legal: {articulo}.")
+    if admite_descuento:
+        parts.append(
+            "Esta infraccion *SI admite descuento* con curso CIA (50% en primeros 5 dias habiles "
+            "si fue en via, 11 dias habiles si fue fotomulta)."
+        )
+    else:
+        parts.append("Esta infraccion *NO admite descuento* por curso CIA.")
+    if consejo:
+        parts.append(consejo)
+
+    return " ".join(parts)

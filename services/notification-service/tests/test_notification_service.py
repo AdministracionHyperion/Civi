@@ -78,7 +78,8 @@ async def test_dispatch_outbox_default_provider_is_disabled() -> None:
 
     assert dispatched.dispatched
     assert dispatched.dispatched[-1]["dispatch_status"] == "disabled_until_provider_configured"
-    assert dispatched.dispatched[-1]["status"] == "queued"
+    # claim_queued_batch marks rows as sending before provider call; disabled provider does not mark_sent
+    assert dispatched.dispatched[-1]["status"] == "sending"
 
 
 def test_whatsapp_provider_mode_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:

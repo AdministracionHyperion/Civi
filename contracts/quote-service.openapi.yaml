@@ -57,6 +57,25 @@ paths:
       responses:
         "200":
           description: reference quote
+  /internal/quotes/infraccion/detail:
+    post:
+      summary: Get CNT infraction detail
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codigo:
+                  type: string
+                consulta:
+                  type: string
+      responses:
+        "200":
+          description: infraction detail
 components:
   securitySchemes:
     internalBearer:

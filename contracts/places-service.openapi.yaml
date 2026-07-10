@@ -116,6 +116,42 @@ paths:
       responses:
         "200":
           description: eligibility
+  /internal/places/{site_id}/ops-contact:
+    get:
+      summary: Get partner ops WhatsApp contact for a site
+      security:
+        - internalBearer: []
+      parameters:
+        - name: site_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ops contact
+        "404":
+          description: ops_contact_not_found
+  /internal/places/ops-contact/lookup:
+    post:
+      summary: Lookup site by ops WhatsApp E.164
+      security:
+        - internalBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [e164]
+              properties:
+                e164:
+                  type: string
+      responses:
+        "200":
+          description: ops contact
+        "404":
+          description: ops_contact_not_found
 components:
   schemas:
     CatalogSummaryResponse:

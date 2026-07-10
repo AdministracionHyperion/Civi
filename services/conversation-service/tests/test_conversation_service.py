@@ -228,7 +228,7 @@ async def test_run_turn_accepts_consent_without_calling_agent() -> None:
     assert agent.calls == 0
     assert classifier.calls == 0
     assert "consentimiento" in response.text
-    assert "SOAT" in response.text
+    assert "asistente integral de tránsito" in response.text
     assert consent is not None
     assert consent.status == "accepted"
     history = repo.list_for_user(user_key="user-consent-accepted")

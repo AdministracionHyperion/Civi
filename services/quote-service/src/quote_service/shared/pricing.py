@@ -160,16 +160,16 @@ def quote_tecnomecanica(*, category: str) -> dict[str, object]:
 
 
 CATEGORY_AMOUNT_COP = {
-    "A": 168_900,
-    "B": 337_800,
-    "C": 633_200,
-    "D": 1_266_100,
-    "E": 1_899_300,
-    "F": 42_225,
-    "H": 211_125,
+    "A": 233_456,
+    "B": 466_912,
+    "C": 875_460,
+    "D": 1_750_920,
+    "E": 2_626_380,
+    "F": 58_364,
+    "H": 291_820,
 }
 
-SMDLV_BY_YEAR = {2026: 42_225}
+SMDLV_BY_YEAR = {2026: 58_364}
 CATEGORY_SMDLV = {"A": 4, "B": 8, "C": 15, "D": 30, "E": 45, "F": 1, "H": 5}
 
 
@@ -398,18 +398,33 @@ def _search_infracciones(query: str, *, limit: int = 5) -> list[InfraccionMatch]
 
 def _score_infraccion(query: str, spec: InfraccionSpec) -> float:
     desc = _normalize_text(spec.descripcion)
+    score = 0.0
     if query in desc:
-        return 0.95
-    best = 0.0
-    for alias in spec.aliases:
-        alias_norm = _normalize_text(alias)
-        if not alias_norm:
-            continue
-        if query == alias_norm or query in alias_norm or alias_norm in query:
-            return 0.92
-        best = max(best, _token_overlap(query, alias_norm))
-    best = max(best, _token_overlap(query, desc) * 0.85)
-    return best
+        score = 0.95
+    else:
+        best = 0.0
+        for alias in spec.aliases:
+            alias_norm = _normalize_text(alias)
+            if not alias_norm:
+                continue
+            if query == alias_norm or query in alias_norm or alias_norm in query:
+                score = 0.92
+                break
+            best = max(best, _token_overlap(query, alias_norm))
+        else:
+            score = max(best, _token_overlap(query, desc) * 0.85)
+
+    # Prefer C14 over A08 for vehicle/moto/pico-y-placa contexts.
+    vehicle_context = any(
+        term in query
+        for term in ("moto", "carro", "auto", "vehiculo", "pico", "placa", "carrera", "avenida")
+    )
+    pedestrian_context = any(term in query for term in ("peaton", "ciclista", "bicicleta", "bici"))
+    if spec.codigo == "C14" and vehicle_context and not pedestrian_context:
+        score += 0.08
+    if spec.codigo == "A08" and vehicle_context and not pedestrian_context:
+        score -= 0.08
+    return score
 
 
 def _token_overlap(left: str, right: str) -> float:

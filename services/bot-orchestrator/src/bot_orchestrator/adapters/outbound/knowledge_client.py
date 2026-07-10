@@ -36,3 +36,22 @@ class KnowledgeClient:
             )
             response.raise_for_status()
             return response.json()
+
+    async def search(
+        self,
+        *,
+        query: str,
+        domain: str | None = None,
+        limit: int = 5,
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {"query": query, "limit": limit}
+        if domain:
+            payload["domain"] = domain
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                f"{self.base_url}/internal/knowledge/search",
+                json=payload,
+                headers=self._headers,
+            )
+            response.raise_for_status()
+            return response.json()

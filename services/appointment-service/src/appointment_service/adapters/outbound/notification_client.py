@@ -38,3 +38,13 @@ class NotificationClient:
             )
             response.raise_for_status()
             return response.json()
+
+    async def send_whatsapp_message(self, *, to: str, body: str) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(
+                f"{self.base_url}/internal/notifications/whatsapp",
+                json={"to": to, "body": body},
+                headers=self._headers,
+            )
+            response.raise_for_status()
+            return response.json()

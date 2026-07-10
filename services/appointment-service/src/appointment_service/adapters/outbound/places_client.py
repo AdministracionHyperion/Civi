@@ -4,7 +4,6 @@ import os
 from typing import Any
 
 import httpx
-from fastapi import HTTPException
 
 
 class PlacesCatalogUnavailable(Exception):
@@ -42,6 +41,33 @@ class PlacesClient:
                 "eligible_for_civi_booking": False,
                 "eligibility_reason": "place_not_found",
             }
+        try:
+            response.raise_for_status()
+            payload = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            raise PlacesCatalogUnavailable("places_catalog_invalid_response") from exc
+        if not isinstance(payload, dict):
+            raise PlacesCatalogUnavailable("places_catalog_invalid_response")
+        return payload
+
+    async def get_ops_contact(self, site_id: str) -> dict[str, Any] | None:
+        try:
+            async with httpx.AsyncClient(timeout=20.0) as client:
+                response = await client.get(
+                    f"{self.base_url}/internal/places/{site_id}/ops-contact",
+                    headers=self._headers(),
+                )
+        except httpx.TimeoutException as exc:
+            raise PlacesCatalogUnavailable("places_catalog_timeout") from exc
+        except httpx.TransportError as exc:
+            raise PlacesCatalogUnavailable("places_catalog_unreachable") from exc
+        except httpx.HTTPError as exc:
+            raise PlacesCatalogUnavailable("places_catalog_unavailable") from exc
+
+        if response.status_code >= 500:
+            raise PlacesCatalogUnavailable("places_catalog_unavailable")
+        if response.status_code == 404:
+            return None
         try:
             response.raise_for_status()
             payload = response.json()

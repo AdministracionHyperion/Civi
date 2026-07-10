@@ -70,6 +70,7 @@ def _to_result(place: Place, *, distance_km: float | None = None) -> PlaceResult
         is_partner=getattr(place, "is_partner", None),
         is_bookable=getattr(place, "is_bookable", False),
         booking_mode=getattr(place, "booking_mode", "information_only"),
+        contact_available=bool(getattr(place, "phone", None)),
     )
 
 
