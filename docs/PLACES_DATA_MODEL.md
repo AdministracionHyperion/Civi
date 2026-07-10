@@ -27,6 +27,37 @@ Imported official rows start as `is_partner=false`, `is_bookable=false`, `bookin
 
 `lat` / `lng` are nullable. Municipality search works without coordinates. GPS ranking only uses valid Colombia coordinates.
 
+## Presence (`source_presence_status`)
+
+| Value | Meaning |
+| --- | --- |
+| `present` | In latest official snapshot |
+| `missing` | Absent from latest snapshot (search/booking suppressed unless overridden) |
+| `manually_preserved` | Ops override: remain searchable despite snapshot absence |
+
+Effective search/eligibility uses shared presence rules (present or manually preserved). Preserve does **not** flip `is_partner` / `is_bookable`.
+
+### Presence events (`places_presence_events`)
+
+Audit rows for presence transitions. Notable columns:
+
+- `event_type`: e.g. `first_seen`, `missing`, `reappeared`, `manually_preserved`, `manual_preservation_removed`
+- `source`: origin of the change (`import`, `manual_operation`, …)
+- `actor` / `reason`: required for manual CLI operations
+- `previous_status` / `new_status`
+
+## Geocode attempts (`places_geocode_attempts`)
+
+One row per provider/manual attempt. Key columns:
+
+- `provider`, `status`, `attempt_number`
+- `http_status`, `error_code`, `error_message` (HTTP geocoder)
+- `lat`, `lng`, `confidence`, `precision`
+- `query`, `response_payload`, `attempted_at`, `completed_at`
+- optional `import_run_id` / `provider_record_id`
+
+Manual CSV import also writes attempt rows with `status=manual`.
+
 ## Public API shape (bot)
 
 `POST /internal/places/nearest` still returns `id`, `name`, `address`, `city`, `department`, `kind`, `distance_km`, plus optional bookable/status fields.
