@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-07-10T20:57:18Z",
+  "scope": "manizales_only",
+  "santander_unchanged": true,
+  "database": "civi_geocode_validation_tmp (ephemeral localhost)",
+  "catalog_sites": 4046,
+  "manizales_source_place_id_resolved": 44,
+  "dry_run": {
+    "rows": 44,
+    "valid_rows": 44,
+    "unknown_site_ids": 0,
+    "duplicate_source_place_id": 0,
+    "kind_mismatch": 0,
+    "municipality_mismatch": 0,
+    "department_mismatch": 0,
+    "manual_protected": 0,
+    "partner_protected": 0,
+    "outside_bbox": 0,
+    "count_mismatch": false,
+    "atomic_aborted": false,
+    "applied_rows": 0,
+    "by_validation_status": {
+      "confirmed_address": 18,
+      "confirmed_business": 19,
+      "approximate_not_confirmed": 7
+    },
+    "by_kind": {
+      "CDA": 14,
+      "CEA": 15,
+      "CIA": 8,
+      "CRC": 7
+    },
+    "resolution": {
+      "source_place_id": 44,
+      "source_records_fallback": 0
+    }
+  },
+  "notes": [
+    "No --apply executed.",
+    "No production database used.",
+    "Santander CSV/scopes untouched.",
+    "geocode_source_url uses objectIds + full ArcGIS field names."
+  ]
+}
