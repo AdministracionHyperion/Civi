@@ -37,11 +37,14 @@ class VehicleClient:
             response.raise_for_status()
             return response.json()
 
-    async def consult_multas(self, *, documento: str) -> dict[str, Any]:
+    async def consult_multas(self, *, documento: str, ciudad: str | None = None) -> dict[str, Any]:
+        payload: dict[str, Any] = {"documento": documento}
+        if ciudad:
+            payload["ciudad"] = ciudad
         async with httpx.AsyncClient(timeout=100.0) as client:
             response = await client.post(
                 f"{self.base_url}/internal/vehicles/multas",
-                json={"documento": documento},
+                json=payload,
                 headers=self._headers,
             )
             response.raise_for_status()

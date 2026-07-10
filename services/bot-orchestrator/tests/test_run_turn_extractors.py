@@ -30,6 +30,7 @@ from bot_orchestrator.slices.run_turn.extractors import (
     wants_cancel_appointment,
     wants_city_coverage,
     wants_alternative_places,
+    wants_general_traffic_question,
     wants_handoff,
     wants_knowledge,
     wants_multas,
@@ -37,6 +38,7 @@ from bot_orchestrator.slices.run_turn.extractors import (
     wants_quote,
     wants_reminder,
     wants_runt_profile,
+    wants_situational_advice,
     wants_vigencia,
 )
 from bot_orchestrator.slices.run_turn.formatters import (
@@ -163,6 +165,37 @@ class FakeVehicleClient:
                 "licencias": [{"categoria": "B1", "estado": "VIGENTE"}],
             },
             "checkedAt": "2026-07-07T00:00:00+00:00",
+        }
+
+    async def consult_multas(self, *, documento: str, ciudad: str | None = None) -> dict[str, object]:
+        return {
+            "success": True,
+            "tieneMultas": False,
+            "documentoTail": documento[-4:],
+            "resumen": {"comparendos": 0, "multas": 0, "total": 0},
+            "simit": {
+                "tieneMultas": False,
+                "resumen": {"comparendos": 0, "multas": 0, "total": 0},
+                "mensaje": "Sin pendientes",
+                "detalles": [],
+                "documentoTail": documento[-4:],
+            },
+            "local": {
+                "city": ciudad,
+                "source": "manizales" if ciudad == "Manizales" else None,
+                "consulted": ciudad == "Manizales",
+                "tieneMultas": False if ciudad == "Manizales" else None,
+                "portalUrl": (
+                    "https://www.movilidadmanizales.com.co/portal-servicios/"
+                    if ciudad == "Manizales"
+                    else "https://webfenix.movilidadbogota.gov.co/#/consulta-pagos"
+                    if ciudad == "Bogota"
+                    else None
+                ),
+                "resumen": None,
+                "mensaje": None,
+                "detalles": [],
+            },
         }
 
 
@@ -348,6 +381,14 @@ def test_knowledge_intent_extraction() -> None:
     assert not wants_knowledge("quiero consultar mis multas en simit cedula 123456789")
 
 
+def test_general_traffic_and_situational_intents() -> None:
+    assert wants_situational_advice("que pasa si me paro en rojo")
+    assert wants_general_traffic_question("puedo circular con soat vencido en colombia")
+    assert wants_general_traffic_question("que hago si tengo un accidente de transito")
+    assert not wants_general_traffic_question("quiero pagar mi servicio")
+    assert not wants_general_traffic_question("cuanto cuesta el soat")
+
+
 def test_place_selection_extraction() -> None:
     assert extract_place_selection("la segunda") == 2
     assert extract_place_selection("opcion 3") == 3
@@ -370,9 +411,83 @@ def test_format_soat_response() -> None:
 
 
 def test_format_multas_response_without_multas() -> None:
-    response = format_multas_response({"tieneMultas": False})
+    response = format_multas_response(
+        {
+            "tieneMultas": False,
+            "simit": {"tieneMultas": False, "resumen": {"total": 0}},
+            "local": {
+                "city": "Bogota",
+                "consulted": False,
+                "portalUrl": "https://webfenix.movilidadbogota.gov.co/#/consulta-pagos",
+            },
+        }
+    )
 
-    assert "No aparecen multas" in response
+    assert "SIMIT" in response
+    assert "no aparecen multas" in response.lower() or "No aparecen" in response or "no aparecen" in response
+    assert "webfenix" in response
+
+
+def test_format_multas_response_with_manizales_local() -> None:
+    response = format_multas_response(
+        {
+            "simit": {
+                "tieneMultas": True,
+                "resumen": {"comparendos": 1, "multas": 1, "total": 250000},
+            },
+            "local": {
+                "city": "Manizales",
+                "consulted": True,
+                "tieneMultas": True,
+                "resumen": {"total": 180000},
+                "portalUrl": "https://www.movilidadmanizales.com.co/portal-servicios/",
+            },
+        }
+    )
+
+    assert "SIMIT" in response
+    assert "Manizales" in response
+    assert "movilidadmanizales" in response
+
+
+def test_format_multas_response_manizales_audiencia_zero_total() -> None:
+    response = format_multas_response(
+        {
+            "simit": {"tieneMultas": False, "resumen": {"total": 0}},
+            "local": {
+                "city": "Manizales",
+                "consulted": True,
+                "tieneMultas": True,
+                "resumen": {"total": 0, "comparendos": 1, "multas": 1},
+                "detalles": [
+                    {
+                        "placa": "QLX871",
+                        "codigo": "D04",
+                        "infraccion": "D04 No detenerse ante una luz roja o amarilla de semaforo",
+                        "fecha": "martes 19 de mayo 2026",
+                        "tipo": "fotodeteccion",
+                        "estado": "Audiencia",
+                        "valor": "No aplica",
+                    }
+                ],
+                "portalUrl": "https://www.movilidadmanizales.com.co/portal-servicios/",
+            },
+        }
+    )
+
+    assert "audiencia" in response.lower() or "registros" in response.lower()
+    assert "D04" in response
+    assert "QLX871" in response
+    assert "luz roja" in response.lower() or "semaforo" in response.lower()
+    assert "19 de mayo" in response.lower()
+    assert "fotodeteccion" in response.lower()
+    assert "no aplica" in response.lower()
+
+
+def test_extract_city_supports_more_cities() -> None:
+    assert extract_city("la multa fue en barranquilla") == "Barranquilla"
+    assert extract_city("comparendo en Manizales") == "Manizales"
+    assert extract_city("en santa marta") == "Santa Marta"
 
 
 def test_format_runt_profile_response() -> None:
@@ -684,6 +799,39 @@ async def test_agent_resumes_pending_vehicle_consult_and_quotes_tecno(monkeypatc
     assert "368.853" in second.text
     assert FakeQuoteClient.calls[0]["service_type"] == "tecnomecanica"
     assert FakeQuoteClient.calls[0]["categoria"] == "carro"
+
+
+@pytest.mark.asyncio
+async def test_agent_accumulates_plate_and_document_across_turns(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    first = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="necesito la tecno"))
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ABC123"))
+    third = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="1096065250"))
+
+    assert first.mode == "vehicle_missing_data"
+    assert second.mode == "vehicle_missing_data"
+    assert "cedula" in second.text.lower()
+    assert third.mode == "vehicle_tecnomecanica"
+    assert third.tool_calls == ["vehicle.check_vigencia", "quote.create"]
+
+
+@pytest.mark.asyncio
+async def test_agent_asks_intent_when_plate_and_document_arrive_without_keyword(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    first = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="FSO879 79837308"))
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="revisar su tecno"))
+
+    assert first.mode == "vehicle_missing_intent"
+    assert "FSO879" in first.text
+    assert "79837308" in first.text
+    assert second.mode == "vehicle_tecnomecanica"
+    assert second.tool_calls == ["vehicle.check_vigencia", "quote.create"]
 
 
 @pytest.mark.asyncio

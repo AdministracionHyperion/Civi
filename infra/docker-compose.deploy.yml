@@ -114,15 +114,31 @@ services:
       QUOTE_SERVICE_URL: http://quote-service:8091
       BILLING_SERVICE_URL: http://billing-service:8092
       HANDOFF_SERVICE_URL: http://handoff-service:8093
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      BOT_CONSULT_REPOSITORY_MODE: ${BOT_CONSULT_REPOSITORY_MODE:-sql}
+      BOT_CONSULT_DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      BOT_CONSULT_AUTO_CREATE_SCHEMA: ${BOT_CONSULT_AUTO_CREATE_SCHEMA:-true}
     depends_on:
-      - vehicle-service
-      - places-service
-      - appointment-service
-      - media-service
-      - knowledge-service
-      - quote-service
-      - billing-service
-      - handoff-service
+      postgres:
+        condition: service_healthy
+      vehicle-service:
+        condition: service_started
+      places-service:
+        condition: service_started
+      appointment-service:
+        condition: service_started
+      media-service:
+        condition: service_started
+      knowledge-service:
+        condition: service_started
+      quote-service:
+        condition: service_started
+      billing-service:
+        condition: service_started
+      handoff-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
 
   vehicle-service:
     build:
@@ -241,6 +257,7 @@ services:
       EVENT_PUBLISHER_MODE: ${EVENT_PUBLISHER_MODE:-redis}
       EVENT_REDIS_URL: ${EVENT_REDIS_URL:?EVENT_REDIS_URL is required}
       EVENT_CHANNEL_PREFIX: ${EVENT_CHANNEL_PREFIX:-civi.events}
+      APPOINTMENT_REMINDER_LEAD_MINUTES: ${APPOINTMENT_REMINDER_LEAD_MINUTES:-30}
     depends_on:
       postgres:
         condition: service_healthy
@@ -308,6 +325,34 @@ services:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_started
+
+  bot-consult-worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.python-service
+      args:
+        SERVICE_PATH: services/bot-orchestrator
+        SERVICE_MODULE: bot_orchestrator.main:app
+    command: ["python", "-m", "bot_orchestrator.workers.consult_worker"]
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:?INTERNAL_SERVICE_TOKEN is required}
+      VEHICLE_SERVICE_URL: http://vehicle-service:8083
+      NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      QUOTE_SERVICE_URL: http://quote-service:8091
+      BOT_CONSULT_WORKER_INTERVAL_SECONDS: ${BOT_CONSULT_WORKER_INTERVAL_SECONDS:-5}
+      BOT_CONSULT_REPOSITORY_MODE: ${BOT_CONSULT_REPOSITORY_MODE:-sql}
+      BOT_CONSULT_DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      BOT_CONSULT_AUTO_CREATE_SCHEMA: ${BOT_CONSULT_AUTO_CREATE_SCHEMA:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      notification-service:
+        condition: service_started
+      vehicle-service:
         condition: service_started
 
   media-service:

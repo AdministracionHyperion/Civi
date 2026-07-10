@@ -132,7 +132,58 @@ async def test_consult_multas_uses_cache_after_first_simit_call() -> None:
 
     assert first.tieneMultas is False
     assert second.tieneMultas is False
+    assert first.simit is not None
     assert simit.multas_calls == 1
+
+
+@pytest.mark.asyncio
+async def test_consult_multas_manizales_calls_local_provider() -> None:
+    class FakeManizales:
+        calls = 0
+
+        async def consultar_multas(self, *, documento: str) -> dict[str, object]:
+            self.calls += 1
+            return {
+                "success": True,
+                "tieneMultas": True,
+                "resumen": {"comparendos": 1, "multas": 1, "total": 180000},
+                "mensaje": "Pendiente Manizales",
+                "detalles": [],
+            }
+
+    repo = InMemoryVehicleCacheRepository()
+    simit = FakeSimitClient()
+    manizales = FakeManizales()
+    payload = ConsultMultasRequest(documento="123456789", ciudad="Manizales")
+
+    result = await consult_multas(
+        payload,
+        simit_client=simit,
+        manizales_client=manizales,
+        cache_repository=repo,
+    )
+
+    assert simit.multas_calls == 1
+    assert manizales.calls == 1
+    assert result.local is not None
+    assert result.local.consulted is True
+    assert result.local.tieneMultas is True
+    assert result.local.portalUrl
+    assert "manizales" in (result.local.portalUrl or "").lower()
+
+
+@pytest.mark.asyncio
+async def test_consult_multas_bogota_only_adds_portal_link() -> None:
+    repo = InMemoryVehicleCacheRepository()
+    simit = FakeSimitClient()
+    payload = ConsultMultasRequest(documento="123456789", ciudad="Bogota")
+
+    result = await consult_multas(payload, simit_client=simit, cache_repository=repo)
+
+    assert simit.multas_calls == 1
+    assert result.local is not None
+    assert result.local.consulted is False
+    assert "webfenix" in (result.local.portalUrl or "")
 
 
 @pytest.mark.asyncio

@@ -1,0 +1,6 @@
+﻿2026-07-08T19:08:38.161976240Z   File "/app/service/src/channel_gateway/slices/receive_message/use_case.py", line 30, in run_turn
+2026-07-08T19:08:38.161977941Z     response.raise_for_status()
+2026-07-08T19:08:38.161979412Z   File "/usr/local/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+2026-07-08T19:08:38.161981168Z     raise HTTPStatusError(message, request=request, response=self)
+2026-07-08T19:08:38.161982917Z httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'http://conversation-service:8081/internal/conversations/turns'
+2026-07-08T19:08:38.161984599Z For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500

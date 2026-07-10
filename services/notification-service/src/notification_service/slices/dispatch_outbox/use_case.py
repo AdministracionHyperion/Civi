@@ -20,7 +20,7 @@ async def dispatch_outbox(
     active_provider = provider or whatsapp_provider_from_env()
     publisher = event_publisher or event_publisher_from_env()
     dispatched = []
-    for message in repository.list_queued(limit=limit):
+    for message in repository.claim_queued_batch(limit=limit):
         provider_result = await active_provider.send(to=message.to, body=message.body)
         item = outbox_to_dict(message)
         item["dispatch_status"] = provider_result.get("status", "unknown")

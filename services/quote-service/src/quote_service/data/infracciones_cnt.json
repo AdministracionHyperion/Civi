@@ -2,7 +2,7 @@
   "version": 2,
   "generated_at": "2026-07-01",
   "reference_year": 2026,
-  "smdlv_2026": 42225,
+  "smdlv_2026": 58364,
   "uvb_2026": 12110,
   "legal_basis": [
     "Ley 769 de 2002 (CNT)",
@@ -13,1105 +13,1594 @@
     "Resolución 20243040030185 de 2024 (cobro coactivo)"
   ],
   "categoria_montos_2026": {
-    "A": {"smdlv": 4, "cop": 168900, "label": "4 SMDLV"},
-    "B": {"smdlv": 8, "cop": 337800, "label": "8 SMDLV"},
-    "C": {"smdlv": 15, "cop": 633200, "label": "15 SMDLV"},
-    "D": {"smdlv": 30, "cop": 1266100, "label": "30 SMDLV"},
-    "E": {"smdlv": 45, "cop": 1899300, "label": "45 SMDLV o más"},
-    "F": {"smdlv": 1, "cop": 42225, "label": "1 SMDLV (peatón)"},
-    "G": {"smdlv": 0, "cop": 0, "label": "Comparendo educativo"},
-    "H": {"smdlv": 5, "cop": 211125, "label": "5 SMDLV (amonestación)"},
-    "I": {"smdlv": 10, "cop": 422250, "label": "10 SMDLV o más"}
+    "A": {
+      "smdlv": 4,
+      "cop": 233456,
+      "label": "4 SMDLV"
+    },
+    "B": {
+      "smdlv": 8,
+      "cop": 466912,
+      "label": "8 SMDLV"
+    },
+    "C": {
+      "smdlv": 15,
+      "cop": 875460,
+      "label": "15 SMDLV"
+    },
+    "D": {
+      "smdlv": 30,
+      "cop": 1750920,
+      "label": "30 SMDLV"
+    },
+    "E": {
+      "smdlv": 45,
+      "cop": 2626380,
+      "label": "45 SMDLV o más"
+    },
+    "F": {
+      "smdlv": 1,
+      "cop": 58364,
+      "label": "1 SMDLV (peatón)"
+    },
+    "G": {
+      "smdlv": 0,
+      "cop": 0,
+      "label": "Comparendo educativo"
+    },
+    "H": {
+      "smdlv": 5,
+      "cop": 291820,
+      "label": "5 SMDLV (amonestación)"
+    },
+    "I": {
+      "smdlv": 10,
+      "cop": 583640,
+      "label": "10 SMDLV o más"
+    }
   },
   "descuentos_curso": {
     "nota": "Descuentos aplicables SOLO si el infractor no ha sido sancionado con otro comparendo en los últimos 12 meses.",
     "por_via": {
-      "50_pct": {"plazo": "primeros 5 días hábiles", "requisito": "pago + curso CIA"},
-      "25_pct": {"plazo": "días 6 a 20 hábiles", "requisito": "pago + curso CIA"}
+      "50_pct": {
+        "plazo": "primeros 5 días hábiles",
+        "requisito": "pago + curso CIA"
+      },
+      "25_pct": {
+        "plazo": "días 6 a 20 hábiles",
+        "requisito": "pago + curso CIA"
+      }
     },
     "por_fotomulta": {
-      "50_pct": {"plazo": "primeros 11 días hábiles", "requisito": "pago + curso CIA"},
-      "25_pct": {"plazo": "días 12 a 26 hábiles", "requisito": "pago + curso CIA"}
+      "50_pct": {
+        "plazo": "primeros 11 días hábiles",
+        "requisito": "pago + curso CIA"
+      },
+      "25_pct": {
+        "plazo": "días 12 a 26 hábiles",
+        "requisito": "pago + curso CIA"
+      }
     },
     "curso_costo_referencial": 329000,
-    "casos_sin_descuento": ["embriaguez", "reincidencia en 12 meses", "infracciones categoría E (algunas)"]
+    "casos_sin_descuento": [
+      "embriaguez",
+      "reincidencia en 12 meses",
+      "infracciones categoría E (algunas)"
+    ]
   },
   "infracciones": [
     {
       "codigo": "A01",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "No transitar por la derecha de la vía.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "procedimiento_pago": "Puedes pagar en bancos autorizados (Bancolombia, Davivienda, BBVA), corresponsales bancarios (Éxito, SuperGIROS) o en línea en la Secretaría de Movilidad de tu ciudad.",
       "consejos": "Siempre transita por el carril derecho. El izquierdo es solo para adelantar.",
-      "aliases": ["derecha de la via", "lado incorrecto", "no transitar derecha", "carril izquierdo", "invadir carril"]
+      "aliases": [
+        "derecha de la via",
+        "lado incorrecto",
+        "no transitar derecha",
+        "carril izquierdo",
+        "invadir carril"
+      ]
     },
     {
       "codigo": "A02",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Agarrarse de otro vehículo en circulación.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "procedimiento_pago": null,
-      "aliases": ["agarrarse vehiculo", "ir colgado", "remolcarse de otro carro"]
+      "aliases": [
+        "agarrarse vehiculo",
+        "ir colgado",
+        "remolcarse de otro carro"
+      ]
     },
     {
       "codigo": "A03",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transportar personas o cosas que disminuyan visibilidad o incomoden la conducción.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["carga que tapa", "visibilidad", "obstruir visibilidad"]
+      "aliases": [
+        "carga que tapa",
+        "visibilidad",
+        "obstruir visibilidad"
+      ]
     },
     {
       "codigo": "A04",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transitar por andenes y lugares destinados a peatones.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
-      "aliases": ["andenes", "zona peatonal", "invasión andén", "invasión espacio público"]
+      "aliases": [
+        "andenes",
+        "zona peatonal",
+        "invasión andén",
+        "invasión espacio público"
+      ]
     },
     {
       "codigo": "A05",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "No respetar las señales de tránsito.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Todas las señales son de obligatorio cumplimiento: informativas, preventivas y reglamentarias.",
-      "aliases": ["senal de transito", "ignorar señal", "no respetar señal", "señal de pare"]
+      "aliases": [
+        "senal de transito",
+        "ignorar señal",
+        "no respetar señal",
+        "señal de pare"
+      ]
     },
     {
       "codigo": "A06",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transitar sin los dispositivos luminosos requeridos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["sin luces", "luces apagadas", "sin faros", "faros dañados"]
+      "aliases": [
+        "sin luces",
+        "luces apagadas",
+        "sin faros",
+        "faros dañados"
+      ]
     },
     {
       "codigo": "A07",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transitar sin dispositivos de parada inmediata o con ellos defectuosos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Los frenos son el sistema más crítico. Haz mantenimiento preventivo cada 10.000 km.",
-      "aliases": ["frenos defectuosos", "parada inmediata", "frenos dañados", "sin frenos"]
+      "aliases": [
+        "frenos defectuosos",
+        "parada inmediata",
+        "frenos dañados",
+        "sin frenos"
+      ]
     },
     {
       "codigo": "A08",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transitar por zonas prohibidas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
-      "aliases": ["zona prohibida", "via restringida", "zona restringida"]
+      "aliases": [
+        "zona prohibida",
+        "via restringida",
+        "zona restringida"
+      ]
     },
     {
       "codigo": "A09",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Adelantar entre dos vehículos en sus respectivos carriles.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["adelantar entre carriles", "adelantar en medio", "zigzag entre carros"]
+      "aliases": [
+        "adelantar entre carriles",
+        "adelantar en medio",
+        "zigzag entre carros"
+      ]
     },
     {
       "codigo": "A10",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Conducir por vía férrea o zonas de protección.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
-      "aliases": ["via ferrea", "rieles", "vía del tren"]
+      "aliases": [
+        "via ferrea",
+        "rieles",
+        "vía del tren"
+      ]
     },
     {
       "codigo": "A11",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Transitar por autopistas o vías de alta velocidad sin autorización.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
-      "aliases": ["autopista prohibida", "alta velocidad restringida"]
+      "aliases": [
+        "autopista prohibida",
+        "alta velocidad restringida"
+      ]
     },
     {
       "codigo": "A12",
       "categoria": "A",
       "smdlv": 4,
-      "monto_cop_2026": 168900,
+      "monto_cop_2026": 233456,
       "descripcion_oficial": "Prestar servicio público con vehículo no autorizado.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización: 5 días 1.ª vez, 20 días 2.ª, 40 días 3.ª.",
-      "aliases": ["servicio publico ilegal", "transporte ilegal", "taxi pirata"]
+      "aliases": [
+        "servicio publico ilegal",
+        "transporte ilegal",
+        "taxi pirata"
+      ]
     },
     {
       "codigo": "B01",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Conducir sin llevar consigo la licencia de conducción.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta presentar la licencia.",
       "consejos": "Siempre lleva tu licencia física o digital (app RUNT). La licencia digital es válida.",
-      "aliases": ["sin licencia encima", "no llevo licencia", "licencia en casa", "olvide la licencia"]
+      "aliases": [
+        "sin licencia encima",
+        "no llevo licencia",
+        "licencia en casa",
+        "olvide la licencia"
+      ]
     },
     {
       "codigo": "B02",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Conducir con la licencia de conducción vencida.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
       "consejos": "Renueva tu licencia antes del vencimiento. Debes ir al CRC para examen psicofísico y refrendación.",
-      "aliases": ["licencia vencida", "licencia expirada", "pase vencido", "licencia caducada"]
+      "aliases": [
+        "licencia vencida",
+        "licencia expirada",
+        "pase vencido",
+        "licencia caducada"
+      ]
     },
     {
       "codigo": "B03",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Circular sin placas o sin permiso vigente de tránsito.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo por 5 días.",
-      "aliases": ["sin placa", "sin placas", "sin permiso", "sin matrícula"]
+      "aliases": [
+        "sin placa",
+        "sin placas",
+        "sin permiso",
+        "sin matrícula"
+      ]
     },
     {
       "codigo": "B04",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Circular con placas adulteradas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización. Puede constituir delito penal por falsedad.",
-      "aliases": ["placas adulteradas", "placas modificadas", "placas alteradas"]
+      "aliases": [
+        "placas adulteradas",
+        "placas modificadas",
+        "placas alteradas"
+      ]
     },
     {
       "codigo": "B05",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Circular con una sola placa o sin permiso vigente.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
-      "aliases": ["una placa", "solo una placa", "falta placa"]
+      "aliases": [
+        "una placa",
+        "solo una placa",
+        "falta placa"
+      ]
     },
     {
       "codigo": "B06",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Circular con placas falsas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización y posible investigación penal por falsedad documental.",
-      "aliases": ["placas falsas", "placas clonadas"]
+      "aliases": [
+        "placas falsas",
+        "placas clonadas"
+      ]
     },
     {
       "codigo": "B07",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "No informar cambio de motor o color del vehículo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["cambio motor", "cambio color", "repotenciación", "pintura no reportada"]
+      "aliases": [
+        "cambio motor",
+        "cambio color",
+        "repotenciación",
+        "pintura no reportada"
+      ]
     },
     {
       "codigo": "B08",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "No pagar el peaje.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Evadir peajes genera multa. Usa TAG (Flypass, Copiloto) para pago automático.",
-      "aliases": ["peaje", "no pague peaje", "evadir peaje", "colarse peaje"]
+      "aliases": [
+        "peaje",
+        "no pague peaje",
+        "evadir peaje",
+        "colarse peaje"
+      ]
     },
     {
       "codigo": "B09",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Equipos de sonido a volumen que incomoda en servicio público.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["sonido alto bus", "musica alta bus", "radio alto"]
+      "aliases": [
+        "sonido alto bus",
+        "musica alta bus",
+        "radio alto"
+      ]
     },
     {
       "codigo": "B10",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Vidrios polarizados sin permiso reglamentario.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Los polarizados requieren permiso. Deben permitir visibilidad de 70% en parabrisas y 55% en laterales delanteros.",
-      "aliases": ["polarizados", "vidrios oscuros", "entintados", "polarizado ilegal"]
+      "aliases": [
+        "polarizados",
+        "vidrios oscuros",
+        "entintados",
+        "polarizado ilegal"
+      ]
     },
     {
       "codigo": "B11",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Publicidad en vidrios que obstaculiza visibilidad.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["publicidad vidrios", "calcomanías", "stickers parabrisas"]
+      "aliases": [
+        "publicidad vidrios",
+        "calcomanías",
+        "stickers parabrisas"
+      ]
     },
     {
       "codigo": "B12",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "No respetar normas para cortejos fúnebres.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["cortejo funebre", "entierro", "caravana fúnebre"]
+      "aliases": [
+        "cortejo funebre",
+        "entierro",
+        "caravana fúnebre"
+      ]
     },
     {
       "codigo": "B13",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "No respetar desfiles, procesiones o manifestaciones autorizadas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["desfile", "procesion", "marcha", "manifestación"]
+      "aliases": [
+        "desfile",
+        "procesion",
+        "marcha",
+        "manifestación"
+      ]
     },
     {
       "codigo": "B14",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Remolcar otro vehículo violando el Código.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["remolque ilegal", "remolcar mal"]
+      "aliases": [
+        "remolque ilegal",
+        "remolcar mal"
+      ]
     },
     {
       "codigo": "B15",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Servicio público sin aviso de tarifas legible.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["tarifas bus", "sin aviso tarifas"]
+      "aliases": [
+        "tarifas bus",
+        "sin aviso tarifas"
+      ]
     },
     {
       "codigo": "B16",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Permitir animales u objetos que incomoden pasajeros.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["animales en bus", "mascotas bus"]
+      "aliases": [
+        "animales en bus",
+        "mascotas bus"
+      ]
     },
     {
       "codigo": "B17",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Abandonar vehículo de servicio público con pasajeros.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["abandonar bus", "abandonar pasajeros"]
+      "aliases": [
+        "abandonar bus",
+        "abandonar pasajeros"
+      ]
     },
     {
       "codigo": "B18",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Transporte público individual sin cumplir el CNT.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["taxi irregular", "taxi incumpliendo"]
+      "aliases": [
+        "taxi irregular",
+        "taxi incumpliendo"
+      ]
     },
     {
       "codigo": "B19",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Cargue o descargue en sitios u horas prohibidas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["descargue prohibido", "cargue prohibido", "carga y descarga"]
+      "aliases": [
+        "descargue prohibido",
+        "cargue prohibido",
+        "carga y descarga"
+      ]
     },
     {
       "codigo": "B20",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Transportar alimentos corruptibles sin condiciones.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["carne sin refrigeracion", "alimentos sin cadena frio"]
+      "aliases": [
+        "carne sin refrigeracion",
+        "alimentos sin cadena frio"
+      ]
     },
     {
       "codigo": "B21",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Lavar vehículo en vía pública o cuerpos de agua.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Lava tu vehículo en lavaderos autorizados. Lavar en la calle o en ríos es infracción ambiental y de tránsito.",
-      "aliases": ["lavar carro calle", "lavar moto calle", "lavar en rio", "lavar en quebrada"]
+      "aliases": [
+        "lavar carro calle",
+        "lavar moto calle",
+        "lavar en rio",
+        "lavar en quebrada"
+      ]
     },
     {
       "codigo": "B22",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Llevar menores de 10 años en asiento delantero.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Los menores de 10 años deben viajar en el asiento trasero con silla de seguridad adecuada a su peso y talla.",
-      "aliases": ["niño adelante", "menor adelante", "bebe adelante"]
+      "aliases": [
+        "niño adelante",
+        "menor adelante",
+        "bebe adelante"
+      ]
     },
     {
       "codigo": "B23",
       "categoria": "B",
       "smdlv": 8,
-      "monto_cop_2026": 337800,
+      "monto_cop_2026": 466912,
       "descripcion_oficial": "Radios o pantallas a volumen superior al permitido.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["pantalla conductor", "video manejando", "tv manejando"]
+      "aliases": [
+        "pantalla conductor",
+        "video manejando",
+        "tv manejando"
+      ]
     },
     {
       "codigo": "C01",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Presentar licencia adulterada o ajena.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización y posible investigación penal.",
-      "aliases": ["licencia falsa", "licencia ajena", "licencia adulterada", "pase falso"]
+      "aliases": [
+        "licencia falsa",
+        "licencia ajena",
+        "licencia adulterada",
+        "pase falso"
+      ]
     },
     {
       "codigo": "C02",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Estacionar en sitios prohibidos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización (grúa o cepo).",
       "procedimiento_pago": "Si te inmovilizaron, pagas multa + grúa + patios (entre $150.000 y $400.000 adicionales según la ciudad).",
       "consejos": "La línea amarilla en el bordillo significa prohibido estacionar. Las zonas de discapacitados requieren permiso especial.",
-      "aliases": ["mal parqueo", "parqueo prohibido", "estacionar mal", "parqueo indebido", "mal estacionado", "zona amarilla", "parquear mal"]
+      "aliases": [
+        "estacionar mal",
+        "mal estacionado",
+        "mal parqueo",
+        "parquear mal",
+        "parqueo indebido",
+        "parqueo prohibido",
+        "zona amarilla"
+      ]
     },
     {
       "codigo": "C03",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Bloquear calzada o intersección con el vehículo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
       "consejos": "No te detengas en una intersección aunque el semáforo esté en verde si el tráfico no te permite cruzar completamente.",
-      "aliases": ["bloquear calle", "bloqueo interseccion", "bloquear cruce", "atravesado"]
+      "aliases": [
+        "bloquear calle",
+        "bloqueo interseccion",
+        "bloquear cruce",
+        "atravesado"
+      ]
     },
     {
       "codigo": "C04",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Estacionar sin precauciones ni señales de peligro.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["estacionar sin senales", "estacionar sin triangulo"]
+      "aliases": [
+        "estacionar sin senales",
+        "estacionar sin triangulo"
+      ]
     },
     {
       "codigo": "C05",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No reducir velocidad en cruce escolar o hospital.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Reduce a 30 km/h o menos en zonas escolares y cerca de hospitales.",
-      "aliases": ["cruce escolar", "zona escolar", "velocidad escolar", "hospital"]
+      "aliases": [
+        "cruce escolar",
+        "zona escolar",
+        "velocidad escolar",
+        "hospital"
+      ]
     },
     {
       "codigo": "C06",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No usar cinturón de seguridad.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "El cinturón es obligatorio para todos los ocupantes, delanteros y traseros. Reduce el riesgo de muerte en 50%.",
-      "aliases": ["sin cinturon", "cinturon de seguridad", "no usar cinturon", "cinturón"]
+      "aliases": [
+        "sin cinturon",
+        "cinturon de seguridad",
+        "no usar cinturon",
+        "cinturón"
+      ]
     },
     {
       "codigo": "C07",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No señalizar giro o cambio de carril.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["sin direccionales", "no senalizar giro", "no poner direccional"]
+      "aliases": [
+        "sin direccionales",
+        "no senalizar giro",
+        "no poner direccional"
+      ]
     },
     {
       "codigo": "C08",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transitar sin dispositivos luminosos requeridos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["luces defectuosas", "sin luces", "bombillo fundido"]
+      "aliases": [
+        "luces defectuosas",
+        "sin luces",
+        "bombillo fundido"
+      ]
     },
     {
       "codigo": "C09",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No respetar señal en cruce férreo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["cruce ferreo", "cruce tren", "no parar tren"]
+      "aliases": [
+        "cruce ferreo",
+        "cruce tren",
+        "no parar tren"
+      ]
     },
     {
       "codigo": "C10",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Conducir con puertas abiertas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["puertas abiertas", "conducir con puerta abierta"]
+      "aliases": [
+        "puertas abiertas",
+        "conducir con puerta abierta"
+      ]
     },
     {
       "codigo": "C11",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No portar equipo de prevención y seguridad.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Todo vehículo debe portar: botiquín, extintor vigente, gato, llanta de repuesto, triángulos, chaleco reflectivo y herramienta básica.",
-      "aliases": ["botiquin", "extintor", "sin botiquin", "sin extintor", "kit carretera"]
+      "aliases": [
+        "botiquin",
+        "chaleco reflectivo",
+        "chaleco reflectivo carro",
+        "equipo de carretera",
+        "extintor",
+        "kit carretera",
+        "sin botiquin",
+        "sin extintor",
+        "triangulos"
+      ]
     },
     {
       "codigo": "C12",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Proveer combustible con motor encendido.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Apaga siempre el motor al tanquear. Es riesgo de incendio y explosión.",
-      "aliases": ["tanquear motor encendido", "echar gasolina motor encendido"]
+      "aliases": [
+        "tanquear motor encendido",
+        "echar gasolina motor encendido"
+      ]
     },
     {
       "codigo": "C13",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Conducir sin adaptaciones con limitación física.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["limitacion fisica", "discapacidad sin adaptacion"]
+      "aliases": [
+        "conducir sin gafas",
+        "discapacidad sin adaptacion",
+        "gafas licencia",
+        "lentes licencia",
+        "limitacion fisica",
+        "restriccion gafas",
+        "sin gafas"
+      ]
     },
     {
       "codigo": "C14",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transitar por sitios u horas restringidas (pico y placa).",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo.",
       "consejos": "Consulta el calendario de pico y placa de tu ciudad. Hay excepciones para carros híbridos, eléctricos y permisos especiales.",
-      "aliases": ["pico y placa", "restriccion horario", "restriccion vehicular", "restricción", "pico placa"]
+      "aliases": [
+        "carrera restringida",
+        "motos restringidas",
+        "pico placa",
+        "pico y placa",
+        "restriccion horario",
+        "restriccion vehicular",
+        "restricción",
+        "sitio restringido",
+        "transitar zona prohibida",
+        "zona prohibida"
+      ]
     },
     {
       "codigo": "C15",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Exceder capacidad autorizada de pasajeros o carga.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["exceso pasajeros", "sobrecupo"]
+      "aliases": [
+        "exceso pasajeros",
+        "sobrecupo"
+      ]
     },
     {
       "codigo": "C16",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transporte escolar sin permiso o distintivos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["bus escolar irregular", "ruta escolar sin permiso"]
+      "aliases": [
+        "bus escolar irregular",
+        "ruta escolar sin permiso"
+      ]
     },
     {
       "codigo": "C17",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Combinaciones de remolques sin autorización.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["doble remolque", "remolque doble"]
+      "aliases": [
+        "doble remolque",
+        "remolque doble"
+      ]
     },
     {
       "codigo": "C18",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Servicio público con taxímetro dañado o adulterado.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["taximetro", "taximetro dañado", "taximetro adulterado"]
+      "aliases": [
+        "taximetro",
+        "taximetro dañado",
+        "taximetro adulterado"
+      ]
     },
     {
       "codigo": "C19",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Recoger o dejar pasajeros fuera de sitios demarcados.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["paradero indebido", "parada indebida"]
+      "aliases": [
+        "paradero indebido",
+        "parada indebida"
+      ]
     },
     {
       "codigo": "C20",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transportar carga a granel sin protección.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["carga a granel", "carga sin cubrir"]
+      "aliases": [
+        "carga a granel",
+        "carga sin cubrir"
+      ]
     },
     {
       "codigo": "C21",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No asegurar la carga transportada.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["carga mal sujeta", "carga suelta"]
+      "aliases": [
+        "carga mal sujeta",
+        "carga suelta"
+      ]
     },
     {
       "codigo": "C22",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Carga con dimensiones superiores sin requisitos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["carga sobredimensionada", "carga extradimensionada"]
+      "aliases": [
+        "carga sobredimensionada",
+        "carga extradimensionada"
+      ]
     },
     {
       "codigo": "C23",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Dar enseñanza práctica de conducción sin autorización.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["clases manejo ilegales", "enseñar a manejar ilegal"]
+      "aliases": [
+        "clases manejo ilegales",
+        "enseñar a manejar ilegal"
+      ]
     },
     {
       "codigo": "C24",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Conducir motocicleta sin observar las normas del Código.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Las motos deben cumplir todas las normas: no circular entre carriles, no adelantar por la derecha, usar casco certificado.",
-      "aliases": ["moto irregular", "moto sin normas", "motocicleta infraccion"]
+      "aliases": [
+        "espejo moto",
+        "espejos retrovisores",
+        "moto irregular",
+        "moto sin espejos",
+        "moto sin normas",
+        "motocicleta infraccion",
+        "sin espejos",
+        "sin retrovisores"
+      ]
     },
     {
       "codigo": "C25",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transitar por carril izquierdo entorpeciendo tráfico.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "El carril izquierdo es solo para adelantar. Mantente en el derecho si no estás adelantando.",
-      "aliases": ["carril izquierdo lento", "carril izquierdo despacio", "tránsito lento izquierda"]
+      "aliases": [
+        "carril izquierdo lento",
+        "carril izquierdo despacio",
+        "tránsito lento izquierda"
+      ]
     },
     {
       "codigo": "C26",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Vehículo pesado por carril izquierdo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["camion carril izquierdo", "tractomula izquierda"]
+      "aliases": [
+        "camion carril izquierdo",
+        "tractomula izquierda"
+      ]
     },
     {
       "codigo": "C27",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Carga u ocupantes que obstruyen visibilidad o controles.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["carga obstruye", "visibilidad obstruida"]
+      "aliases": [
+        "carga obstruye",
+        "visibilidad obstruida"
+      ]
     },
     {
       "codigo": "C28",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Usar dispositivos de emergencia sin ser vehículo de emergencia.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
       "consejos": "Las sirenas y luces estroboscópicas son exclusivas de ambulancias, bomberos y policía. Su uso indebido es grave.",
-      "aliases": ["sirena ilegal", "sirena no autorizada", "luces de policia falsas"]
+      "aliases": [
+        "sirena ilegal",
+        "sirena no autorizada",
+        "luces de policia falsas"
+      ]
     },
     {
       "codigo": "C29",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Conducir a velocidad superior a la máxima permitida.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Velocidades máximas: 30 km/h zonas escolares, 50 km/h vías urbanas, 80 km/h vías rurales, 120 km/h autopistas.",
-      "aliases": ["exceso de velocidad", "velocidad", "fotomulta velocidad", "exceder velocidad", "ir muy rápido", "velocidad máxima"]
+      "aliases": [
+        "exceso de velocidad",
+        "velocidad",
+        "fotomulta velocidad",
+        "exceder velocidad",
+        "ir muy rápido",
+        "velocidad máxima"
+      ]
     },
     {
       "codigo": "C30",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No atender señal de ceda el paso.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["ceda el paso", "no ceder paso", "no ceder el paso"]
+      "aliases": [
+        "ceda el paso",
+        "no ceder paso",
+        "no ceder el paso"
+      ]
     },
     {
       "codigo": "C31",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No acatar señales de agentes de tránsito.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Las indicaciones de los agentes de tránsito prevalecen sobre semáforos y señales verticales.",
-      "aliases": ["desobedecer agente", "ignorar agente", "no obedecer policia transito", "agente de tránsito"]
+      "aliases": [
+        "desobedecer agente",
+        "ignorar agente",
+        "no obedecer policia transito",
+        "agente de tránsito"
+      ]
     },
     {
       "codigo": "C32",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No respetar paso de peatones.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "El peatón siempre tiene la prelación en pasos peatonales demarcados. Detente completamente.",
-      "aliases": ["no respetar peatones", "paso peatonal", "cebra", "no frenar peatón"]
+      "aliases": [
+        "no respetar peatones",
+        "paso peatonal",
+        "cebra",
+        "no frenar peatón"
+      ]
     },
     {
       "codigo": "C33",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Poner vehículo en marcha sin precauciones.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["arranque imprudente", "arrancar sin mirar"]
+      "aliases": [
+        "arranque imprudente",
+        "arrancar sin mirar"
+      ]
     },
     {
       "codigo": "C34",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Reparar vehículo en vía pública sin procedimiento.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Solo puedes reparar en vía pública en emergencia. Usa chaleco reflectivo, triángulos y oríllate.",
-      "aliases": ["reparar en via", "mecanico en calle", "arreglar carro calle"]
+      "aliases": [
+        "reparar en via",
+        "mecanico en calle",
+        "arreglar carro calle"
+      ]
     },
     {
       "codigo": "C35",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "No realizar revisión técnico-mecánica en plazo legal.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta que se realice la RTM.",
       "procedimiento_pago": "Si te inmovilizaron: multa + grúa + patios + costo de la RTM. Solo hasta tener la RTM aprobada te entregan el vehículo.",
       "consejos": "La tecnomecánica es obligatoria cada año para vehículos con más de 6 años de antigüedad. Agéndala con tiempo.",
-      "aliases": ["tecnomecanica vencida", "rtm vencida", "sin tecnomecanica", "sin revisión", "sin tecno", "revisión vencida"]
+      "aliases": [
+        "revisión vencida",
+        "rtm vencida",
+        "sin revisión",
+        "sin tecno",
+        "sin tecnomecanica",
+        "tecnomecanica vencida"
+      ]
     },
     {
       "codigo": "C36",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transportar carga en contenedores sin sujeción.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["contenedor sin sujecion", "contenedor suelto"]
+      "aliases": [
+        "contenedor sin sujecion",
+        "contenedor suelto"
+      ]
     },
     {
       "codigo": "C37",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Transportar pasajeros en platón o plataforma de carga.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
       "consejos": "Está totalmente prohibido transportar personas en el platón. Es extremadamente peligroso.",
-      "aliases": ["pasajeros en platón", "personas en platón", "gente en platón"]
+      "aliases": [
+        "pasajeros en platón",
+        "personas en platón",
+        "gente en platón"
+      ]
     },
     {
       "codigo": "C38",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Usar celular al conducir sin manos libres.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Solo puedes usar celular con manos libres (bluetooth, speaker). Sostener el teléfono mientras conduces es infracción.",
-      "aliases": ["celular manejando", "whatsapp manejando", "telefono manejando", "llamar manejando", "chatear manejando", "manos libres"]
+      "aliases": [
+        "celular",
+        "celular manejando",
+        "chatear manejando",
+        "dispositivo movil",
+        "hablar por celular",
+        "llamar manejando",
+        "manos libres",
+        "telefono",
+        "telefono manejando",
+        "usar celular",
+        "whatsapp manejando"
+      ]
     },
     {
       "codigo": "C39",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Vulnerar reglas de estacionamiento del artículo 77.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["estacionamiento art 77", "parqueo art 77"]
+      "aliases": [
+        "estacionamiento art 77",
+        "parqueo art 77"
+      ]
     },
     {
       "codigo": "C40",
       "categoria": "C",
       "smdlv": 15,
-      "monto_cop_2026": 633200,
+      "monto_cop_2026": 875460,
       "descripcion_oficial": "Estacionar en zona de discapacitados sin autorización.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización (grúa o cepo).",
       "consejos": "Las zonas azules requieren permiso especial visible en el parabrisas. La multa es de categoría C.",
-      "aliases": ["zona discapacitados", "parqueo discapacitados", "zona azul"]
+      "aliases": [
+        "zona discapacitados",
+        "parqueo discapacitados",
+        "zona azul"
+      ]
     },
     {
       "codigo": "D01",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Guiar vehículo sin licencia de conducción.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización del vehículo por 5 días hábiles.",
-      "aliases": ["sin licencia", "conducir sin licencia", "no tener pase", "sin pase de conduccion"]
+      "aliases": [
+        "sin licencia",
+        "conducir sin licencia",
+        "no tener pase",
+        "sin pase de conduccion"
+      ]
     },
     {
       "codigo": "D02",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Conducir sin portar seguros exigidos por ley (SOAT).",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta adquirir el SOAT.",
       "procedimiento_pago": "Si te inmovilizaron: multa + comprar SOAT + grúa + patios. Sin SOAT NO te entregan el vehículo.",
       "consejos": "Sin SOAT no puedes circular, no te reciben en un CDA y te inmovilizan. Civi te ayuda a cotizarlo y comprarlo por este chat.",
-      "aliases": ["sin soat", "soat vencido", "no tener soat", "seguro vencido", "sin seguro", "soat"]
+      "aliases": [
+        "no tener soat",
+        "seguro vencido",
+        "sin seguro",
+        "sin soat",
+        "soat",
+        "soat vencido"
+      ]
     },
     {
       "codigo": "D03",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Transitar en sentido contrario.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
       "consejos": "Circular en contravía puede causar colisiones frontales fatales.",
-      "aliases": ["sentido contrario", "via contraria", "contravia", "contravía", "en contra via"]
+      "aliases": [
+        "sentido contrario",
+        "via contraria",
+        "contravia",
+        "contravía",
+        "en contra via"
+      ]
     },
     {
       "codigo": "D04",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "No detenerse ante luz roja o amarilla de semáforo, señal PARE o intermitente rojo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "La luz amarilla significa 'detenerse', no 'acelerar'. Las cámaras de fotodetección registran la infracción automáticamente.",
-      "aliases": ["semaforo en rojo", "pasarse el rojo", "luz roja", "pare", "fotomulta semaforo", "semáforo", "cruzar en rojo"]
+      "aliases": [
+        "cruzar en rojo",
+        "fotomulta semaforo",
+        "luz roja",
+        "no detenerse en rojo",
+        "pare",
+        "pasarse el rojo",
+        "pasarse semaforo",
+        "semaforo en rojo",
+        "semáforo"
+      ]
     },
     {
       "codigo": "D05",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Conducir sobre aceras, plazas o zonas peatonales.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["acera", "zona peatonal vehiculo", "conducir por anden", "carro en andén"]
+      "aliases": [
+        "acera",
+        "zona peatonal vehiculo",
+        "conducir por anden",
+        "carro en andén"
+      ]
     },
     {
       "codigo": "D06",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Adelantar en berma, túnel, puente, curva o paso a nivel.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "La línea amarilla continua significa 'prohibido adelantar'. En curva o túnel la visibilidad es limitada.",
-      "aliases": ["adelantar en curva", "adelantar en tunel", "adelantar en puente", "adelantar en berma", "doble linea amarilla"]
+      "aliases": [
+        "adelantar en curva",
+        "adelantar en tunel",
+        "adelantar en puente",
+        "adelantar en berma",
+        "doble linea amarilla"
+      ]
     },
     {
       "codigo": "D07",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Maniobras peligrosas que pongan en riesgo personas o cosas.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
       "consejos": "Piruetas, piques y derrapes pueden generar inmovilización, multa y hasta proceso penal si hay lesiones.",
-      "aliases": ["maniobra peligrosa", "piruetas", "piques", "carreras ilegales", "derrape"]
+      "aliases": [
+        "maniobra peligrosa",
+        "piruetas",
+        "piques",
+        "carreras ilegales",
+        "derrape"
+      ]
     },
     {
       "codigo": "D08",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Conducir sin luces o sin dispositivos luminosos de posición, direccionales o de freno, o con alguno dañado cuando son exigidos.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["sin luces obligatorias", "luces dañadas", "sin luminosos", "stops dañados"]
+      "aliases": [
+        "sin luces obligatorias",
+        "luces dañadas",
+        "sin luminosos",
+        "stops dañados"
+      ]
     },
     {
       "codigo": "D09",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "No permitir el paso de vehículos de emergencia (ambulancia, bomberos, policía, etc.).",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Cuando escuches sirena, oríllate a la derecha y cede el paso. Segundos pueden salvar vidas.",
-      "aliases": ["no dejar pasar ambulancia", "vehiculo emergencia", "bloquear ambulancia", "no ceder ambulancia"]
+      "aliases": [
+        "no dejar pasar ambulancia",
+        "vehiculo emergencia",
+        "bloquear ambulancia",
+        "no ceder ambulancia"
+      ]
     },
     {
       "codigo": "D10",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Conducir vehículo de transporte escolar con exceso de velocidad.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["escolar exceso velocidad", "bus escolar rapido"]
+      "aliases": [
+        "escolar exceso velocidad",
+        "bus escolar rapido"
+      ]
     },
     {
       "codigo": "D11",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Permitir servicio público de pasajeros sin salida de emergencia en cada costado.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["bus sin salida emergencia", "salida emergencia bus"]
+      "aliases": [
+        "bus sin salida emergencia",
+        "salida emergencia bus"
+      ]
     },
     {
       "codigo": "D12",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Conducir vehículo destinado a un servicio diferente al autorizado en la licencia de tránsito.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización: 5 días 1.ª vez, 20 días 2.ª, 40 días 3.ª.",
-      "aliases": ["servicio no autorizado", "servicio diferente licencia"]
+      "aliases": [
+        "servicio no autorizado",
+        "servicio diferente licencia"
+      ]
     },
     {
       "codigo": "D13",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Transportar carga con peso superior al autorizado.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta descargar el exceso.",
       "consejos": "El sobrepeso daña las vías y es peligroso. Se controla en básculas de la Policía de Carreteras.",
-      "aliases": ["sobrepeso", "exceso de peso", "sobrecarga", "sobrecargado"]
+      "aliases": [
+        "sobrepeso",
+        "exceso de peso",
+        "sobrecarga",
+        "sobrecargado"
+      ]
     },
     {
       "codigo": "D14",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Usar combustibles no regulados que pongan en peligro a usuarios o peatones.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["gas propano ilegal", "combustible no regulado", "gas ilegal"]
+      "aliases": [
+        "gas propano ilegal",
+        "combustible no regulado",
+        "gas ilegal"
+      ]
     },
     {
       "codigo": "D15",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Cambiar el recorrido o trazado de ruta de transporte público sin autorización.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["cambio de ruta bus", "ruta no autorizada"]
+      "aliases": [
+        "cambio de ruta bus",
+        "ruta no autorizada"
+      ]
     },
     {
       "codigo": "D16",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Arrojar residuos sólidos al espacio público desde un vehículo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Arrojar basura desde el vehículo es infracción de tránsito y ambiental. Guarda los residuos y deposítalos en una caneca.",
-      "aliases": ["basura desde carro", "tirar basura", "arrojar basura", "botar basura", "basura ventana"]
+      "aliases": [
+        "basura desde carro",
+        "tirar basura",
+        "arrojar basura",
+        "botar basura",
+        "basura ventana"
+      ]
     },
     {
       "codigo": "D17",
       "categoria": "D",
       "smdlv": 30,
-      "monto_cop_2026": 1266100,
+      "monto_cop_2026": 1750920,
       "descripcion_oficial": "Infracción a normas de emisiones contaminantes o generación de ruido.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta corregir las emisiones.",
       "consejos": "El escape ruidoso o que emite humo visible es infracción. Mantén el sistema de escape en buen estado.",
-      "aliases": ["contaminacion", "ruido", "emisiones", "escape ruidoso", "humo"]
+      "aliases": [
+        "antirruido",
+        "contaminacion",
+        "decibeles",
+        "emisiones",
+        "escape modificado",
+        "escape ruidoso",
+        "exhosto",
+        "exosto",
+        "humo",
+        "ruido"
+      ]
     },
     {
       "codigo": "E01",
       "categoria": "E",
       "smdlv": 45,
-      "monto_cop_2026": 1899300,
+      "monto_cop_2026": 2626380,
       "descripcion_oficial": "Proveer combustible a vehículos de servicio público con pasajeros a bordo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": "Inmovilización.",
       "consejos": "NO admite descuento por curso. Es obligatorio que los pasajeros desciendan antes de tanquear.",
-      "aliases": ["tanquear con pasajeros", "combustible con pasajeros", "gasolina con pasajeros"]
+      "aliases": [
+        "tanquear con pasajeros",
+        "combustible con pasajeros",
+        "gasolina con pasajeros"
+      ]
     },
     {
       "codigo": "E02",
       "categoria": "E",
       "smdlv": 45,
-      "monto_cop_2026": 1899300,
+      "monto_cop_2026": 2626380,
       "descripcion_oficial": "Negarse a prestar el servicio público sin causa justificada que altere el orden público.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["negarse taxi", "taxi no presta servicio", "taxi niega carrera"]
+      "aliases": [
+        "negarse taxi",
+        "taxi no presta servicio",
+        "taxi niega carrera"
+      ]
     },
     {
       "codigo": "E03",
@@ -1133,164 +1622,261 @@
         "prueba de alcoholemia"
       ],
       "variables": [
-        {"id": "g0_1", "label": "Grado 0 (20-39 mg), 1.ª vez", "smdlv": 90},
-        {"id": "g0_2", "label": "Grado 0 (20-39 mg), 2.ª vez", "smdlv": 135},
-        {"id": "g0_3", "label": "Grado 0 (20-39 mg), 3.ª vez", "smdlv": 180},
-        {"id": "g1_1", "label": "Grado I (40-99 mg), 1.ª vez", "smdlv": 180},
-        {"id": "g1_2", "label": "Grado I (40-99 mg), 2.ª vez", "smdlv": 270},
-        {"id": "g1_3", "label": "Grado I (40-99 mg), 3.ª vez", "smdlv": 360},
-        {"id": "g2_1", "label": "Grado II (100-149 mg), 1.ª vez", "smdlv": 360},
-        {"id": "g2_2", "label": "Grado II (100-149 mg), 2.ª vez", "smdlv": 540},
-        {"id": "g2_3", "label": "Grado II (100-149 mg), 3.ª vez", "smdlv": 720},
-        {"id": "g3_1", "label": "Grado III (≥150 mg), 1.ª vez", "smdlv": 720},
-        {"id": "g3_2", "label": "Grado III (≥150 mg), 2.ª vez", "smdlv": 1080},
-        {"id": "g3_3", "label": "Grado III (≥150 mg), 3.ª vez", "smdlv": 1440},
-        {"id": "fuga", "label": "Negativa a prueba o fuga (Art. 152 parágrafo 3°)", "smdlv": 1440}
+        {
+          "id": "g0_1",
+          "label": "Grado 0 (20-39 mg), 1.ª vez",
+          "smdlv": 90,
+          "monto_cop_2026": 5252760
+        },
+        {
+          "id": "g0_2",
+          "label": "Grado 0 (20-39 mg), 2.ª vez",
+          "smdlv": 135,
+          "monto_cop_2026": 7879140
+        },
+        {
+          "id": "g0_3",
+          "label": "Grado 0 (20-39 mg), 3.ª vez",
+          "smdlv": 180,
+          "monto_cop_2026": 10505520
+        },
+        {
+          "id": "g1_1",
+          "label": "Grado I (40-99 mg), 1.ª vez",
+          "smdlv": 180,
+          "monto_cop_2026": 10505520
+        },
+        {
+          "id": "g1_2",
+          "label": "Grado I (40-99 mg), 2.ª vez",
+          "smdlv": 270,
+          "monto_cop_2026": 15758280
+        },
+        {
+          "id": "g1_3",
+          "label": "Grado I (40-99 mg), 3.ª vez",
+          "smdlv": 360,
+          "monto_cop_2026": 21011040
+        },
+        {
+          "id": "g2_1",
+          "label": "Grado II (100-149 mg), 1.ª vez",
+          "smdlv": 360,
+          "monto_cop_2026": 21011040
+        },
+        {
+          "id": "g2_2",
+          "label": "Grado II (100-149 mg), 2.ª vez",
+          "smdlv": 540,
+          "monto_cop_2026": 31516560
+        },
+        {
+          "id": "g2_3",
+          "label": "Grado II (100-149 mg), 3.ª vez",
+          "smdlv": 720,
+          "monto_cop_2026": 42022080
+        },
+        {
+          "id": "g3_1",
+          "label": "Grado III (≥150 mg), 1.ª vez",
+          "smdlv": 720,
+          "monto_cop_2026": 42022080
+        },
+        {
+          "id": "g3_2",
+          "label": "Grado III (≥150 mg), 2.ª vez",
+          "smdlv": 1080,
+          "monto_cop_2026": 63033120
+        },
+        {
+          "id": "g3_3",
+          "label": "Grado III (≥150 mg), 3.ª vez",
+          "smdlv": 1440,
+          "monto_cop_2026": 84044160
+        },
+        {
+          "id": "fuga",
+          "label": "Negativa a prueba o fuga (Art. 152 parágrafo 3°)",
+          "smdlv": 1440,
+          "monto_cop_2026": 84044160
+        }
       ]
     },
     {
       "codigo": "E04",
       "categoria": "E",
       "smdlv": 45,
-      "monto_cop_2026": 1899300,
+      "monto_cop_2026": 2626380,
       "descripcion_oficial": "Transportar personas y sustancias peligrosas simultáneamente en el mismo vehículo.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": "Inmovilización.",
-      "aliases": ["explosivos con pasajeros", "sustancias peligrosas con pasajeros"]
+      "aliases": [
+        "explosivos con pasajeros",
+        "sustancias peligrosas con pasajeros"
+      ]
     },
     {
       "codigo": "F01",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: invadir zona vehicular o usar patines/monopatines en vía.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": "Amonestación o multa de 1 SMDLV.",
       "consejos": "Los peatones también deben respetar las normas de tránsito. Cruza siempre por cebras y puentes peatonales.",
-      "aliases": ["peaton invade via", "peaton en via", "patines en via"]
+      "aliases": [
+        "peaton invade via",
+        "peaton en via",
+        "patines en via"
+      ]
     },
     {
       "codigo": "F02",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: llevar elementos que obstaculicen el tránsito.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton obstaculo"]
+      "aliases": [
+        "peaton obstaculo"
+      ]
     },
     {
       "codigo": "F03",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: cruzar por sitios no permitidos o sobre guardavías.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton cruzar mal", "cruzar mal", "cruzar autopista"]
+      "aliases": [
+        "peaton cruzar mal",
+        "cruzar mal",
+        "cruzar autopista"
+      ]
     },
     {
       "codigo": "F04",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: colocarse delante o detrás de vehículo con motor encendido.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton motor encendido"]
+      "aliases": [
+        "peaton motor encendido"
+      ]
     },
     {
       "codigo": "F05",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: remolcarse de vehículos en movimiento.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton remolcarse"]
+      "aliases": [
+        "peaton remolcarse"
+      ]
     },
     {
       "codigo": "F06",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: actuar de forma que ponga en peligro su integridad.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton peligro"]
+      "aliases": [
+        "peaton peligro"
+      ]
     },
     {
       "codigo": "F07",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: cruzar atravesando tráfico sin usar paso peatonal.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton sin cruce", "cruzar sin cebra"]
+      "aliases": [
+        "peaton sin cruce",
+        "cruzar sin cebra"
+      ]
     },
     {
       "codigo": "F08",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: ocupar zona de seguridad de vía férrea.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton via ferrea"]
+      "aliases": [
+        "peaton via ferrea"
+      ]
     },
     {
       "codigo": "F09",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: subirse o bajarse de vehículo en movimiento.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton vehiculo movimiento"]
+      "aliases": [
+        "peaton vehiculo movimiento"
+      ]
     },
     {
       "codigo": "F10",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: transitar por túneles o puentes de vía férrea.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["peaton tunel"]
+      "aliases": [
+        "peaton tunel"
+      ]
     },
     {
       "codigo": "F11",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón/ciclista STTMP: ocupar zona de seguridad fuera de lugares habilitados.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["sttmp peatón"]
+      "aliases": [
+        "sttmp peatón"
+      ]
     },
     {
       "codigo": "F12",
       "categoria": "F",
       "smdlv": 1,
-      "monto_cop_2026": 42225,
+      "monto_cop_2026": 58364,
       "descripcion_oficial": "Peatón: cruzar fuera de zonas autorizadas dentro del perímetro urbano.",
       "articulo": "Art. 131 Ley 769/2002",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
-      "aliases": ["cruzar fuera paso peatonal urbano"]
+      "aliases": [
+        "cruzar fuera paso peatonal urbano"
+      ]
     },
     {
       "codigo": "G01",
@@ -1301,7 +1887,10 @@
       "articulo": "Res. 003027/2010 serie G (comparendo educativo)",
       "admite_descuento_curso": false,
       "sancion_adicional": "Comparendo educativo (sin multa económica).",
-      "aliases": ["fumar en bus", "pasajero fumando"]
+      "aliases": [
+        "fumar en bus",
+        "pasajero fumando"
+      ]
     },
     {
       "codigo": "G02",
@@ -1312,164 +1901,213 @@
       "articulo": "Res. 003027/2010 serie G (comparendo educativo)",
       "admite_descuento_curso": false,
       "sancion_adicional": "Comparendo educativo (sin multa económica).",
-      "aliases": ["peaton amonestado", "ciclista infraccion leve"]
+      "aliases": [
+        "peaton amonestado",
+        "ciclista infraccion leve"
+      ]
     },
     {
       "codigo": "H01",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Circular con defensas rígidas no originales del fabricante.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["defensas rigidas", "bumper rigido", "defensa no original"]
+      "aliases": [
+        "defensas rigidas",
+        "bumper rigido",
+        "defensa no original"
+      ]
     },
     {
       "codigo": "H02",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Conductor que no porte la licencia de tránsito del vehículo.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": "Inmovilización hasta presentar el documento.",
       "consejos": "Siempre porta la tarjeta de propiedad. También puedes tenerla en versión digital (app RUNT).",
-      "aliases": ["sin licencia transito", "sin tarjeta propiedad", "tarjeta propiedad"]
+      "aliases": [
+        "sin licencia transito",
+        "sin tarjeta propiedad",
+        "tarjeta propiedad"
+      ]
     },
     {
       "codigo": "H03",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Obstaculizar, perjudicar o poner en riesgo a otras personas en vía.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["obstaculizar transito", "estorbar via"]
+      "aliases": [
+        "obstaculizar transito",
+        "estorbar via"
+      ]
     },
     {
       "codigo": "H04",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "No respetar derechos e integridad de peatones.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["no respetar peatones leve"]
+      "aliases": [
+        "no respetar peatones leve"
+      ]
     },
     {
       "codigo": "H05",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "No respetar prelación de paso en intersecciones o giros.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["prelacion de paso", "no ceder interseccion"]
+      "aliases": [
+        "prelacion de paso",
+        "no ceder interseccion"
+      ]
     },
     {
       "codigo": "H06",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "No tomar medidas para evitar movimiento de vehículo estacionado.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["vehiculo sin freno mano", "carro se fue solo"]
+      "aliases": [
+        "vehiculo sin freno mano",
+        "carro se fue solo"
+      ]
     },
     {
       "codigo": "H07",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Llevar pasajeros en parte exterior del vehículo o estribos.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["pasajeros en estribo", "gente en estribo"]
+      "aliases": [
+        "pasajeros en estribo",
+        "gente en estribo"
+      ]
     },
     {
       "codigo": "H08",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Portar luces exploradoras en la parte posterior del vehículo.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["luces exploradoras traseras", "exploradoras atras"]
+      "aliases": [
+        "luces exploradoras traseras",
+        "exploradoras atras"
+      ]
     },
     {
       "codigo": "H09",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Pasajero con expresiones injuriosas o que cause molestia.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["pasajero grosero", "pasajero agresivo"]
+      "aliases": [
+        "pasajero grosero",
+        "pasajero agresivo"
+      ]
     },
     {
       "codigo": "H10",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Conductor de vehículo no automotor que incumple normas del Código.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["bicicleta infraccion", "bicicleta", "cicla"]
+      "aliases": [
+        "bicicleta infraccion",
+        "bicicleta",
+        "cicla"
+      ]
     },
     {
       "codigo": "H11",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Menor de 2 años sin silla de seguridad en asiento posterior.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
       "consejos": "Los niños menores de 2 años deben ir en silla de seguridad orientada hacia atrás en el asiento trasero.",
-      "aliases": ["bebe sin silla", "silla bebe", "silla de niño", "niño sin silla"]
+      "aliases": [
+        "bebe sin silla",
+        "silla bebe",
+        "silla de niño",
+        "niño sin silla"
+      ]
     },
     {
       "codigo": "H12",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Vehículo de alto tonelaje en vía de monumento histórico.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["camion monumento historico", "camion centro historico"]
+      "aliases": [
+        "camion monumento historico",
+        "camion centro historico"
+      ]
     },
     {
       "codigo": "H13",
       "categoria": "H",
       "smdlv": 5,
-      "monto_cop_2026": 211125,
+      "monto_cop_2026": 291820,
       "descripcion_oficial": "Otras conductas infractoras no descritas en el catálogo.",
       "articulo": "Res. 003027/2010 serie H (amonestación / 5 SMDLV)",
       "admite_descuento_curso": true,
       "sancion_adicional": null,
-      "aliases": ["infraccion no catalogada"]
+      "aliases": [
+        "infraccion no catalogada"
+      ]
     },
     {
       "codigo": "I01",
       "categoria": "I",
       "smdlv": 10,
-      "monto_cop_2026": 422250,
+      "monto_cop_2026": 583640,
       "descripcion_oficial": "Conductor sorprendido fumando mientras conduce.",
       "articulo": "Res. 003027/2010 serie I",
       "admite_descuento_curso": false,
       "sancion_adicional": null,
       "consejos": "Fumar mientras se conduce está prohibido porque distrae y afecta los reflejos. Si necesitas fumar, estaciónate.",
-      "aliases": ["fumar manejando", "cigarro manejando", "cigarrillo manejando"]
+      "aliases": [
+        "fumar manejando",
+        "cigarro manejando",
+        "cigarrillo manejando"
+      ]
     },
     {
       "codigo": "I02",
@@ -1479,9 +2117,17 @@
       "articulo": "Res. 003027/2010 serie I",
       "admite_descuento_curso": false,
       "sancion_adicional": "Investigación por lesiones u homicidio culposo si hubo víctimas.",
-      "aliases": ["deficiencia fisica accidente", "art 21 accidente"],
+      "aliases": [
+        "deficiencia fisica accidente",
+        "art 21 accidente"
+      ],
       "variables": [
-        {"id": "maximo", "label": "Hasta 100 SMDLV (según gravedad)", "smdlv": 100}
+        {
+          "id": "maximo",
+          "label": "Hasta 100 SMDLV (según gravedad)",
+          "smdlv": 100,
+          "monto_cop_2026": 5836400
+        }
       ]
     }
   ]

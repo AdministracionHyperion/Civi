@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
 import unicodedata
 
@@ -21,7 +22,15 @@ from bot_orchestrator.shared.appointment_selection import (
     PendingAppointmentSelection,
     PendingVehicleConsult,
     appointment_selection_store,
+    shared_pending_store,
     vehicle_consult_store,
+)
+from bot_orchestrator.shared.consult_jobs import (
+    ConsultJob,
+    ConsultJobStatus,
+    get_consult_job_repository,
+    estimated_wait_seconds,
+    generate_job_id,
 )
 from bot_orchestrator.shared.date_parser import parse_natural_datetime
 from bot_orchestrator.shared.vehicle_category import map_clase_to_quote_category
@@ -52,7 +61,13 @@ from .extractors import (
     wants_quote,
     wants_reminder,
     wants_runt_profile,
+    wants_situational_advice,
+    wants_general_traffic_question,
+    wants_infraccion_lookup,
     wants_soat,
+    wants_soat_info,
+    wants_accident_info,
+    wants_infraccion_explanation,
     wants_tecno,
     wants_vigencia,
 )
@@ -71,6 +86,7 @@ from .formatters import (
     format_reminder_response,
     format_runt_profile_response,
     format_handoff_response,
+    format_infraccion_detail_response,
     format_vigencia_response,
     soat_needs_quote,
     tecno_needs_quote,
@@ -88,8 +104,10 @@ async def run_agent_turn(
     llm_provider: LLMProvider | None = None,
 ) -> AgentTurnResponse:
     text = payload.text
-    placa = extract_plate(text)
-    documento = extract_document(text)
+    fresh_placa = extract_plate(text)
+    fresh_documento = extract_document(text)
+    placa = fresh_placa
+    documento = fresh_documento
 
     lowered = text.lower()
     if wants_cancel_appointment(text):
@@ -186,6 +204,27 @@ async def run_agent_turn(
                 mode="handoff_error",
             )
 
+    if wants_infraccion_lookup(text):
+        try:
+            data = await QuoteClient().create(
+                service_type="infraccion",
+                consulta=text,
+                codigo=extract_infraction_code(text),
+            )
+            return AgentTurnResponse(
+                text=format_quote_response(data),
+                state_version=1,
+                mode="infraccion_quote",
+                tool_calls=["quote.create"],
+            )
+        except httpx.HTTPStatusError:
+            pass
+        except Exception:
+            logger.exception("Failed infraccion catalog lookup")
+
+    if wants_situational_advice(text) or wants_general_traffic_question(text):
+        return await _answer_with_knowledge_context(payload, llm_provider=llm_provider)
+
     if wants_payment(text):
         try:
             data = await BillingClient().create_payment_intent(
@@ -260,6 +299,20 @@ async def run_agent_turn(
                 mode="knowledge_error",
             )
 
+    if wants_infraccion_explanation(text) and not wants_knowledge(text):
+        code = extract_infraction_code(text)
+        if code:
+            try:
+                data = await QuoteClient().get_infraccion_detail(codigo=code)
+                return AgentTurnResponse(
+                    text=format_infraccion_detail_response(data),
+                    state_version=1,
+                    mode="infraccion_detail",
+                    tool_calls=["quote.infraccion_detail"],
+                )
+            except httpx.HTTPStatusError:
+                pass
+
     if wants_knowledge(text):
         domain = knowledge_domain_for_text(text)
         topic = knowledge_topic_for_text(text, domain=domain)
@@ -315,11 +368,70 @@ async def run_agent_turn(
         )
 
     pending_consult = vehicle_consult_store.get(user_key=payload.user_key, channel=payload.channel)
-    if wants_vigencia(text) or (pending_consult is not None and (placa or documento)):
+    if pending_consult is not None and pending_consult.intent in {"multas", "runt_profile"}:
+        # Multas / RUNT profile use their own slots below; do not treat as SOAT/tecno pending.
+        pass
+    elif pending_consult is not None:
+        placa = placa or pending_consult.placa
+        documento = documento or pending_consult.documento
+
+    has_both_vehicle_slots = bool(placa and documento)
+    captured_fresh_slots = bool(fresh_placa or fresh_documento)
+    vigencia_pending = pending_consult is not None and pending_consult.intent not in {
+        "multas",
+        "runt_profile",
+    }
+    multas_or_runt_pending = pending_consult is not None and pending_consult.intent in {
+        "multas",
+        "runt_profile",
+    }
+    should_handle_vehicle = (
+        not multas_or_runt_pending
+        and (
+            wants_vigencia(text)
+            or vigencia_pending
+            or (has_both_vehicle_slots and captured_fresh_slots)
+        )
+    )
+
+    if should_handle_vehicle:
         if wants_vigencia(text):
             intent = "soat" if wants_soat(text) and not wants_tecno(text) else "tecnomecanica"
-        else:
+        elif pending_consult is not None and pending_consult.intent:
             intent = pending_consult.intent
+        else:
+            intent = None
+
+        if intent is None:
+            vehicle_consult_store.save(
+                PendingVehicleConsult(
+                    user_key=payload.user_key,
+                    channel=payload.channel,
+                    intent=None,
+                    placa=placa,
+                    documento=documento,
+                )
+            )
+            if has_both_vehicle_slots:
+                return AgentTurnResponse(
+                    text=(
+                        f"Veo la placa *{placa}* y el documento *{documento}*. "
+                        "¿Consultamos *SOAT* o *tecnomecanica*?"
+                    ),
+                    state_version=1,
+                    mode="vehicle_missing_intent",
+                )
+            missing_bits: list[str] = []
+            if not placa:
+                missing_bits.append("la *placa*")
+            if not documento:
+                missing_bits.append("la *cedula del titular*")
+            missing = " y ".join(missing_bits) if missing_bits else "la *placa* y la *cedula*"
+            return AgentTurnResponse(
+                text=f"Para consultar SOAT o tecnomecanica, pasame {missing}.",
+                state_version=1,
+                mode="vehicle_missing_data",
+            )
 
         if not placa or not documento:
             vehicle_consult_store.save(
@@ -327,17 +439,42 @@ async def run_agent_turn(
                     user_key=payload.user_key,
                     channel=payload.channel,
                     intent=intent,
+                    placa=placa,
+                    documento=documento,
                 )
             )
-            missing_prompt = (
-                "Va el SOAT. Pasame la *placa* y la *cedula del titular* y consulto en RUNT."
-                if intent == "soat"
-                else "Va la tecno. Pasame la *placa* y la *cedula del titular* y consulto en RUNT."
-            )
+            if not placa and not documento:
+                missing_prompt = (
+                    "Va el SOAT. Pasame la *placa* y la *cedula del titular* y consulto en RUNT."
+                    if intent == "soat"
+                    else "Va la tecno. Pasame la *placa* y la *cedula del titular* y consulto en RUNT."
+                )
+            elif not placa:
+                missing_prompt = (
+                    "Va el SOAT. Pasame la *placa* y consulto en RUNT."
+                    if intent == "soat"
+                    else "Va la tecno. Pasame la *placa* y consulto en RUNT."
+                )
+            else:
+                missing_prompt = (
+                    "Va el SOAT. Pasame la *cedula del titular* y consulto en RUNT."
+                    if intent == "soat"
+                    else "Va la tecno. Pasame la *cedula del titular* y consulto en RUNT."
+                )
             return AgentTurnResponse(
                 text=missing_prompt,
                 state_version=1,
                 mode="vehicle_missing_data",
+            )
+
+        vehicle_consult_store.clear(user_key=payload.user_key, channel=payload.channel)
+
+        if payload.channel.lower() == "whatsapp":
+            return await _enqueue_consult_job(
+                payload=payload,
+                intent=intent,
+                placa=placa,
+                documento=documento,
             )
 
         try:
@@ -349,7 +486,6 @@ async def run_agent_turn(
                 mode="vehicle_error",
             )
 
-        vehicle_consult_store.clear(user_key=payload.user_key, channel=payload.channel)
         quote_payload = await _maybe_quote_for_vigencia(intent=intent, data=data)
         tool_calls = ["vehicle.check_vigencia"]
         if quote_payload is not None:
@@ -372,16 +508,58 @@ async def run_agent_turn(
             tool_calls=tool_calls,
         )
 
-    if wants_multas(text):
-        if not documento:
+    if wants_multas(text) or (
+        pending_consult is not None and pending_consult.intent == "multas"
+    ):
+        ciudad = extract_city(text)
+        if pending_consult is not None and pending_consult.intent == "multas":
+            ciudad = ciudad or pending_consult.ciudad
+            documento = documento or pending_consult.documento
+
+        if not ciudad:
+            vehicle_consult_store.save(
+                PendingVehicleConsult(
+                    user_key=payload.user_key,
+                    channel=payload.channel,
+                    intent="multas",
+                    documento=documento,
+                    ciudad=None,
+                )
+            )
             return AgentTurnResponse(
-                text="Pasame la *cedula* para consultar multas o comparendos en SIMIT.",
+                text="Dime en que *ciudad* te pusieron la multa o el comparendo.",
+                state_version=1,
+                mode="multas_missing_city",
+            )
+
+        if not documento:
+            vehicle_consult_store.save(
+                PendingVehicleConsult(
+                    user_key=payload.user_key,
+                    channel=payload.channel,
+                    intent="multas",
+                    documento=None,
+                    ciudad=ciudad,
+                )
+            )
+            return AgentTurnResponse(
+                text=f"Va. Para consultar multas en *{ciudad}*, pasame la *cedula*.",
                 state_version=1,
                 mode="multas_missing_document",
             )
 
+        vehicle_consult_store.clear(user_key=payload.user_key, channel=payload.channel)
+
+        if payload.channel.lower() == "whatsapp":
+            return await _enqueue_consult_job(
+                payload=payload,
+                intent="multas",
+                documento=documento,
+                ciudad=ciudad,
+            )
+
         try:
-            data = await VehicleClient().consult_multas(documento=documento)
+            data = await VehicleClient().consult_multas(documento=documento, ciudad=ciudad)
             return AgentTurnResponse(
                 text=format_multas_response(data),
                 state_version=1,
@@ -401,6 +579,13 @@ async def run_agent_turn(
                 text="Pasame la *cedula* para consultar tu perfil RUNT.",
                 state_version=1,
                 mode="runt_profile_missing_document",
+            )
+
+        if payload.channel.lower() == "whatsapp":
+            return await _enqueue_consult_job(
+                payload=payload,
+                intent="runt_profile",
+                documento=documento,
             )
 
         try:
@@ -428,13 +613,74 @@ async def run_agent_turn(
             mode="location_received_missing_procedure",
         )
 
-    return await _run_llm_fallback(payload, llm_provider=llm_provider)
+    return await _answer_with_knowledge_context(payload, llm_provider=llm_provider)
+
+
+async def _answer_with_knowledge_context(
+    payload: AgentTurnRequest,
+    *,
+    llm_provider: LLMProvider | None = None,
+) -> AgentTurnResponse:
+    context_blocks: list[str] = []
+    tool_calls = ["knowledge.search", "llm.complete"]
+    try:
+        search = await KnowledgeClient().search(query=payload.text, limit=5)
+        hits = search.get("hits") if isinstance(search, dict) else None
+        if isinstance(hits, list):
+            for hit in hits[:4]:
+                if not isinstance(hit, dict):
+                    continue
+                title = str(hit.get("title") or "").strip()
+                body = str(hit.get("body") or "").strip()
+                score = hit.get("score")
+                if not body:
+                    continue
+                header = title or "Contexto"
+                score_bit = f" (score={score})" if isinstance(score, (int, float)) else ""
+                context_blocks.append(f"- {header}{score_bit}: {body}")
+    except Exception:
+        logger.exception("Failed knowledge corpus search; continuing with LLM only")
+        tool_calls = ["llm.complete"]
+
+    if context_blocks:
+        user_text = (
+            f"Pregunta del usuario: {payload.text}\n\n"
+            "Contexto validado de Civi (usa solo esto para hechos legales/montos; "
+            "si no alcanza, dilo y no inventes codigos ni tarifas):\n"
+            + "\n".join(context_blocks)
+        )
+    else:
+        user_text = (
+            f"Pregunta del usuario: {payload.text}\n\n"
+            "No hay contexto validado recuperado. No inventes codigos de infraccion ni montos. "
+            "Si falta informacion, pide el codigo del comparendo o mas detalle."
+        )
+
+    return await _run_llm_fallback(
+        payload,
+        llm_provider=llm_provider,
+        user_text_override=user_text,
+        tool_calls=tool_calls,
+        mode="knowledge_rag_llm" if context_blocks else "llm_provider",
+    )
 
 
 async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest) -> AgentTurnResponse | None:
     pending = appointment_selection_store.get(user_key=payload.user_key, channel=payload.channel)
+    was_just_loaded = False
     if pending is None:
-        return None
+        procedure = shared_pending_store.pop_pending_procedure(user_key=payload.user_key)
+        if procedure:
+            pending = PendingAppointmentSelection(
+                user_key=payload.user_key,
+                channel=payload.channel,
+                procedure=procedure,
+                places=[],
+            )
+            appointment_selection_store.save(pending)
+            was_just_loaded = True
+        else:
+            return None
 
     starts_at = _parse_appointment_datetime(payload.text)
     if starts_at:
@@ -445,7 +691,7 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
         location = location_for_turn(payload)
         if city is None and location is None:
             appointment_selection_store.save(pending)
-            if starts_at or wants_appointment(payload.text):
+            if starts_at or was_just_loaded or wants_appointment(payload.text):
                 return AgentTurnResponse(
                     text=LOCATION_REQUEST_PENDING_TEXT,
                     state_version=1,
@@ -469,7 +715,7 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
             tool_calls=[],
         )
 
-    selection_idx = extract_place_selection(payload.text)
+    selection_idx = extract_place_selection(payload.text, places=pending.places)
     if selection_idx is None and _looks_like_place_confirmation(payload.text):
         if pending.selected_index is not None:
             selection_idx = pending.selected_index
@@ -627,12 +873,15 @@ async def _run_llm_fallback(
     payload: AgentTurnRequest,
     *,
     llm_provider: LLMProvider | None = None,
+    user_text_override: str | None = None,
+    tool_calls: list[str] | None = None,
+    mode: str | None = None,
 ) -> AgentTurnResponse:
     provider = llm_provider or llm_provider_from_env()
     try:
         result = await provider.complete(
             system_prompt=build_system_prompt(),
-            user_text=payload.text,
+            user_text=user_text_override or payload.text,
             user_key=payload.user_key,
             channel=payload.channel,
         )
@@ -648,8 +897,8 @@ async def _run_llm_fallback(
         return AgentTurnResponse(
             text=generated.strip(),
             state_version=1,
-            mode=str(result.get("provider_mode", "llm_provider")),
-            tool_calls=["llm.complete"],
+            mode=mode or str(result.get("provider_mode", "llm_provider")),
+            tool_calls=tool_calls or ["llm.complete"],
         )
 
     return AgentTurnResponse(
@@ -779,6 +1028,15 @@ def _int_or_none(value: object) -> int | None:
     return None
 
 
+def _int_from_env(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return default
+    return value if value >= 0 else default
+
+
 def notification_to_for_turn(payload: AgentTurnRequest) -> str | None:
     if payload.channel.lower() != "whatsapp":
         return None
@@ -805,3 +1063,113 @@ def location_for_turn(payload: AgentTurnRequest) -> tuple[float, float] | None:
         if is_colombia_latlng(lat, lng):
             return lat, lng
     return None
+
+
+async def _enqueue_consult_job(
+    *,
+    payload: AgentTurnRequest,
+    intent: str,
+    placa: str | None = None,
+    documento: str | None = None,
+    ciudad: str | None = None,
+    repository: "ConsultJobRepository | None" = None,
+) -> AgentTurnResponse:
+    repo = repository or get_consult_job_repository()
+
+    parallelism = _int_from_env("BOT_CONSULT_MAX_CONCURRENT", 3)
+    dedup_window = _int_from_env("BOT_CONSULT_DEDUP_WINDOW_SECONDS", 120)
+    if dedup_window > 0:
+        existing = repo.find_active_for_user(
+            user_key=payload.user_key,
+            intent=intent,
+            max_age_seconds=dedup_window,
+        )
+        if existing is not None:
+            existing_job, existing_pos = existing
+            if existing_job.status == ConsultJobStatus.PROCESSING:
+                return AgentTurnResponse(
+                    text="Tu consulta ya esta en proceso. En un momento te mando el resultado.",
+                    state_version=1,
+                    mode=f"vehicle_{intent}_already_processing",
+                )
+            # Still pending — reuse existing position
+            intent_labels: dict[str, str] = {
+                "soat": "SOAT",
+                "tecnomecanica": "tecnomecanica",
+                "multas": "multas",
+                "runt_profile": "perfil RUNT",
+            }
+            label = intent_labels.get(intent, intent)
+            wait_estimate = estimated_wait_seconds(existing_pos, parallelism=parallelism)
+            return AgentTurnResponse(
+                text=(
+                    f"Ya tienes una consulta de {label} en la cola "
+                    f"(posicion *{existing_pos}*, espera estimada: {wait_estimate}). "
+                    f"Te mando el resultado por aqui apenas este listo."
+                ),
+                state_version=1,
+                mode=f"vehicle_{intent}_already_queued",
+            )
+
+    job = ConsultJob(
+        job_id=generate_job_id(),
+        user_key=payload.user_key,
+        channel=payload.channel,
+        intent=intent,
+        placa=placa,
+        documento=documento,
+        ciudad=ciudad,
+    )
+    try:
+        _, position = repo.enqueue(job)
+    except RuntimeError:
+        return AgentTurnResponse(
+            text="Hay muchas consultas en curso. Intentalo de nuevo en un momento.",
+            state_version=1,
+            mode="vehicle_queue_full",
+        )
+
+    intent_labels: dict[str, str] = {
+        "soat": "SOAT",
+        "tecnomecanica": "tecnomecanica",
+        "multas": "multas",
+        "runt_profile": "perfil RUNT",
+    }
+    label = intent_labels.get(intent, intent)
+    wait_estimate = estimated_wait_seconds(position, parallelism=parallelism)
+
+    if position == 1:
+        if intent == "multas":
+            city_bit = f" en *{ciudad}*" if ciudad else ""
+            msg = (
+                f"Listo, ya empiezo a consultar tus multas{city_bit} en SIMIT "
+                f"(y el portal local si aplica). En un momento te mando el resultado por aqui."
+            )
+        else:
+            msg = (
+                f"Listo, ya empiezo a consultar tu {label} en el RUNT. "
+                f"En un momento te mando el resultado por aqui."
+            )
+    else:
+        msg = (
+            f"Listo, tu consulta de {label} quedo en la posicion *{position}* de la cola "
+            f"(espera estimada: {wait_estimate}). "
+            f"Te mando el resultado por aqui apenas este listo."
+        )
+
+    tool_calls: list[str]
+    if intent == "soat" or intent == "tecnomecanica":
+        tool_calls = ["vehicle.check_vigencia"]
+    elif intent == "multas":
+        tool_calls = ["vehicle.consult_multas"]
+    elif intent == "runt_profile":
+        tool_calls = ["vehicle.consult_runt_profile"]
+    else:
+        tool_calls = []
+
+    return AgentTurnResponse(
+        text=msg,
+        state_version=1,
+        mode=f"vehicle_{intent}_queued",
+        tool_calls=tool_calls,
+    )

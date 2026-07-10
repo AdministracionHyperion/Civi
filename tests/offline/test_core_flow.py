@@ -12,6 +12,11 @@ from conversation_service.slices.run_turn.schemas import RunTurnRequest
 from conversation_service.slices.run_turn.use_case import run_turn
 import bot_orchestrator.slices.run_turn.use_case as agent_use_case
 from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+from bot_orchestrator.shared.consult_jobs import (
+    ConsultJobStatus,
+    InMemoryConsultJobRepository,
+)
+from bot_orchestrator.workers import consult_worker
 from notification_service.shared.repository import InMemoryNotificationRepository
 from notification_service.slices.process_due_reminders.use_case import process_due_reminders
 from notification_service.slices.schedule_reminder.schemas import ScheduleReminderRequest
@@ -132,6 +137,22 @@ class LocalAppointmentClient:
         }
 
 
+class FakeNotificationClient:
+    """Tracks send_whatsapp_message calls for offline testing."""
+
+    def __init__(self) -> None:
+        self.sent_messages: list[dict[str, str]] = []
+        self.dispatches: int = 0
+
+    async def send_whatsapp_message(self, *, to: str, body: str) -> dict[str, object]:
+        self.sent_messages.append({"to": to, "body": body})
+        return {"success": True, "message": {}}
+
+    async def dispatch_outbox(self, *, limit: int = 10) -> dict[str, object]:
+        self.dispatches += 1
+        return {"dispatched": []}
+
+
 class OfflineAgentClient:
     def __init__(self, *, event_publisher: InMemoryEventPublisher) -> None:
         self.calls = 0
@@ -179,9 +200,12 @@ async def test_offline_core_conversation_flow(monkeypatch: pytest.MonkeyPatch) -
     conversation_repository = InMemoryConversationRepository()
     appointment_repository = InMemoryAppointmentRepository()
     notification_repository = InMemoryNotificationRepository()
+    consult_repo = InMemoryConsultJobRepository()
 
     monkeypatch.setattr(agent_use_case, "VehicleClient", FakeVehicleClient)
     monkeypatch.setattr(agent_use_case, "PlacesClient", FakePlacesClient)
+    monkeypatch.setattr(agent_use_case, "consult_job_repository", consult_repo)
+    monkeypatch.setattr(consult_worker, "consult_job_repository", consult_repo)
     monkeypatch.setattr(appointment_use_case, "repository", appointment_repository)
     monkeypatch.setattr(schedule_reminder_use_case, "repository", notification_repository)
 
@@ -192,6 +216,7 @@ async def test_offline_core_conversation_flow(monkeypatch: pytest.MonkeyPatch) -
         agent_client=agent_client,
     )
 
+    # --- Consent flow ---
     pending = await receive_message(
         ReceiveMessageRequest(
             user_key="573001112233",
@@ -223,7 +248,8 @@ async def test_offline_core_conversation_flow(monkeypatch: pytest.MonkeyPatch) -
     )
     assert fallback.text == "respuesta offline LLM para explicame que puedes hacer"
 
-    vehicle = await receive_message(
+    # --- SOAT consult via WhatsApp: async path ---
+    vehicle_ack = await receive_message(
         ReceiveMessageRequest(
             user_key="573001112233",
             text="consulta soat de ABC123 cedula 123456789",
@@ -232,8 +258,34 @@ async def test_offline_core_conversation_flow(monkeypatch: pytest.MonkeyPatch) -
         conversation_client=conversation_client,
         event_publisher=event_publisher,
     )
-    assert "SOAT vigente hasta el *15/10/2026*" in vehicle.text
+    assert "ya empiezo a consultar" in vehicle_ack.text
+    assert vehicle_ack.mode == "vehicle_soat_queued"
 
+    # Worker processes the pending job
+    fake_vc = FakeVehicleClient()
+    fake_nc = FakeNotificationClient()
+    processed = await consult_worker.run_once(
+        repository=consult_repo,
+        vehicle_client=fake_vc,
+        notification_client=fake_nc,
+    )
+    assert processed == 1
+
+    # Assert worker sent the formatted SOAT text via notification
+    assert len(fake_nc.sent_messages) == 1
+    assert "SOAT vigente hasta el *15/10/2026*" in fake_nc.sent_messages[0]["body"]
+    assert fake_nc.dispatches == 1
+
+    # Job marked done
+    job_keys = list(consult_repo._jobs.keys())
+    assert len(job_keys) == 1
+    job = consult_repo.get(job_keys[0])
+    assert job is not None
+    assert job.status == ConsultJobStatus.DONE
+    assert job.result is not None
+    assert "SOAT vigente" in job.result.get("formatted", "")
+
+    # --- Appointment flow ---
     appointment = await receive_message(
         ReceiveMessageRequest(
             user_key="573001112233",

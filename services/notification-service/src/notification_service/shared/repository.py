@@ -37,6 +37,9 @@ class NotificationRepository(Protocol):
     def list_queued(self, *, limit: int = 50) -> list[OutboxMessage]:
         ...
 
+    def claim_queued_batch(self, *, limit: int = 50) -> list[OutboxMessage]:
+        ...
+
     def mark_sent(self, message_id: int) -> OutboxMessage | None:
         ...
 
@@ -72,6 +75,17 @@ class InMemoryNotificationRepository:
             msg for msg in sorted(self._outbox.values(), key=lambda item: item.id)
             if msg.status == "queued"
         ][:limit]
+
+    def claim_queued_batch(self, *, limit: int = 50) -> list[OutboxMessage]:
+        with self._lock:
+            batch = []
+            for msg in sorted(self._outbox.values(), key=lambda item: item.id):
+                if msg.status == "queued":
+                    msg.status = "sending"
+                    batch.append(msg)
+                    if len(batch) >= limit:
+                        break
+            return batch
 
     def mark_sent(self, message_id: int) -> OutboxMessage | None:
         with self._lock:

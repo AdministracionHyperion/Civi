@@ -4,11 +4,13 @@ from fastapi import Depends, FastAPI
 
 from civi_common import health_payload, require_internal_token
 from quote_service.slices.create_quote.api import router as quote_router
+from quote_service.slices.get_infraccion_detail.api import router as infraccion_router
 
 SERVICE_NAME = "quote-service"
 
 app = FastAPI(title="Civi Quote Service", version="0.1.0")
 app.include_router(quote_router)
+app.include_router(infraccion_router)
 
 
 @app.get("/health/live")

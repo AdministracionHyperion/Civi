@@ -5,6 +5,7 @@ from typing import Protocol
 from civi_common.events import EventPublisher, event_publisher_from_env
 from appointment_service.adapters.outbound.notification_client import NotificationClient
 from appointment_service.shared.mappers import appointment_to_dict
+from appointment_service.shared.reminders import compute_remind_at
 from appointment_service.shared.repository import repository
 
 from .schemas import CreateAppointmentRequest, CreateAppointmentResponse
@@ -74,7 +75,7 @@ async def _schedule_reminder(
                 f"Recordatorio Civi: cita de {payload.procedure} en "
                 f"{payload.place.name}, {payload.place.city}, {payload.starts_at}."
             ),
-            remind_at=payload.starts_at,
+            remind_at=compute_remind_at(payload.starts_at),
         )
     except Exception as exc:
         return {"status": "failed", "reason": str(exc)}

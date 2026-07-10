@@ -1,0 +1,1 @@
+"""Infraccion detail lookup slice."""

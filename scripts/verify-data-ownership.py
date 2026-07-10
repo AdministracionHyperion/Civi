@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SQL_MODULES = {
     "admin-service": "admin_service.adapters.outbound.sql_audit_repository",
     "appointment-service": "appointment_service.adapters.outbound.sql_repository",
+    "bot-orchestrator": "bot_orchestrator.adapters.outbound.sql_repository",
     "conversation-service": "conversation_service.adapters.outbound.sql_repository",
     "media-service": "media_service.adapters.outbound.sql_repository",
     "notification-service": "notification_service.adapters.outbound.sql_repository",
@@ -20,6 +21,7 @@ SQL_MODULES = {
 ALLOWED_TABLE_PATTERNS = {
     "admin-service": ("admin_",),
     "appointment-service": ("appointment_", "appointments"),
+    "bot-orchestrator": ("bot_", "bot_consult_jobs"),
     "conversation-service": ("conversation_",),
     "media-service": ("media_",),
     "notification-service": ("notification_",),
