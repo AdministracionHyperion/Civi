@@ -1,0 +1,58 @@
+{
+  "database": "civi_geocode_validation_tmp (ephemeral local Postgres)",
+  "database_url_sanitized": "postgresql+psycopg://civi:***@localhost:5432/civi_geocode_validation_tmp",
+  "catalog": {
+    "input": "services/places-service/data/raw/places_colombia_original.json",
+    "unique_sites": 4046,
+    "source_place_id_populated": 4046,
+    "null_source_place_id": 0
+  },
+  "id_coverage": {
+    "manizales": "44/44 exact one",
+    "santander": "153/153 exact one"
+  },
+  "manizales": {
+    "resolution_source_place_id": 44,
+    "unknown_site_ids": 0,
+    "duplicate_source_place_id": 0,
+    "department_mismatch": 0,
+    "municipality_mismatch": 0,
+    "kind_mismatch": 0,
+    "manual_protected": 0,
+    "partner_protected": 0,
+    "outside_bbox": 0,
+    "atomic_aborted": false,
+    "applied_rows": 0,
+    "mode": "dry_run"
+  },
+  "santander": {
+    "resolution_source_place_id": 153,
+    "unknown_site_ids": 0,
+    "duplicate_source_place_id": 0,
+    "department_mismatch": 0,
+    "municipality_mismatch": 0,
+    "kind_mismatch": 0,
+    "manual_protected": 0,
+    "partner_protected": 0,
+    "outside_bbox": 0,
+    "atomic_aborted": false,
+    "applied_rows": 0,
+    "mode": "dry_run"
+  },
+  "db_unchanged_by_dry_run": {
+    "before": {
+      "sites_with_lat": 0,
+      "sites_with_validation": 0,
+      "geocode_attempts": 0
+    },
+    "after": {
+      "sites_with_lat": 0,
+      "sites_with_validation": 0,
+      "geocode_attempts": 0
+    }
+  },
+  "no_apply": true,
+  "no_force": true,
+  "no_deploy": true,
+  "no_production_access": true
+}

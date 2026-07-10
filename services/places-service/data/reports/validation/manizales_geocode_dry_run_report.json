@@ -1,0 +1,48 @@
+{
+  "mode": "dry_run",
+  "input": "services\\places-service\\data\\geocodes\\manizales\\geocodes_manizales_validado.csv",
+  "scope": "manizales",
+  "city": "Manizales",
+  "rows": 44,
+  "valid_rows": 44,
+  "inserted": 44,
+  "updated": 0,
+  "unchanged": 0,
+  "skipped": 0,
+  "rejected": 0,
+  "unknown_site_ids": 0,
+  "manual_protected": 0,
+  "partner_protected": 0,
+  "kind_mismatch": 0,
+  "municipality_mismatch": 0,
+  "department_mismatch": 0,
+  "duplicate_source_place_id": 0,
+  "duplicate_ids": 0,
+  "outside_bbox": 0,
+  "count_mismatch": false,
+  "count_mismatch_reasons": [],
+  "by_kind": {
+    "CDA": 14,
+    "CEA": 15,
+    "CIA": 8,
+    "CRC": 7
+  },
+  "by_city": {
+    "Manizales": 44
+  },
+  "by_validation_status": {
+    "approximate_not_confirmed": 12,
+    "confirmed_address": 13,
+    "confirmed_business": 19
+  },
+  "atomic_aborted": false,
+  "rejected_rows": [],
+  "blocked_rows": [],
+  "unknown_ids": [],
+  "resolution": {
+    "source_place_id": 44,
+    "source_records_fallback": 0
+  },
+  "applied_rows": 0,
+  "database_url": "postgresql+psycopg://civi:***@localhost:5432/civi_geocode_validation_tmp"
+}
