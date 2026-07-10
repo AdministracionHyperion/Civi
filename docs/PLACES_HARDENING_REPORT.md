@@ -2,6 +2,8 @@
 
 Branch: `fix/places-production-hardening`  
 Base commit: `b53a55fba2152d3e75f1c2e6ce068ec4cf91cace`  
+HEAD: `6164377fe931d916bc4bf7144dc80abd0f55bffc`  
+PR: https://github.com/AdministracionHyperion/Civi/pull/3  
 Started: 2026-07-10
 
 ## Baseline (before code changes)
@@ -27,15 +29,32 @@ Started: 2026-07-10
 | pending_review | **6** |
 | unique_entities | 3293 |
 
-## Hardening delivered in this branch
+## Hardening delivered
 
-- Tri-state `document_valid` + `document_validation_status` on Entity / import metrics
+- Tri-state `document_valid` + `document_validation_status`
 - `HttpGeocoder`: rate limit, retry backoff, `low_confidence`, injectable transport
 - `places_presence_events` on first_seen / missing / reappeared
+- Shared effective presence for nearest / partners / eligibility
 - Catalog summary + OpenAPI expanded metrics
-- CLI hardening tests; geocode dry-run CI smoke; `fix/**` on verify workflow
-- Appointment 404 (`exists=false`) + 503 (`PlacesCatalogUnavailable`)
+- CLI hardening (no implicit SQLite on apply; geocode CSV validation)
+- Appointment 404 / 422 / 503 + OpenAPI
+- CI: `fix/**` + geocode dry-run smoke + Postgres idempotency
+
+## Verification (HEAD `6164377`)
+
+| Check | Result |
+| --- | --- |
+| `scripts/verify.ps1` | PASSED (**193** tests) |
+| GitHub Actions (push) | PASSED — https://github.com/AdministracionHyperion/Civi/actions/runs/29062093955 |
+| GitHub Actions (PR) | PASSED — https://github.com/AdministracionHyperion/Civi/actions/runs/29062095583 |
+| No deploy / no production apply | Confirmed |
+
+## Remaining gaps (keep READY_TO_MERGE=NO)
+
+1. Dedicated **PostgreSQL 16 legacy container** job (create NOT NULL schema → migrate → import 4107 → second import) is implemented in code/tests helpers but not yet a full remote container gate beyond clean Postgres idempotency.
+2. Full Compose stack smoke (channel→appointment) is not a remote CI gate.
+3. `manually_preserved` operational CLI/API with mandatory actor/reason is only partially covered via presence model/events.
 
 ## READY_TO_MERGE
 
-NO (await CI green on this PR)
+**NO**
