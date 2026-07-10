@@ -252,7 +252,23 @@ jobs:
         env:
           PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
         run: |
-          SITE_ID=$(cat /tmp/geocode_site_id.txt)
+          # CSV apply marks geocode_status=manual; clear it so this step isolates
+          # unknown-site abort (manual protection is covered in a later step).
+          python - <<'PY'
+          from pathlib import Path
+          from sqlalchemy import create_engine, text
+          site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
+          engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
+          with engine.begin() as conn:
+              conn.execute(
+                  text(
+                      "UPDATE places_sites SET geocode_status='ok', "
+                      "geocode_confidence=0.91 WHERE site_id=:s"
+                  ),
+                  {"s": site_id},
+              )
+          print("cleared_manual_for_mixed", site_id)
+          PY
           python - <<PY
           import csv
           from pathlib import Path
@@ -300,6 +316,7 @@ jobs:
           report = json.loads(Path("/tmp/geocode_mixed_report.json").read_text())
           assert report["atomic_aborted"] is True
           assert report["applied_rows"] == 0
+          assert report["unknown_site_ids"] == 1
           site_id = Path("/tmp/geocode_site_id.txt").read_text().strip()
           engine = create_engine("postgresql+psycopg://civi:civi@localhost:5432/civi", future=True)
           with engine.connect() as conn:
@@ -327,8 +344,10 @@ jobs:
           from pathlib import Path
           report = json.loads(Path("/tmp/geocode_partial_report.json").read_text())
           assert report["atomic_aborted"] is False
+          assert report["allow_partial"] is True
           assert report["unknown_site_ids"] == 1
           assert report["inserted"] + report["updated"] >= 1
+          assert report["applied_rows"] >= 1
           print("geocode_allow_partial_ok", report)
           PY
       - name: Geocode manual protected without --force-manual

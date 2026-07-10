@@ -122,6 +122,15 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
     inspector = inspect(engine)
     tables = set(inspector.get_table_names())
 
+    def _dialect_ddl(ddl: str) -> str:
+        """PostgreSQL rejects BOOLEAN DEFAULT 0/1; map to FALSE/TRUE."""
+        if engine.dialect.name != "postgresql":
+            return ddl
+        return (
+            ddl.replace("BOOLEAN DEFAULT 0", "BOOLEAN DEFAULT FALSE")
+            .replace("BOOLEAN DEFAULT 1", "BOOLEAN DEFAULT TRUE")
+        )
+
     def add_missing_columns(table: str, columns: tuple[tuple[str, str], ...]) -> None:
         if table not in tables:
             return
@@ -130,7 +139,7 @@ def migrate_schema(engine: Engine) -> dict[str, list[str]]:
             if name in existing:
                 continue
             with engine.begin() as conn:
-                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}"))
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {_dialect_ddl(ddl)}"))
             added[table].append(name)
 
     add_missing_columns("places_sites", _PLACES_SITES_EXTRA)
