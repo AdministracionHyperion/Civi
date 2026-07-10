@@ -1,0 +1,25 @@
+{
+  "input_sha256": "457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634",
+  "input_rows": 4107,
+  "source_records": 4107,
+  "imported_as_site": 4040,
+  "merged_duplicate": 61,
+  "pending_review": 6,
+  "rejected_with_reason": 0,
+  "unique_entities": 3293,
+  "unique_sites": 4046,
+  "detected_site_id_collisions_before_fix": 4,
+  "resolved_as_duplicate": 2,
+  "resolved_as_distinct_sites": 2,
+  "unresolved_collisions": 0,
+  "site_id_collisions_disambiguated": 0,
+  "sum_check": 4107,
+  "sum_matches_input": true,
+  "site_materialization_check": 4046,
+  "site_materialization_matches": true,
+  "idempotency_second_apply": {
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 4046
+  }
+}

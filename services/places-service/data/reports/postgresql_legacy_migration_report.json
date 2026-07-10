@@ -1,0 +1,133 @@
+{
+  "database_url": "localhost:5432/places_legacy_gate",
+  "postgres_version": "16.14",
+  "legacy_schema_created": true,
+  "lat_nullable_before": false,
+  "lng_nullable_before": false,
+  "lat_nullable_after": true,
+  "lng_nullable_after": true,
+  "legacy_rows_before": 2,
+  "legacy_rows_after": 2,
+  "legacy_sites_migrated": 2,
+  "legacy_entities_created": 2,
+  "orphan_entities": 0,
+  "v1_applied": true,
+  "v2_applied": true,
+  "v3_applied": true,
+  "national_source_rows": 4107,
+  "national_unique_sites": 4046,
+  "national_unique_entities": 3293,
+  "first_apply": {
+    "inserted": 4046,
+    "updated": 0,
+    "unchanged": 0
+  },
+  "second_apply": {
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 4046
+  },
+  "second_migration_changes": {
+    "migrations": [],
+    "places": [],
+    "places_sites": [],
+    "legacy_nullability": []
+  },
+  "passed": true,
+  "steps": [
+    {
+      "create_legacy_places": "ok"
+    },
+    {
+      "legacy_not_null_confirmed": true
+    },
+    {
+      "migrate_schema": {
+        "places_sites": [],
+        "places_entities": [],
+        "places_import_runs": [],
+        "places": [
+          "is_bookable",
+          "booking_mode",
+          "municipality_code",
+          "status_verified",
+          "location_precision",
+          "phone",
+          "status",
+          "source",
+          "source_updated_at",
+          "geocode_confidence",
+          "geocode_provider",
+          "geocode_status",
+          "runt_actor_id",
+          "nit"
+        ],
+        "places_geocode_attempts": [],
+        "places_presence_events": [],
+        "migrations": [
+          "v1_baseline",
+          "v2_national_catalog",
+          "v3_places_production_hardening",
+          "v4_geocode_attempts_and_presence_source"
+        ],
+        "legacy_nullability": [
+          "lat:drop_not_null",
+          "lng:drop_not_null"
+        ]
+      },
+      "legacy_migrated": 2
+    },
+    {
+      "lat_lng_nullable": true,
+      "ids_preserved": true,
+      "entities_non_orphan": true,
+      "migrations_applied": [
+        "v1_baseline",
+        "v2_national_catalog",
+        "v3_places_production_hardening",
+        "v4_geocode_attempts_and_presence_source"
+      ],
+      "partner_flags": {
+        "legacy-partner-01": true,
+        "legacy-public-01": false
+      }
+    },
+    {
+      "first_national_import": "ok",
+      "by_processing_status": {
+        "imported_as_site": 4040,
+        "merged_duplicate": 61,
+        "pending_review": 6
+      },
+      "legacy_preserved": true,
+      "total_sites": 4048
+    },
+    {
+      "second_apply_idempotent": true
+    },
+    {
+      "second_migrate_schema_empty": true
+    }
+  ],
+  "expected": {
+    "input_rows": 4107,
+    "imported": 4040,
+    "merged": 61,
+    "pending": 6,
+    "rejected": 0,
+    "unique_sites": 4046,
+    "unique_entities": 3293,
+    "second_unchanged": 4046
+  },
+  "reconciliation": {
+    "input_rows": 4107,
+    "unique_sites": 4046,
+    "unique_entities": 3293,
+    "by_processing_status": {
+      "imported_as_site": 4040,
+      "merged_duplicate": 61,
+      "pending_review": 6
+    },
+    "sum_matches_input": true
+  }
+}

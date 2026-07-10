@@ -36,8 +36,13 @@ def repository_from_env() -> PlacesRepository:
         from places_service.adapters.outbound.sql_repository import SqlPlacesRepository
 
         auto_create = os.getenv("PLACES_AUTO_CREATE_SCHEMA", "").strip().lower() in {"1", "true", "yes"}
-        auto_seed = os.getenv("PLACES_AUTO_SEED_CATALOG", "").strip().lower() in {"1", "true", "yes"}
-        return SqlPlacesRepository(database_url, create_schema=auto_create, seed_catalog=auto_seed)
+        # Explicit bootstrap: none|sample|dataset. Legacy PLACES_AUTO_SEED_CATALOG=true maps to sample.
+        bootstrap = os.getenv("PLACES_BOOTSTRAP_MODE", "").strip().lower()
+        legacy_seed = os.getenv("PLACES_AUTO_SEED_CATALOG", "").strip().lower() in {"1", "true", "yes"}
+        if not bootstrap:
+            bootstrap = "sample" if legacy_seed else "none"
+        seed_catalog = bootstrap == "sample"
+        return SqlPlacesRepository(database_url, create_schema=auto_create, seed_catalog=seed_catalog)
     raise RuntimeError(f"unsupported places repository mode: {mode}")
 
 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Civi — Mapa Manizales</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root {
+      --ink: #1a1f16;
+      --paper: #f4f1ea;
+      --confirmed: #1f6f4a;
+      --approx: #b36b00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    header {
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid #d8d2c4;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      align-items: baseline;
+    }
+    h1 { font-size: 1.1rem; margin: 0; font-weight: 650; }
+    .meta { font-size: 0.85rem; opacity: 0.8; }
+    .legend { display: flex; gap: 1rem; font-size: 0.85rem; }
+    .swatch {
+      display: inline-block;
+      width: 0.75rem; height: 0.75rem;
+      border-radius: 50%;
+      margin-right: 0.35rem;
+      vertical-align: -1px;
+    }
+    .swatch.confirmed { background: var(--confirmed); }
+    .swatch.approx { background: var(--approx); border: 2px dashed #7a4a00; box-sizing: border-box; }
+    #map { height: calc(100vh - 64px); width: 100%; }
+    .popup h3 { margin: 0 0 0.35rem; font-size: 1rem; }
+    .popup p { margin: 0.2rem 0; font-size: 0.9rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge.ok { background: #d8f0e3; color: var(--confirmed); }
+    .badge.warn { background: #ffe6bf; color: #7a4a00; }
+    .error {
+      padding: 1rem 1.25rem;
+      color: #8b1e1e;
+      background: #fde8e8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Manizales — establecimientos RUNT</h1>
+    <span class="meta" id="count">Cargando…</span>
+    <div class="legend">
+      <span><i class="swatch confirmed"></i>Confirmado (negocio / dirección)</span>
+      <span><i class="swatch approx"></i>Aproximado (no confirmado)</span>
+    </div>
+  </header>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const apiBase = (params.get("api") || "http://127.0.0.1:8085").replace(/\/$/, "");
+    const token = params.get("token") || "change-me-local-only";
+
+    const map = L.map("map").setView([5.0689, -75.5174], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap",
+      maxZoom: 19,
+    }).addTo(map);
+
+    function markerStyle(props) {
+      const approx = props.validation_status === "approximate_not_confirmed";
+      return {
+        radius: 8,
+        color: approx ? "#7a4a00" : "#145c3a",
+        weight: approx ? 2 : 1,
+        dashArray: approx ? "3 3" : null,
+        fillColor: approx ? "#b36b00" : "#1f6f4a",
+        fillOpacity: 0.85,
+      };
+    }
+
+    function popupHtml(props) {
+      const approx = props.validation_status === "approximate_not_confirmed";
+      const badge = approx
+        ? '<span class="badge warn">aproximado — no confirmado</span>'
+        : '<span class="badge ok">ubicación confirmada</span>';
+      // Never show "ubicación confirmada" for approximate records.
+      return `
+        <div class="popup">
+          <h3>${escapeHtml(props.name || "")}</h3>
+          <p><strong>Categoría:</strong> ${escapeHtml(props.kind || "")}</p>
+          <p><strong>Dirección:</strong> ${escapeHtml(props.address || "")}</p>
+          <p><strong>Precisión:</strong> ${escapeHtml(props.precision || "—")}</p>
+          <p><strong>Validación:</strong> ${escapeHtml(props.validation_status || "—")}</p>
+          <p>${badge}</p>
+        </div>`;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function load() {
+      const url = `${apiBase}/internal/places/geojson?city=Manizales&department=Caldas`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      });
+      if (!res.ok) {
+        document.getElementById("count").textContent = `Error HTTP ${res.status}`;
+        document.getElementById("map").insertAdjacentHTML(
+          "beforebegin",
+          `<div class="error">No se pudo cargar GeoJSON desde ${escapeHtml(url)}. ` +
+          `Pasa ?api= y ?token= si hace falta.</div>`
+        );
+        return;
+      }
+      const data = await res.json();
+      const features = data.features || [];
+      document.getElementById("count").textContent =
+        `${features.length} marcadores · ${data.meta?.city || "Manizales"}`;
+
+      const layer = L.geoJSON(data, {
+        pointToLayer(feature, latlng) {
+          return L.circleMarker(latlng, markerStyle(feature.properties || {}));
+        },
+        onEachFeature(feature, layer) {
+          layer.bindPopup(popupHtml(feature.properties || {}));
+        },
+      }).addTo(map);
+      if (features.length) {
+        map.fitBounds(layer.getBounds(), { padding: [24, 24] });
+      }
+    }
+
+    load().catch((err) => {
+      document.getElementById("count").textContent = "Error de red";
+      console.error(err);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "started": true,
+  "container": "civi-places-pg-validation",
+  "database_url": "postgresql+psycopg://civi:civi@127.0.0.1:55432/civi",
+  "steps": [
+    {
+      "docker_run": "ok"
+    },
+    {
+      "pg_isready": "ok"
+    },
+    {
+      "first_apply_stdout_tail": "  \"reconciliation\": {\n    \"input_rows\": 4107,\n    \"source_records\": 4107,\n    \"by_processing_status\": {\n      \"imported_as_site\": 4040,\n      \"merged_duplicate\": 61,\n      \"pending_review\": 6\n    },\n    \"unique_entities\": 3293,\n    \"unique_sites\": 4046,\n    \"merged_duplicates\": 61,\n    \"duplicate_candidates\": 2814,\n    \"site_id_collisions_disambiguated\": 0,\n    \"rejected\": 0,\n    \"sum_check\": 4107,\n    \"sum_matches_input\": true,\n    \"non_merged_equals_unique_sites\": true\n  },\n  \"unique_sites\": 4046,\n  \"unique_entities\": 3293,\n  \"report_dir\": \"C:\\\\Users\\\\pc\\\\Desktop\\\\civi\\\\civi-restructurado\\\\services\\\\places-service\\\\data\\\\reports\",\n  \"skip_geocoding\": true,\n  \"geocode_stats\": null,\n  \"site_id_collisions\": 0\n}\n{\n  \"applied\": true,\n  \"database_url\": \"postgresql+psycopg://civi:civi@127.0.0.1:55432/civi\",\n  \"migration\": {\n    \"places_sites\": [],\n    \"places_entities\": [],\n    \"places_import_runs\": [],\n    \"places\": [],\n    \"migrations\": [\n      \"v1_baseline\",\n      \"v2_national_catalog\"\n    ]\n  },\n  \"legacy_migrated\": 0,\n  \"inserted\": 4046,\n  \"updated\": 0,\n  \"unchanged\": 0,\n  \"entities_inserted\": 3293,\n  \"entities_updated\": 0,\n  \"missing\": 0,\n  \"reappeared\": 0,\n  \"absent_marked\": 0\n}\n"
+    },
+    {
+      "second_apply_stdout_tail": "29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634\",\n  \"reconciliation\": {\n    \"input_rows\": 4107,\n    \"source_records\": 4107,\n    \"by_processing_status\": {\n      \"imported_as_site\": 4040,\n      \"merged_duplicate\": 61,\n      \"pending_review\": 6\n    },\n    \"unique_entities\": 3293,\n    \"unique_sites\": 4046,\n    \"merged_duplicates\": 61,\n    \"duplicate_candidates\": 2814,\n    \"site_id_collisions_disambiguated\": 0,\n    \"rejected\": 0,\n    \"sum_check\": 4107,\n    \"sum_matches_input\": true,\n    \"non_merged_equals_unique_sites\": true\n  },\n  \"unique_sites\": 4046,\n  \"unique_entities\": 3293,\n  \"report_dir\": \"C:\\\\Users\\\\pc\\\\Desktop\\\\civi\\\\civi-restructurado\\\\services\\\\places-service\\\\data\\\\reports\",\n  \"skip_geocoding\": true,\n  \"geocode_stats\": null,\n  \"site_id_collisions\": 0\n}\n{\n  \"applied\": true,\n  \"database_url\": \"postgresql+psycopg://civi:civi@127.0.0.1:55432/civi\",\n  \"migration\": {\n    \"places_sites\": [],\n    \"places_entities\": [],\n    \"places_import_runs\": [],\n    \"places\": [],\n    \"migrations\": []\n  },\n  \"legacy_migrated\": 0,\n  \"inserted\": 0,\n  \"updated\": 0,\n  \"unchanged\": 4046,\n  \"entities_inserted\": 0,\n  \"entities_updated\": 0,\n  \"missing\": 0,\n  \"reappeared\": 0,\n  \"absent_marked\": 0\n}\n"
+    }
+  ],
+  "first_apply": {
+    "inserted": 4046,
+    "updated": 0,
+    "unchanged": 0
+  },
+  "second_apply": {
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 4046
+  },
+  "sha256": "457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634",
+  "passed": true,
+  "container_removed": true
+}

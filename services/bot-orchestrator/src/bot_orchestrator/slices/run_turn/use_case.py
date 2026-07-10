@@ -19,6 +19,7 @@ from bot_orchestrator.adapters.outbound.quote_client import QuoteClient
 from bot_orchestrator.adapters.outbound.vehicle_client import VehicleClient
 from bot_orchestrator.prompts.loader import build_system_prompt
 from bot_orchestrator.shared.appointment_selection import (
+    AWAITING_PROCEDURE,
     PendingAppointmentSelection,
     PendingVehicleConsult,
     appointment_selection_store,
@@ -42,18 +43,22 @@ from .extractors import (
     extract_displacement,
     extract_infraction_code,
     extract_model_year,
+    extract_partner_decision,
     extract_place_selection,
     extract_plate,
     extract_start_iso,
     extract_vehicle_type,
     knowledge_domain_for_text,
     knowledge_topic_for_text,
+    mentions_crc,
+    normalize_infraccion_query,
     procedure_for_text,
     quote_service_for_text,
     wants_appointment,
     wants_cancel_appointment,
     wants_city_coverage,
     wants_alternative_places,
+    wants_general_multas_city,
     wants_handoff,
     wants_knowledge,
     wants_multas,
@@ -78,6 +83,8 @@ from .formatters import (
     format_city_knowledge_response,
     format_knowledge_response,
     format_multas_response,
+    format_no_affiliate_coverage,
+    format_partner_decision_response,
     format_pending_place_date_request,
     format_place_response,
     format_place_options_response,
@@ -110,6 +117,10 @@ async def run_agent_turn(
     documento = fresh_documento
 
     lowered = text.lower()
+    partner_response = await _maybe_handle_partner_decision(payload)
+    if partner_response is not None:
+        return partner_response
+
     if wants_cancel_appointment(text):
         appointment_id = extract_appointment_id(text)
         if appointment_id is None:
@@ -206,9 +217,10 @@ async def run_agent_turn(
 
     if wants_infraccion_lookup(text):
         try:
+            consulta = normalize_infraccion_query(text)
             data = await QuoteClient().create(
                 service_type="infraccion",
-                consulta=text,
+                consulta=consulta,
                 codigo=extract_infraction_code(text),
             )
             return AgentTurnResponse(
@@ -333,7 +345,17 @@ async def run_agent_turn(
 
     if wants_appointment(text):
         procedure = procedure_for_text(text)
+        crc_hint = mentions_crc(text)
         if procedure is None:
+            appointment_selection_store.save(
+                PendingAppointmentSelection(
+                    user_key=payload.user_key,
+                    channel=payload.channel,
+                    procedure=AWAITING_PROCEDURE,
+                    places=[],
+                    mentioned_crc=crc_hint,
+                )
+            )
             return AgentTurnResponse(
                 text="Claro. Dime si la cita es para tecnomecanica, licencia o curso por multa.",
                 state_version=1,
@@ -351,10 +373,17 @@ async def run_agent_turn(
                     procedure=procedure,
                     places=[],
                     starts_at=starts_at,
+                    mentioned_crc=crc_hint,
                 )
             )
+            preface = ""
+            if crc_hint and procedure == "curso_multa":
+                preface = (
+                    "Para el *curso por multa* necesitas un *CIA* (Centro Integral de Atencion), "
+                    "no un CRC (eso es para examenes de licencia). "
+                )
             return AgentTurnResponse(
-                text=LOCATION_REQUEST_TEXT,
+                text=preface + LOCATION_REQUEST_TEXT,
                 state_version=1,
                 mode="appointment_missing_location",
             )
@@ -365,6 +394,7 @@ async def run_agent_turn(
             city=city,
             location=location,
             starts_at=starts_at,
+            mentioned_crc=crc_hint,
         )
 
     pending_consult = vehicle_consult_store.get(user_key=payload.user_key, channel=payload.channel)
@@ -516,21 +546,8 @@ async def run_agent_turn(
             ciudad = ciudad or pending_consult.ciudad
             documento = documento or pending_consult.documento
 
-        if not ciudad:
-            vehicle_consult_store.save(
-                PendingVehicleConsult(
-                    user_key=payload.user_key,
-                    channel=payload.channel,
-                    intent="multas",
-                    documento=documento,
-                    ciudad=None,
-                )
-            )
-            return AgentTurnResponse(
-                text="Dime en que *ciudad* te pusieron la multa o el comparendo.",
-                state_version=1,
-                mode="multas_missing_city",
-            )
+        if wants_general_multas_city(text):
+            ciudad = None
 
         if not documento:
             vehicle_consult_store.save(
@@ -542,8 +559,12 @@ async def run_agent_turn(
                     ciudad=ciudad,
                 )
             )
+            if ciudad:
+                ask = f"Va. Para consultar multas en *{ciudad}*, pasame la *cedula*."
+            else:
+                ask = "Va. Consulto en SIMIT nacional. Pasame la *cedula*."
             return AgentTurnResponse(
-                text=f"Va. Para consultar multas en *{ciudad}*, pasame la *cedula*.",
+                text=ask,
                 state_version=1,
                 mode="multas_missing_document",
             )
@@ -665,6 +686,47 @@ async def _answer_with_knowledge_context(
     )
 
 
+async def _maybe_handle_partner_decision(payload: AgentTurnRequest) -> AgentTurnResponse | None:
+    decision = extract_partner_decision(payload.text)
+    if decision is None:
+        return None
+    action, appointment_id = decision
+
+    try:
+        if action == "confirmar":
+            data = await AppointmentClient().confirm(appointment_id=appointment_id)
+            tool = "appointment.confirm"
+            mode = "appointment_partner_confirmed"
+        else:
+            data = await AppointmentClient().reject(appointment_id=appointment_id)
+            tool = "appointment.reject"
+            mode = "appointment_partner_rejected"
+        success = bool(data.get("success"))
+        if not success:
+            mode = "appointment_partner_decision_failed"
+        return AgentTurnResponse(
+            text=format_partner_decision_response(
+                action=action,
+                appointment_id=appointment_id,
+                success=success,
+                error=str(data.get("error") or "") or None,
+            ),
+            state_version=1,
+            mode=mode,
+            tool_calls=[tool],
+        )
+    except httpx.HTTPStatusError:
+        return AgentTurnResponse(
+            text=format_partner_decision_response(
+                action=action,
+                appointment_id=appointment_id,
+                success=False,
+            ),
+            state_version=1,
+            mode="appointment_partner_decision_error",
+        )
+
+
 async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest) -> AgentTurnResponse | None:
     pending = appointment_selection_store.get(user_key=payload.user_key, channel=payload.channel)
     was_just_loaded = False
@@ -682,6 +744,22 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
         else:
             return None
 
+    if mentions_crc(payload.text):
+        pending.mentioned_crc = True
+
+    # Resolve procedure when user was asked for tecnomecanica / licencia / curso.
+    if pending.procedure in {"", AWAITING_PROCEDURE}:
+        resolved = procedure_for_text(payload.text)
+        if resolved is None:
+            appointment_selection_store.save(pending)
+            return AgentTurnResponse(
+                text="Claro. Dime si la cita es para tecnomecanica, licencia o curso por multa.",
+                state_version=1,
+                mode="appointment_missing_procedure",
+            )
+        pending.procedure = resolved
+        appointment_selection_store.save(pending)
+
     starts_at = _parse_appointment_datetime(payload.text)
     if starts_at:
         pending.starts_at = starts_at
@@ -691,9 +769,20 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
         location = location_for_turn(payload)
         if city is None and location is None:
             appointment_selection_store.save(pending)
-            if starts_at or was_just_loaded or wants_appointment(payload.text):
+            preface = ""
+            if pending.mentioned_crc and pending.procedure == "curso_multa":
+                preface = (
+                    "Para el *curso por multa* necesitas un *CIA* (Centro Integral de Atencion), "
+                    "no un CRC (eso es para examenes de licencia). "
+                )
+            if (
+                starts_at
+                or was_just_loaded
+                or wants_appointment(payload.text)
+                or procedure_for_text(payload.text) is not None
+            ):
                 return AgentTurnResponse(
-                    text=LOCATION_REQUEST_PENDING_TEXT,
+                    text=preface + LOCATION_REQUEST_PENDING_TEXT,
                     state_version=1,
                     mode="appointment_missing_location",
                 )
@@ -705,6 +794,7 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
             city=city,
             location=location,
             starts_at=pending.starts_at,
+            mentioned_crc=pending.mentioned_crc,
         )
 
     if wants_alternative_places(payload.text):
@@ -766,8 +856,8 @@ async def _maybe_handle_pending_appointment_selection(payload: AgentTurnRequest)
         )
         appointment_selection_store.clear(user_key=payload.user_key, channel=payload.channel)
         tool_calls = ["appointment.select_place", "appointment.create"]
-        if (appointment_data.get("notification") or {}).get("status") == "scheduled":
-            tool_calls.append("notification.schedule")
+        if (appointment_data.get("notification") or {}).get("status") == "sent":
+            tool_calls.append("notification.partner_notify")
         return AgentTurnResponse(
             text=format_appointment_response(appointment_data["appointment"]),
             state_version=1,
@@ -789,6 +879,7 @@ async def _find_places_and_continue_appointment(
     city: str | None,
     location: tuple[float, float] | None,
     starts_at: str | None,
+    mentioned_crc: bool = False,
 ) -> AgentTurnResponse:
     lat = location[0] if location is not None else None
     lng = location[1] if location is not None else None
@@ -802,9 +893,16 @@ async def _find_places_and_continue_appointment(
         )
 
     places = places_data.get("places") or []
+    crc_note = ""
+    if mentioned_crc and procedure == "curso_multa":
+        crc_note = (
+            "Para el *curso por multa* necesitas un *CIA* (Centro Integral de Atencion), "
+            "no un CRC (eso es para examenes de licencia). "
+        )
+
     if not places:
         return AgentTurnResponse(
-            text="Aun no tengo centros disponibles para ese tramite en esa ciudad.",
+            text=crc_note + format_no_affiliate_coverage(),
             state_version=1,
             mode="places_empty",
             tool_calls=["places.find_nearest"],
@@ -818,10 +916,11 @@ async def _find_places_and_continue_appointment(
                 procedure=procedure,
                 places=[dict(place) for place in places],
                 starts_at=starts_at,
+                mentioned_crc=mentioned_crc,
             )
         )
         return AgentTurnResponse(
-            text=format_place_options_response(places, starts_at=starts_at),
+            text=crc_note + format_place_options_response(places, starts_at=starts_at),
             state_version=1,
             mode="appointment_place_selection_required",
             tool_calls=["places.find_nearest"],
@@ -834,10 +933,11 @@ async def _find_places_and_continue_appointment(
                 channel=payload.channel,
                 procedure=procedure,
                 places=[dict(places[0])],
+                mentioned_crc=mentioned_crc,
             )
         )
         return AgentTurnResponse(
-            text=format_place_response(places[0]),
+            text=crc_note + format_place_response(places[0]),
             state_version=1,
             mode="places_suggested",
             tool_calls=["places.find_nearest"],
@@ -853,8 +953,8 @@ async def _find_places_and_continue_appointment(
         )
         appointment_selection_store.clear(user_key=payload.user_key, channel=payload.channel)
         tool_calls = ["places.find_nearest", "appointment.create"]
-        if (appointment_data.get("notification") or {}).get("status") == "scheduled":
-            tool_calls.append("notification.schedule")
+        if (appointment_data.get("notification") or {}).get("status") == "sent":
+            tool_calls.append("notification.partner_notify")
         return AgentTurnResponse(
             text=format_appointment_response(appointment_data["appointment"]),
             state_version=1,
@@ -902,7 +1002,7 @@ async def _run_llm_fallback(
         )
 
     return AgentTurnResponse(
-        text="Soy *Civi*, tu asistente virtual. En que te ayudo hoy: SOAT, tecnomecanica, licencia o curso por multa?",
+        text="¡Hola! Soy Civi, tu asistente integral de tránsito en Colombia. ¿En qué puedo ayudarte? 😊",
         state_version=1,
         mode="agent_menu",
     )

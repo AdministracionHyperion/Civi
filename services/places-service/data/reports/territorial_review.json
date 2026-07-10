@@ -1,0 +1,274 @@
+[
+  {
+    "site_id": "site-prov-cda-c-d-a-san-pedro-de-los-m-66c552133023",
+    "raw_city": "San Pedro",
+    "raw_department": "Antioquia",
+    "municipality": "San Pedro",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-ajustev-san-pedro-de-a1e8aa558751",
+    "raw_city": "San Pedro",
+    "raw_department": "Antioquia",
+    "municipality": "San Pedro",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-occidente-8af089097fa5",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-santafe-ed21d38523df",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-jam-24f7c765c14a",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-piendamo-b8c967a66f5a",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-centro-de-diagnostico-au-78e38f43768c",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-control-autos-de-san-and-6575614828ae",
+    "raw_city": "San Andres",
+    "raw_department": "San Andres",
+    "municipality": "San Andres",
+    "department": "San Andres",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-cda-reviexpress-3501b9fd8bc8",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-control-motos-sector-1-dd801300320a",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cda-diagnosticentro-del-nort-9337ae331022",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-cea-pases-com-san-pedro-0bbd43058442",
+    "raw_city": "San Pedro",
+    "raw_department": "Antioquia",
+    "municipality": "San Pedro",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-085a6e3b8955",
+    "raw_city": "San Vicente",
+    "raw_department": "Antioquia",
+    "municipality": "San Vicente",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-3c6a1d1b997d",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-64ad2d3c1089",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-835a9f8a7308",
+    "raw_city": "Mompos",
+    "raw_department": "Bolivar",
+    "municipality": "Mompos",
+    "department": "Bolivar",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-cea-conduce-piendamo-d079261af5a4",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-b1399e874a35",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-escuela-ac-de-conduccion-8f611af04400",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-escuela-de-automovilismo-e01ad18b2c71",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-ferr-059434a268cc",
+    "raw_city": "Tumaco",
+    "raw_department": "Narino",
+    "municipality": "Tumaco",
+    "department": "Narino",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cea-centro-de-ensenanza-auto-9594a88a572c",
+    "raw_city": "San Andres",
+    "raw_department": "San Andres",
+    "municipality": "San Andres",
+    "department": "San Andres",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-cia-municipal-san-pedro-d311226aa6af",
+    "raw_city": "San Pedro",
+    "raw_department": "Antioquia",
+    "municipality": "San Pedro",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-centro-integral-de-atenc-337aa5fc6b83",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-cia-santa-fe-de-antioqui-f1aba9d84a31",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-cia-educar-del-cauca-07a2a64a6cbb",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-cia-mariquita-1cd5972bb4b7",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-cia-cia-sitt-san-sebastian-d-5c77ba8015af",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-centro-de-reconocimiento-9df8f0b01f6f",
+    "raw_city": "Don Matias",
+    "raw_department": "Antioquia",
+    "municipality": "Don Matias",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-crc-arango-de-occidente-48e3527c0a67",
+    "raw_city": "Santafe De Antioquia",
+    "raw_department": "Antioquia",
+    "municipality": "Santafe De Antioquia",
+    "department": "Antioquia",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-centro-de-reconocimiento-d167bfcb82cd",
+    "raw_city": "Piendamo",
+    "raw_department": "Cauca",
+    "municipality": "Piendamo",
+    "department": "Cauca",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-caribe-centro-de-reconoc-159e6b13a2c3",
+    "raw_city": "San Andres",
+    "raw_department": "San Andres",
+    "municipality": "San Andres",
+    "department": "San Andres",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-centro-de-reconocimiento-a39974d87502",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  },
+  {
+    "site_id": "site-prov-crc-centro-medico-integral-m-7f6d6069529c",
+    "raw_city": "Mariquita",
+    "raw_department": "Tolima",
+    "municipality": "Mariquita",
+    "department": "Tolima",
+    "municipality_code": null
+  }
+]

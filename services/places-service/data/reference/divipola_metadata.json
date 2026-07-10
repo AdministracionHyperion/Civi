@@ -1,0 +1,17 @@
+{
+  "name": "DIVIPOLA municipios",
+  "url": "https://www.datos.gov.co/resource/gdxc-w37w.json",
+  "fetched_at": "2026-07-09T23:21:52.111900+00:00",
+  "row_count": 1122,
+  "source_row_count": 1122,
+  "sha256": "1028ab04c10a08fa860dd89e621de1eb9246710a56102c915f0988ae9e10d63d",
+  "schema_observed": [
+    "cod_dpto",
+    "cod_mpio",
+    "dpto",
+    "latitud",
+    "longitud",
+    "nom_mpio",
+    "tipo_municipio"
+  ]
+}

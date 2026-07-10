@@ -17,4 +17,8 @@ def appointment_to_dict(record: AppointmentRecord) -> dict[str, object]:
         "starts_at": record.starts_at,
         "status": record.status,
         "created_at": record.created_at,
+        "partner_notified_at": record.partner_notified_at,
+        "partner_confirmed_at": record.partner_confirmed_at,
+        "client_notification_to": record.client_notification_to,
+        "partner_notification_to": record.partner_notification_to,
     }

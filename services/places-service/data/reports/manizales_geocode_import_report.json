@@ -1,0 +1,314 @@
+{
+  "mode": "dry_run",
+  "input": "services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv",
+  "scope": "manizales",
+  "city": "Manizales",
+  "rows": 44,
+  "valid_rows": 44,
+  "inserted": 0,
+  "updated": 0,
+  "unchanged": 0,
+  "skipped": 44,
+  "rejected": 0,
+  "unknown_site_ids": 44,
+  "manual_protected": 0,
+  "partner_protected": 0,
+  "kind_mismatch": 0,
+  "municipality_mismatch": 0,
+  "department_mismatch": 0,
+  "duplicate_source_place_id": 0,
+  "duplicate_ids": 0,
+  "outside_bbox": 0,
+  "count_mismatch": false,
+  "count_mismatch_reasons": [],
+  "by_kind": {
+    "CDA": 14,
+    "CEA": 15,
+    "CIA": 8,
+    "CRC": 7
+  },
+  "by_city": {
+    "Manizales": 44
+  },
+  "by_validation_status": {
+    "approximate_not_confirmed": 12,
+    "confirmed_address": 13,
+    "confirmed_business": 19
+  },
+  "atomic_aborted": true,
+  "rejected_rows": [],
+  "blocked_rows": [
+    {
+      "row": 2,
+      "id": "cda-manizales-cda-caldas-el-bosque-a730920403",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 3,
+      "id": "cda-manizales-cda-de-la-23-932437de5e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 4,
+      "id": "cda-manizales-cda-de-las-motos-s-a-s-cefd995a8f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 5,
+      "id": "cda-manizales-cda-periautos-del-cafe-47cdf6ccee",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 6,
+      "id": "cda-manizales-cda-socicar-7acac31f0f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 7,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-autobig--751aa51622",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 8,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-canguro--adab3b9bfc",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 9,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-converry-22c7414615",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 10,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-de-calda-f03cfeb7c1",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 11,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-el-ruiz--bf099c5f78",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 12,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-fullmoto-070ccbb6af",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 13,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-fullmoto-a12a31c6bc",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 14,
+      "id": "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 15,
+      "id": "cda-manizales-diagnosticentro-parque-de-las-aguas-411f21a64f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 16,
+      "id": "cea-manizales-academia-automovilistica-caldas-sas-12d613c393",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 17,
+      "id": "cea-manizales-academia-automovilistica-los-profesional-f40dba1467",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 18,
+      "id": "cea-manizales-academia-automovilistica-piloto-177f760536",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 19,
+      "id": "cea-manizales-academia-de-automovilismo-nikilauda-0cb40d70d7",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 20,
+      "id": "cea-manizales-autoescuela-manizales-e-a-t-4bd057ccb2",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 21,
+      "id": "cea-manizales-cea-educar-manizales-2adc7ac1c6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 22,
+      "id": "cea-manizales-cea-escuela-americana-de-automovilismo-m-d4b714cae6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 23,
+      "id": "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 24,
+      "id": "cea-manizales-cea-sevial-manizales-sas-716cb248de",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 25,
+      "id": "cea-manizales-cea-tecnicar-c9fad3737c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 26,
+      "id": "cea-manizales-centro-de-ensenanza-automovilistica-edus-85761532ed",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 27,
+      "id": "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 28,
+      "id": "cea-manizales-centro-de-ensenanza-automovilistica-cate-a67c787bb8",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 29,
+      "id": "cea-manizales-centro-de-ensenanza-automovilistica-eliz-9a0d8bded8",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 30,
+      "id": "cea-manizales-centro-de-ensenanza-de-automovilismo-edu-e34e8339e3",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 31,
+      "id": "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 32,
+      "id": "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 33,
+      "id": "cia-manizales-cia-manizales-sas-931d82a0f9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 34,
+      "id": "cia-manizales-cia-sitt-express-manizales-96d0b725df",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 35,
+      "id": "cia-manizales-cia-terminal-manizales-sas-fae703ee5a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 36,
+      "id": "cia-manizales-cia-transito-de-manizales-62d29d68d1",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 37,
+      "id": "cia-manizales-ciavil-manizales-s-a-s-e49bee2a11",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 38,
+      "id": "cia-manizales-cimyc-manizales-s-a-s-498175000a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 39,
+      "id": "crc-manizales-centro-de-diagnostico-psicosensometrico--9b51e2035c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 40,
+      "id": "crc-manizales-centro-de-reconocimiento-de-conductores--85ee12eed5",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 41,
+      "id": "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 42,
+      "id": "crc-manizales-certificamos-agustinos-98839ab670",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 43,
+      "id": "crc-manizales-certificamos-manizales-sas-b5dfa44562",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 44,
+      "id": "crc-manizales-certificamos-terminal-8c0ec71ce6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 45,
+      "id": "crc-manizales-crc-palermo-centro-de-reconocimiento-de--e250105cef",
+      "reason": "unknown_site"
+    }
+  ],
+  "unknown_ids": [
+    "cda-manizales-cda-caldas-el-bosque-a730920403",
+    "cda-manizales-cda-de-la-23-932437de5e",
+    "cda-manizales-cda-de-las-motos-s-a-s-cefd995a8f",
+    "cda-manizales-cda-periautos-del-cafe-47cdf6ccee",
+    "cda-manizales-cda-socicar-7acac31f0f",
+    "cda-manizales-centro-de-diagnostico-automotor-autobig--751aa51622",
+    "cda-manizales-centro-de-diagnostico-automotor-canguro--adab3b9bfc",
+    "cda-manizales-centro-de-diagnostico-automotor-converry-22c7414615",
+    "cda-manizales-centro-de-diagnostico-automotor-de-calda-f03cfeb7c1",
+    "cda-manizales-centro-de-diagnostico-automotor-el-ruiz--bf099c5f78",
+    "cda-manizales-centro-de-diagnostico-automotor-fullmoto-070ccbb6af",
+    "cda-manizales-centro-de-diagnostico-automotor-fullmoto-a12a31c6bc",
+    "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c",
+    "cda-manizales-diagnosticentro-parque-de-las-aguas-411f21a64f",
+    "cea-manizales-academia-automovilistica-caldas-sas-12d613c393",
+    "cea-manizales-academia-automovilistica-los-profesional-f40dba1467",
+    "cea-manizales-academia-automovilistica-piloto-177f760536",
+    "cea-manizales-academia-de-automovilismo-nikilauda-0cb40d70d7",
+    "cea-manizales-autoescuela-manizales-e-a-t-4bd057ccb2",
+    "cea-manizales-cea-educar-manizales-2adc7ac1c6",
+    "cea-manizales-cea-escuela-americana-de-automovilismo-m-d4b714cae6",
+    "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0",
+    "cea-manizales-cea-sevial-manizales-sas-716cb248de",
+    "cea-manizales-cea-tecnicar-c9fad3737c",
+    "cea-manizales-centro-de-ensenanza-automovilistica-edus-85761532ed",
+    "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930",
+    "cea-manizales-centro-de-ensenanza-automovilistica-cate-a67c787bb8",
+    "cea-manizales-centro-de-ensenanza-automovilistica-eliz-9a0d8bded8",
+    "cea-manizales-centro-de-ensenanza-de-automovilismo-edu-e34e8339e3",
+    "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e",
+    "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047",
+    "cia-manizales-cia-manizales-sas-931d82a0f9",
+    "cia-manizales-cia-sitt-express-manizales-96d0b725df",
+    "cia-manizales-cia-terminal-manizales-sas-fae703ee5a",
+    "cia-manizales-cia-transito-de-manizales-62d29d68d1",
+    "cia-manizales-ciavil-manizales-s-a-s-e49bee2a11",
+    "cia-manizales-cimyc-manizales-s-a-s-498175000a",
+    "crc-manizales-centro-de-diagnostico-psicosensometrico--9b51e2035c",
+    "crc-manizales-centro-de-reconocimiento-de-conductores--85ee12eed5",
+    "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d",
+    "crc-manizales-certificamos-agustinos-98839ab670",
+    "crc-manizales-certificamos-manizales-sas-b5dfa44562",
+    "crc-manizales-certificamos-terminal-8c0ec71ce6",
+    "crc-manizales-crc-palermo-centro-de-reconocimiento-de--e250105cef"
+  ],
+  "resolution": {
+    "source_place_id": 0,
+    "source_records_fallback": 0
+  },
+  "applied_rows": 0,
+  "database_url": "postgresql+psycopg://civi:***@postgres:5432/civi"
+}

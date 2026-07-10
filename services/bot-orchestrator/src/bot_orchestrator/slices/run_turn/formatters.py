@@ -122,8 +122,6 @@ def _format_soat_response(data: dict[str, Any], *, quote: dict[str, Any] | None)
 
     if soat_needs_quote(data):
         parts.append("Quieres que te ayude con la renovacion del SOAT?")
-    else:
-        parts.append("Perfecto, si necesitas algo mas con gusto estare disponible! \U0001F60A")
     return " ".join(parts)
 
 
@@ -177,8 +175,6 @@ def _format_tecno_response(data: dict[str, Any], *, quote: dict[str, Any] | None
 
     if tecno_needs_quote(data):
         parts.append("Quieres que te ayude a agendar la cita?")
-    else:
-        parts.append("Perfecto, si necesitas algo mas con gusto estare disponible! \U0001F60A")
     return " ".join(parts)
 
 
@@ -365,7 +361,7 @@ def format_place_response(place: dict[str, object]) -> str:
     distancia = _format_distance(place.get("distance_km"))
 
     lines = [
-        "Con la ubicacion que mandaste, esta es la opcion que mejor encaja:",
+        "Con la ubicacion que mandaste, este es el centro afiliado Civi que mejor encaja:",
         f"*{tipo}*",
         f"*{nombre}*",
     ]
@@ -375,7 +371,7 @@ def format_place_response(place: dict[str, object]) -> str:
         lines.append(f"Ciudad: {ciudad}")
     if distancia:
         lines.append(f"Distancia: {distancia}")
-    lines.append("Te sirve o buscamos otra opcion?")
+    lines.append("Te sirve o buscamos otra opcion afiliada?")
     return "\n".join(lines)
 
 
@@ -398,7 +394,11 @@ def format_place_options_response(places: list[dict[str, object]], *, starts_at:
             parts.append(f"   Distancia: {distancia}")
         options.append("\n".join(parts))
 
-    header = f"Tengo estas opciones de *{tipo_hint}*:" if tipo_hint else "Tengo estas opciones:"
+    header = (
+        f"Estos son centros afiliados Civi de *{tipo_hint}* cerca de ti:"
+        if tipo_hint
+        else "Estos son centros afiliados Civi cerca de ti:"
+    )
     suffix = (
         f"Ya tengo la fecha *{starts_at}*. Dime el numero del centro que prefieres."
         if starts_at
@@ -416,11 +416,36 @@ def format_pending_place_date_request(place: dict[str, object]) -> str:
 
 def format_appointment_response(appointment: dict[str, object]) -> str:
     place = appointment.get("place") or {}
+    status = str(appointment.get("status") or "")
+    if status == "pending_partner":
+        return (
+            f"Listo, solicite la cita *#{appointment.get('id')}* para *{appointment.get('starts_at')}* "
+            f"en *{place.get('name')}*, {place.get('address')}. "
+            "El centro afiliado debe confirmarla; te aviso cuando respondan."
+        )
     return (
-        f"Listo, cita creada para *{appointment.get('starts_at')}* en "
-        f"*{place.get('name')}*, {place.get('address')}. "
-        "Te enviare un recordatorio antes de tu cita. Perfecto, si necesitas algo mas con gusto estare disponible! \U0001F60A"
+        f"Listo, cita *#{appointment.get('id')}* confirmada para *{appointment.get('starts_at')}* en "
+        f"*{place.get('name')}*, {place.get('address')}."
     )
+
+
+def format_no_affiliate_coverage() -> str:
+    return (
+        "Aun no tengo afiliados Civi en tu zona para agendar. "
+        "Puedo orientarte sobre el tramite o pasarte con un asesor."
+    )
+
+
+def format_partner_decision_response(*, action: str, appointment_id: int, success: bool, error: str | None = None) -> str:
+    if success:
+        if action == "confirmar":
+            return f"Cita {appointment_id} confirmada. Ya avise al cliente."
+        return f"Cita {appointment_id} rechazada. Ya avise al cliente."
+    if error == "not_found":
+        return f"No encontre la cita {appointment_id}."
+    if error == "not_pending":
+        return f"La cita {appointment_id} ya no esta pendiente de confirmacion."
+    return f"No pude procesar la cita {appointment_id}. Intentalo de nuevo."
 
 
 def format_appointments_list(data: dict[str, object]) -> str:

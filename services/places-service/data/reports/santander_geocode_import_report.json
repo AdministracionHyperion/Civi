@@ -1,0 +1,971 @@
+{
+  "mode": "dry_run",
+  "input": "services/places-service/data/geocodes/santander/geocodes_santander_priorizado_validado.csv",
+  "scope": "santander",
+  "city": "Santander (área metropolitana priorizada)",
+  "rows": 153,
+  "valid_rows": 153,
+  "inserted": 0,
+  "updated": 0,
+  "unchanged": 0,
+  "skipped": 153,
+  "rejected": 0,
+  "unknown_site_ids": 153,
+  "manual_protected": 0,
+  "partner_protected": 0,
+  "kind_mismatch": 0,
+  "municipality_mismatch": 0,
+  "department_mismatch": 0,
+  "duplicate_source_place_id": 0,
+  "duplicate_ids": 0,
+  "outside_bbox": 0,
+  "count_mismatch": false,
+  "count_mismatch_reasons": [],
+  "by_kind": {
+    "CDA": 37,
+    "CEA": 56,
+    "CIA": 25,
+    "CRC": 35
+  },
+  "by_city": {
+    "Bucaramanga": 81,
+    "Floridablanca": 29,
+    "Giron": 23,
+    "Piedecuesta": 20
+  },
+  "by_validation_status": {
+    "confirmed_business": 65,
+    "confirmed_address": 30,
+    "approximate_not_confirmed": 58
+  },
+  "atomic_aborted": true,
+  "rejected_rows": [],
+  "blocked_rows": [
+    {
+      "row": 2,
+      "id": "cda-bucaramanga-c-d-a-ciudad-bonita-ltda-d7579f871d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 3,
+      "id": "cda-bucaramanga-c-d-a-las-motos-de-bucaramanga-s-a-s-6312586899",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 4,
+      "id": "cda-bucaramanga-cda-bucaramanga-s-a-s-cfe90a6b03",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 5,
+      "id": "cda-bucaramanga-cda-del-oriente-sas-ab76ccad0d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 6,
+      "id": "cda-bucaramanga-cda-la-concordia-2498edee49",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 7,
+      "id": "cda-bucaramanga-cda-la-isla-de-la-52-a1d14d2bc9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 8,
+      "id": "cda-bucaramanga-cda-la-terminal-bga-96aaaacd9f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 9,
+      "id": "cda-bucaramanga-cda-la-virgen-0d0416e6fc",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 10,
+      "id": "cda-bucaramanga-cda-practimoto-a012246d4f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 11,
+      "id": "cda-bucaramanga-cda-revitec-la-61-efa103beaf",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 12,
+      "id": "cda-bucaramanga-cda-revitec-la-rosita-3ff2a780a7",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 13,
+      "id": "cda-bucaramanga-cda-supercar-la-central-58c3f5ce82",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 14,
+      "id": "cda-bucaramanga-centro-de-diagnostico-automotor-de-la-di-aec6693e01",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 15,
+      "id": "cda-bucaramanga-centro-de-diagnostico-automotor-la-27-co-06acd49f7f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 16,
+      "id": "cda-bucaramanga-centro-de-diagnostico-automotor-puerta-d-3280643fe0",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 17,
+      "id": "cda-bucaramanga-centro-de-diagnostico-automotor-santande-9d34b603ca",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 18,
+      "id": "cda-bucaramanga-centro-de-diagnostico-automotriz-tecnofu-f34d196e88",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 19,
+      "id": "cda-bucaramanga-certificado-nacional-tecnico-mecanico-s--843db4ff32",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 20,
+      "id": "cda-bucaramanga-certificado-nacional-tecnomecancio-s-a-77b42de2c1",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 21,
+      "id": "cda-bucaramanga-certificado-nacional-tecnomecanico-s-a-8bfeb956e4",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 22,
+      "id": "cda-bucaramanga-tecnico-mecanica-la-27-37da48969b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 23,
+      "id": "cea-bucaramanga-academia-tecnica-de-conductores-practi-c-c3406e00e2",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 24,
+      "id": "cea-bucaramanga-autoaprender-s-a-s-d822f050d0",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 25,
+      "id": "cea-bucaramanga-c-e-a-auto-oriente-de7ec8c4aa",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 26,
+      "id": "cea-bucaramanga-cea-al-volante-la-27-7a66faeef3",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 27,
+      "id": "cea-bucaramanga-cea-autoaprender-s-a-s-d6b391cfa9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 28,
+      "id": "cea-bucaramanga-cea-colsetrans-041d74e3eb",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 29,
+      "id": "cea-bucaramanga-cea-luz-marina-bohorquez-de-gamboa-d54982fcef",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 30,
+      "id": "cea-bucaramanga-cea-manejando-bucaramanga-55c16c929c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 31,
+      "id": "cea-bucaramanga-cea-manejar-96b119a7fa",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 32,
+      "id": "cea-bucaramanga-ceapromover-s-a-s-e38bd2da54",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 33,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-fbb20141ed",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 34,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-25a4449a7d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 35,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-5a9b7a4993",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 36,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-9a9cc5e79e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 37,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-baro-a9f546371c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 38,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-cea--182b3d4cc7",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 39,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-fesp-28a88cb9ce",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 40,
+      "id": "cea-bucaramanga-centro-de-ensenanza-automovilistica-orie-dac8c19d12",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 41,
+      "id": "cea-bucaramanga-centro-superior-de-conduccion-csc-s-a-s-0b99b17229",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 42,
+      "id": "cea-bucaramanga-centro-tecnico-de-ensenanza-automovilist-5706393b8e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 43,
+      "id": "cea-bucaramanga-condusan-bucaramanga-s-a-s-4645fd86d8",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 44,
+      "id": "cea-bucaramanga-cooperativa-de-instructores-de-automovil-914897bfaa",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 45,
+      "id": "cea-bucaramanga-ensenanza-automovilistica-galvis-e8fd9eaee9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 46,
+      "id": "cea-bucaramanga-escuela-auto-class-6cd1dd509d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 47,
+      "id": "cea-bucaramanga-escuela-de-automovilismo-karen-principal-6a5c716631",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 48,
+      "id": "cea-bucaramanga-escuela-de-automovilismo-victor-s-a-s-f3708e90f6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 49,
+      "id": "cea-bucaramanga-escuela-de-automovilismo-y-motociclismo--347d217ca9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 50,
+      "id": "cea-bucaramanga-escuela-de-automovilismo-alvarez-y-o-cen-b04785f311",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 51,
+      "id": "cia-bucaramanga-a-gas-vehicular-gnv-s-a-s-d9cf69a8ae",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 52,
+      "id": "cia-bucaramanga-casa-carcel-del-oriente-colombiano-sas-d11fad5b7b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 53,
+      "id": "cia-bucaramanga-centro-integral-de-atencion-autoriente-046df37c3c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 54,
+      "id": "cia-bucaramanga-centro-integral-de-atencion-vial-cia-buc-616b8a7b8e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 55,
+      "id": "cia-bucaramanga-cia-global-bucaramanga-88688721c3",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 56,
+      "id": "cia-bucaramanga-cia-group-bucarmanga-9a400d628e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 57,
+      "id": "cia-bucaramanga-cia-los-santanderes-61511f037f",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 58,
+      "id": "cia-bucaramanga-cia-oriencol-sas-7ddade2283",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 59,
+      "id": "cia-bucaramanga-cia-practicar-ab1d21c204",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 60,
+      "id": "cia-bucaramanga-educia-bucaramanga-9d83b91b4b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 61,
+      "id": "cia-bucaramanga-vialseg-bucaramanga-791eb9d099",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 62,
+      "id": "crc-bucaramanga-acerca-crc-santander-s-a-a257cd6a7a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 63,
+      "id": "crc-bucaramanga-c-r-c-manejar-s-a-s-484a3dd6ac",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 64,
+      "id": "crc-bucaramanga-centro-de-reconocimiento-de-conductores--840fe7d149",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 65,
+      "id": "crc-bucaramanga-centro-de-reconocimiento-de-conductores--b022f54891",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 66,
+      "id": "crc-bucaramanga-centro-de-reconocimiento-de-conductores--725930af04",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 67,
+      "id": "crc-bucaramanga-centro-de-reconocimiento-de-conductores--9b6c53e427",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 68,
+      "id": "crc-bucaramanga-conduexam-bucaramanga-572f518a38",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 69,
+      "id": "crc-bucaramanga-confia-crc-cabecera-8f0c05094e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 70,
+      "id": "crc-bucaramanga-crc-a-prueba-valledupar-no-1-fa7d115e67",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 71,
+      "id": "crc-bucaramanga-crc-la-27-1919bfbe8d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 72,
+      "id": "crc-bucaramanga-crc-medicar-s-s-a-s-91fe5259ed",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 73,
+      "id": "crc-bucaramanga-crc-simetric-santander-23ae590077",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 74,
+      "id": "crc-bucaramanga-crc-super-salud-la-central-28f22b1241",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 75,
+      "id": "crc-bucaramanga-efisaludriesgos-profesionales-sas-290627130b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 76,
+      "id": "crc-bucaramanga-mts-medicina-trabajo-y-seguridad-i-p-s-s-0ba7e60bd9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 77,
+      "id": "crc-bucaramanga-ocupasalud-s-a-s-1b40f43414",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 78,
+      "id": "crc-bucaramanga-salud-vial-centro-de-reconocimiento-de-c-d93b69035b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 79,
+      "id": "crc-bucaramanga-saoc-ss-s-a-s-d4dc029813",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 80,
+      "id": "crc-bucaramanga-servisalud-ips-bucaramanga-39847fa218",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 81,
+      "id": "crc-bucaramanga-simetric-bucaramanga-7db4ecd8e5",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 82,
+      "id": "crc-bucaramanga-vitaltest-ips-bucaramanga-c21a5809bb",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 83,
+      "id": "cda-floridablanca-cda-autopista-floridablanca-cd84d1314d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 84,
+      "id": "cda-floridablanca-cda-motocicletas-parque-caracoli-a6ec9b6320",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 85,
+      "id": "cda-floridablanca-cda-motos-floridablanca-cc3ad11e6e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 86,
+      "id": "cda-floridablanca-cda-villabel-5177beabe6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 87,
+      "id": "cda-floridablanca-centro-de-diagnostico-automotor-la-guada-671104c70b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 88,
+      "id": "cda-floridablanca-centro-diagnostico-automotor-canaveral-744dea7c0b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 89,
+      "id": "cda-floridablanca-diagnosticentros-de-colombia-s-a-s-509647b9eb",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 90,
+      "id": "cea-floridablanca-cea-grupo-empresarial-karen-sas-1cdf56fce1",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 91,
+      "id": "cea-floridablanca-centro-de-ensenanza-automovilistica-metr-b1c9496900",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 92,
+      "id": "cea-floridablanca-centro-de-ensenanza-autogalvis-floridabl-b42b6f16a9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 93,
+      "id": "cea-floridablanca-centro-de-ensenanza-automovilistica-auto-14f1c633c6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 94,
+      "id": "cea-floridablanca-centro-de-ensenanza-automovilistica-avan-9dd8959c1d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 95,
+      "id": "cea-floridablanca-centro-de-ensenanza-automovilistica-zona-5e2d26beef",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 96,
+      "id": "cea-floridablanca-centro-de-ensenanza-de-automovilismo-kar-31929dbf6c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 97,
+      "id": "cea-floridablanca-condusan-d137eb717c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 98,
+      "id": "cea-floridablanca-escuela-de-automovilismo-florida-a4c7cf2dba",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 99,
+      "id": "cea-floridablanca-grupo-empresarial-jdto-s-a-s-f17ba91649",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 100,
+      "id": "cea-floridablanca-instituto-tecnico-para-formacion-de-cond-f896076a7c",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 101,
+      "id": "cia-floridablanca-aspecor-s-a-s-centro-integral-de-a-tenci-c1d2c7f0c1",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 102,
+      "id": "cia-floridablanca-centro-integral-de-atencion-vial-cia-flo-b0cc121954",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 103,
+      "id": "cia-floridablanca-cia-doble-via-74e7aa05df",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 104,
+      "id": "cia-floridablanca-cia-global-floridablanca-e320c2c64a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 105,
+      "id": "cia-floridablanca-cia-ivelcor-floridablanca-e756b820a9",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 106,
+      "id": "crc-floridablanca-c-r-c-adn-conductores-s-a-s-76ac1fc55e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 107,
+      "id": "crc-floridablanca-centro-de-reconocimiento-de-conductores--01b1fb3407",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 108,
+      "id": "crc-floridablanca-centro-de-reconocimiento-de-conductores--9994455cbb",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 109,
+      "id": "crc-floridablanca-certikar-la-florida-362a409b73",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 110,
+      "id": "crc-floridablanca-crc-floridablanca-6c0e03fbcf",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 111,
+      "id": "crc-floridablanca-servisalud-ips-floridablanca-b6bd5ae008",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 112,
+      "id": "cda-giron-cda-giron-s-a-s-acef737773",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 113,
+      "id": "cda-giron-cda-itg-s-a-s-33ef2f6e52",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 114,
+      "id": "cda-giron-centro-de-diagnostico-automotriz-cda-rev-cabfa47c6a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 115,
+      "id": "cea-giron-academia-de-conduccion-los-coches-eb437676a6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 116,
+      "id": "cea-giron-cea-aprender-s-a-s-917f7550f8",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 117,
+      "id": "cea-giron-cea-galvis-giron-e1740d3197",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 118,
+      "id": "cea-giron-centro-de-ensenanza-automovilistica-auto-7db8517885",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 119,
+      "id": "cea-giron-centro-de-ensenanza-automovilistica-giro-acb0f37b5a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 120,
+      "id": "cea-giron-centro-de-ensenanza-automovilistica-henr-8604e1daed",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 121,
+      "id": "cea-giron-centro-de-ensenanza-automovilistica-san--b354b75834",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 122,
+      "id": "cea-giron-centro-de-ensenanza-automovilistico-cea--c3c0cd7a99",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 123,
+      "id": "cea-giron-ensenanza-millas-de-vida-giron-s-a-s-628ff584e5",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 124,
+      "id": "cia-giron-centro-integral-de-atencion-seguridad-vi-282b776bb5",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 125,
+      "id": "cia-giron-centro-integral-de-atencion-vial-de-chic-a9d2e92832",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 126,
+      "id": "cia-giron-cia-giron-438f3045c2",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 127,
+      "id": "cia-giron-cia-global-giron-67604703b8",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 128,
+      "id": "cia-giron-instituto-de-capacitacion-y-formacion-de-4cb3af65fa",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 129,
+      "id": "crc-giron-centro-de-reconocimiento-de-conductores--0c554ce0cb",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 130,
+      "id": "crc-giron-centro-de-reconocimiento-de-conductores--22928670ea",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 131,
+      "id": "crc-giron-centro-de-reconocimiento-de-conductores--a138cc2d2d",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 132,
+      "id": "crc-giron-confia-crc-giron-dca8f8f64e",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 133,
+      "id": "crc-giron-servisalud-ips-giron-12a1534d68",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 134,
+      "id": "crc-giron-vitaltest-ips-giron-s-a-s-0503bb7b6b",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 135,
+      "id": "cda-piedecuesta-cda-barroblanco-e721d73fae",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 136,
+      "id": "cda-piedecuesta-cda-el-molino-piedecuesta-3d85476145",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 137,
+      "id": "cda-piedecuesta-cda-motos-de-la-cuesta-57b26776e3",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 138,
+      "id": "cda-piedecuesta-cda-san-pedro-6599e50b25",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 139,
+      "id": "cda-piedecuesta-centro-de-diagnostico-automotriz-motos-p-a2a6a19547",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 140,
+      "id": "cda-piedecuesta-certificado-nacional-tecnomecanico-s-a-d16495d3a6",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 141,
+      "id": "cea-piedecuesta-autoconducir-sas-c72e6e9421",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 142,
+      "id": "cea-piedecuesta-c-e-a-practi-car-delacuesta-66a04f4443",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 143,
+      "id": "cea-piedecuesta-cea-piedecuestas-s-a-s-9cb29a011a",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 144,
+      "id": "cea-piedecuesta-centro-de-ensenanza-automovilistica-auto-016bd5edac",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 145,
+      "id": "cea-piedecuesta-centro-de-ensenanza-automovilistica-avan-6a86433224",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 146,
+      "id": "cea-piedecuesta-centro-de-ensenanza-automovilistica-pie--514fb8dacc",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 147,
+      "id": "cea-piedecuesta-centro-de-ensenanza-automovilistica-cea--51357e1d97",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 148,
+      "id": "cea-piedecuesta-colsetrans-eu-b457d0f1c2",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 149,
+      "id": "cia-piedecuesta-centro-integral-de-atencion-vial-cia-pie-9c138f5b45",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 150,
+      "id": "cia-piedecuesta-cia-global-piedecuesta-d4f7877995",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 151,
+      "id": "cia-piedecuesta-cia-guatiguara-16f4fbea74",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 152,
+      "id": "cia-piedecuesta-ivelcor-piedecuesta-5b682df114",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 153,
+      "id": "crc-piedecuesta-centro-de-reconocimiento-de-santander-li-45069542c2",
+      "reason": "unknown_site"
+    },
+    {
+      "row": 154,
+      "id": "crc-piedecuesta-certisalud-sas-541469ad03",
+      "reason": "unknown_site"
+    }
+  ],
+  "unknown_ids": [
+    "cda-bucaramanga-c-d-a-ciudad-bonita-ltda-d7579f871d",
+    "cda-bucaramanga-c-d-a-las-motos-de-bucaramanga-s-a-s-6312586899",
+    "cda-bucaramanga-cda-bucaramanga-s-a-s-cfe90a6b03",
+    "cda-bucaramanga-cda-del-oriente-sas-ab76ccad0d",
+    "cda-bucaramanga-cda-la-concordia-2498edee49",
+    "cda-bucaramanga-cda-la-isla-de-la-52-a1d14d2bc9",
+    "cda-bucaramanga-cda-la-terminal-bga-96aaaacd9f",
+    "cda-bucaramanga-cda-la-virgen-0d0416e6fc",
+    "cda-bucaramanga-cda-practimoto-a012246d4f",
+    "cda-bucaramanga-cda-revitec-la-61-efa103beaf",
+    "cda-bucaramanga-cda-revitec-la-rosita-3ff2a780a7",
+    "cda-bucaramanga-cda-supercar-la-central-58c3f5ce82",
+    "cda-bucaramanga-centro-de-diagnostico-automotor-de-la-di-aec6693e01",
+    "cda-bucaramanga-centro-de-diagnostico-automotor-la-27-co-06acd49f7f",
+    "cda-bucaramanga-centro-de-diagnostico-automotor-puerta-d-3280643fe0",
+    "cda-bucaramanga-centro-de-diagnostico-automotor-santande-9d34b603ca",
+    "cda-bucaramanga-centro-de-diagnostico-automotriz-tecnofu-f34d196e88",
+    "cda-bucaramanga-certificado-nacional-tecnico-mecanico-s--843db4ff32",
+    "cda-bucaramanga-certificado-nacional-tecnomecancio-s-a-77b42de2c1",
+    "cda-bucaramanga-certificado-nacional-tecnomecanico-s-a-8bfeb956e4",
+    "cda-bucaramanga-tecnico-mecanica-la-27-37da48969b",
+    "cea-bucaramanga-academia-tecnica-de-conductores-practi-c-c3406e00e2",
+    "cea-bucaramanga-autoaprender-s-a-s-d822f050d0",
+    "cea-bucaramanga-c-e-a-auto-oriente-de7ec8c4aa",
+    "cea-bucaramanga-cea-al-volante-la-27-7a66faeef3",
+    "cea-bucaramanga-cea-autoaprender-s-a-s-d6b391cfa9",
+    "cea-bucaramanga-cea-colsetrans-041d74e3eb",
+    "cea-bucaramanga-cea-luz-marina-bohorquez-de-gamboa-d54982fcef",
+    "cea-bucaramanga-cea-manejando-bucaramanga-55c16c929c",
+    "cea-bucaramanga-cea-manejar-96b119a7fa",
+    "cea-bucaramanga-ceapromover-s-a-s-e38bd2da54",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-fbb20141ed",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-25a4449a7d",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-5a9b7a4993",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-auto-9a9cc5e79e",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-baro-a9f546371c",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-cea--182b3d4cc7",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-fesp-28a88cb9ce",
+    "cea-bucaramanga-centro-de-ensenanza-automovilistica-orie-dac8c19d12",
+    "cea-bucaramanga-centro-superior-de-conduccion-csc-s-a-s-0b99b17229",
+    "cea-bucaramanga-centro-tecnico-de-ensenanza-automovilist-5706393b8e",
+    "cea-bucaramanga-condusan-bucaramanga-s-a-s-4645fd86d8",
+    "cea-bucaramanga-cooperativa-de-instructores-de-automovil-914897bfaa",
+    "cea-bucaramanga-ensenanza-automovilistica-galvis-e8fd9eaee9",
+    "cea-bucaramanga-escuela-auto-class-6cd1dd509d",
+    "cea-bucaramanga-escuela-de-automovilismo-karen-principal-6a5c716631",
+    "cea-bucaramanga-escuela-de-automovilismo-victor-s-a-s-f3708e90f6",
+    "cea-bucaramanga-escuela-de-automovilismo-y-motociclismo--347d217ca9",
+    "cea-bucaramanga-escuela-de-automovilismo-alvarez-y-o-cen-b04785f311",
+    "cia-bucaramanga-a-gas-vehicular-gnv-s-a-s-d9cf69a8ae",
+    "cia-bucaramanga-casa-carcel-del-oriente-colombiano-sas-d11fad5b7b",
+    "cia-bucaramanga-centro-integral-de-atencion-autoriente-046df37c3c",
+    "cia-bucaramanga-centro-integral-de-atencion-vial-cia-buc-616b8a7b8e",
+    "cia-bucaramanga-cia-global-bucaramanga-88688721c3",
+    "cia-bucaramanga-cia-group-bucarmanga-9a400d628e",
+    "cia-bucaramanga-cia-los-santanderes-61511f037f",
+    "cia-bucaramanga-cia-oriencol-sas-7ddade2283",
+    "cia-bucaramanga-cia-practicar-ab1d21c204",
+    "cia-bucaramanga-educia-bucaramanga-9d83b91b4b",
+    "cia-bucaramanga-vialseg-bucaramanga-791eb9d099",
+    "crc-bucaramanga-acerca-crc-santander-s-a-a257cd6a7a",
+    "crc-bucaramanga-c-r-c-manejar-s-a-s-484a3dd6ac",
+    "crc-bucaramanga-centro-de-reconocimiento-de-conductores--840fe7d149",
+    "crc-bucaramanga-centro-de-reconocimiento-de-conductores--b022f54891",
+    "crc-bucaramanga-centro-de-reconocimiento-de-conductores--725930af04",
+    "crc-bucaramanga-centro-de-reconocimiento-de-conductores--9b6c53e427",
+    "crc-bucaramanga-conduexam-bucaramanga-572f518a38",
+    "crc-bucaramanga-confia-crc-cabecera-8f0c05094e",
+    "crc-bucaramanga-crc-a-prueba-valledupar-no-1-fa7d115e67",
+    "crc-bucaramanga-crc-la-27-1919bfbe8d",
+    "crc-bucaramanga-crc-medicar-s-s-a-s-91fe5259ed",
+    "crc-bucaramanga-crc-simetric-santander-23ae590077",
+    "crc-bucaramanga-crc-super-salud-la-central-28f22b1241",
+    "crc-bucaramanga-efisaludriesgos-profesionales-sas-290627130b",
+    "crc-bucaramanga-mts-medicina-trabajo-y-seguridad-i-p-s-s-0ba7e60bd9",
+    "crc-bucaramanga-ocupasalud-s-a-s-1b40f43414",
+    "crc-bucaramanga-salud-vial-centro-de-reconocimiento-de-c-d93b69035b",
+    "crc-bucaramanga-saoc-ss-s-a-s-d4dc029813",
+    "crc-bucaramanga-servisalud-ips-bucaramanga-39847fa218",
+    "crc-bucaramanga-simetric-bucaramanga-7db4ecd8e5",
+    "crc-bucaramanga-vitaltest-ips-bucaramanga-c21a5809bb",
+    "cda-floridablanca-cda-autopista-floridablanca-cd84d1314d",
+    "cda-floridablanca-cda-motocicletas-parque-caracoli-a6ec9b6320",
+    "cda-floridablanca-cda-motos-floridablanca-cc3ad11e6e",
+    "cda-floridablanca-cda-villabel-5177beabe6",
+    "cda-floridablanca-centro-de-diagnostico-automotor-la-guada-671104c70b",
+    "cda-floridablanca-centro-diagnostico-automotor-canaveral-744dea7c0b",
+    "cda-floridablanca-diagnosticentros-de-colombia-s-a-s-509647b9eb",
+    "cea-floridablanca-cea-grupo-empresarial-karen-sas-1cdf56fce1",
+    "cea-floridablanca-centro-de-ensenanza-automovilistica-metr-b1c9496900",
+    "cea-floridablanca-centro-de-ensenanza-autogalvis-floridabl-b42b6f16a9",
+    "cea-floridablanca-centro-de-ensenanza-automovilistica-auto-14f1c633c6",
+    "cea-floridablanca-centro-de-ensenanza-automovilistica-avan-9dd8959c1d",
+    "cea-floridablanca-centro-de-ensenanza-automovilistica-zona-5e2d26beef",
+    "cea-floridablanca-centro-de-ensenanza-de-automovilismo-kar-31929dbf6c",
+    "cea-floridablanca-condusan-d137eb717c",
+    "cea-floridablanca-escuela-de-automovilismo-florida-a4c7cf2dba",
+    "cea-floridablanca-grupo-empresarial-jdto-s-a-s-f17ba91649",
+    "cea-floridablanca-instituto-tecnico-para-formacion-de-cond-f896076a7c",
+    "cia-floridablanca-aspecor-s-a-s-centro-integral-de-a-tenci-c1d2c7f0c1",
+    "cia-floridablanca-centro-integral-de-atencion-vial-cia-flo-b0cc121954",
+    "cia-floridablanca-cia-doble-via-74e7aa05df",
+    "cia-floridablanca-cia-global-floridablanca-e320c2c64a",
+    "cia-floridablanca-cia-ivelcor-floridablanca-e756b820a9",
+    "crc-floridablanca-c-r-c-adn-conductores-s-a-s-76ac1fc55e",
+    "crc-floridablanca-centro-de-reconocimiento-de-conductores--01b1fb3407",
+    "crc-floridablanca-centro-de-reconocimiento-de-conductores--9994455cbb",
+    "crc-floridablanca-certikar-la-florida-362a409b73",
+    "crc-floridablanca-crc-floridablanca-6c0e03fbcf",
+    "crc-floridablanca-servisalud-ips-floridablanca-b6bd5ae008",
+    "cda-giron-cda-giron-s-a-s-acef737773",
+    "cda-giron-cda-itg-s-a-s-33ef2f6e52",
+    "cda-giron-centro-de-diagnostico-automotriz-cda-rev-cabfa47c6a",
+    "cea-giron-academia-de-conduccion-los-coches-eb437676a6",
+    "cea-giron-cea-aprender-s-a-s-917f7550f8",
+    "cea-giron-cea-galvis-giron-e1740d3197",
+    "cea-giron-centro-de-ensenanza-automovilistica-auto-7db8517885",
+    "cea-giron-centro-de-ensenanza-automovilistica-giro-acb0f37b5a",
+    "cea-giron-centro-de-ensenanza-automovilistica-henr-8604e1daed",
+    "cea-giron-centro-de-ensenanza-automovilistica-san--b354b75834",
+    "cea-giron-centro-de-ensenanza-automovilistico-cea--c3c0cd7a99",
+    "cea-giron-ensenanza-millas-de-vida-giron-s-a-s-628ff584e5",
+    "cia-giron-centro-integral-de-atencion-seguridad-vi-282b776bb5",
+    "cia-giron-centro-integral-de-atencion-vial-de-chic-a9d2e92832",
+    "cia-giron-cia-giron-438f3045c2",
+    "cia-giron-cia-global-giron-67604703b8",
+    "cia-giron-instituto-de-capacitacion-y-formacion-de-4cb3af65fa",
+    "crc-giron-centro-de-reconocimiento-de-conductores--0c554ce0cb",
+    "crc-giron-centro-de-reconocimiento-de-conductores--22928670ea",
+    "crc-giron-centro-de-reconocimiento-de-conductores--a138cc2d2d",
+    "crc-giron-confia-crc-giron-dca8f8f64e",
+    "crc-giron-servisalud-ips-giron-12a1534d68",
+    "crc-giron-vitaltest-ips-giron-s-a-s-0503bb7b6b",
+    "cda-piedecuesta-cda-barroblanco-e721d73fae",
+    "cda-piedecuesta-cda-el-molino-piedecuesta-3d85476145",
+    "cda-piedecuesta-cda-motos-de-la-cuesta-57b26776e3",
+    "cda-piedecuesta-cda-san-pedro-6599e50b25",
+    "cda-piedecuesta-centro-de-diagnostico-automotriz-motos-p-a2a6a19547",
+    "cda-piedecuesta-certificado-nacional-tecnomecanico-s-a-d16495d3a6",
+    "cea-piedecuesta-autoconducir-sas-c72e6e9421",
+    "cea-piedecuesta-c-e-a-practi-car-delacuesta-66a04f4443",
+    "cea-piedecuesta-cea-piedecuestas-s-a-s-9cb29a011a",
+    "cea-piedecuesta-centro-de-ensenanza-automovilistica-auto-016bd5edac",
+    "cea-piedecuesta-centro-de-ensenanza-automovilistica-avan-6a86433224",
+    "cea-piedecuesta-centro-de-ensenanza-automovilistica-pie--514fb8dacc",
+    "cea-piedecuesta-centro-de-ensenanza-automovilistica-cea--51357e1d97",
+    "cea-piedecuesta-colsetrans-eu-b457d0f1c2",
+    "cia-piedecuesta-centro-integral-de-atencion-vial-cia-pie-9c138f5b45",
+    "cia-piedecuesta-cia-global-piedecuesta-d4f7877995",
+    "cia-piedecuesta-cia-guatiguara-16f4fbea74",
+    "cia-piedecuesta-ivelcor-piedecuesta-5b682df114",
+    "crc-piedecuesta-centro-de-reconocimiento-de-santander-li-45069542c2",
+    "crc-piedecuesta-certisalud-sas-541469ad03"
+  ],
+  "resolution": {
+    "source_place_id": 0,
+    "source_records_fallback": 0
+  },
+  "applied_rows": 0,
+  "database_url": "postgresql+psycopg://civi:***@postgres:5432/civi"
+}

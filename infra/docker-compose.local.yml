@@ -229,7 +229,10 @@ services:
       PLACES_REPOSITORY_MODE: sql
       PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
       PLACES_AUTO_CREATE_SCHEMA: "true"
-      PLACES_AUTO_SEED_CATALOG: "true"
+      PLACES_BOOTSTRAP_MODE: none
+      PLACES_AUTO_SEED_CATALOG: "false"
+      PLACES_SEARCH_RADIUS_KM: "40"
+      PLACES_GEOCODING_MODE: disabled
     ports:
       - "8085:8085"
     depends_on:
@@ -248,6 +251,7 @@ services:
       PORT: 8086
       INTERNAL_SERVICE_TOKEN: change-me-local-only
       NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      PLACES_SERVICE_URL: http://places-service:8085
       APPOINTMENT_REPOSITORY_MODE: sql
       APPOINTMENT_DATABASE_URL: postgresql+psycopg://civi:civi@postgres:5432/civi
       APPOINTMENT_AUTO_CREATE_SCHEMA: "true"
@@ -255,12 +259,17 @@ services:
       EVENT_REDIS_URL: redis://redis:6379/1
       EVENT_CHANNEL_PREFIX: civi.events
       APPOINTMENT_REMINDER_LEAD_MINUTES: "30"
+      APPOINTMENT_PARTNER_REMINDER_LEAD_MINUTES: "60"
     ports:
       - "8086:8086"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_started
+      places-service:
+        condition: service_started
+      notification-service:
         condition: service_started
 
   bot-consult-worker:

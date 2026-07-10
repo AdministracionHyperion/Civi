@@ -24,6 +24,10 @@ DISPLACEMENT_RE = re.compile(r"\b([1-9][0-9]{1,3})\s*(?:cc|c\.c\.|cilindraje)?\b
 MODEL_RE = re.compile(r"\b(19[5-9][0-9]|20[0-3][0-9])\b")
 INFRACTION_CODE_RE = re.compile(r"\b([A-I]\d{2})\b", re.IGNORECASE)
 APPOINTMENT_ID_RE = re.compile(r"\b(?:cita|reserva|turno)?\s*#?\s*(\d{1,9})\b", re.IGNORECASE)
+PARTNER_DECISION_RE = re.compile(
+    r"\b(confirmar|rechazar)\s+#?\s*(\d{1,9})\b",
+    re.IGNORECASE,
+)
 
 
 def extract_plate(text: str) -> str | None:
@@ -100,41 +104,136 @@ def wants_infraccion_quote(text: str) -> bool:
 
 def wants_infraccion_lookup(text: str) -> bool:
     """True when the user asks what a traffic fine/code is, not a Civi service quote."""
-    if wants_infraccion_quote(text) or wants_infraccion_explanation(text):
+    if wants_infraccion_quote(text):
         return True
     if extract_infraction_code(text):
         return True
-    lowered = (text or "").lower()
-    personal_terms = ("mis multas", "mis comparendos", "mi multa", "mi comparendo", "cuanto debo", "cuánto debo")
+    lowered = _normalized(text)
+    personal_terms = ("mis multas", "mis comparendos", "mi multa", "mi comparendo", "cuanto debo")
     if any(term in lowered for term in personal_terms):
         return False
     if any(term in lowered for term in ("cotizar soat", "precio soat", "comprar soat", "agendar", "cita")):
         return False
-    topic_terms = (
-        "semaforo", "semáforo", "luz roja", "pasarse el rojo",
+    # Strong conduct topics: enough alone to hit the catalog (no "cuanto vale" required).
+    strong_topics = (
         "espejo", "espejos", "retrovisor",
+        "exosto", "exhosto", "exsosto", "escape", "silenciador", "decibel",
+        "me escape", "reten", "evadir control", "fuga de transito",
+        "celular al volante", "usar celular",
         "chaleco", "reflectivo",
         "gafas", "lentes",
-        "exosto", "exhosto", "escape ruidoso", "decibel",
+        "cinturon",
+    )
+    if any(term in lowered for term in strong_topics):
+        return True
+    # Weaker topics still need an explicit fine/value framing.
+    weak_topics = (
+        "semaforo", "luz roja", "pasarse el rojo",
         "pico y placa", "zona prohibida", "sitio restringido",
         "mal parqueo", "estacionar",
-        "celular al volante", "usar celular",
         "sin soat", "soat vencido",
-        "cinturon", "cinturón",
     )
     question_terms = (
-        "multa", "comparendo", "infraccion", "infracción", "codigo", "código",
-        "cuanto", "cuánto", "vale", "cuesta", "sancion", "sanción", "que pasa",
+        "multa", "comparendo", "infraccion", "codigo",
+        "cuanto", "vale", "cuesta", "sancion", "que pasa", "ilegal",
     )
-    return any(term in lowered for term in topic_terms) and any(term in lowered for term in question_terms)
+    if any(term in lowered for term in weak_topics) and any(term in lowered for term in question_terms):
+        return True
+    return wants_infraccion_explanation(text)
+
+
+def wants_infraccion_explanation(text: str) -> bool:
+    lowered = (text or "").lower()
+    if wants_infraccion_quote(text):
+        return False
+    explain_terms = (
+        "que significa", "qué significa", "explicame", "explicación", "explicacion",
+        "detalle de", "que es la multa", "en que consiste", "en qué consiste",
+        "que infraccion es", "que codigo", "qué código",
+        "por que me multaron", "por qué me multaron",
+    )
+    if not any(term in lowered for term in explain_terms):
+        return False
+    context_terms = (
+        "multa", "comparendo", "infraccion", "infracción", "codigo", "código",
+        "semaforo", "semáforo", "exosto", "escape", "espejo", "reten", "retén",
+        "celular", "cinturon", "cinturón", "soat", "d0", "c0", "c2", "c3",
+    )
+    return any(term in lowered for term in context_terms)
+
+
+def normalize_infraccion_query(text: str) -> str:
+    """Fix common typos before catalog alias search."""
+    lowered = (text or "").lower()
+    replacements = (
+        ("exsosto", "exosto"),
+        ("exhosto", "exosto"),
+        ("mmoficiado", "modificado"),
+        ("moficiado", "modificado"),
+        ("modoficado", "modificado"),
+    )
+    for old, new in replacements:
+        lowered = lowered.replace(old, new)
+    return lowered
+
+
+def wants_general_multas_city(text: str) -> bool:
+    lowered = _normalized(text)
+    return any(
+        term in lowered
+        for term in (
+            "general",
+            "no se",
+            "no se",
+            "nacional",
+            "da igual",
+            "cualquiera",
+            "en general",
+            "mira general",
+        )
+    )
 
 
 def wants_multas(text: str) -> bool:
     lowered = (text or "").lower()
     if wants_infraccion_quote(text):
         return False
-    terms = ("multa", "multas", "comparendo", "comparendos", "simit", "fotomulta")
-    return any(term in lowered for term in terms)
+    # Appointment procedure selection — not a SIMIT consult.
+    if "curso" in lowered and any(term in lowered for term in ("multa", "comparendo")):
+        personal = (
+            "mis multas",
+            "mis comparendos",
+            "mi multa",
+            "consultar multas",
+            "ver multas",
+            "mirar multas",
+            "revisar multas",
+        )
+        if not any(term in lowered for term in personal):
+            return False
+    personal_or_consult = (
+        "mis multas",
+        "mis comparendos",
+        "mi multa",
+        "mi comparendo",
+        "consultar multas",
+        "ver multas",
+        "mirar multas",
+        "revisar multas",
+        "buscar multas",
+        "simit",
+        "fotomulta",
+        "fotomultas",
+    )
+    if any(term in lowered for term in personal_or_consult):
+        return True
+    # Broader: "multas" / "comparendos" as consult intent without "curso".
+    if any(term in lowered for term in ("multas", "comparendos")):
+        return True
+    if "multa" in lowered or "comparendo" in lowered:
+        action = ("consultar", "ver", "mirar", "revisar", "buscar", "tengo", "debo", "puedes")
+        return any(term in lowered for term in action)
+    return False
 
 
 def wants_runt_profile(text: str) -> bool:
@@ -286,8 +385,23 @@ def wants_payment(text: str) -> bool:
 
 
 def wants_handoff(text: str) -> bool:
-    lowered = (text or "").lower()
-    return any(term in lowered for term in ("asesor", "humano", "persona", "agente", "llameme", "llámeme"))
+    lowered = _normalized(text)
+    # "ASESORAME" alone is product advice, not human escalation.
+    human_signals = (
+        "asesor humano",
+        "agente humano",
+        "persona real",
+        "persona humana",
+        "hablar con alguien",
+        "hablar con una persona",
+        "pasar con un asesor",
+        "pasame con un asesor",
+        "quiero un asesor",
+        "quiero hablar con un asesor",
+        "llameme",
+        "llamame",
+    )
+    return any(term in lowered for term in human_signals)
 
 
 def wants_situational_advice(text: str) -> bool:
@@ -352,19 +466,6 @@ def wants_accident_info(text: str) -> bool:
         "farola", "farol", "radiador", "parachoques", "capo", "puerta", "espejo",
         "vidrio", "llanta", "faro",
         "me chocaron", "me estrellaron", "choque simple",
-    )
-    return any(term in lowered for term in terms)
-
-
-def wants_infraccion_explanation(text: str) -> bool:
-    lowered = (text or "").lower()
-    if wants_infraccion_quote(text):
-        return False
-    terms = (
-        "que significa", "qué significa", "explicame", "explicación", "explicacion",
-        "detalle de", "que es la multa", "en que consiste", "en qué consiste",
-        "que infraccion es", "que codigo", "qué código",
-        "por que me multaron", "por qué me multaron",
     )
     return any(term in lowered for term in terms)
 
@@ -587,6 +688,14 @@ def extract_appointment_id(text: str) -> int | None:
     return None
 
 
+def extract_partner_decision(text: str) -> tuple[str, int] | None:
+    match = PARTNER_DECISION_RE.search(text or "")
+    if not match:
+        return None
+    action = match.group(1).lower()
+    return action, int(match.group(2))
+
+
 def extract_city(text: str) -> str | None:
     match = CITY_RE.search(text or "")
     if not match:
@@ -645,6 +754,10 @@ def procedure_for_text(text: str) -> str | None:
     if "licencia" in lowered:
         return "licencia_primera"
     return None
+
+
+def mentions_crc(text: str) -> bool:
+    return "crc" in _normalized(text)
 
 
 def _normalized(text: str) -> str:

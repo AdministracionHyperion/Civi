@@ -1127,7 +1127,19 @@
         "desobedecer agente",
         "ignorar agente",
         "no obedecer policia transito",
-        "agente de tránsito"
+        "agente de tránsito",
+        "me escape",
+        "me escapé",
+        "me escape del reten",
+        "me escapé del retén",
+        "reten",
+        "retén",
+        "evadir control",
+        "evadir reten",
+        "fuga de transito",
+        "fuga de tránsito",
+        "no pare al agente",
+        "no paré al agente"
       ]
     },
     {
@@ -1567,8 +1579,13 @@
         "escape ruidoso",
         "exhosto",
         "exosto",
+        "exsosto",
         "humo",
-        "ruido"
+        "ruido",
+        "silenciador",
+        "quitar silenciador",
+        "exosto modificado",
+        "escape ilegal"
       ]
     },
     {

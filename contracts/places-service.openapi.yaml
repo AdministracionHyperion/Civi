@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Civi Places Service
-  version: 0.1.0
+  version: 0.2.0
 paths:
   /health/live:
     get:
@@ -44,6 +44,8 @@ paths:
                   type: number
                 limit:
                   type: integer
+                municipality_code:
+                  type: string
       responses:
         "200":
           description: nearest places
@@ -55,7 +57,156 @@ paths:
       responses:
         "200":
           description: partners
+  /internal/places/geojson:
+    get:
+      summary: GeoJSON FeatureCollection for map rendering (Manizales first)
+      security:
+        - internalBearer: []
+      parameters:
+        - name: city
+          in: query
+          schema:
+            type: string
+            default: Manizales
+        - name: department
+          in: query
+          schema:
+            type: string
+            default: Caldas
+      responses:
+        "200":
+          description: GeoJSON features with lat/lng, precision, validation_status, location_confirmed
+  /internal/places/catalog/summary:
+    get:
+      summary: Catalog statistics for admin and operations
+      security:
+        - internalBearer: []
+      responses:
+        "200":
+          description: catalog summary with presence, geocode, and document validation metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogSummaryResponse"
+  /internal/places/{site_id}:
+    get:
+      summary: Get place/site by id
+      security:
+        - internalBearer: []
+      parameters:
+        - name: site_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: place detail
+  /internal/places/{site_id}/booking-eligibility:
+    get:
+      summary: Booking eligibility for a site
+      security:
+        - internalBearer: []
+      parameters:
+        - name: site_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: eligibility
 components:
+  schemas:
+    CatalogSummaryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        source_records:
+          type: integer
+        unique_entities:
+          type: integer
+        unique_sites:
+          type: integer
+        by_actor_type:
+          type: object
+          additionalProperties:
+            type: integer
+        by_operational_status:
+          type: object
+          additionalProperties:
+            type: integer
+        by_source_presence_status:
+          type: object
+          additionalProperties:
+            type: integer
+        by_geocode_status:
+          type: object
+          additionalProperties:
+            type: integer
+        by_document_validation_status:
+          type: object
+          additionalProperties:
+            type: integer
+        partners:
+          type: integer
+        bookable:
+          type: integer
+        geocoded:
+          type: integer
+        pending_geocoding:
+          type: integer
+        low_confidence_geocodes:
+          type: integer
+        manual_review:
+          type: integer
+        duplicate_candidates:
+          type: integer
+        invalid_addresses:
+          type: integer
+        invalid_phones:
+          type: integer
+          nullable: true
+        valid_documents:
+          type: integer
+          nullable: true
+        invalid_documents:
+          type: integer
+          nullable: true
+        candidate_documents:
+          type: integer
+          nullable: true
+        ambiguous_documents:
+          type: integer
+          nullable: true
+        missing_documents:
+          type: integer
+          nullable: true
+        absent_from_snapshot:
+          type: integer
+          nullable: true
+        missing:
+          type: integer
+          nullable: true
+        present_sites:
+          type: integer
+          nullable: true
+        reappeared_sites:
+          type: integer
+          nullable: true
+        latest_import:
+          type: object
+          nullable: true
+        source_updated_at:
+          type: string
+          nullable: true
+        snapshot_at:
+          type: string
+          nullable: true
+        error:
+          type: string
+          nullable: true
   securitySchemes:
     internalBearer:
       type: http

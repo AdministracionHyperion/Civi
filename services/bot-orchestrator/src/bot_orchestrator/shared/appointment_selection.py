@@ -6,6 +6,9 @@ from threading import Lock
 from typing import Any
 
 
+AWAITING_PROCEDURE = "awaiting"
+
+
 @dataclass
 class PendingAppointmentSelection:
     user_key: str
@@ -14,6 +17,7 @@ class PendingAppointmentSelection:
     places: list[dict[str, Any]]
     starts_at: str | None = None
     selected_index: int | None = None
+    mentioned_crc: bool = False
 
 
 @dataclass

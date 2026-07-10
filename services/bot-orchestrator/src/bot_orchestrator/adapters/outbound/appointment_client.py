@@ -68,3 +68,21 @@ class AppointmentClient:
             )
             response.raise_for_status()
             return response.json()
+
+    async def confirm(self, *, appointment_id: int) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(
+                f"{self.base_url}/internal/appointments/{appointment_id}/confirm",
+                headers=self._headers,
+            )
+            response.raise_for_status()
+            return response.json()
+
+    async def reject(self, *, appointment_id: int) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(
+                f"{self.base_url}/internal/appointments/{appointment_id}/reject",
+                headers=self._headers,
+            )
+            response.raise_for_status()
+            return response.json()

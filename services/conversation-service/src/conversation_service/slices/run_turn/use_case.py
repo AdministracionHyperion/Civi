@@ -11,9 +11,13 @@ from conversation_service.slices.classify_consent.use_case import ConsentClassif
 
 from .schemas import RunTurnRequest, RunTurnResponse
 
+# Saludo canónico de Civi (WhatsApp). El gate de Habeas Data se concatena solo en el primer contacto.
+STANDARD_GREETING_TEXT = (
+    "¡Hola! Soy Civi, tu asistente integral de tránsito en Colombia. ¿En qué puedo ayudarte? 😊"
+)
+
 GREETING_HABEAS_DATA_TEXT = (
-    "Hola 👋 Soy *Civi*, tu asistente para tramites de transito en Colombia: "
-    "SOAT, tecnomecanica, licencias y cursos por comparendo.\n\n"
+    f"{STANDARD_GREETING_TEXT}\n\n"
     "Para orientarte necesito tu autorizacion para tratar tus datos personales "
     "segun la Ley 1581 de 2012 (Habeas Data). Solo guardare lo necesario para ayudarte "
     "con el tramite.\n\n"
@@ -21,8 +25,7 @@ GREETING_HABEAS_DATA_TEXT = (
 )
 
 CONSENT_ACCEPTED_TEXT = (
-    "Gracias. Ya registre tu consentimiento. En que te puedo ayudar hoy: SOAT, "
-    "tecnomecanica, licencia o curso por multa?"
+    f"Gracias. Ya registre tu consentimiento.\n\n{STANDARD_GREETING_TEXT}"
 )
 
 CONSENT_DECLINED_TEXT = (
