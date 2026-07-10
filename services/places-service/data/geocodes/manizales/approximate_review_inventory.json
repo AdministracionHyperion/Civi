@@ -1,22 +1,11 @@
 {
   "city": "Manizales",
-  "validation_status_in_csv": "approximate_not_confirmed",
-  "count": 12,
-  "canonical_csv": "services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv",
   "canonical_csv_modified": false,
-  "expected_scope_counts_unchanged": true,
-  "geoportal": {
-    "accessible": true,
-    "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-    "note": "Consultas espaciales/textuales a NOMENCLATURA PREDIAL. No se usó geocodificador secundario como proveedor persistente."
-  },
-  "decision_legend": {
-    "candidate_confirmed_address": "Candidato fuerte de dirección registrado; CSV aún approximate_not_confirmed.",
-    "current_coordinate_inconsistent": "Coordenada CSV incoherente con la dirección/sector RUNT.",
-    "keep_approximate_bad_commercial_poi": "POI comercial descartado por mala georreferencia; conservar aproximado.",
-    "operational_status_requires_review": "Revisar vigencia operativa (RUNT 2.0) antes de confirmar.",
-    "keep_approximate_insufficient_evidence": "Sin evidencia de punto exacto; conservar aproximado."
-  },
+  "scope_counts_unchanged": true,
+  "tests_unchanged": true,
+  "official_reports_unchanged": true,
+  "geoportal_service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+  "secondary_geocoder_not_used_as_persistent_provider": true,
   "rows": [
     {
       "n": 1,
@@ -24,41 +13,69 @@
       "kind": "CDA",
       "name": "CDA CALDAS EL BOSQUE",
       "address_runt": "CALLE 12 # 30 32",
-      "city": "Manizales",
       "nit": "890805554",
       "phone": "3113549239",
       "lat_current": 5.06231775,
       "lng_current": -75.52377055,
-      "precision": "street_intersection",
-      "confidence": 0.58,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Se prioriza la dirección RUNT mediante road_intersection:calle 12/carrera 30; el lugar comercial geoapify quedó a 1317 m y no coincidió por teléfono.",
+      "secondary_reference": {
+        "lat": 5.061935,
+        "lng": -75.5238599
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "exact",
+        "lat": 5.0619511,
+        "lng": -75.5239771,
+        "objectids": [
+          32634
+        ],
+        "features": [
+          {
+            "objectid": 32634,
+            "ficha_nuev": "0104000003140004000000000",
+            "direccion": "C 12 30 32",
+            "barrio": "00",
+            "lat": 5.0619511,
+            "lng": -75.5239771,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "exact",
+          "requested_address": "C 12 30 32",
+          "variants_tried": [
+            "C 12 30 32"
+          ],
+          "feature": {
+            "objectid": 32634,
+            "ficha_nuev": "0104000003140004000000000",
+            "direccion": "C 12 30 32",
+            "barrio": "00",
+            "lat": 5.0619511,
+            "lng": -75.5239771,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+          },
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+          ],
+          "distance_to_current_m": 46.7,
+          "distance_to_secondary_m": 13.1,
+          "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+          "recommended_lat": 5.0619511,
+          "recommended_lng": -75.5239771,
+          "reason": "Geometría centroide del predio oficial con dirección coincidente."
+        }
+      },
+      "distance_current_to_geoportal_m": 46.7,
+      "distance_secondary_to_geoportal_m": 13.1,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.061935,
-      "candidate_lng": -75.5238599,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 43.7,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "C 12 30 32",
-        "match_quality": "exact_or_equivalent",
-        "nearest_predial_distance_m": 13.1,
-        "detail": "Capa NOMENCLATURA PREDIAL devolvió 'C 12 30 32' a ~13 m del candidato."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente.",
+      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:calle 12/carrera 30; el lugar comercial geoapify quedó a 1317 m y no coincidió por teléfono."
     },
     {
       "n": 2,
@@ -66,39 +83,37 @@
       "kind": "CDA",
       "name": "CDA SOCICAR",
       "address_runt": "AVENIDA 19 N 13 - 44 LOCAL 3-4-5-6 AMERICAS",
-      "city": "Manizales",
       "nit": "901841847",
       "phone": "3043331591",
       "lat_current": 5.0694483,
       "lng_current": -75.5235525,
-      "precision": "street_intersection",
-      "confidence": 0.62,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano carrera 19 con calle 13; separación de vías=0.0 m; no confirma el negocio.",
+      "secondary_reference": null,
+      "geoportal_or_interpolation": {
+        "match_type": "insufficient",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "insufficient",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null,
+          "recommended_status": "keep_approximate_insufficient_evidence",
+          "reason": "Sin evidencia de punto exacto.",
+          "unchanged_this_round": true
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "keep_approximate_insufficient_evidence",
-      "candidate_lat": null,
-      "candidate_lng": null,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": null,
-      "status_note": "Continúa aproximado por falta de evidencia de punto exacto.",
-      "blocking_pending": "Falta pin comercial/municipal verificable coherente con nombre+dirección.",
-      "audit_notes": [
-        "Sin candidato fuerte de dirección en esta ronda."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "queried": false,
-        "detail": "No se consultó candidato nuevo."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "keep_approximate_insufficient_evidence",
+      "reason": "Sin evidencia de punto exacto.",
+      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 13; separación de vías=0.0 m; no confirma el negocio."
     },
     {
       "n": 3,
@@ -106,41 +121,72 @@
       "kind": "CDA",
       "name": "CENTRO DE DIAGNOSTICO AUTOMOTOR MOTOLINARES",
       "address_runt": "CARRERA 24 # 32 - 49 BRR FUNDADORES",
-      "city": "Manizales",
       "nit": "901345789",
       "phone": "3113010474",
       "lat_current": 5.0667186,
       "lng_current": -75.5111711,
-      "precision": "street_intersection",
-      "confidence": 0.58,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Se prioriza la dirección RUNT mediante road_intersection:carrera 24/calle 32; el lugar comercial overture_maps_2026-06-17 quedó a 1593 m y no coincidió por teléfono.",
+      "secondary_reference": {
+        "lat": 5.066789,
+        "lng": -75.5108139
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "exact",
+        "lat": 5.0668589,
+        "lng": -75.5108467,
+        "objectids": [
+          52874
+        ],
+        "features": [
+          {
+            "objectid": 52874,
+            "ficha_nuev": "0105000002910904000000000",
+            "direccion": "CR 24 32 49",
+            "barrio": "00",
+            "lat": 5.0668589,
+            "lng": -75.5108467,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+32+49%27"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "exact",
+          "requested_address": "CR 24 32 49",
+          "variants_tried": [
+            "CR 24 32 49",
+            "K 24 32 49"
+          ],
+          "feature": {
+            "objectid": 52874,
+            "ficha_nuev": "0105000002910904000000000",
+            "direccion": "CR 24 32 49",
+            "barrio": "00",
+            "lat": 5.0668589,
+            "lng": -75.5108467,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27"
+          },
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+32+49%27"
+          ],
+          "distance_to_current_m": 39.2,
+          "distance_to_secondary_m": 8.6,
+          "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+          "recommended_lat": 5.0668589,
+          "recommended_lng": -75.5108467,
+          "reason": "Geometría centroide del predio oficial con dirección coincidente."
+        }
+      },
+      "distance_current_to_geoportal_m": 39.2,
+      "distance_secondary_to_geoportal_m": 8.6,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.066789,
-      "candidate_lng": -75.5108139,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 40.3,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "CR 24 32 49",
-        "match_quality": "exact_or_equivalent",
-        "nearest_predial_distance_m": 8.6,
-        "detail": "NOMENCLATURA PREDIAL: 'CR 24 32 49' a ~8.6 m del candidato (coincide con RUNT)."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente.",
+      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:carrera 24/calle 32; el lugar comercial overture_maps_2026-06-17 quedó a 1593 m y no coincidió por teléfono."
     },
     {
       "n": 4,
@@ -148,41 +194,37 @@
       "kind": "CEA",
       "name": "ACADEMIA AUTOMOVILISTICA CALDAS SAS",
       "address_runt": "CARRERA 23 NRO 53A 25",
-      "city": "Manizales",
       "nit": "900351845",
       "phone": "6068911466",
       "lat_current": 5.062466632954545,
       "lng_current": -75.49477705814394,
-      "precision": "street_interpolation",
-      "confidence": 0.55,
-      "provider": "openstreetmap_local_interpolation",
-      "evidence_current": "Interpolación en carrera 23 entre (49.0, 30.0) y (58.0, 6.0); no confirma el negocio.",
+      "secondary_reference": null,
+      "geoportal_or_interpolation": {
+        "match_type": "insufficient",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "insufficient",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null,
+          "recommended_status": "keep_approximate_bad_commercial_poi",
+          "reason": "POI comercial del centro mal georreferenciado; no usar.",
+          "unchanged_this_round": true
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "keep_approximate_bad_commercial_poi",
-      "candidate_lat": null,
-      "candidate_lng": null,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": null,
-      "status_note": "POI comercial encontrado está mal georreferenciado en el centro; no usarlo.",
-      "blocking_pending": "Conservar punto actual aproximado hasta evidencia municipal/comercial válida.",
-      "audit_notes": [
-        "Registrar POI comercial del centro como mal georreferenciado.",
-        "No adoptar esas coordenadas.",
-        "Conservar lat/lng actuales del CSV."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "queried": false,
-        "detail": "Sin candidato nuevo a validar."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "keep_approximate_bad_commercial_poi",
+      "reason": "POI comercial del centro mal georreferenciado; no usar.",
+      "evidence_current_csv": "Interpolación en carrera 23 entre (49.0, 30.0) y (58.0, 6.0); no confirma el negocio."
     },
     {
       "n": 5,
@@ -190,41 +232,125 @@
       "kind": "CEA",
       "name": "ACADEMIA AUTOMOVILISTICA PILOTO",
       "address_runt": "CARRERA 21 NO. 15-40",
-      "city": "Manizales",
       "nit": "17171839",
       "phone": "8828184",
       "lat_current": 5.0681641,
       "lng_current": -75.5221452,
-      "precision": "street_intersection",
-      "confidence": 0.62,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano carrera 21 con calle 15; separación de vías=0.0 m; no confirma el negocio.",
+      "secondary_reference": {
+        "lat": 5.0682222,
+        "lng": -75.5217211
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "interpolated",
+        "lat": 5.0680482,
+        "lng": -75.5217908,
+        "objectids": [
+          80394,
+          80393
+        ],
+        "features": [
+          {
+            "objectid": 80394,
+            "ficha_nuev": "0104000002500017000000000",
+            "direccion": "K 21 15 38",
+            "barrio": "00",
+            "lat": 5.0680505,
+            "lng": -75.5218138,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+          },
+          {
+            "objectid": 80393,
+            "ficha_nuev": "0104000002500018000000000",
+            "direccion": "K 21 15 44 48",
+            "barrio": "00",
+            "lat": 5.0680436,
+            "lng": -75.5217448,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+21+15%25%27&resultRecordCount=100"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "interpolated",
+          "requested_address": "CARRERA 21 NO. 15-40",
+          "via_token": "K 21 15",
+          "target_plate": 40,
+          "features_used": [
+            {
+              "objectid": 80394,
+              "ficha_nuev": "0104000002500017000000000",
+              "direccion": "K 21 15 38",
+              "barrio": "00",
+              "lat": 5.0680505,
+              "lng": -75.5218138,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+            },
+            {
+              "objectid": 80393,
+              "ficha_nuev": "0104000002500018000000000",
+              "direccion": "K 21 15 44 48",
+              "barrio": "00",
+              "lat": 5.0680436,
+              "lng": -75.5217448,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+            }
+          ],
+          "interpolation": {
+            "lat": 5.0680482,
+            "lng": -75.5217908,
+            "method": "linear_interpolation_between_predial_centroids",
+            "target_plate": 40,
+            "before": {
+              "objectid": 80394,
+              "ficha_nuev": "0104000002500017000000000",
+              "direccion": "K 21 15 38",
+              "barrio": "00",
+              "lat": 5.0680505,
+              "lng": -75.5218138,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+            },
+            "after": {
+              "objectid": 80393,
+              "ficha_nuev": "0104000002500018000000000",
+              "direccion": "K 21 15 44 48",
+              "barrio": "00",
+              "lat": 5.0680436,
+              "lng": -75.5217448,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+            },
+            "before_plate": 38,
+            "after_plate": 44,
+            "t": 0.3333
+          },
+          "plates_found": [
+            26,
+            34,
+            38,
+            44,
+            60
+          ],
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+21+15%25%27&resultRecordCount=100"
+          ],
+          "distance_to_current_m": 41.3,
+          "distance_to_secondary_m": 20.8,
+          "recommended_status": "candidate_approximate_or_address_via_municipal_interpolation",
+          "recommended_lat": 5.0680482,
+          "recommended_lng": -75.5217908,
+          "reason": "Interpolación entre placas 38 y 44 sobre K 21 15 (no existe predio exacto 15-40)."
+        }
+      },
+      "distance_current_to_geoportal_m": 41.3,
+      "distance_secondary_to_geoportal_m": 20.8,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.0682222,
-      "candidate_lng": -75.5217211,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 47.4,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita; predial exacto 15-40 no hallado.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "K 21 15 38 (cercano; no existe 'K 21 15 40' exacto)",
-        "match_quality": "nearby_same_block",
-        "nearest_predial_distance_m": 8.9,
-        "detail": "Predios en K 21 15 38 / 44-48 / 60 cerca del candidato; sin ficha exacta 15-40."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "candidate_approximate_or_address_via_municipal_interpolation",
+      "reason": "Interpolación entre placas 38 y 44 sobre K 21 15 (no existe predio exacto 15-40).",
+      "evidence_current_csv": "Cruce colombiano carrera 21 con calle 15; separación de vías=0.0 m; no confirma el negocio."
     },
     {
       "n": 6,
@@ -232,40 +358,184 @@
       "kind": "CEA",
       "name": "CEA PRACTICAR DEL EJE - MANIZALES",
       "address_runt": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
-      "city": "Manizales",
       "nit": "901247003",
       "phone": "3138836685",
       "lat_current": 5.05390085,
       "lng_current": -75.47652575000001,
-      "precision": "street_intersection",
-      "confidence": 0.58,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Se prioriza la dirección RUNT mediante road_intersection:carrera 23/calle 70; el lugar comercial openstreetmap_local_interpolation quedó a 891 m y no coincidió por teléfono.",
+      "secondary_reference": {
+        "lat": 5.0517,
+        "lng": -75.4844
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "interpolated",
+        "lat": 5.0506212,
+        "lng": -75.4836742,
+        "objectids": [
+          96475,
+          52515
+        ],
+        "features": [
+          {
+            "objectid": 96475,
+            "ficha_nuev": "0101000001110916900000465",
+            "direccion": "K 23 70B 57 L 6",
+            "barrio": "00",
+            "lat": 5.0504758,
+            "lng": -75.4829351,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+          },
+          {
+            "objectid": 52515,
+            "ficha_nuev": "0101000001080008000000000",
+            "direccion": "K 23 70A 60",
+            "barrio": "00",
+            "lat": 5.0506939,
+            "lng": -75.4840437,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70+23%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CL+70+23%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+23+70%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25AV+23+70%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&geometry=%7B%22xmin%22%3A+-75.48602794513216%2C+%22ymin%22%3A+5.0500783783783785%2C+%22xmax%22%3A+-75.48277205486782%2C+%22ymax%22%3A+5.053321621621622%2C+%22spatialReference%22%3A+%7B%22wkid%22%3A+4326%7D%7D&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "interpolated",
+          "requested_address": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
+          "via_token": "K 23 70",
+          "target_plate": 59,
+          "features_used": [
+            {
+              "objectid": 96475,
+              "ficha_nuev": "0101000001110916900000465",
+              "direccion": "K 23 70B 57 L 6",
+              "barrio": "00",
+              "lat": 5.0504758,
+              "lng": -75.4829351,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+            },
+            {
+              "objectid": 52515,
+              "ficha_nuev": "0101000001080008000000000",
+              "direccion": "K 23 70A 60",
+              "barrio": "00",
+              "lat": 5.0506939,
+              "lng": -75.4840437,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+            }
+          ],
+          "interpolation": {
+            "lat": 5.0506212,
+            "lng": -75.4836742,
+            "method": "linear_interpolation_between_predial_centroids",
+            "target_plate": 59,
+            "before": {
+              "objectid": 96475,
+              "ficha_nuev": "0101000001110916900000465",
+              "direccion": "K 23 70B 57 L 6",
+              "barrio": "00",
+              "lat": 5.0504758,
+              "lng": -75.4829351,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+            },
+            "after": {
+              "objectid": 52515,
+              "ficha_nuev": "0101000001080008000000000",
+              "direccion": "K 23 70A 60",
+              "barrio": "00",
+              "lat": 5.0506939,
+              "lng": -75.4840437,
+              "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+            },
+            "before_plate": 57,
+            "after_plate": 60,
+            "t": 0.6667
+          },
+          "plates_found": [
+            26,
+            34,
+            44,
+            54,
+            57,
+            60,
+            74,
+            76,
+            94,
+            102
+          ],
+          "alta_suiza_plausible": true,
+          "not_cerro_de_oro": true,
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70+23%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CL+70+23%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+23+70%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25AV+23+70%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&geometry=%7B%22xmin%22%3A+-75.48602794513216%2C+%22ymin%22%3A+5.0500783783783785%2C+%22xmax%22%3A+-75.48277205486782%2C+%22ymax%22%3A+5.053321621621622%2C+%22spatialReference%22%3A+%7B%22wkid%22%3A+4326%7D%7D&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+          ],
+          "sample_relevant_addresses": [
+            "C 70 23B 190",
+            "C 70 23B 23",
+            "C 70 23B 31",
+            "C 70 23B 41",
+            "C 70 23B 47",
+            "C 70 23C 03",
+            "C 70 23C 03 PREDIO In",
+            "C 70 23C 15",
+            "C 70 23D 27 29 Ap 502",
+            "C 70 23D 29 Ap 201",
+            "C 70 23D 29 Ap 202",
+            "C 70 23D 29 Ap 301",
+            "C 70 23D 29 Ap 302",
+            "C 70 23D 29 Ap 401",
+            "C 70 23D 29 Ap 402",
+            "C 70 23D 29 Ap 501",
+            "C 70 23D 29 Pq 1",
+            "C 70 23D 29 Pq 10",
+            "C 70 23D 29 Pq 11",
+            "C 70 23D 29 Pq 12",
+            "C 70 23D 29 Pq 13",
+            "C 70 23D 29 Pq 2",
+            "C 70 23D 29 Pq 3",
+            "C 70 23D 29 Pq 301",
+            "C 70 23D 29 Pq 4",
+            "C 70 23D 29 Pq 5",
+            "C 70 23D 29 Pq 6",
+            "C 70 23D 29 Pq 7",
+            "C 70 23D 29 Pq 8",
+            "C 70 23D 29 Pq 9",
+            "C 70 23D 39",
+            "C 70 23D 45",
+            "C 70A 21A 15 Pq 23",
+            "C 70B 23B 07",
+            "C 70B 23B 105",
+            "C 70B 23B 111",
+            "C 70B 23B 119",
+            "C 70B 23B 127",
+            "C 70B 23B 131",
+            "C 70B 23B 141"
+          ],
+          "distance_to_current_m": 871.7,
+          "distance_to_secondary_m": 144.4,
+          "recommended_status": "approximate_not_confirmed_with_corrected_municipal_interpolation",
+          "recommended_lat": 5.0506212,
+          "recommended_lng": -75.4836742,
+          "reason": "Interpolación municipal hacia 70-59; mantener approximate_not_confirmed salvo predio exacto. Verificar sector Alta Suiza."
+        }
+      },
+      "distance_current_to_geoportal_m": 871.7,
+      "distance_secondary_to_geoportal_m": 144.4,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "current_coordinate_inconsistent",
-      "candidate_lat": 5.0517,
-      "candidate_lng": -75.4844,
-      "candidate_kind": "approximate_sector_only",
-      "distance_current_to_candidate_m": 905.9,
-      "status_note": "Coordenada actual incoherente (Cerro de Oro/Colseguros, no Alta Suiza). Sector candidato aproximado sobre Av. Santander/Cra 23; sigue approximate.",
-      "blocking_pending": "Necesita coordenada municipal o comercial verificable en Alta Suiza antes de confirmar.",
-      "audit_notes": [
-        "Punto CSV actual cae fuera del sector declarado (Alta Suiza - Av. Santander).",
-        "Sector candidato 5.0517,-75.4844 es solo aproximación de zona, no confirmación."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "queried": false,
-        "detail": "No se validó como confirmed_address; sector aproximado pendiente de nomenclatura exacta 70-59."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "approximate_not_confirmed_with_corrected_municipal_interpolation",
+      "reason": "Interpolación municipal hacia 70-59; mantener approximate_not_confirmed salvo predio exacto. Verificar sector Alta Suiza.",
+      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:carrera 23/calle 70; el lugar comercial openstreetmap_local_interpolation quedó a 891 m y no coincidió por teléfono."
     },
     {
       "n": 7,
@@ -273,41 +543,75 @@
       "kind": "CEA",
       "name": "CENTRO DE ENSEÑANZA AUTOMOVILISTICA CALDAS",
       "address_runt": "CRA 24 53-20",
-      "city": "Manizales",
       "nit": "901461969",
       "phone": null,
       "lat_current": 5.0630767,
       "lng_current": -75.4962899,
-      "precision": "street_intersection",
-      "confidence": 0.62,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano carrera 24 con calle 53; separación de vías=0.0 m; no confirma el negocio.",
+      "secondary_reference": {
+        "lat": 5.062863,
+        "lng": -75.4961049
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "exact",
+        "lat": 5.062791,
+        "lng": -75.4962457,
+        "objectids": [
+          14593
+        ],
+        "features": [
+          {
+            "objectid": 14593,
+            "ficha_nuev": "0103000000830006000000000",
+            "direccion": "K 24 53 20 K 25",
+            "barrio": "00",
+            "lat": 5.062791,
+            "lng": -75.4962457,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20%27",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+53+20%27"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "exact",
+          "requested_address": "K 24 53 20",
+          "variants_tried": [
+            "K 24 53 20",
+            "K 24 53 20 K 25",
+            "CR 24 53 20"
+          ],
+          "feature": {
+            "objectid": 14593,
+            "ficha_nuev": "0103000000830006000000000",
+            "direccion": "K 24 53 20 K 25",
+            "barrio": "00",
+            "lat": 5.062791,
+            "lng": -75.4962457,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+          },
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20%27",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+53+20%27"
+          ],
+          "distance_to_current_m": 32.1,
+          "distance_to_secondary_m": 17.5,
+          "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+          "recommended_lat": 5.062791,
+          "recommended_lng": -75.4962457,
+          "reason": "Geometría centroide del predio oficial con dirección coincidente."
+        }
+      },
+      "distance_current_to_geoportal_m": 32.1,
+      "distance_secondary_to_geoportal_m": 17.5,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.062863,
-      "candidate_lng": -75.4961049,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 31.4,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "K 24 53 20 K 25",
-        "match_quality": "exact_or_equivalent",
-        "nearest_predial_distance_m": 7.0,
-        "detail": "NOMENCLATURA PREDIAL: 'K 24 53 20 K 25' a ~7 m (coincide con CRA 24 53-20)."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente.",
+      "evidence_current_csv": "Cruce colombiano carrera 24 con calle 53; separación de vías=0.0 m; no confirma el negocio."
     },
     {
       "n": 8,
@@ -315,41 +619,69 @@
       "kind": "CIA",
       "name": "CENTRO INTEGRAL DE ATENCION RUTAS DE COLOMBIA",
       "address_runt": "CALLE 21 # 19 - 27 CENTRO",
-      "city": "Manizales",
       "nit": "901851594",
       "phone": null,
       "lat_current": 5.069294909977283,
       "lng_current": -75.51837825910042,
-      "precision": "street_interpolation",
-      "confidence": 0.55,
-      "provider": "openstreetmap_local_interpolation",
-      "evidence_current": "Interpolación en calle 21 entre (11.0, 34.0) y (22.0, 39.0); no confirma el negocio.",
+      "secondary_reference": {
+        "lat": 5.069402,
+        "lng": -75.5182809
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "exact",
+        "lat": 5.0693862,
+        "lng": -75.5180932,
+        "objectids": [
+          27405
+        ],
+        "features": [
+          {
+            "objectid": 27405,
+            "ficha_nuev": "0105000000820002000000000",
+            "direccion": "C 21 19 27",
+            "barrio": "00",
+            "lat": 5.0693862,
+            "lng": -75.5180932,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+          }
+        ],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "exact",
+          "requested_address": "C 21 19 27",
+          "variants_tried": [
+            "C 21 19 27"
+          ],
+          "feature": {
+            "objectid": 27405,
+            "ficha_nuev": "0105000000820002000000000",
+            "direccion": "C 21 19 27",
+            "barrio": "00",
+            "lat": 5.0693862,
+            "lng": -75.5180932,
+            "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+          },
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+          ],
+          "distance_to_current_m": 33.2,
+          "distance_to_secondary_m": 20.9,
+          "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+          "recommended_lat": 5.0693862,
+          "recommended_lng": -75.5180932,
+          "reason": "Geometría centroide del predio oficial con dirección coincidente."
+        }
+      },
+      "distance_current_to_geoportal_m": 33.2,
+      "distance_secondary_to_geoportal_m": 20.9,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.069402,
-      "candidate_lng": -75.5182809,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 16.1,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "C 21 19 27",
-        "match_quality": "exact_or_equivalent",
-        "nearest_predial_distance_m": 20.9,
-        "detail": "NOMENCLATURA PREDIAL: 'C 21 19 27' a ~21 m del candidato (coincide con RUNT)."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente.",
+      "evidence_current_csv": "Interpolación en calle 21 entre (11.0, 34.0) y (22.0, 39.0); no confirma el negocio."
     },
     {
       "n": 9,
@@ -357,41 +689,82 @@
       "kind": "CIA",
       "name": "CENTRO INTEGRAL DE ATENCIÓN EJE CAFETEROS S.A.S",
       "address_runt": "CARRERA 20 NO.21-40",
-      "city": "Manizales",
       "nit": "900455427",
       "phone": "7550531",
       "lat_current": 5.069090011353712,
       "lng_current": -75.51802856550218,
-      "precision": "street_interpolation",
-      "confidence": 0.55,
-      "provider": "openstreetmap_local_interpolation",
-      "evidence_current": "Interpolación en carrera 20 entre (20.0, 25.0) y (28.0, 40.0); no confirma el negocio.",
+      "secondary_reference": {
+        "lat": 5.0689636,
+        "lng": -75.5181746
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "insufficient",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+20+21%25%27&resultRecordCount=100",
+          "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+20+21%25%27&resultRecordCount=100"
+        ],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "insufficient",
+          "requested_address": "CARRERA 20 NO.21-40",
+          "plates_found": [
+            35
+          ],
+          "sample_addresses": [
+            "K 20 21 35 Pq 1 Niv 1A",
+            "K 20 21 35 Pq 1 Niv 2A",
+            "K 20 21 35 Pq 1 Niv 2B",
+            "K 20 21 35 Pq 1 Niv 3A",
+            "K 20 21 35 Pq 1 Niv 3B",
+            "K 20 21 35 Pq 1 Niv 4A",
+            "K 20 21 35 Pq 1 Niv 4B",
+            "K 20 21 35 Pq 1 Niv 5A",
+            "K 20 21 35 Pq 1 Niv 5B",
+            "K 20 21 35 Pq 1 Niv 6B",
+            "K 20 21 35 Pq 1 Niv 7B",
+            "K 20 21 35 Pq 10 Niv 1B",
+            "K 20 21 35 Pq 10 Niv 3B",
+            "K 20 21 35 Pq 10 Niv 4B",
+            "K 20 21 35 Pq 10 Niv 5B",
+            "K 20 21 35 Pq 10 Niv 6B",
+            "K 20 21 35 Pq 10 Niv 7B",
+            "K 20 21 35 Pq 2 Niv 1A",
+            "K 20 21 35 Pq 2 Niv 2A",
+            "K 20 21 35 Pq 2 Niv 2B",
+            "K 20 21 35 Pq 2 Niv 3A",
+            "K 20 21 35 Pq 2 Niv 3B",
+            "K 20 21 35 Pq 2 Niv 4A",
+            "K 20 21 35 Pq 2 Niv 4B",
+            "K 20 21 35 Pq 2 Niv 5A",
+            "K 20 21 35 Pq 2 Niv 5B",
+            "K 20 21 35 Pq 2 Niv 6B",
+            "K 20 21 35 Pq 2 Niv 7B",
+            "K 20 21 35 Pq 3 NIV 4B",
+            "K 20 21 35 Pq 3 Niv 1A"
+          ],
+          "query_urls": [
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+20+21%25%27&resultRecordCount=100",
+            "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+20+21%25%27&resultRecordCount=100"
+          ],
+          "recommended_status": "keep_approximate_not_confirmed",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "reason": "insufficient_bracketing_predios",
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "candidate_confirmed_address",
-      "candidate_lat": 5.0689636,
-      "candidate_lng": -75.5181746,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 21.4,
-      "status_note": "Candidato fuerte de dirección; estado CSV sigue approximate_not_confirmed.",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita; predial exacto 21-40 no hallado.",
-      "audit_notes": [
-        "Candidato de dirección propuesto por auditoría externa."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "K 20 21 35 (cercano; no existe 'K 20 21 40' exacto)",
-        "match_quality": "nearby_same_block",
-        "nearest_predial_distance_m": 3.9,
-        "detail": "Predios K 20 21 35 y tramos C 21 20 cerca del candidato; sin ficha exacta 21-40."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "keep_approximate_not_confirmed",
+      "reason": "insufficient_bracketing_predios",
+      "evidence_current_csv": "Interpolación en carrera 20 entre (20.0, 25.0) y (28.0, 40.0); no confirma el negocio."
     },
     {
       "n": 10,
@@ -399,39 +772,37 @@
       "kind": "CIA",
       "name": "CIMYC MANIZALES S.A.S",
       "address_runt": "CARRERA 19 #64A-19A",
-      "city": "Manizales",
       "nit": "901447764",
       "phone": null,
       "lat_current": 5.05813485,
       "lng_current": -75.48422695,
-      "precision": "street_intersection",
-      "confidence": 0.5,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano carrera 19 con calle 64a; separación de vías=112.5 m; no confirma el negocio.",
+      "secondary_reference": null,
+      "geoportal_or_interpolation": {
+        "match_type": "insufficient",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "insufficient",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null,
+          "recommended_status": "keep_approximate_insufficient_evidence",
+          "reason": "Sin evidencia de punto exacto.",
+          "unchanged_this_round": true
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "keep_approximate_insufficient_evidence",
-      "candidate_lat": null,
-      "candidate_lng": null,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": null,
-      "status_note": "Continúa aproximado por falta de evidencia de punto exacto.",
-      "blocking_pending": "Falta pin comercial/municipal verificable.",
-      "audit_notes": [
-        "Sin candidato fuerte de dirección en esta ronda."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "queried": false,
-        "detail": "No se consultó candidato nuevo."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "keep_approximate_insufficient_evidence",
+      "reason": "Sin evidencia de punto exacto.",
+      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 64a; separación de vías=112.5 m; no confirma el negocio."
     },
     {
       "n": 11,
@@ -439,43 +810,48 @@
       "kind": "CRC",
       "name": "CENTRO DE RECONOCIMIENTO DE CONDUCTORES EVALUANDO MANIZALES",
       "address_runt": "CALLE 22 NO. 18-29 PISO 2",
-      "city": "Manizales",
       "nit": "900094432",
       "phone": "8830561",
       "lat_current": 5.0702978,
       "lng_current": -75.5177831,
-      "precision": "street_intersection",
-      "confidence": 0.62,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano calle 22 con carrera 18; separación de vías=0.0 m; no confirma el negocio.",
+      "secondary_reference": {
+        "lat": 5.070056,
+        "lng": -75.5177019
+      },
+      "geoportal_or_interpolation": {
+        "match_type": "documentation_only",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "documentation_only",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null,
+          "secondary_reference_not_applied": [
+            5.070056,
+            -75.5177019
+          ],
+          "recommended_status": "operational_status_requires_review_no_coord_change",
+          "reason": "Sin cambio de coordenadas/estado. RUNT directorio clásico: Calle 22 #18-29 piso 2; ausente en RUNT 2.0 actores activos/certificando 2026 (hallazgo auditoría).",
+          "runt_discrepancy": {
+            "classic_directory_address": "CALLE 22 NO. 18-29 PISO 2",
+            "runt_2_0_active_certifying_2026": "not_listed_per_external_audit",
+            "action": "document_only"
+          }
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "operational_status_requires_review",
-      "candidate_lat": 5.070056,
-      "candidate_lng": -75.5177019,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": 28.4,
-      "status_note": "RUNT aún muestra Calle 22 #18-29 piso 2; no aparece en RUNT 2.0 actores activos/certificando 2026. Coordenada de referencia registrada; CSV sin cambio.",
-      "blocking_pending": "Revisar estado operativo/presencia RUNT 2.0 antes de confirmar o retirar.",
-      "audit_notes": [
-        "Dirección RUNT vigente en directorio clásico: Calle 22 #18-29 piso 2.",
-        "Ausente del conjunto RUNT 2.0 activos/certificando 2026 (hallazgo de auditoría).",
-        "Coordenada de referencia 5.0700560,-75.5177019 (no aplicada al CSV)."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "matched_predial_address": "C 22 18 23 29",
-        "match_quality": "exact_or_equivalent",
-        "nearest_predial_distance_m": 2.8,
-        "detail": "NOMENCLATURA PREDIAL: 'C 22 18 23 29' a ~2.8 m de la referencia (cubre 18-29)."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "operational_status_requires_review_no_coord_change",
+      "reason": "Sin cambio de coordenadas/estado. RUNT directorio clásico: Calle 22 #18-29 piso 2; ausente en RUNT 2.0 actores activos/certificando 2026 (hallazgo auditoría).",
+      "evidence_current_csv": "Cruce colombiano calle 22 con carrera 18; separación de vías=0.0 m; no confirma el negocio."
     },
     {
       "n": 12,
@@ -483,162 +859,198 @@
       "kind": "CRC",
       "name": "CERTIFICAMOS AGUSTINOS",
       "address_runt": "CRA 19 18-27 LC 3/3-1",
-      "city": "Manizales",
       "nit": "900697302",
       "phone": "3008149289",
       "lat_current": 5.069385,
       "lng_current": -75.5203143,
-      "precision": "street_intersection",
-      "confidence": 0.62,
-      "provider": "openstreetmap_road_network",
-      "evidence_current": "Cruce colombiano carrera 19 con calle 18; separación de vías=0.0 m; no confirma el negocio.",
+      "secondary_reference": null,
+      "geoportal_or_interpolation": {
+        "match_type": "insufficient",
+        "lat": null,
+        "lng": null,
+        "objectids": [],
+        "features": [],
+        "query_urls": [],
+        "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+        "detail": {
+          "match_type": "insufficient",
+          "recommended_lat": null,
+          "recommended_lng": null,
+          "distance_to_current_m": null,
+          "distance_to_secondary_m": null,
+          "recommended_status": "keep_approximate_shared_nit_separate_sites",
+          "reason": "Comparte NIT con Certificamos Terminal; sedes distintas, no fusionar.",
+          "unchanged_this_round": true
+        }
+      },
+      "distance_current_to_geoportal_m": null,
+      "distance_secondary_to_geoportal_m": null,
       "csv_validation_status": "approximate_not_confirmed",
       "csv_modified": false,
-      "decision": "keep_approximate_insufficient_evidence",
-      "candidate_lat": null,
-      "candidate_lng": null,
-      "candidate_kind": "address_candidate",
-      "distance_current_to_candidate_m": null,
-      "status_note": "Continúa aproximado por falta de evidencia de punto exacto. Comparte NIT con Certificamos Terminal; son dos sedes RUNT distintas (no fusionar).",
-      "blocking_pending": "Falta pin exacto de la sede Agustinos; no fusionar con Terminal.",
-      "audit_notes": [
-        "NIT compartido con Certificamos Terminal.",
-        "Dos sedes RUNT diferentes: no fusionar registros ni coordenadas."
-      ],
-      "geoportal_manizales": {
-        "layer": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-        "layer_name": "NOMENCLATURA PREDIAL",
-        "accessible": true,
-        "queried": false,
-        "detail": "No se consultó candidato nuevo."
-      },
-      "sources_consulted": [
-        "CSV canónico geocodes_manizales_validado.csv (sin modificar)",
-        "Hallazgos de auditoría externa (esta ronda)",
-        "Geoportal Alcaldía de Manizales — https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-      ]
+      "recommended_status": "keep_approximate_shared_nit_separate_sites",
+      "reason": "Comparte NIT con Certificamos Terminal; sedes distintas, no fusionar.",
+      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 18; separación de vías=0.0 m; no confirma el negocio."
     }
   ],
   "summary_table": [
     {
       "id": "cda-manizales-cda-caldas-el-bosque-a730920403",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CALLE 12 # 30 32",
       "lat_lng_current": "5.06231775,-75.52377055",
-      "lat_lng_candidate": "5.061935,-75.5238599",
-      "distance_m": 43.7,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría."
+      "lat_lng_secondary": "5.061935,-75.5238599",
+      "lat_lng_geoportal_or_interpolation": "5.0619511,-75.5239771",
+      "match_type": "exact",
+      "objectids": [
+        32634
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
     },
     {
       "id": "cda-manizales-cda-socicar-7acac31f0f",
-      "decision": "keep_approximate_insufficient_evidence",
+      "address_runt": "AVENIDA 19 N 13 - 44 LOCAL 3-4-5-6 AMERICAS",
       "lat_lng_current": "5.0694483,-75.5235525",
-      "lat_lng_candidate": "—",
-      "distance_m": "—",
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Falta pin comercial/municipal verificable coherente con nombre+dirección."
+      "lat_lng_secondary": "—",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "insufficient",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "keep_approximate_insufficient_evidence",
+      "reason": "Sin evidencia de punto exacto."
     },
     {
       "id": "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CARRERA 24 # 32 - 49 BRR FUNDADORES",
       "lat_lng_current": "5.0667186,-75.5111711",
-      "lat_lng_candidate": "5.066789,-75.5108139",
-      "distance_m": 40.3,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría."
+      "lat_lng_secondary": "5.066789,-75.5108139",
+      "lat_lng_geoportal_or_interpolation": "5.0668589,-75.5108467",
+      "match_type": "exact",
+      "objectids": [
+        52874
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
     },
     {
       "id": "cea-manizales-academia-automovilistica-caldas-sas-12d613c393",
-      "decision": "keep_approximate_bad_commercial_poi",
+      "address_runt": "CARRERA 23 NRO 53A 25",
       "lat_lng_current": "5.062466632954545,-75.49477705814394",
-      "lat_lng_candidate": "—",
-      "distance_m": "—",
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Conservar punto actual aproximado hasta evidencia municipal/comercial válida."
+      "lat_lng_secondary": "—",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "insufficient",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "keep_approximate_bad_commercial_poi",
+      "reason": "POI comercial del centro mal georreferenciado; no usar."
     },
     {
       "id": "cea-manizales-academia-automovilistica-piloto-177f760536",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CARRERA 21 NO. 15-40",
       "lat_lng_current": "5.0681641,-75.5221452",
-      "lat_lng_candidate": "5.0682222,-75.5217211",
-      "distance_m": 47.4,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita; predial exacto 15-40 no hallado."
+      "lat_lng_secondary": "5.0682222,-75.5217211",
+      "lat_lng_geoportal_or_interpolation": "5.0680482,-75.5217908",
+      "match_type": "interpolated",
+      "objectids": [
+        80394,
+        80393
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "candidate_approximate_or_address_via_municipal_interpolation",
+      "reason": "Interpolación entre placas 38 y 44 sobre K 21 15 (no existe predio exacto 15-40)."
     },
     {
       "id": "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0",
-      "decision": "current_coordinate_inconsistent",
+      "address_runt": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
       "lat_lng_current": "5.05390085,-75.47652575000001",
-      "lat_lng_candidate": "5.0517,-75.4844",
-      "distance_m": 905.9,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Necesita coordenada municipal o comercial verificable en Alta Suiza antes de confirmar."
+      "lat_lng_secondary": "5.0517,-75.4844",
+      "lat_lng_geoportal_or_interpolation": "5.0506212,-75.4836742",
+      "match_type": "interpolated",
+      "objectids": [
+        96475,
+        52515
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "approximate_not_confirmed_with_corrected_municipal_interpolation",
+      "reason": "Interpolación municipal hacia 70-59; mantener approximate_not_confirmed salvo predio exacto. Verificar sector Alta Suiza."
     },
     {
       "id": "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CRA 24 53-20",
       "lat_lng_current": "5.0630767,-75.4962899",
-      "lat_lng_candidate": "5.062863,-75.4961049",
-      "distance_m": 31.4,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría."
+      "lat_lng_secondary": "5.062863,-75.4961049",
+      "lat_lng_geoportal_or_interpolation": "5.062791,-75.4962457",
+      "match_type": "exact",
+      "objectids": [
+        14593
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
     },
     {
       "id": "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CALLE 21 # 19 - 27 CENTRO",
       "lat_lng_current": "5.069294909977283,-75.51837825910042",
-      "lat_lng_candidate": "5.069402,-75.5182809",
-      "distance_m": 16.1,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita de apply/auditoría."
+      "lat_lng_secondary": "5.069402,-75.5182809",
+      "lat_lng_geoportal_or_interpolation": "5.0693862,-75.5180932",
+      "match_type": "exact",
+      "objectids": [
+        27405
+      ],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
     },
     {
       "id": "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047",
-      "decision": "candidate_confirmed_address",
+      "address_runt": "CARRERA 20 NO.21-40",
       "lat_lng_current": "5.069090011353712,-75.51802856550218",
-      "lat_lng_candidate": "5.0689636,-75.5181746",
-      "distance_m": 21.4,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Aplicar al CSV solo tras decisión explícita; predial exacto 21-40 no hallado."
+      "lat_lng_secondary": "5.0689636,-75.5181746",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "insufficient",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "keep_approximate_not_confirmed",
+      "reason": "insufficient_bracketing_predios"
     },
     {
       "id": "cia-manizales-cimyc-manizales-s-a-s-498175000a",
-      "decision": "keep_approximate_insufficient_evidence",
+      "address_runt": "CARRERA 19 #64A-19A",
       "lat_lng_current": "5.05813485,-75.48422695",
-      "lat_lng_candidate": "—",
-      "distance_m": "—",
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Falta pin comercial/municipal verificable."
+      "lat_lng_secondary": "—",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "insufficient",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "keep_approximate_insufficient_evidence",
+      "reason": "Sin evidencia de punto exacto."
     },
     {
       "id": "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d",
-      "decision": "operational_status_requires_review",
+      "address_runt": "CALLE 22 NO. 18-29 PISO 2",
       "lat_lng_current": "5.0702978,-75.5177831",
-      "lat_lng_candidate": "5.070056,-75.5177019",
-      "distance_m": 28.4,
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Revisar estado operativo/presencia RUNT 2.0 antes de confirmar o retirar."
+      "lat_lng_secondary": "5.070056,-75.5177019",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "documentation_only",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "operational_status_requires_review_no_coord_change",
+      "reason": "Sin cambio de coordenadas/estado. RUNT directorio clásico: Calle 22 #18-29 piso 2; ausente en RUNT 2.0 actores activos/certificando 2026 (hallazgo auditoría)."
     },
     {
       "id": "crc-manizales-certificamos-agustinos-98839ab670",
-      "decision": "keep_approximate_insufficient_evidence",
+      "address_runt": "CRA 19 18-27 LC 3/3-1",
       "lat_lng_current": "5.069385,-75.5203143",
-      "lat_lng_candidate": "—",
-      "distance_m": "—",
-      "source": "Geoportal NOMENCLATURA PREDIAL + auditoría externa",
-      "csv_status": "approximate_not_confirmed (sin cambio)",
-      "blocking_pending": "Falta pin exacto de la sede Agustinos; no fusionar con Terminal."
+      "lat_lng_secondary": "—",
+      "lat_lng_geoportal_or_interpolation": "—",
+      "match_type": "insufficient",
+      "objectids": [],
+      "source": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+      "recommended_status": "keep_approximate_shared_nit_separate_sites",
+      "reason": "Comparte NIT con Certificamos Terminal; sedes distintas, no fusionar."
     }
-  ]
+  ],
+  "probe_file": "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json"
 }

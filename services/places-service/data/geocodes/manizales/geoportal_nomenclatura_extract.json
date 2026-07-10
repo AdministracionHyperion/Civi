@@ -1,0 +1,453 @@
+{
+  "service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+  "layer": "NOMENCLATURA PREDIAL",
+  "queries": {
+    "cda-manizales-cda-caldas-el-bosque-a730920403": {
+      "match_type": "exact",
+      "requested_address": "C 12 30 32",
+      "variants_tried": [
+        "C 12 30 32"
+      ],
+      "feature": {
+        "objectid": 32634,
+        "ficha_nuev": "0104000003140004000000000",
+        "direccion": "C 12 30 32",
+        "barrio": "00",
+        "lat": 5.0619511,
+        "lng": -75.5239771,
+        "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+      },
+      "all_features": [
+        {
+          "objectid": 32634,
+          "ficha_nuev": "0104000003140004000000000",
+          "direccion": "C 12 30 32",
+          "barrio": "00",
+          "lat": 5.0619511,
+          "lng": -75.5239771,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+        }
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+12+30+32%27"
+      ],
+      "distance_to_current_m": 46.7,
+      "distance_to_secondary_m": 13.1,
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "recommended_lat": 5.0619511,
+      "recommended_lng": -75.5239771,
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
+    },
+    "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c": {
+      "match_type": "exact",
+      "requested_address": "CR 24 32 49",
+      "variants_tried": [
+        "CR 24 32 49",
+        "K 24 32 49"
+      ],
+      "feature": {
+        "objectid": 52874,
+        "ficha_nuev": "0105000002910904000000000",
+        "direccion": "CR 24 32 49",
+        "barrio": "00",
+        "lat": 5.0668589,
+        "lng": -75.5108467,
+        "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27"
+      },
+      "all_features": [
+        {
+          "objectid": 52874,
+          "ficha_nuev": "0105000002910904000000000",
+          "direccion": "CR 24 32 49",
+          "barrio": "00",
+          "lat": 5.0668589,
+          "lng": -75.5108467,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27"
+        }
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+32+49%27",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+32+49%27"
+      ],
+      "distance_to_current_m": 39.2,
+      "distance_to_secondary_m": 8.6,
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "recommended_lat": 5.0668589,
+      "recommended_lng": -75.5108467,
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
+    },
+    "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930": {
+      "match_type": "exact",
+      "requested_address": "K 24 53 20",
+      "variants_tried": [
+        "K 24 53 20",
+        "K 24 53 20 K 25",
+        "CR 24 53 20"
+      ],
+      "feature": {
+        "objectid": 14593,
+        "ficha_nuev": "0103000000830006000000000",
+        "direccion": "K 24 53 20 K 25",
+        "barrio": "00",
+        "lat": 5.062791,
+        "lng": -75.4962457,
+        "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+      },
+      "all_features": [
+        {
+          "objectid": 14593,
+          "ficha_nuev": "0103000000830006000000000",
+          "direccion": "K 24 53 20 K 25",
+          "barrio": "00",
+          "lat": 5.062791,
+          "lng": -75.4962457,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+        },
+        {
+          "objectid": 14594,
+          "ficha_nuev": "0103000000830006000000000",
+          "direccion": "K 24 53 20 K 25",
+          "barrio": "00",
+          "lat": 5.0628109,
+          "lng": -75.496141,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+        },
+        {
+          "objectid": 14595,
+          "ficha_nuev": "0103000000830006000000000",
+          "direccion": "K 24 53 20 K 25",
+          "barrio": "00",
+          "lat": 5.062756,
+          "lng": -75.4961999,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+        },
+        {
+          "objectid": 14596,
+          "ficha_nuev": "0103000000830006000000000",
+          "direccion": "K 24 53 20 K 25",
+          "barrio": "00",
+          "lat": 5.0628373,
+          "lng": -75.4962534,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+        },
+        {
+          "objectid": 14610,
+          "ficha_nuev": "0103000000830006000000000",
+          "direccion": "K 24 53 20 K 25",
+          "barrio": "00",
+          "lat": 5.062826,
+          "lng": -75.4962295,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27"
+        }
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20%27",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27K+24+53+20+K+25%27",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27CR+24+53+20%27"
+      ],
+      "distance_to_current_m": 32.1,
+      "distance_to_secondary_m": 17.5,
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "recommended_lat": 5.062791,
+      "recommended_lng": -75.4962457,
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
+    },
+    "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e": {
+      "match_type": "exact",
+      "requested_address": "C 21 19 27",
+      "variants_tried": [
+        "C 21 19 27"
+      ],
+      "feature": {
+        "objectid": 27405,
+        "ficha_nuev": "0105000000820002000000000",
+        "direccion": "C 21 19 27",
+        "barrio": "00",
+        "lat": 5.0693862,
+        "lng": -75.5180932,
+        "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+      },
+      "all_features": [
+        {
+          "objectid": 27405,
+          "ficha_nuev": "0105000000820002000000000",
+          "direccion": "C 21 19 27",
+          "barrio": "00",
+          "lat": 5.0693862,
+          "lng": -75.5180932,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+        }
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+%3D+%27C+21+19+27%27"
+      ],
+      "distance_to_current_m": 33.2,
+      "distance_to_secondary_m": 20.9,
+      "recommended_status": "candidate_for_confirmed_address_using_geoportal_geometry",
+      "recommended_lat": 5.0693862,
+      "recommended_lng": -75.5180932,
+      "reason": "Geometría centroide del predio oficial con dirección coincidente."
+    },
+    "cea-manizales-academia-automovilistica-piloto-177f760536": {
+      "match_type": "interpolated",
+      "requested_address": "CARRERA 21 NO. 15-40",
+      "via_token": "K 21 15",
+      "target_plate": 40,
+      "features_used": [
+        {
+          "objectid": 80394,
+          "ficha_nuev": "0104000002500017000000000",
+          "direccion": "K 21 15 38",
+          "barrio": "00",
+          "lat": 5.0680505,
+          "lng": -75.5218138,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+        },
+        {
+          "objectid": 80393,
+          "ficha_nuev": "0104000002500018000000000",
+          "direccion": "K 21 15 44 48",
+          "barrio": "00",
+          "lat": 5.0680436,
+          "lng": -75.5217448,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+        }
+      ],
+      "interpolation": {
+        "lat": 5.0680482,
+        "lng": -75.5217908,
+        "method": "linear_interpolation_between_predial_centroids",
+        "target_plate": 40,
+        "before": {
+          "objectid": 80394,
+          "ficha_nuev": "0104000002500017000000000",
+          "direccion": "K 21 15 38",
+          "barrio": "00",
+          "lat": 5.0680505,
+          "lng": -75.5218138,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+        },
+        "after": {
+          "objectid": 80393,
+          "ficha_nuev": "0104000002500018000000000",
+          "direccion": "K 21 15 44 48",
+          "barrio": "00",
+          "lat": 5.0680436,
+          "lng": -75.5217448,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100"
+        },
+        "before_plate": 38,
+        "after_plate": 44,
+        "t": 0.3333
+      },
+      "plates_found": [
+        26,
+        34,
+        38,
+        44,
+        60
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+21+15%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+21+15%25%27&resultRecordCount=100"
+      ],
+      "distance_to_current_m": 41.3,
+      "distance_to_secondary_m": 20.8,
+      "recommended_status": "candidate_approximate_or_address_via_municipal_interpolation",
+      "recommended_lat": 5.0680482,
+      "recommended_lng": -75.5217908,
+      "reason": "Interpolación entre placas 38 y 44 sobre K 21 15 (no existe predio exacto 15-40)."
+    },
+    "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047": {
+      "match_type": "insufficient",
+      "requested_address": "CARRERA 20 NO.21-40",
+      "plates_found": [
+        35
+      ],
+      "sample_addresses": [
+        "K 20 21 35 Pq 1 Niv 1A",
+        "K 20 21 35 Pq 1 Niv 2A",
+        "K 20 21 35 Pq 1 Niv 2B",
+        "K 20 21 35 Pq 1 Niv 3A",
+        "K 20 21 35 Pq 1 Niv 3B",
+        "K 20 21 35 Pq 1 Niv 4A",
+        "K 20 21 35 Pq 1 Niv 4B",
+        "K 20 21 35 Pq 1 Niv 5A",
+        "K 20 21 35 Pq 1 Niv 5B",
+        "K 20 21 35 Pq 1 Niv 6B",
+        "K 20 21 35 Pq 1 Niv 7B",
+        "K 20 21 35 Pq 10 Niv 1B",
+        "K 20 21 35 Pq 10 Niv 3B",
+        "K 20 21 35 Pq 10 Niv 4B",
+        "K 20 21 35 Pq 10 Niv 5B",
+        "K 20 21 35 Pq 10 Niv 6B",
+        "K 20 21 35 Pq 10 Niv 7B",
+        "K 20 21 35 Pq 2 Niv 1A",
+        "K 20 21 35 Pq 2 Niv 2A",
+        "K 20 21 35 Pq 2 Niv 2B",
+        "K 20 21 35 Pq 2 Niv 3A",
+        "K 20 21 35 Pq 2 Niv 3B",
+        "K 20 21 35 Pq 2 Niv 4A",
+        "K 20 21 35 Pq 2 Niv 4B",
+        "K 20 21 35 Pq 2 Niv 5A",
+        "K 20 21 35 Pq 2 Niv 5B",
+        "K 20 21 35 Pq 2 Niv 6B",
+        "K 20 21 35 Pq 2 Niv 7B",
+        "K 20 21 35 Pq 3 NIV 4B",
+        "K 20 21 35 Pq 3 Niv 1A"
+      ],
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+20+21%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+20+21%25%27&resultRecordCount=100"
+      ],
+      "recommended_status": "keep_approximate_not_confirmed",
+      "recommended_lat": null,
+      "recommended_lng": null,
+      "reason": "insufficient_bracketing_predios",
+      "distance_to_current_m": null,
+      "distance_to_secondary_m": null
+    },
+    "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0": {
+      "match_type": "interpolated",
+      "requested_address": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
+      "via_token": "K 23 70",
+      "target_plate": 59,
+      "features_used": [
+        {
+          "objectid": 96475,
+          "ficha_nuev": "0101000001110916900000465",
+          "direccion": "K 23 70B 57 L 6",
+          "barrio": "00",
+          "lat": 5.0504758,
+          "lng": -75.4829351,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+        },
+        {
+          "objectid": 52515,
+          "ficha_nuev": "0101000001080008000000000",
+          "direccion": "K 23 70A 60",
+          "barrio": "00",
+          "lat": 5.0506939,
+          "lng": -75.4840437,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+        }
+      ],
+      "interpolation": {
+        "lat": 5.0506212,
+        "lng": -75.4836742,
+        "method": "linear_interpolation_between_predial_centroids",
+        "target_plate": 59,
+        "before": {
+          "objectid": 96475,
+          "ficha_nuev": "0101000001110916900000465",
+          "direccion": "K 23 70B 57 L 6",
+          "barrio": "00",
+          "lat": 5.0504758,
+          "lng": -75.4829351,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+        },
+        "after": {
+          "objectid": 52515,
+          "ficha_nuev": "0101000001080008000000000",
+          "direccion": "K 23 70A 60",
+          "barrio": "00",
+          "lat": 5.0506939,
+          "lng": -75.4840437,
+          "query_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100"
+        },
+        "before_plate": 57,
+        "after_plate": 60,
+        "t": 0.6667
+      },
+      "plates_found": [
+        26,
+        34,
+        44,
+        54,
+        57,
+        60,
+        74,
+        76,
+        94,
+        102
+      ],
+      "alta_suiza_plausible": true,
+      "not_cerro_de_oro": true,
+      "query_urls": [
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70+23%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CL+70+23%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25K+23+70%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25CR+23+70%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25AV+23+70%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&where=CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion+LIKE+%27%25C+70%25%27&resultRecordCount=100",
+        "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.ficha_nuev%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.barrio&returnGeometry=true&outSR=4326&geometry=%7B%22xmin%22%3A+-75.48602794513216%2C+%22ymin%22%3A+5.0500783783783785%2C+%22xmax%22%3A+-75.48277205486782%2C+%22ymax%22%3A+5.053321621621622%2C+%22spatialReference%22%3A+%7B%22wkid%22%3A+4326%7D%7D&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      ],
+      "sample_relevant_addresses": [
+        "C 70 23B 190",
+        "C 70 23B 23",
+        "C 70 23B 31",
+        "C 70 23B 41",
+        "C 70 23B 47",
+        "C 70 23C 03",
+        "C 70 23C 03 PREDIO In",
+        "C 70 23C 15",
+        "C 70 23D 27 29 Ap 502",
+        "C 70 23D 29 Ap 201",
+        "C 70 23D 29 Ap 202",
+        "C 70 23D 29 Ap 301",
+        "C 70 23D 29 Ap 302",
+        "C 70 23D 29 Ap 401",
+        "C 70 23D 29 Ap 402",
+        "C 70 23D 29 Ap 501",
+        "C 70 23D 29 Pq 1",
+        "C 70 23D 29 Pq 10",
+        "C 70 23D 29 Pq 11",
+        "C 70 23D 29 Pq 12",
+        "C 70 23D 29 Pq 13",
+        "C 70 23D 29 Pq 2",
+        "C 70 23D 29 Pq 3",
+        "C 70 23D 29 Pq 301",
+        "C 70 23D 29 Pq 4",
+        "C 70 23D 29 Pq 5",
+        "C 70 23D 29 Pq 6",
+        "C 70 23D 29 Pq 7",
+        "C 70 23D 29 Pq 8",
+        "C 70 23D 29 Pq 9",
+        "C 70 23D 39",
+        "C 70 23D 45",
+        "C 70A 21A 15 Pq 23",
+        "C 70B 23B 07",
+        "C 70B 23B 105",
+        "C 70B 23B 111",
+        "C 70B 23B 119",
+        "C 70B 23B 127",
+        "C 70B 23B 131",
+        "C 70B 23B 141"
+      ],
+      "distance_to_current_m": 871.7,
+      "distance_to_secondary_m": 144.4,
+      "recommended_status": "approximate_not_confirmed_with_corrected_municipal_interpolation",
+      "recommended_lat": 5.0506212,
+      "recommended_lng": -75.4836742,
+      "reason": "Interpolación municipal hacia 70-59; mantener approximate_not_confirmed salvo predio exacto. Verificar sector Alta Suiza."
+    },
+    "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d": {
+      "match_type": "documentation_only",
+      "recommended_lat": null,
+      "recommended_lng": null,
+      "distance_to_current_m": null,
+      "distance_to_secondary_m": null,
+      "secondary_reference_not_applied": [
+        5.070056,
+        -75.5177019
+      ],
+      "recommended_status": "operational_status_requires_review_no_coord_change",
+      "reason": "Sin cambio de coordenadas/estado. RUNT directorio clásico: Calle 22 #18-29 piso 2; ausente en RUNT 2.0 actores activos/certificando 2026 (hallazgo auditoría).",
+      "runt_discrepancy": {
+        "classic_directory_address": "CALLE 22 NO. 18-29 PISO 2",
+        "runt_2_0_active_certifying_2026": "not_listed_per_external_audit",
+        "action": "document_only"
+      }
+    }
+  }
+}
