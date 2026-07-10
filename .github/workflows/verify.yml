@@ -1,7 +1,7 @@
 name: verify
 on:
   push:
-    branches: [main, "feat/**"]
+    branches: [main, "feat/**", "fix/**"]
   pull_request:
     branches: [main]
 
@@ -86,6 +86,43 @@ jobs:
       - name: Run verify.ps1 via pwsh
         shell: pwsh
         run: ./scripts/verify.ps1
+      - name: Geocode CLI dry-run smoke
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          path = Path("/tmp/geocode_smoke.csv")
+          with path.open("w", encoding="utf-8", newline="") as fh:
+              writer = csv.DictWriter(
+                  fh,
+                  fieldnames=["site_id", "lat", "lng", "confidence", "provider", "precision"],
+              )
+              writer.writeheader()
+              writer.writerow(
+                  {
+                      "site_id": "smoke-site",
+                      "lat": "7.1193",
+                      "lng": "-73.1227",
+                      "confidence": "0.9",
+                      "provider": "manual",
+                      "precision": "address",
+                  }
+              )
+          print(path)
+          PY
+          python -m places_service.cli.import_geocodes \
+            --input /tmp/geocode_smoke.csv \
+            --dry-run \
+            --report-path /tmp/geocode_smoke_report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/geocode_smoke_report.json").read_text())
+          assert report["mode"] == "dry_run"
+          assert report["rows"] == 1
+          assert report["outside_colombia"] == 0
+          print("geocode_dry_run_ok", report)
+          PY
       - name: PostgreSQL import idempotency
         env:
           PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi

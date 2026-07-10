@@ -10,7 +10,11 @@ Merged by: AdministracionHyperion
 SHA fuente (blob LF en git): `03df28538959a7d596c92451fecf960073b30df622e55206677faa8dfa3abba7`  
 Nota: un checkout Windows con CRLF puede mostrar `457b4fda…` en disco; el contenido JSON es el mismo tras normalizar EOL.
 
-## READY_TO_MERGE=YES (histórico) / INTEGRATION_COMPLETE pendiente de informe operativo
+## INTEGRATION_COMPLETE=YES
+
+El merge del catálogo nacional (PR #1 / squash `952466b`) quedó cerrado operativamente con métricas 4107 / 4046 / 61 / 6.
+
+`READY_TO_MERGE` para el PR de hardening (`fix/places-production-hardening`) sigue en **NO** hasta CI verde.
 
 ## Evidencia pre-merge (commit f4f3635)
 

@@ -35,12 +35,12 @@ Modificados: nearest (sin fallback), appointment places client + guard, bot book
 | --- | ---: |
 | Registros fuente | **4107** (CDA 989, CEA 1552, CIA 772, CRC 794) |
 | Titulares únicos | **3293** |
-| Sedes únicas | **4044** |
-| Fusionados exactos | **59** |
+| Sedes únicas | **4046** |
+| Fusionados exactos | **61** |
 | Candidatos duplicado (revisión) | **2815** |
 | Rechazados | **0** |
 | Pending review (procesamiento) | **6** |
-| Reconciliación | 4042+59+6+0 = **4107** ✓ |
+| Reconciliación | 4040+61+6+0 = **4107** ✓ |
 
 ## 15–18. Calidad
 

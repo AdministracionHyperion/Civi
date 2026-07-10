@@ -49,7 +49,7 @@ async def test_dashboard_summary_uses_service_contract_note() -> None:
             return {
                 "success": True,
                 "source_records": 4107,
-                "unique_sites": 4044,
+                "unique_sites": 4046,
                 "unique_entities": 3293,
                 "by_actor_type": {"CDA": 985, "CEA": 1541, "CIA": 724, "CRC": 794},
                 "partners": 0,
@@ -71,7 +71,7 @@ async def test_dashboard_summary_uses_service_contract_note() -> None:
     assert not summary.appointments_visible
     assert summary.places_catalog is not None
     assert summary.places_catalog["source_records"] == 4107
-    assert summary.places_catalog["unique_sites"] == 4044
+    assert summary.places_catalog["unique_sites"] == 4046
 
 
 @pytest.mark.asyncio
