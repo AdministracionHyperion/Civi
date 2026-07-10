@@ -4,14 +4,19 @@ import csv
 import hashlib
 import json
 import os
+import uuid
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse, urlunparse
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import create_engine, select, text
 
-from places_service.adapters.outbound.catalog_repository import CatalogSqlRepository
+from places_service.adapters.outbound.catalog_repository import (
+    CatalogSqlRepository,
+    _site_to_place_result,
+)
 from places_service.adapters.outbound.schema import places_sites
 from places_service.cli import import_santander_geocodes
 from places_service.domain.models import Entity, ImportRun, LOCATION_PRECISIONS, Site
@@ -26,6 +31,8 @@ CSV_PATH = Path(
 EXPECTED_SHA256 = "814a59c71899b250362c42a8ffe087cc6d0a7c12d0b3a0f6b1954c27c9cf06d0"
 TARGET_GIRON_ID = "cea-giron-centro-de-ensenanza-automovilistica-san--b354b75834"
 
+DEFAULT_PG_ADMIN_URL = "postgresql+psycopg://civi:civi@localhost:5432/postgres"
+
 
 def _sha256_lf(path: Path) -> str:
     data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
@@ -36,8 +43,21 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = True) -> list[dict[str, str]]:
-    rows = read_csv_rows(CSV_PATH)
+def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+
+
+def _seed_santander_catalog(
+    db_url: str,
+    *,
+    include_manizales_control: bool = True,
+    rows: list[dict[str, str]] | None = None,
+) -> list[dict[str, str]]:
+    rows = rows if rows is not None else read_csv_rows(CSV_PATH)
     repo = CatalogSqlRepository(db_url, create_schema=True)
     now = _now()
     entities: list[Entity] = []
@@ -55,6 +75,7 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
         lat: float | None = None,
         lng: float | None = None,
         is_partner: bool = False,
+        geocode_status: str | None = None,
     ) -> None:
         entity = Entity(
             entity_id=f"ent-{site_id}",
@@ -69,6 +90,7 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
             created_at=now,
             updated_at=now,
         )
+        resolved_status = geocode_status or ("ok" if lat is not None else "not_attempted")
         site = Site(
             site_id=site_id,
             entity_id=entity.entity_id,
@@ -85,7 +107,7 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
             source_place_id=source_place_id,
             lat=lat,
             lng=lng,
-            geocode_status="ok" if lat is not None else "not_attempted",
+            geocode_status=resolved_status,
             location_precision="unknown",
             operational_status="unknown",
             status_verified=False,
@@ -126,10 +148,10 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
 
     repo.apply_import(
         import_run=ImportRun(
-            import_run_id="seed-santander-batch",
+            import_run_id=f"seed-santander-{uuid.uuid4().hex[:8]}",
             source_name="test",
             input_filename="seed.json",
-            input_sha256="santander-seed",
+            input_sha256=f"santander-seed-{uuid.uuid4().hex[:8]}",
             started_at=now,
             status="applied",
         ),
@@ -140,6 +162,39 @@ def _seed_santander_catalog(db_url: str, *, include_manizales_control: bool = Tr
         duplicate_candidates=[],
     )
     return rows
+
+
+def _ephemeral_postgres_url() -> tuple[str, str, object]:
+    """Create an ephemeral Postgres database. Returns (db_url, db_name, admin_engine)."""
+    admin_url = (
+        os.getenv("PLACES_TEST_DATABASE_URL")
+        or os.getenv("PLACES_DATABASE_URL")
+        or DEFAULT_PG_ADMIN_URL
+    )
+    if not admin_url.startswith("postgresql"):
+        raise RuntimeError(f"Postgres admin URL required, got: {admin_url}")
+
+    parsed = urlparse(admin_url)
+    # Always connect to the maintenance DB for CREATE/DROP DATABASE.
+    admin_parsed = parsed._replace(path="/postgres")
+    admin_engine = create_engine(urlunparse(admin_parsed), isolation_level="AUTOCOMMIT", future=True)
+    db_name = f"santander_gc_{uuid.uuid4().hex[:10]}"
+    with admin_engine.connect() as conn:
+        conn.execute(text(f'CREATE DATABASE "{db_name}"'))
+    db_url = urlunparse(parsed._replace(path=f"/{db_name}"))
+    return db_url, db_name, admin_engine
+
+
+def _drop_postgres_db(admin_engine, db_name: str) -> None:
+    with admin_engine.connect() as conn:
+        conn.execute(
+            text(
+                "SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+                "WHERE datname = :name AND pid <> pg_backend_pid()"
+            ),
+            {"name": db_name},
+        )
+        conn.execute(text(f'DROP DATABASE IF EXISTS "{db_name}"'))
 
 
 def test_csv_sha_counts_bbox_and_target_row() -> None:
@@ -180,22 +235,23 @@ def test_csv_sha_counts_bbox_and_target_row() -> None:
     valid, errors = validate_rows(rows, SANTANDER_SCOPE)
     assert errors == []
     assert len(valid) == 153
+    assert SANTANDER_SCOPE.expected_counts is not None
+    assert SANTANDER_SCOPE.expected_counts.total == 153
 
 
 def test_santander_rejects_giron_point_outside_municipal_bbox(tmp_path: Path) -> None:
     rows = read_csv_rows(CSV_PATH)
-    bad = dict(rows[0])
-    # Force the known wrong-municipality longitude that must not pass Girón bbox.
-    target = next(r for r in rows if r["id"] == TARGET_GIRON_ID)
-    bad = dict(target)
-    bad["lng"] = "-73.1049661"
-    bad["validation_status"] = "approximate_not_confirmed"
     path = tmp_path / "bad_giron.csv"
-    with path.open("w", encoding="utf-8", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
-        writer.writeheader()
-        for row in rows:
-            writer.writerow(bad if row["id"] == TARGET_GIRON_ID else row)
+    mutated = []
+    for row in rows:
+        if row["id"] == TARGET_GIRON_ID:
+            bad = dict(row)
+            bad["lng"] = "-73.1049661"
+            bad["validation_status"] = "approximate_not_confirmed"
+            mutated.append(bad)
+        else:
+            mutated.append(row)
+    _write_csv(path, mutated)
     report = tmp_path / "bad_report.json"
     rc = import_santander_geocodes.main(
         ["--input", str(path), "--dry-run", "--report-path", str(report)]
@@ -204,6 +260,22 @@ def test_santander_rejects_giron_point_outside_municipal_bbox(tmp_path: Path) ->
     payload = json.loads(report.read_text(encoding="utf-8"))
     assert payload["atomic_aborted"] is True
     assert payload["outside_bbox"] >= 1
+
+
+def test_santander_rejects_truncated_or_wrong_counts(tmp_path: Path) -> None:
+    rows = read_csv_rows(CSV_PATH)
+    truncated = rows[:-1]
+    path = tmp_path / "truncated.csv"
+    _write_csv(path, truncated)
+    report = tmp_path / "truncated_report.json"
+    rc = import_santander_geocodes.main(
+        ["--input", str(path), "--dry-run", "--report-path", str(report)]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["atomic_aborted"] is True
+    assert payload["count_mismatch"] is True
+    assert any("expected_total:153" in r for r in payload["count_mismatch_reasons"])
 
 
 def test_santander_import_apply_idempotent_and_isolated(tmp_path: Path) -> None:
@@ -280,6 +352,232 @@ def test_santander_import_apply_idempotent_and_isolated(tmp_path: Path) -> None:
     assert second["atomic_aborted"] is False
 
 
+def test_duplicate_source_place_id_aborts(tmp_path: Path) -> None:
+    db = tmp_path / "dup.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    rows = _seed_santander_catalog(db_url)
+    target = rows[0]["id"]
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    with repo.engine.begin() as conn:
+        original = (
+            conn.execute(select(places_sites).where(places_sites.c.source_place_id == target))
+            .mappings()
+            .one()
+        )
+        payload = dict(original)
+        payload["site_id"] = "site-dup-extra"
+        payload["name"] = "DUP"
+        payload["name_normalized"] = "DUP"
+        conn.execute(places_sites.insert().values(**payload))
+    report = tmp_path / "dup_report.json"
+    rc = import_santander_geocodes.main(
+        [
+            "--input",
+            str(CSV_PATH),
+            "--apply",
+            "--database-url",
+            db_url,
+            "--report-path",
+            str(report),
+        ]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["atomic_aborted"] is True
+    assert payload["duplicate_source_place_id"] >= 1
+    assert any(b["reason"] == "duplicate_source_place_id" for b in payload["blocked_rows"])
+
+
+def test_department_mismatch_aborts(tmp_path: Path) -> None:
+    db = tmp_path / "dept.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    with repo.engine.begin() as conn:
+        conn.execute(
+            places_sites.update()
+            .where(places_sites.c.source_place_id == TARGET_GIRON_ID)
+            .values(department="Cundinamarca", raw_department="Cundinamarca")
+        )
+    report = tmp_path / "dept_report.json"
+    rc = import_santander_geocodes.main(
+        ["--input", str(CSV_PATH), "--apply", "--database-url", db_url, "--report-path", str(report)]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["department_mismatch"] >= 1
+    assert any(b["reason"] == "department_mismatch" for b in payload["blocked_rows"])
+
+
+def test_municipality_mismatch_aborts(tmp_path: Path) -> None:
+    db = tmp_path / "muni.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    with repo.engine.begin() as conn:
+        conn.execute(
+            places_sites.update()
+            .where(places_sites.c.source_place_id == TARGET_GIRON_ID)
+            .values(municipality="Bucaramanga", raw_city="Bucaramanga")
+        )
+    report = tmp_path / "muni_report.json"
+    rc = import_santander_geocodes.main(
+        ["--input", str(CSV_PATH), "--apply", "--database-url", db_url, "--report-path", str(report)]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["municipality_mismatch"] >= 1
+
+
+def test_kind_mismatch_aborts(tmp_path: Path) -> None:
+    db = tmp_path / "kind.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    with repo.engine.begin() as conn:
+        conn.execute(
+            places_sites.update()
+            .where(places_sites.c.source_place_id == TARGET_GIRON_ID)
+            .values(actor_type="CDA")
+        )
+    report = tmp_path / "kind_report.json"
+    rc = import_santander_geocodes.main(
+        ["--input", str(CSV_PATH), "--apply", "--database-url", db_url, "--report-path", str(report)]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["kind_mismatch"] >= 1
+
+
+def test_manual_and_partner_protections_abort(tmp_path: Path) -> None:
+    rows = read_csv_rows(CSV_PATH)
+    manual_id = rows[0]["id"]
+    partner_id = rows[1]["id"]
+
+    db = tmp_path / "prot.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    with repo.engine.begin() as conn:
+        conn.execute(
+            places_sites.update()
+            .where(places_sites.c.source_place_id == manual_id)
+            .values(lat=7.12, lng=-73.12, geocode_status="manual")
+        )
+        conn.execute(
+            places_sites.update()
+            .where(places_sites.c.source_place_id == partner_id)
+            .values(lat=7.12, lng=-73.12, is_partner=True, geocode_status="ok")
+        )
+
+    report = tmp_path / "prot_report.json"
+    rc = import_santander_geocodes.main(
+        ["--input", str(CSV_PATH), "--apply", "--database-url", db_url, "--report-path", str(report)]
+    )
+    assert rc == 1
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["manual_protected"] >= 1
+    assert payload["partner_protected"] >= 1
+    reasons = {b["reason"] for b in payload["blocked_rows"]}
+    assert "manual_protected" in reasons
+    assert "partner_protected" in reasons
+
+
+def test_geojson_counts_and_approximate_not_confirmed(tmp_path: Path) -> None:
+    db = tmp_path / "geo.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    assert (
+        import_santander_geocodes.main(
+            [
+                "--input",
+                str(CSV_PATH),
+                "--apply",
+                "--database-url",
+                db_url,
+                "--report-path",
+                str(tmp_path / "geo_report.json"),
+            ]
+        )
+        == 0
+    )
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    counts = {
+        city: len(repo.list_geojson_features(city=city, department="Santander"))
+        for city in ("Bucaramanga", "Floridablanca", "Giron", "Piedecuesta")
+    }
+    assert counts == {"Bucaramanga": 81, "Floridablanca": 29, "Giron": 23, "Piedecuesta": 20}
+
+    all_features = []
+    for city in counts:
+        all_features.extend(repo.list_geojson_features(city=city, department="Santander"))
+    approx = [
+        f for f in all_features if f["properties"]["validation_status"] == "approximate_not_confirmed"
+    ]
+    assert len(approx) == 58
+    assert all(f["properties"]["location_confirmed"] is False for f in approx)
+
+
+def test_nearest_exposes_geocode_fields(tmp_path: Path) -> None:
+    db = tmp_path / "near.sqlite"
+    db_url = f"sqlite+pysqlite:///{db.as_posix()}"
+    _seed_santander_catalog(db_url)
+    assert (
+        import_santander_geocodes.main(
+            [
+                "--input",
+                str(CSV_PATH),
+                "--apply",
+                "--database-url",
+                db_url,
+                "--report-path",
+                str(tmp_path / "near_report.json"),
+            ]
+        )
+        == 0
+    )
+    repo = CatalogSqlRepository(db_url, create_schema=False)
+    result = repo.search_nearest(
+        actor_type=None,
+        city=None,
+        municipality_code=None,
+        lat=7.1193,
+        lng=-73.1227,
+        limit=5,
+        radius_km=25.0,
+    )
+    assert result["places"]
+    place = result["places"][0]
+    assert place["lat"] is not None
+    assert place["lng"] is not None
+    assert place["validation_status"] in {
+        "confirmed_business",
+        "confirmed_address",
+        "approximate_not_confirmed",
+    }
+    assert "location_confirmed" in place
+    assert place["precision"] == place["location_precision"]
+    if place["validation_status"] == "approximate_not_confirmed":
+        assert place["location_confirmed"] is False
+    else:
+        assert place["location_confirmed"] is True
+
+    # Mapping helper stays consistent with PlaceResult geocode surface.
+    with repo.engine.begin() as conn:
+        row = (
+            conn.execute(
+                select(places_sites).where(
+                    places_sites.c.geocode_validation_status == "approximate_not_confirmed"
+                )
+            )
+            .mappings()
+            .first()
+        )
+    mapped = _site_to_place_result(dict(row))
+    assert mapped["location_confirmed"] is False
+    assert mapped["validation_status"] == "approximate_not_confirmed"
+
+
 def test_santander_dry_run_csv_only() -> None:
     rc = import_santander_geocodes.main(
         [
@@ -293,28 +591,57 @@ def test_santander_dry_run_csv_only() -> None:
     assert rc == 0
 
 
-@pytest.mark.skipif(
-    not (os.getenv("PLACES_TEST_DATABASE_URL") or "").startswith("postgresql"),
-    reason="Set PLACES_TEST_DATABASE_URL=postgresql+... to exercise Postgres apply",
-)
-def test_santander_apply_postgres(tmp_path: Path) -> None:
-    db_url = os.environ["PLACES_TEST_DATABASE_URL"]
-    # Use a unique schema-less sqlite-style seed against the provided PG URL.
-    # Caller must point at an ephemeral test database.
-    _seed_santander_catalog(db_url, include_manizales_control=True)
-    report_path = tmp_path / "pg_report.json"
-    rc = import_santander_geocodes.main(
-        [
-            "--input",
-            str(CSV_PATH),
-            "--apply",
-            "--database-url",
-            db_url,
-            "--report-path",
-            str(report_path),
-        ]
-    )
-    assert rc == 0
-    report = json.loads(report_path.read_text(encoding="utf-8"))
-    assert report["atomic_aborted"] is False
-    assert report["inserted"] + report["updated"] == 153
+def test_santander_apply_postgres_ephemeral(tmp_path: Path) -> None:
+    try:
+        db_url, db_name, admin_engine = _ephemeral_postgres_url()
+    except Exception as exc:  # noqa: BLE001
+        pytest.fail(
+            "PostgreSQL efímero requerido para cerrar el PR. "
+            f"No se pudo crear la base ({exc}). "
+            "Define PLACES_TEST_DATABASE_URL o levanta Postgres en localhost:5432 "
+            f"(default {DEFAULT_PG_ADMIN_URL})."
+        )
+
+    try:
+        _seed_santander_catalog(db_url, include_manizales_control=True)
+        report_path = tmp_path / "pg_report.json"
+        rc = import_santander_geocodes.main(
+            [
+                "--input",
+                str(CSV_PATH),
+                "--apply",
+                "--database-url",
+                db_url,
+                "--report-path",
+                str(report_path),
+            ]
+        )
+        assert rc == 0
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        assert report["atomic_aborted"] is False
+        assert report["inserted"] + report["updated"] == 153
+        assert report["resolution"]["source_place_id"] == 153
+
+        # Idempotent second apply on the same ephemeral DB.
+        report2 = tmp_path / "pg_report2.json"
+        rc2 = import_santander_geocodes.main(
+            [
+                "--input",
+                str(CSV_PATH),
+                "--apply",
+                "--database-url",
+                db_url,
+                "--report-path",
+                str(report2),
+            ]
+        )
+        assert rc2 == 0
+        second = json.loads(report2.read_text(encoding="utf-8"))
+        assert second["unchanged"] == 153
+        print(f"postgres_ephemeral_ok database={db_name} applied=153 unchanged=153")
+    finally:
+        try:
+            _drop_postgres_db(admin_engine, db_name)
+        except Exception:  # noqa: BLE001
+            pass
+        admin_engine.dispose()

@@ -8,6 +8,9 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Used by Santander geocode tests to create an ephemeral database.
+      PLACES_TEST_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/postgres
     services:
       postgres:
         image: postgres:16-alpine

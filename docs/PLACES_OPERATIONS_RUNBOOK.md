@@ -101,8 +101,10 @@ Input (committed): `services/places-service/data/geocodes/santander/geocodes_san
 - Validation mix: 65 `confirmed_business` / 30 `confirmed_address` / 58 `approximate_not_confirmed`
 - Resolves by official source `id` → `places_sites.source_place_id` (no `source_records` fallback in routine apply)
 - Validates each row against **its municipality bbox** (Girón stays `-73.18`…`-73.15`; do not widen)
+- Aborts if aggregate counts diverge from the scope contract (153; 81/29/23/20; 37/56/25/35; 65/30/58)
 - Shared engine: `validated_geocode_import` + `geocode_scopes` (Manizales remains a thin wrapper)
 - Does **not** modify Manizales rows; does **not** enable `--force` by default
+- Resolves `source_place_id` with exactly one DB hit (`unknown_site` / `duplicate_source_place_id`); re-checks department, municipality, kind and protections inside the write transaction
 
 Prerequisites before apply:
 

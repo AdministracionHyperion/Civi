@@ -10,11 +10,13 @@ Design rules (see PLACES_OPERATIONS_RUNBOOK.md):
     blocked, the whole file is rejected with no writes (exit 1).
   * Resolution is strict: official CSV ``id`` -> ``places_sites.source_place_id``
     (optional ``places_source_records`` fallback for diagnostics only).
-    Never fuzzy-match, never create new sites.
+    Never fuzzy-match, never create new sites. Exactly one DB hit required.
   * Per-municipality bbox: each row is checked against the envelope of its CSV
     city — never a widened metro box that would hide wrong-city coordinates.
+  * Mandatory aggregate counts (when configured on the scope) must match exactly.
   * Idempotent: re-applying identical content yields unchanged == rows.
-  * Protections are re-checked inside the write transaction.
+  * Department / municipality / kind + protections are re-checked inside the
+    write transaction.
 """
 
 import csv
@@ -123,6 +125,43 @@ def _is_outside_bbox_reason(reason: str) -> bool:
     return reason.startswith("outside_") and "bbox" in reason
 
 
+def _count_by(values: Any) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for value in values:
+        key = str(value)
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def validate_expected_counts(
+    rows: list[ValidatedGeocode],
+    scope: GeocodeScope,
+) -> list[str]:
+    """Return human-readable mismatch reasons; empty when counts match or unset."""
+    expected = scope.expected_counts
+    if expected is None:
+        return []
+
+    reasons: list[str] = []
+    if len(rows) != expected.total:
+        reasons.append(f"expected_total:{expected.total} got:{len(rows)}")
+
+    by_city = _count_by(r.city for r in rows)
+    if by_city != dict(expected.by_city):
+        reasons.append(f"expected_by_city:{dict(expected.by_city)} got:{by_city}")
+
+    by_kind = _count_by(r.kind for r in rows)
+    if by_kind != dict(expected.by_kind):
+        reasons.append(f"expected_by_kind:{dict(expected.by_kind)} got:{by_kind}")
+
+    by_status = _count_by(r.validation_status for r in rows)
+    if by_status != dict(expected.by_validation_status):
+        reasons.append(
+            f"expected_by_validation_status:{dict(expected.by_validation_status)} got:{by_status}"
+        )
+    return reasons
+
+
 def validate_rows(
     raw_rows: list[dict[str, str]],
     scope: GeocodeScope,
@@ -229,26 +268,26 @@ def validate_rows(
     return valid, errors
 
 
-def _count_by(values: Any) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for value in values:
-        key = str(value)
-        counts[key] = counts.get(key, 0) + 1
-    return counts
-
-
 def resolve_site_id(
     conn,
     source_place_id: str,
     *,
     use_source_records_fallback: bool = True,
-) -> tuple[str | None, str | None]:
-    """Resolve official id -> site_id. Never fuzzy. Returns (site_id, method)."""
-    hit = conn.execute(
+) -> tuple[str | None, str | None, str | None]:
+    """Resolve official id -> site_id.
+
+    Returns ``(site_id, method, error)`` where ``error`` is one of:
+    ``None``, ``unknown_site``, ``duplicate_source_place_id``.
+
+    Never uses ``.first()`` to pick among duplicates.
+    """
+    hits = conn.execute(
         select(places_sites.c.site_id).where(places_sites.c.source_place_id == source_place_id)
-    ).first()
-    if hit is not None:
-        return str(hit[0]), "source_place_id"
+    ).all()
+    if len(hits) > 1:
+        return None, None, "duplicate_source_place_id"
+    if len(hits) == 1:
+        return str(hits[0][0]), "source_place_id", None
 
     if use_source_records_fallback:
         candidates = conn.execute(
@@ -257,6 +296,7 @@ def resolve_site_id(
                 places_source_records.c.source_payload,
             ).where(places_source_records.c.source_payload.like(f"%{source_place_id}%"))
         ).all()
+        matched_ids: list[str] = []
         for matched_site_id, payload in candidates:
             if not matched_site_id:
                 continue
@@ -265,9 +305,14 @@ def resolve_site_id(
             except (TypeError, ValueError):
                 continue
             if str(parsed.get("id") or "") == source_place_id:
-                return str(matched_site_id), "source_records_fallback"
+                matched_ids.append(str(matched_site_id))
+        unique_ids = list(dict.fromkeys(matched_ids))
+        if len(unique_ids) > 1:
+            return None, None, "duplicate_source_place_id"
+        if len(unique_ids) == 1:
+            return unique_ids[0], "source_records_fallback", None
 
-    return None, None
+    return None, None, "unknown_site"
 
 
 @dataclass
@@ -280,6 +325,8 @@ class Classification:
     partner_protected: int = 0
     kind_mismatch: int = 0
     municipality_mismatch: int = 0
+    department_mismatch: int = 0
+    duplicate_source_place_id: int = 0
     resolution: dict[str, int] = field(
         default_factory=lambda: {"source_place_id": 0, "source_records_fallback": 0}
     )
@@ -302,6 +349,10 @@ def _site_municipality_label(site: dict[str, Any]) -> str:
     return str(site.get("municipality") or site.get("raw_city") or "")
 
 
+def _site_department_label(site: dict[str, Any]) -> str:
+    return str(site.get("department") or site.get("raw_department") or "")
+
+
 def _protection_reason(
     site: dict[str, Any],
     *,
@@ -313,6 +364,30 @@ def _protection_reason(
         return "manual_protected"
     if bool(site.get("is_partner")) and has_coords and not force_partner:
         return "partner_protected"
+    return None
+
+
+def _identity_mismatch_reason(
+    site: dict[str, Any],
+    row: ValidatedGeocode,
+    scope: GeocodeScope,
+) -> str | None:
+    """Validate department, municipality, and kind against the resolved site."""
+    site_dept = _site_department_label(site)
+    if fold_place_name(site_dept) != fold_place_name(scope.expected_department):
+        return "department_mismatch"
+    if fold_place_name(site_dept) != fold_place_name(row.department):
+        return "department_mismatch"
+
+    csv_muni = scope.resolve_municipality(row.city)
+    site_muni_label = _site_municipality_label(site)
+    site_muni = scope.resolve_municipality(site_muni_label)
+    if csv_muni is None or site_muni is None or site_muni.name != csv_muni.name:
+        return "municipality_mismatch"
+
+    site_kind = str(site.get("actor_type") or "").strip().upper()
+    if site_kind != row.kind:
+        return "kind_mismatch"
     return None
 
 
@@ -329,9 +404,19 @@ def classify_against_db(
     result = Classification()
     with repo.engine.connect() as conn:
         for row in rows:
-            site_id, method = resolve_site_id(
+            site_id, method, resolve_error = resolve_site_id(
                 conn, row.source_place_id, use_source_records_fallback=use_source_records_fallback
             )
+            if resolve_error == "duplicate_source_place_id":
+                result.duplicate_source_place_id += 1
+                result.blocked.append(
+                    {
+                        "row": row.row_number,
+                        "id": row.source_place_id,
+                        "reason": "duplicate_source_place_id",
+                    }
+                )
+                continue
             if site_id is None:
                 result.unknown_ids.append(row.source_place_id)
                 result.blocked.append(
@@ -343,23 +428,38 @@ def classify_against_db(
             if method in result.resolution:
                 result.resolution[method] += 1
 
-            site = (
+            sites = (
                 conn.execute(select(places_sites).where(places_sites.c.site_id == site_id))
                 .mappings()
-                .first()
+                .all()
             )
-            if site is None:  # pragma: no cover - resolved id must exist
+            if len(sites) != 1:
                 result.unknown_ids.append(row.source_place_id)
                 result.blocked.append(
-                    {"row": row.row_number, "id": row.source_place_id, "reason": "unknown_site"}
+                    {
+                        "row": row.row_number,
+                        "id": row.source_place_id,
+                        "reason": "unknown_site" if not sites else "duplicate_source_place_id",
+                    }
                 )
                 continue
 
-            site_dict = dict(site)
-            csv_muni = scope.resolve_municipality(row.city)
-            site_muni_label = _site_municipality_label(site_dict)
-            site_muni = scope.resolve_municipality(site_muni_label)
-            if csv_muni is None or site_muni is None or site_muni.name != csv_muni.name:
+            site_dict = dict(sites[0])
+            identity_error = _identity_mismatch_reason(site_dict, row, scope)
+            if identity_error == "department_mismatch":
+                result.department_mismatch += 1
+                result.blocked.append(
+                    {
+                        "row": row.row_number,
+                        "id": row.source_place_id,
+                        "site_id": site_id,
+                        "reason": "department_mismatch",
+                        "csv_department": row.department,
+                        "site_department": _site_department_label(site_dict),
+                    }
+                )
+                continue
+            if identity_error == "municipality_mismatch":
                 result.municipality_mismatch += 1
                 result.blocked.append(
                     {
@@ -368,13 +468,11 @@ def classify_against_db(
                         "site_id": site_id,
                         "reason": "municipality_mismatch",
                         "csv_city": row.city,
-                        "site_municipality": site_muni_label,
+                        "site_municipality": _site_municipality_label(site_dict),
                     }
                 )
                 continue
-
-            site_kind = str(site_dict.get("actor_type") or "").strip().upper()
-            if site_kind != row.kind:
+            if identity_error == "kind_mismatch":
                 result.kind_mismatch += 1
                 result.blocked.append(
                     {
@@ -383,7 +481,7 @@ def classify_against_db(
                         "site_id": site_id,
                         "reason": "kind_mismatch",
                         "csv_kind": row.kind,
-                        "site_kind": site_kind,
+                        "site_kind": str(site_dict.get("actor_type") or ""),
                     }
                 )
                 continue
@@ -426,34 +524,54 @@ def classify_against_db(
 
 
 class ProtectedSiteError(RuntimeError):
-    """Raised when a site becomes protected between classify and write."""
+    """Raised when a site fails identity/protection re-check before write."""
 
 
 def _write_rows(
     conn,
     rows: list[ValidatedGeocode],
     *,
+    scope: GeocodeScope,
     now: str,
-    attempt_source: str,
     force_manual: bool,
     force_partner: bool,
 ) -> dict[str, int]:
     counts = {"inserted": 0, "updated": 0}
     for row in rows:
-        site = (
+        sites = (
             conn.execute(select(places_sites).where(places_sites.c.site_id == row.site_id))
             .mappings()
-            .first()
+            .all()
         )
-        if site is None:
-            raise ProtectedSiteError(f"site disappeared before write: {row.site_id}")
-        site_dict = dict(site)
+        if len(sites) != 1:
+            raise ProtectedSiteError(
+                f"site lookup failed before write for {row.source_place_id}: count={len(sites)}"
+            )
+        site_dict = dict(sites[0])
+
+        identity_error = _identity_mismatch_reason(site_dict, row, scope)
+        if identity_error is not None:
+            raise ProtectedSiteError(
+                f"{identity_error} re-check failed for {row.source_place_id} ({row.site_id})"
+            )
+
         protection = _protection_reason(
             site_dict, force_manual=force_manual, force_partner=force_partner
         )
         if protection is not None and not _same_geocode(site_dict, row):
             raise ProtectedSiteError(
                 f"{protection} re-check failed for {row.source_place_id} ({row.site_id})"
+            )
+
+        # Re-confirm source_place_id still resolves uniquely to this site.
+        resolve_hits = conn.execute(
+            select(places_sites.c.site_id).where(
+                places_sites.c.source_place_id == row.source_place_id
+            )
+        ).all()
+        if len(resolve_hits) != 1 or str(resolve_hits[0][0]) != row.site_id:
+            raise ProtectedSiteError(
+                f"source_place_id re-check failed for {row.source_place_id}: hits={len(resolve_hits)}"
             )
 
         conn.execute(
@@ -485,7 +603,7 @@ def _write_rows(
                 precision=row.precision,
                 response_payload=json.dumps(
                     {
-                        "source": attempt_source,
+                        "source": scope.attempt_source,
                         "source_place_id": row.source_place_id,
                         "validation_status": row.validation_status,
                         "precision": row.precision,
@@ -535,8 +653,12 @@ def _base_report(
         "partner_protected": 0,
         "kind_mismatch": 0,
         "municipality_mismatch": 0,
+        "department_mismatch": 0,
+        "duplicate_source_place_id": 0,
         "duplicate_ids": 0,
         "outside_bbox": 0,
+        "count_mismatch": False,
+        "count_mismatch_reasons": [],
         "by_kind": _count_by(r.kind for r in valid),
         "by_city": _count_by(r.city for r in valid),
         "by_validation_status": _count_by(r.validation_status for r in valid),
@@ -606,6 +728,16 @@ def run_import(
         _maybe_write_report(report_path, report)
         return EXIT_VALIDATION, report
 
+    count_reasons = validate_expected_counts(valid, scope)
+    if count_reasons:
+        report["count_mismatch"] = True
+        report["count_mismatch_reasons"] = count_reasons
+        report["atomic_aborted"] = True
+        report["rejected"] = 1
+        report["rejected_rows"] = [{"row": None, "id": None, "reasons": count_reasons}]
+        _maybe_write_report(report_path, report)
+        return EXIT_VALIDATION, report
+
     if apply and not database_url:
         raise SystemExit(
             "apply requires --database-url or PLACES_DATABASE_URL; "
@@ -647,6 +779,8 @@ def run_import(
     report["partner_protected"] = classification.partner_protected
     report["kind_mismatch"] = classification.kind_mismatch
     report["municipality_mismatch"] = classification.municipality_mismatch
+    report["department_mismatch"] = classification.department_mismatch
+    report["duplicate_source_place_id"] = classification.duplicate_source_place_id
     report["skipped"] = len(classification.blocked)
     report["blocked_rows"] = classification.blocked
     report["resolution"] = classification.resolution
@@ -676,8 +810,8 @@ def run_import(
             write_counts = _write_rows(
                 conn,
                 classification.to_write,
+                scope=scope,
                 now=now,
-                attempt_source=scope.attempt_source,
                 force_manual=force_manual,
                 force_partner=force_partner,
             )
@@ -713,6 +847,7 @@ __all__ = [
     "ProtectedSiteError",
     "read_csv_rows",
     "validate_rows",
+    "validate_expected_counts",
     "resolve_site_id",
     "classify_against_db",
     "run_import",

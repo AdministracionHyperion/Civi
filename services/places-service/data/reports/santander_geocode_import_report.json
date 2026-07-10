@@ -15,8 +15,12 @@
   "partner_protected": 0,
   "kind_mismatch": 0,
   "municipality_mismatch": 0,
+  "department_mismatch": 0,
+  "duplicate_source_place_id": 0,
   "duplicate_ids": 0,
   "outside_bbox": 0,
+  "count_mismatch": false,
+  "count_mismatch_reasons": [],
   "by_kind": {
     "CDA": 37,
     "CEA": 56,

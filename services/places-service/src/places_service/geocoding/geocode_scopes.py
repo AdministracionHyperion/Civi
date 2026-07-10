@@ -4,12 +4,13 @@ from __future__ import annotations
 
 Manizales remains a single-municipality scope. Santander validates each row
 against the bbox of its own municipality (never a single metro envelope that
-would hide cross-municipality mistakes).
+would hide cross-municipality mistakes) and enforces mandatory aggregate counts.
 """
 
 from dataclasses import dataclass
 from pathlib import Path
 import unicodedata
+from typing import Mapping
 
 from places_service.geocoding.bounds import (
     BBox,
@@ -41,6 +42,16 @@ class MunicipalityScope:
 
 
 @dataclass(frozen=True)
+class ExpectedCounts:
+    """Mandatory aggregate counts for a rollout CSV. All must match exactly."""
+
+    total: int
+    by_city: Mapping[str, int]
+    by_kind: Mapping[str, int]
+    by_validation_status: Mapping[str, int]
+
+
+@dataclass(frozen=True)
 class GeocodeScope:
     key: str
     display_name: str
@@ -54,6 +65,7 @@ class GeocodeScope:
     # When set, outside-bbox reasons use this exact prefix (Manizales compat).
     # Otherwise reasons are ``outside_municipality_bbox:{Name}:{lat},{lng}``.
     outside_bbox_prefix: str | None = None
+    expected_counts: ExpectedCounts | None = None
 
     def resolve_municipality(self, city: str) -> MunicipalityScope | None:
         folded = fold_place_name(city)
@@ -87,6 +99,16 @@ MANIZALES_SCOPE = GeocodeScope(
     ),
     centroid=MANIZALES_CENTROID,
     outside_bbox_prefix="outside_manizales_bbox",
+    expected_counts=ExpectedCounts(
+        total=44,
+        by_city={"Manizales": 44},
+        by_kind={"CDA": 14, "CEA": 15, "CIA": 8, "CRC": 7},
+        by_validation_status={
+            "confirmed_business": 19,
+            "confirmed_address": 13,
+            "approximate_not_confirmed": 12,
+        },
+    ),
 )
 
 SANTANDER_SCOPE = GeocodeScope(
@@ -126,6 +148,21 @@ SANTANDER_SCOPE = GeocodeScope(
     ),
     centroid=BUCARAMANGA_CENTROID,
     outside_bbox_prefix=None,
+    expected_counts=ExpectedCounts(
+        total=153,
+        by_city={
+            "Bucaramanga": 81,
+            "Floridablanca": 29,
+            "Giron": 23,
+            "Piedecuesta": 20,
+        },
+        by_kind={"CDA": 37, "CEA": 56, "CIA": 25, "CRC": 35},
+        by_validation_status={
+            "confirmed_business": 65,
+            "confirmed_address": 30,
+            "approximate_not_confirmed": 58,
+        },
+    ),
 )
 
 SCOPES: dict[str, GeocodeScope] = {
@@ -136,6 +173,7 @@ SCOPES: dict[str, GeocodeScope] = {
 
 __all__ = [
     "MunicipalityScope",
+    "ExpectedCounts",
     "GeocodeScope",
     "MANIZALES_SCOPE",
     "SANTANDER_SCOPE",
