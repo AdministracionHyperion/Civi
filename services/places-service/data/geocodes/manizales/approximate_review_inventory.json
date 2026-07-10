@@ -1,36 +1,44 @@
 {
   "city": "Manizales",
+  "mode": "offline_refresh",
   "canonical_csv_modified": true,
-  "scope_counts_unchanged": false,
-  "tests_unchanged": true,
-  "official_reports_unchanged": true,
-  "geoportal_service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
-  "consulted_at": "2026-07-10T20:19:46Z",
-  "privacy_note": "Solo OBJECTID, direccion, geometria minima (punto representativo), coordenada representativa, derivation_method, consulta, fecha, distancias y formula. Sin propietarios, documentos, avaluos, fichas, NPN ni consultas con outFields comodín.",
-  "geometry_method_note": "Punto representativo = centroide de area (shoelace con traslacion al primer vertice). Si cae fuera (concavo), point_on_surface determinista.",
-  "secondary_geocoder_not_used_as_persistent_provider": true,
-  "hypothetical_counts": {
-    "current_csv_counts": {
-      "approximate_not_confirmed": 7,
-      "confirmed_address": 18,
-      "confirmed_business": 19
+  "canonical_csv_note": "El CSV canónico ya incluye mejoras geoportal (5 confirmed_address + 3 interpolaciones). Este refresh no afirma 'CSV sin modificar'.",
+  "scope_counts": {
+    "total": 44,
+    "by_kind": {
+      "CDA": 14,
+      "CEA": 15,
+      "CIA": 8,
+      "CRC": 7
     },
-    "proposals_on_approximate_12": {
-      "confirmed_address": 5,
-      "approximate_not_confirmed": 7
-    },
-    "hypothetical_after_apply_proposals_only": {
+    "by_validation_status": {
       "confirmed_address": 18,
-      "approximate_not_confirmed": 7,
       "confirmed_business": 19,
-      "note": "Hipotético; CSV canónico no modificado."
-    },
-    "applied_in_fix_manizales_geocode_quality": {
-      "confirmed_address_from_exact": 5,
-      "approximate_interpolations_coords_updated": 3,
-      "unchanged_approximate": 4
+      "approximate_not_confirmed": 7
     }
   },
+  "expected_current_counts": {
+    "confirmed_business": 19,
+    "confirmed_address": 18,
+    "approximate_not_confirmed": 7
+  },
+  "original_audit_ids": [
+    "cda-manizales-cda-caldas-el-bosque-a730920403",
+    "cda-manizales-cda-socicar-7acac31f0f",
+    "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c",
+    "cea-manizales-academia-automovilistica-caldas-sas-12d613c393",
+    "cea-manizales-academia-automovilistica-piloto-177f760536",
+    "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0",
+    "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930",
+    "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e",
+    "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047",
+    "cia-manizales-cimyc-manizales-s-a-s-498175000a",
+    "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d",
+    "crc-manizales-certificamos-agustinos-98839ab670"
+  ],
+  "original_audit_id_count": 12,
+  "geoportal_service": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10",
+  "consulted_at": "2026-07-10T20:53:49Z",
   "rows": [
     {
       "n": 1,
@@ -38,24 +46,14 @@
       "kind": "CDA",
       "name": "CDA CALDAS EL BOSQUE",
       "address_runt": "CALLE 12 # 30 32",
-      "nit": "890805554",
-      "phone": "3113549239",
-      "lat_current": 5.06231775,
-      "lng_current": -75.52377055,
-      "secondary_reference": {
-        "lat": 5.061935,
-        "lng": -75.5238599
-      },
-      "previous_audit_point": {
-        "lat": 5.0619511,
-        "lng": -75.5239771,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0619543,
-        "lng": -75.5239713
-      },
-      "displacement_from_previous_m": 0.73,
+      "lat_current": 5.0619543,
+      "lng_current": -75.5239713,
+      "csv_validation_status": "confirmed_address",
+      "csv_precision": "building",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial",
+      "csv_distance_to_runt_anchor_m": "46.1",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=32634&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "exact",
         "lat": 5.0619543,
@@ -144,14 +142,8 @@
           "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
         }
       },
-      "distance_current_to_geoportal_m": 46.1,
-      "distance_secondary_to_geoportal_m": 12.5,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono.",
-      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:calle 12/carrera 30; el lugar comercial geoapify quedó a 1317 m y no coincidió por teléfono."
+      "historical_evidence_preserved": true,
+      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
     },
     {
       "n": 2,
@@ -159,21 +151,14 @@
       "kind": "CDA",
       "name": "CDA SOCICAR",
       "address_runt": "AVENIDA 19 N 13 - 44 LOCAL 3-4-5-6 AMERICAS",
-      "nit": "901841847",
-      "phone": "3043331591",
       "lat_current": 5.0694483,
       "lng_current": -75.5235525,
-      "secondary_reference": null,
-      "previous_audit_point": {
-        "lat": 5.069587,
-        "lng": -75.5231293,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0695891,
-        "lng": -75.5231314
-      },
-      "displacement_from_previous_m": 0.33,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "street_intersection",
+      "csv_provider": "openstreetmap_road_network",
+      "csv_distance_to_runt_anchor_m": "0.0",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://www.openstreetmap.org/copyright",
       "geoportal_or_interpolation": {
         "match_type": "interpolated_audit_only",
         "lat": 5.0695891,
@@ -395,14 +380,8 @@
           "reason": "Interpolación K 19 13 41→45 47 hacia placa 44 documentada, pero sin evidencia oficial reproducible de que Avenida 19 RUNT ≡ K 19; proposed=approximate_not_confirmed."
         }
       },
-      "distance_current_to_geoportal_m": 49.2,
-      "distance_secondary_to_geoportal_m": null,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación K 19 13 41→45 47 hacia placa 44 documentada, pero sin evidencia oficial reproducible de que Avenida 19 RUNT ≡ K 19; proposed=approximate_not_confirmed.",
-      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 13; separación de vías=0.0 m; no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Interpolación K 19 13 41→45 47 hacia placa 44 documentada, pero sin evidencia oficial reproducible de que Avenida 19 RUNT ≡ K 19; proposed=approximate_not_confirmed."
     },
     {
       "n": 3,
@@ -410,24 +389,14 @@
       "kind": "CDA",
       "name": "CENTRO DE DIAGNOSTICO AUTOMOTOR MOTOLINARES",
       "address_runt": "CARRERA 24 # 32 - 49 BRR FUNDADORES",
-      "nit": "901345789",
-      "phone": "3113010474",
-      "lat_current": 5.0667186,
-      "lng_current": -75.5111711,
-      "secondary_reference": {
-        "lat": 5.066789,
-        "lng": -75.5108139
-      },
-      "previous_audit_point": {
-        "lat": 5.0668589,
-        "lng": -75.5108467,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0668747,
-        "lng": -75.5108309
-      },
-      "displacement_from_previous_m": 2.48,
+      "lat_current": 5.0668747,
+      "lng_current": -75.5108309,
+      "csv_validation_status": "confirmed_address",
+      "csv_precision": "building",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial",
+      "csv_distance_to_runt_anchor_m": "41.5",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=52874&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "exact",
         "lat": 5.0668747,
@@ -519,14 +488,8 @@
           "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
         }
       },
-      "distance_current_to_geoportal_m": 41.5,
-      "distance_secondary_to_geoportal_m": 9.7,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono.",
-      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:carrera 24/calle 32; el lugar comercial overture_maps_2026-06-17 quedó a 1593 m y no coincidió por teléfono."
+      "historical_evidence_preserved": true,
+      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
     },
     {
       "n": 4,
@@ -534,21 +497,14 @@
       "kind": "CEA",
       "name": "ACADEMIA AUTOMOVILISTICA CALDAS SAS",
       "address_runt": "CARRERA 23 NRO 53A 25",
-      "nit": "900351845",
-      "phone": "6068911466",
-      "lat_current": 5.062466632954545,
-      "lng_current": -75.49477705814394,
-      "secondary_reference": null,
-      "previous_audit_point": {
-        "lat": 5.0626837,
-        "lng": -75.4949458,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0627089,
-        "lng": -75.4949577
-      },
-      "displacement_from_previous_m": 3.1,
+      "lat_current": 5.0627089,
+      "lng_current": -75.4949577,
+      "csv_validation_status": "confirmed_address",
+      "csv_precision": "building",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial",
+      "csv_distance_to_runt_anchor_m": "33.6",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=26301&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "exact_range_includes_plate",
         "lat": 5.0627089,
@@ -627,14 +583,8 @@
           "reason": "OBJECTID 26301 K 23 53A 25 27 incluye placa RUNT 25; punto representativo derivation_method=polygon_area_centroid, inside=True."
         }
       },
-      "distance_current_to_geoportal_m": 33.6,
-      "distance_secondary_to_geoportal_m": null,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "OBJECTID 26301 K 23 53A 25 27 incluye placa RUNT 25; punto representativo derivation_method=polygon_area_centroid, inside=True.",
-      "evidence_current_csv": "Interpolación en carrera 23 entre (49.0, 30.0) y (58.0, 6.0); no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "OBJECTID 26301 K 23 53A 25 27 incluye placa RUNT 25; punto representativo derivation_method=polygon_area_centroid, inside=True."
     },
     {
       "n": 5,
@@ -642,24 +592,14 @@
       "kind": "CEA",
       "name": "ACADEMIA AUTOMOVILISTICA PILOTO",
       "address_runt": "CARRERA 21 NO. 15-40",
-      "nit": "17171839",
-      "phone": "8828184",
-      "lat_current": 5.0681641,
-      "lng_current": -75.5221452,
-      "secondary_reference": {
-        "lat": 5.0682222,
-        "lng": -75.5217211
-      },
-      "previous_audit_point": {
-        "lat": 5.0680482,
-        "lng": -75.5217908,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0680434,
-        "lng": -75.5217931
-      },
-      "displacement_from_previous_m": 0.59,
+      "lat_current": 5.0680434,
+      "lng_current": -75.5217931,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "address_interpolation",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial_interpolation",
+      "csv_distance_to_runt_anchor_m": "41.2",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=80394%2C80393&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "interpolated",
         "lat": 5.0680434,
@@ -851,14 +791,8 @@
           "reason": "Interpolación entre puntos representativos de placas 38 y 44 sobre K 21 15; t=0.333333 en [0,1]. Sin predio exacto 15-40."
         }
       },
-      "distance_current_to_geoportal_m": 41.2,
-      "distance_secondary_to_geoportal_m": 21.4,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación entre puntos representativos de placas 38 y 44 sobre K 21 15; t=0.333333 en [0,1]. Sin predio exacto 15-40.",
-      "evidence_current_csv": "Cruce colombiano carrera 21 con calle 15; separación de vías=0.0 m; no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Interpolación entre puntos representativos de placas 38 y 44 sobre K 21 15; t=0.333333 en [0,1]. Sin predio exacto 15-40."
     },
     {
       "n": 6,
@@ -866,24 +800,14 @@
       "kind": "CEA",
       "name": "CEA PRACTICAR DEL EJE - MANIZALES",
       "address_runt": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
-      "nit": "901247003",
-      "phone": "3138836685",
-      "lat_current": 5.05390085,
-      "lng_current": -75.47652575000001,
-      "secondary_reference": {
-        "lat": 5.0517,
-        "lng": -75.4844
-      },
-      "previous_audit_point": {
-        "lat": 5.0518408,
-        "lng": -75.4841049,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0518489,
-        "lng": -75.4840936
-      },
-      "displacement_from_previous_m": 1.54,
+      "lat_current": 5.0518489,
+      "lng_current": -75.4840936,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "address_interpolation",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial_interpolation",
+      "csv_distance_to_runt_anchor_m": "868.7",
+      "csv_address_consistency": "official_correction_over_250m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=105038%2C105040&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "interpolated",
         "lat": 5.0518489,
@@ -1092,14 +1016,8 @@
           "reason": "Interpolación OBJECTID 105038→105040; t=0.20. Mantener approximate_not_confirmed salvo predio exacto. Descartados 96475/52515."
         }
       },
-      "distance_current_to_geoportal_m": 868.7,
-      "distance_secondary_to_geoportal_m": 37.8,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación OBJECTID 105038→105040; t=0.20. Mantener approximate_not_confirmed salvo predio exacto. Descartados 96475/52515.",
-      "evidence_current_csv": "Se prioriza la dirección RUNT mediante road_intersection:carrera 23/calle 70; el lugar comercial openstreetmap_local_interpolation quedó a 891 m y no coincidió por teléfono."
+      "historical_evidence_preserved": true,
+      "reason": "Interpolación OBJECTID 105038→105040; t=0.20. Mantener approximate_not_confirmed salvo predio exacto. Descartados 96475/52515."
     },
     {
       "n": 7,
@@ -1107,24 +1025,14 @@
       "kind": "CEA",
       "name": "CENTRO DE ENSEÑANZA AUTOMOVILISTICA CALDAS",
       "address_runt": "CRA 24 53-20",
-      "nit": "901461969",
-      "phone": null,
-      "lat_current": 5.0630767,
-      "lng_current": -75.4962899,
-      "secondary_reference": {
-        "lat": 5.062863,
-        "lng": -75.4961049
-      },
-      "previous_audit_point": {
-        "lat": 5.062791,
-        "lng": -75.4962457,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0627826,
-        "lng": -75.4962432
-      },
-      "displacement_from_previous_m": 0.97,
+      "lat_current": 5.0627826,
+      "lng_current": -75.4962432,
+      "csv_validation_status": "confirmed_address",
+      "csv_precision": "building",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial",
+      "csv_distance_to_runt_anchor_m": "33.1",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=14593&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "exact",
         "lat": 5.0627826,
@@ -1219,14 +1127,8 @@
           "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
         }
       },
-      "distance_current_to_geoportal_m": 33.1,
-      "distance_secondary_to_geoportal_m": 17.7,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono.",
-      "evidence_current_csv": "Cruce colombiano carrera 24 con calle 53; separación de vías=0.0 m; no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
     },
     {
       "n": 8,
@@ -1234,24 +1136,14 @@
       "kind": "CIA",
       "name": "CENTRO INTEGRAL DE ATENCION RUTAS DE COLOMBIA",
       "address_runt": "CALLE 21 # 19 - 27 CENTRO",
-      "nit": "901851594",
-      "phone": null,
-      "lat_current": 5.069294909977283,
-      "lng_current": -75.51837825910042,
-      "secondary_reference": {
-        "lat": 5.069402,
-        "lng": -75.5182809
-      },
-      "previous_audit_point": {
-        "lat": 5.0693862,
-        "lng": -75.5180932,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0694094,
-        "lng": -75.5181173
-      },
-      "displacement_from_previous_m": 3.71,
+      "lat_current": 5.0694094,
+      "lng_current": -75.5181173,
+      "csv_validation_status": "confirmed_address",
+      "csv_precision": "building",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial",
+      "csv_distance_to_runt_anchor_m": "31.6",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=27405&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "exact",
         "lat": 5.0694094,
@@ -1340,14 +1232,8 @@
           "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
         }
       },
-      "distance_current_to_geoportal_m": 31.6,
-      "distance_secondary_to_geoportal_m": 18.1,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono.",
-      "evidence_current_csv": "Interpolación en calle 21 entre (11.0, 34.0) y (22.0, 39.0); no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
     },
     {
       "n": 9,
@@ -1355,24 +1241,14 @@
       "kind": "CIA",
       "name": "CENTRO INTEGRAL DE ATENCIÓN EJE CAFETEROS S.A.S",
       "address_runt": "CARRERA 20 NO.21-40",
-      "nit": "900455427",
-      "phone": "7550531",
-      "lat_current": 5.069090011353712,
-      "lng_current": -75.51802856550218,
-      "secondary_reference": {
-        "lat": 5.0689636,
-        "lng": -75.5181746
-      },
-      "previous_audit_point": {
-        "lat": 5.0692599,
-        "lng": -75.5179778,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0692235,
-        "lng": -75.5179797
-      },
-      "displacement_from_previous_m": 4.05,
+      "lat_current": 5.0692235,
+      "lng_current": -75.5179797,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "address_interpolation",
+      "csv_provider": "manizales_geoportal_nomenclatura_predial_interpolation",
+      "csv_distance_to_runt_anchor_m": "15.8",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/2020_consulta_POT_urbano_web_v10_2/MapServer/10/query?f=json&objectIds=27319%2C27346&outFields=CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID%2CCATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion&returnGeometry=true&outSR=4326",
       "geoportal_or_interpolation": {
         "match_type": "interpolated",
         "lat": 5.0692235,
@@ -1569,14 +1445,8 @@
           "reason": "Interpolación OBJECTID 27319 (K 20 21 35) → 27346 (K 20 21 51); t=0.3125."
         }
       },
-      "distance_current_to_geoportal_m": 15.8,
-      "distance_secondary_to_geoportal_m": 36.1,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación OBJECTID 27319 (K 20 21 35) → 27346 (K 20 21 51); t=0.3125.",
-      "evidence_current_csv": "Interpolación en carrera 20 entre (20.0, 25.0) y (28.0, 40.0); no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Interpolación OBJECTID 27319 (K 20 21 35) → 27346 (K 20 21 51); t=0.3125."
     },
     {
       "n": 10,
@@ -1584,14 +1454,14 @@
       "kind": "CIA",
       "name": "CIMYC MANIZALES S.A.S",
       "address_runt": "CARRERA 19 #64A-19A",
-      "nit": "901447764",
-      "phone": null,
       "lat_current": 5.05813485,
       "lng_current": -75.48422695,
-      "secondary_reference": null,
-      "previous_audit_point": null,
-      "recalculated_point": null,
-      "displacement_from_previous_m": null,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "street_intersection",
+      "csv_provider": "openstreetmap_road_network",
+      "csv_distance_to_runt_anchor_m": "0.0",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://www.openstreetmap.org/copyright",
       "geoportal_or_interpolation": {
         "match_type": "insufficient",
         "lat": null,
@@ -1619,14 +1489,8 @@
           "unchanged_this_round": true
         }
       },
-      "distance_current_to_geoportal_m": null,
-      "distance_secondary_to_geoportal_m": null,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "nearby_address_landmark",
-      "reason": "Sin evidencia de punto exacto en esta ronda.",
-      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 64a; separación de vías=112.5 m; no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Sin evidencia de punto exacto en esta ronda."
     },
     {
       "n": 11,
@@ -1634,24 +1498,14 @@
       "kind": "CRC",
       "name": "CENTRO DE RECONOCIMIENTO DE CONDUCTORES EVALUANDO MANIZALES",
       "address_runt": "CALLE 22 NO. 18-29 PISO 2",
-      "nit": "900094432",
-      "phone": "8830561",
       "lat_current": 5.0702978,
       "lng_current": -75.5177831,
-      "secondary_reference": {
-        "lat": 5.070056,
-        "lng": -75.5177019
-      },
-      "previous_audit_point": {
-        "lat": 5.0700727,
-        "lng": -75.5176819,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0700864,
-        "lng": -75.517688
-      },
-      "displacement_from_previous_m": 1.67,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "street_intersection",
+      "csv_provider": "openstreetmap_road_network",
+      "csv_distance_to_runt_anchor_m": "0.0",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://www.openstreetmap.org/copyright",
       "geoportal_or_interpolation": {
         "match_type": "exact_range_includes_plate",
         "lat": 5.0700864,
@@ -1809,14 +1663,8 @@
           "reason": "Dirección: OBJECTID 27245/68601 incluyen placa 29. Operación: revisión RUNT 2.0 pendiente → proposed approximate_not_confirmed."
         }
       },
-      "distance_current_to_geoportal_m": 25.8,
-      "distance_secondary_to_geoportal_m": 3.7,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address",
-      "reason": "Dirección: OBJECTID 27245/68601 incluyen placa 29. Operación: revisión RUNT 2.0 pendiente → proposed approximate_not_confirmed.",
-      "evidence_current_csv": "Cruce colombiano calle 22 con carrera 18; separación de vías=0.0 m; no confirma el negocio."
+      "historical_evidence_preserved": true,
+      "reason": "Dirección: OBJECTID 27245/68601 incluyen placa 29. Operación: revisión RUNT 2.0 pendiente → proposed approximate_not_confirmed."
     },
     {
       "n": 12,
@@ -1824,21 +1672,14 @@
       "kind": "CRC",
       "name": "CERTIFICAMOS AGUSTINOS",
       "address_runt": "CRA 19 18-27 LC 3/3-1",
-      "nit": "900697302",
-      "phone": "3008149289",
       "lat_current": 5.069385,
       "lng_current": -75.5203143,
-      "secondary_reference": null,
-      "previous_audit_point": {
-        "lat": 5.0700344,
-        "lng": -75.5198595,
-        "note": "vertex_mean_from_commit_b78dcd6"
-      },
-      "recalculated_point": {
-        "lat": 5.0700367,
-        "lng": -75.5198939
-      },
-      "displacement_from_previous_m": 3.82,
+      "csv_validation_status": "approximate_not_confirmed",
+      "csv_precision": "street_intersection",
+      "csv_provider": "openstreetmap_road_network",
+      "csv_distance_to_runt_anchor_m": "0.0",
+      "csv_address_consistency": "within_100m",
+      "csv_geocode_source_url": "https://www.openstreetmap.org/copyright",
       "geoportal_or_interpolation": {
         "match_type": "building_address_confirmed_local_not_confirmed",
         "lat": 5.0700367,
@@ -2015,204 +1856,9 @@
           "reason": "Edificio/dirección base K 19 18 27 confirmada (OBJECTID 81323–81334); local RUNT distinto y sin fusión. proposed=approximate_not_confirmed."
         }
       },
-      "distance_current_to_geoportal_m": 86.1,
-      "distance_secondary_to_geoportal_m": null,
-      "csv_validation_status": "approximate_not_confirmed",
-      "csv_modified": false,
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "nearby_address_landmark",
-      "reason": "Edificio/dirección base K 19 18 27 confirmada (OBJECTID 81323–81334); local RUNT distinto y sin fusión. proposed=approximate_not_confirmed.",
-      "evidence_current_csv": "Cruce colombiano carrera 19 con calle 18; separación de vías=0.0 m; no confirma el negocio."
-    }
-  ],
-  "summary_table": [
-    {
-      "id": "cda-manizales-cda-caldas-el-bosque-a730920403",
-      "address_runt": "CALLE 12 # 30 32",
-      "previous": "5.0619511,-75.5239771",
-      "recalculated": "5.0619543,-75.5239713",
-      "displacement_m": 0.73,
-      "inside_polygon": true,
-      "match_type": "exact",
-      "objectids": [
-        32634
-      ],
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
-    },
-    {
-      "id": "cda-manizales-cda-socicar-7acac31f0f",
-      "address_runt": "AVENIDA 19 N 13 - 44 LOCAL 3-4-5-6 AMERICAS",
-      "previous": "5.069587,-75.5231293",
-      "recalculated": "5.0695891,-75.5231314",
-      "displacement_m": 0.33,
-      "inside_polygon": null,
-      "match_type": "interpolated_audit_only",
-      "objectids": [
-        80316,
-        80293
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación K 19 13 41→45 47 hacia placa 44 documentada, pero sin evidencia oficial reproducible de que Avenida 19 RUNT ≡ K 19; proposed=approximate_not_confirmed."
-    },
-    {
-      "id": "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c",
-      "address_runt": "CARRERA 24 # 32 - 49 BRR FUNDADORES",
-      "previous": "5.0668589,-75.5108467",
-      "recalculated": "5.0668747,-75.5108309",
-      "displacement_m": 2.48,
-      "inside_polygon": true,
-      "match_type": "exact",
-      "objectids": [
-        52874
-      ],
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
-    },
-    {
-      "id": "cea-manizales-academia-automovilistica-caldas-sas-12d613c393",
-      "address_runt": "CARRERA 23 NRO 53A 25",
-      "previous": "5.0626837,-75.4949458",
-      "recalculated": "5.0627089,-75.4949577",
-      "displacement_m": 3.1,
-      "inside_polygon": true,
-      "match_type": "exact_range_includes_plate",
-      "objectids": [
-        26301
-      ],
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "OBJECTID 26301 K 23 53A 25 27 incluye placa RUNT 25; punto representativo derivation_method=polygon_area_centroid, inside=True."
-    },
-    {
-      "id": "cea-manizales-academia-automovilistica-piloto-177f760536",
-      "address_runt": "CARRERA 21 NO. 15-40",
-      "previous": "5.0680482,-75.5217908",
-      "recalculated": "5.0680434,-75.5217931",
-      "displacement_m": 0.59,
-      "inside_polygon": null,
-      "match_type": "interpolated",
-      "objectids": [
-        80394,
-        80393
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación entre puntos representativos de placas 38 y 44 sobre K 21 15; t=0.333333 en [0,1]. Sin predio exacto 15-40."
-    },
-    {
-      "id": "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0",
-      "address_runt": "CRA 23 NRO 70-59 ALTA SUIZA - AVENIDA SANTANDER",
-      "previous": "5.0518408,-75.4841049",
-      "recalculated": "5.0518489,-75.4840936",
-      "displacement_m": 1.54,
-      "inside_polygon": null,
-      "match_type": "interpolated",
-      "objectids": [
-        105038,
-        105040
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación OBJECTID 105038→105040; t=0.20. Mantener approximate_not_confirmed salvo predio exacto. Descartados 96475/52515."
-    },
-    {
-      "id": "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930",
-      "address_runt": "CRA 24 53-20",
-      "previous": "5.062791,-75.4962457",
-      "recalculated": "5.0627826,-75.4962432",
-      "displacement_m": 0.97,
-      "inside_polygon": true,
-      "match_type": "exact",
-      "objectids": [
-        14593
-      ],
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
-    },
-    {
-      "id": "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e",
-      "address_runt": "CALLE 21 # 19 - 27 CENTRO",
-      "previous": "5.0693862,-75.5180932",
-      "recalculated": "5.0694094,-75.5181173",
-      "displacement_m": 3.71,
-      "inside_polygon": true,
-      "match_type": "exact",
-      "objectids": [
-        27405
-      ],
-      "csv_proposed_validation_status": "confirmed_address",
-      "csv_proposed_precision": "building",
-      "reason": "Predio oficial exacto; punto representativo verificado dentro del polígono."
-    },
-    {
-      "id": "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047",
-      "address_runt": "CARRERA 20 NO.21-40",
-      "previous": "5.0692599,-75.5179778",
-      "recalculated": "5.0692235,-75.5179797",
-      "displacement_m": 4.05,
-      "inside_polygon": null,
-      "match_type": "interpolated",
-      "objectids": [
-        27319,
-        27346
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address_interpolation",
-      "reason": "Interpolación OBJECTID 27319 (K 20 21 35) → 27346 (K 20 21 51); t=0.3125."
-    },
-    {
-      "id": "cia-manizales-cimyc-manizales-s-a-s-498175000a",
-      "address_runt": "CARRERA 19 #64A-19A",
-      "previous": "—",
-      "recalculated": "—",
-      "displacement_m": "—",
-      "inside_polygon": null,
-      "match_type": "insufficient",
-      "objectids": [],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "nearby_address_landmark",
-      "reason": "Sin evidencia de punto exacto en esta ronda."
-    },
-    {
-      "id": "crc-manizales-centro-de-reconocimiento-de-conductores--dfb8fe156d",
-      "address_runt": "CALLE 22 NO. 18-29 PISO 2",
-      "previous": "5.0700727,-75.5176819",
-      "recalculated": "5.0700864,-75.517688",
-      "displacement_m": 1.67,
-      "inside_polygon": null,
-      "match_type": "exact_range_includes_plate",
-      "objectids": [
-        27245,
-        68601
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "address",
-      "reason": "Dirección: OBJECTID 27245/68601 incluyen placa 29. Operación: revisión RUNT 2.0 pendiente → proposed approximate_not_confirmed."
-    },
-    {
-      "id": "crc-manizales-certificamos-agustinos-98839ab670",
-      "address_runt": "CRA 19 18-27 LC 3/3-1",
-      "previous": "5.0700344,-75.5198595",
-      "recalculated": "5.0700367,-75.5198939",
-      "displacement_m": 3.82,
-      "inside_polygon": null,
-      "match_type": "building_address_confirmed_local_not_confirmed",
-      "objectids": [
-        81323,
-        81326,
-        81333,
-        81334
-      ],
-      "csv_proposed_validation_status": "approximate_not_confirmed",
-      "csv_proposed_precision": "nearby_address_landmark",
+      "historical_evidence_preserved": true,
       "reason": "Edificio/dirección base K 19 18 27 confirmada (OBJECTID 81323–81334); local RUNT distinto y sin fusión. proposed=approximate_not_confirmed."
     }
   ],
-  "probe_file": "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json",
-  "canonical_csv_modification_note": "fix/manizales-geocode-quality: applied 5 confirmed_address (building) + 3 approximate interpolations; left Socicar/Evaluando/Agustinos/CIMYC unchanged. Counts now 19/18/7."
+  "probe_file": "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json"
 }

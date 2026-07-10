@@ -6,17 +6,27 @@ No owners, documents, avaluos, fichas, NPN. outFields limited to OBJECTID+direcc
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import sys
 import urllib.parse
 import urllib.request
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
+from manizales_geoportal_urls import (  # noqa: E402
+    DIR_FIELD,
+    OID_FIELD,
+    ORIGINAL_AUDIT_IDS,
+    OUT_FIELDS,
+    SERVICE,
+    build_objectids_query_url,
+)
 from manizales_nomenclatura_geometry import (  # noqa: E402
     haversine_m,
     interpolate_representative_points,
@@ -37,15 +47,10 @@ OUT_PROBE = Path(
     "services/places-service/data/geocodes/manizales/geoportal_nomenclatura_extract.json"
 )
 
-SERVICE = (
-    "https://sig.manizales.gov.co/wadmzl/rest/services/20_WEB/"
-    "2020_consulta_POT_urbano_web_v10_2/MapServer/10"
-)
+SERVICE = SERVICE  # re-export from manizales_geoportal_urls
 QUERY = SERVICE + "/query"
-DIR_FIELD = "CATASTRO_13SEP2021.DBO.BDD_PREDIO_AVALUO_PROP_NEW.direccion"
-OID_FIELD = "CATASTRO_13SEP2021.DBO.Construcciones_Urbanas_MASORA_NEW.OBJECTID"
 # Explicit allow-list only — never outFields=*
-OUT_FIELDS = ",".join([OID_FIELD, DIR_FIELD])
+assert "*" not in OUT_FIELDS
 
 CONSULTED_AT = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -280,22 +285,152 @@ def persistable_detail(g: dict) -> dict:
     return out
 
 
-def main() -> None:
-    previous = load_previous_coords()
-    approx = [
-        r
-        for r in csv.DictReader(CSV_PATH.open(encoding="utf-8-sig", newline=""))
-        if r["validation_status"] == "approximate_not_confirmed"
-    ]
-    all_rows = list(csv.DictReader(CSV_PATH.open(encoding="utf-8-sig", newline="")))
-    by_status = {}
-    for r in all_rows:
-        by_status[r["validation_status"]] = by_status.get(r["validation_status"], 0) + 1
+def load_all_rows() -> list[dict[str, str]]:
+    return list(csv.DictReader(CSV_PATH.open(encoding="utf-8-sig", newline="")))
 
-    by_id = {r["id"]: r for r in approx}
-    assert len(by_id) == len(approx)
-    if len(approx) == 0:
-        raise SystemExit("no approximate rows to audit")
+
+def csv_status_counts(rows: list[dict[str, str]]) -> dict[str, int]:
+    return dict(Counter(r["validation_status"] for r in rows))
+
+
+def offline_refresh_inventory() -> dict:
+    """Re-run safely against the current CSV without network calls.
+
+    Preserves existing geoportal detail from the inventory JSON when present.
+    Does not silently wipe incompatible historical evidence; marks gaps instead.
+    """
+    rows = load_all_rows()
+    by_id = {r["id"]: r for r in rows}
+    missing = [sid for sid in ORIGINAL_AUDIT_IDS if sid not in by_id]
+    if missing:
+        raise SystemExit(f"CSV missing original audit ids: {missing}")
+    if len(rows) != 44 or len(by_id) != 44:
+        raise SystemExit(f"expected 44 unique CSV rows, got {len(rows)}/{len(by_id)}")
+
+    counts = csv_status_counts(rows)
+    existing: dict = {}
+    if OUT_JSON.exists():
+        existing = json.loads(OUT_JSON.read_text(encoding="utf-8"))
+    existing_by_id = {r["id"]: r for r in (existing.get("rows") or [])}
+
+    out_rows = []
+    for i, sid in enumerate(ORIGINAL_AUDIT_IDS, 1):
+        r = by_id[sid]
+        prev = existing_by_id.get(sid) or {}
+        g_prev = prev.get("geoportal_or_interpolation") or {}
+        item = {
+            "n": i,
+            "id": sid,
+            "kind": r["kind"],
+            "name": r["name"],
+            "address_runt": r["address"],
+            "lat_current": float(r["lat"]),
+            "lng_current": float(r["lng"]),
+            "csv_validation_status": r["validation_status"],
+            "csv_precision": r["precision"],
+            "csv_provider": r["provider"],
+            "csv_distance_to_runt_anchor_m": r.get("distance_to_runt_anchor_m"),
+            "csv_address_consistency": r.get("address_consistency"),
+            "csv_geocode_source_url": r.get("geocode_source_url"),
+            "geoportal_or_interpolation": g_prev
+            if g_prev
+            else {
+                "match_type": "preserved_unavailable_offline",
+                "note": "Sin detalle geoportal previo; no se sobrescribe evidencia histórica.",
+            },
+            "historical_evidence_preserved": bool(g_prev),
+            "reason": prev.get("reason")
+            or "Offline refresh: estado CSV actual sincronizado; detalle geoportal preservado si existía.",
+        }
+        out_rows.append(item)
+
+    payload = {
+        "city": "Manizales",
+        "mode": "offline_refresh",
+        "canonical_csv_modified": True,
+        "canonical_csv_note": (
+            "El CSV canónico ya incluye mejoras geoportal (5 confirmed_address + "
+            "3 interpolaciones). Este refresh no afirma 'CSV sin modificar'."
+        ),
+        "scope_counts": {
+            "total": len(rows),
+            "by_kind": dict(Counter(r["kind"] for r in rows)),
+            "by_validation_status": counts,
+        },
+        "expected_current_counts": {
+            "confirmed_business": 19,
+            "confirmed_address": 18,
+            "approximate_not_confirmed": 7,
+        },
+        "original_audit_ids": list(ORIGINAL_AUDIT_IDS),
+        "original_audit_id_count": len(ORIGINAL_AUDIT_IDS),
+        "geoportal_service": SERVICE,
+        "consulted_at": CONSULTED_AT,
+        "rows": out_rows,
+        "probe_file": str(OUT_PROBE).replace("\\", "/"),
+    }
+    if counts != payload["expected_current_counts"]:
+        payload["count_warning"] = {
+            "actual": counts,
+            "expected": payload["expected_current_counts"],
+        }
+
+    OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    lines = [
+        "# Inventario Manizales — refresh offline del CSV canónico",
+        "",
+        "Modo offline: sincroniza los 12 IDs de auditoría originales con el CSV actual (44 filas).",
+        "No consulta el Geoportal. No borra evidencia geoportal previa si ya existía.",
+        "",
+        f"Servicio de referencia: `{SERVICE}`",
+        f"Consulta/local: `{CONSULTED_AT}`",
+        "",
+        "## Conteos CSV actuales",
+        "",
+        "```json",
+        json.dumps(payload["scope_counts"], ensure_ascii=False, indent=2),
+        "```",
+        "",
+        "## Filas de auditoría (12 IDs originales)",
+        "",
+        "| ID | CSV status | precision | lat,lng |",
+        "|---|---|---|---|",
+    ]
+    for row in out_rows:
+        lines.append(
+            f"| `{row['id']}` | `{row['csv_validation_status']}` | `{row['csv_precision']}` | "
+            f"{row['lat_current']},{row['lng_current']} |"
+        )
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return payload
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Manizales NOMENCLATURA PREDIAL audit extractor")
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Refresh inventory from current CSV without network; preserve prior geoportal detail.",
+    )
+    args = parser.parse_args(argv)
+    if args.offline:
+        payload = offline_refresh_inventory()
+        print(json.dumps({"mode": "offline", "counts": payload["scope_counts"]}, indent=2, ensure_ascii=False))
+        return 0
+
+    previous = load_previous_coords()
+    all_rows = load_all_rows()
+    by_id_all = {r["id"]: r for r in all_rows}
+    missing = [sid for sid in ORIGINAL_AUDIT_IDS if sid not in by_id_all]
+    if missing:
+        raise SystemExit(f"CSV missing original audit ids: {missing}")
+    if len(all_rows) != 44 or len(by_id_all) != 44:
+        raise SystemExit(f"expected 44 unique CSV rows, got {len(all_rows)}/{len(by_id_all)}")
+
+    by_status = csv_status_counts(all_rows)
+    # Audit the original 12 IDs regardless of current validation_status.
+    by_id = {sid: by_id_all[sid] for sid in ORIGINAL_AUDIT_IDS}
 
     probe: dict = {
         "service": SERVICE,
@@ -757,12 +892,12 @@ def main() -> None:
     geoportal_by_id[cimyc_id] = g
     probe["queries"][cimyc_id] = persistable_detail(g)
 
-    # Build inventory + comparison to previous vertex-mean coords
+    # Build inventory for the original 12 audit IDs (status may already be confirmed).
     out_rows = []
     table = []
     proposed_counts = {"confirmed_address": 0, "approximate_not_confirmed": 0}
-    for i, r in enumerate(approx, 1):
-        sid = r["id"]
+    for i, sid in enumerate(ORIGINAL_AUDIT_IDS, 1):
+        r = by_id[sid]
         g = geoportal_by_id[sid]
         cur_lat, cur_lng = float(r["lat"]), float(r["lng"])
         sec = SECONDARY.get(sid)
@@ -811,8 +946,9 @@ def main() -> None:
             },
             "distance_current_to_geoportal_m": g.get("distance_to_current_m"),
             "distance_secondary_to_geoportal_m": g.get("distance_to_secondary_m"),
-            "csv_validation_status": "approximate_not_confirmed",
-            "csv_modified": False,
+            "csv_validation_status": r["validation_status"],
+            "csv_precision": r["precision"],
+            "csv_provider": r["provider"],
             "csv_proposed_validation_status": status,
             "csv_proposed_precision": precision,
             "reason": g.get("reason"),
@@ -823,6 +959,7 @@ def main() -> None:
             {
                 "id": sid,
                 "address_runt": r["address"],
+                "csv_status": r["validation_status"],
                 "previous": f"{prev['lat']},{prev['lng']}" if prev else "—",
                 "recalculated": f"{new_lat},{new_lng}" if new_lat is not None else "—",
                 "displacement_m": displacement_m if displacement_m is not None else "—",
@@ -835,31 +972,31 @@ def main() -> None:
             }
         )
 
-    # Hypothetical counts if proposals were applied to the 12 approximate rows only.
-    p_to_confirmed = proposed_counts["confirmed_address"]
-    hyp = {
-        "current_csv_counts": by_status,
-        "proposals_on_approximate_12": proposed_counts,
-        "hypothetical_after_apply_proposals_only": {
-            "confirmed_address": by_status.get("confirmed_address", 0) + p_to_confirmed,
-            "approximate_not_confirmed": 12 - p_to_confirmed,
-            "confirmed_business": by_status.get("confirmed_business", 0),
-            "note": "Hipotético; CSV canónico no modificado.",
-        },
+    scope_counts = {
+        "total": len(all_rows),
+        "by_kind": dict(Counter(r["kind"] for r in all_rows)),
+        "by_validation_status": by_status,
     }
-
     payload = {
         "city": "Manizales",
-        "canonical_csv_modified": False,
-        "scope_counts_unchanged": True,
-        "tests_unchanged": True,
-        "official_reports_unchanged": True,
+        "mode": "online_geoportal",
+        "canonical_csv_modified": True,
+        "canonical_csv_note": (
+            "CSV canónico ya refleja mejoras geoportal aplicadas; este extractor audita "
+            "los 12 IDs originales y reporta conteos reales del CSV."
+        ),
+        "scope_counts": scope_counts,
+        "expected_current_counts": {
+            "confirmed_business": 19,
+            "confirmed_address": 18,
+            "approximate_not_confirmed": 7,
+        },
+        "audit_proposals_on_original_12": proposed_counts,
         "geoportal_service": SERVICE,
         "consulted_at": CONSULTED_AT,
         "privacy_note": probe["privacy_note"],
         "geometry_method_note": probe["geometry_method_note"],
         "secondary_geocoder_not_used_as_persistent_provider": True,
-        "hypothetical_counts": hyp,
         "rows": out_rows,
         "summary_table": table,
         "probe_file": str(OUT_PROBE).replace("\\", "/"),
@@ -868,33 +1005,35 @@ def main() -> None:
     OUT_PROBE.write_text(json.dumps(probe, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     lines = [
-        "# Inventario Manizales aproximadas — geometría oficial NOMENCLATURA PREDIAL",
+        "# Inventario Manizales — geometría oficial NOMENCLATURA PREDIAL",
         "",
-        "**CSV canónico no modificado.** Punto representativo = centroide de área (shoelace) o `point_on_surface` si el centroide cae fuera.",
+        "Audita los 12 IDs originales sobre el CSV canónico actual (44 filas). "
+        "Punto representativo = centroide de área (shoelace) o `point_on_surface`.",
         "",
         f"Servicio: `{SERVICE}`",
         f"Consulta: `{CONSULTED_AT}`",
         "",
-        "Privacidad: solo OBJECTID, dirección, geometría mínima, coordenada representativa, `derivation_method`, consulta, fecha, distancias y fórmula. Sin `outFields=*`.",
+        "Privacidad: solo OBJECTID, dirección, geometría mínima, coordenada representativa, "
+        "`derivation_method`, consulta, fecha, distancias y fórmula. Sin `outFields=*`.",
         "",
-        "## Conteos hipotéticos (si se aplicaran propuestas)",
+        "## Conteos CSV actuales",
         "",
         "```json",
-        json.dumps(hyp, ensure_ascii=False, indent=2),
+        json.dumps(scope_counts, ensure_ascii=False, indent=2),
         "```",
         "",
-        "## Tabla final",
+        "## Tabla final (12 IDs originales)",
         "",
-        "| ID | Anterior | Recalculada | Δ m | Dentro polígono | OBJECTIDs | proposed_status | proposed_precision | Motivo |",
-        "|---|---|---|---:|---|---|---|---|---|",
+        "| ID | CSV status | Anterior | Recalculada | Δ m | Dentro polígono | OBJECTIDs | proposed_status | proposed_precision | Motivo |",
+        "|---|---|---|---|---:|---|---|---|---|---|",
     ]
     for t in table:
         oids = ",".join(str(x) for x in t["objectids"]) if t["objectids"] else "—"
         inside = t["inside_polygon"]
         inside_s = "—" if inside is None else str(inside)
         lines.append(
-            f"| `{t['id']}` | {t['previous']} | {t['recalculated']} | {t['displacement_m']} | "
-            f"{inside_s} | {oids} | `{t['csv_proposed_validation_status']}` | "
+            f"| `{t['id']}` | `{t['csv_status']}` | {t['previous']} | {t['recalculated']} | "
+            f"{t['displacement_m']} | {inside_s} | {oids} | `{t['csv_proposed_validation_status']}` | "
             f"`{t['csv_proposed_precision']}` | {t['reason']} |"
         )
     lines.append("")
@@ -905,6 +1044,7 @@ def main() -> None:
             "",
             f"- **ID:** `{row['id']}`",
             f"- **Dirección RUNT:** {row['address_runt']}",
+            f"- **CSV status:** `{row['csv_validation_status']}`",
             f"- **Actual CSV:** {row['lat_current']}, {row['lng_current']}",
             f"- **Anterior auditoría:** {row['previous_audit_point']}",
             f"- **Recalculada:** {row['recalculated_point']}",
@@ -930,7 +1070,6 @@ def main() -> None:
         assert '"ficha_nuev"' not in text
         assert '"propietario"' not in text
         assert '"npn"' not in text
-        # Confirm allow-listed outFields only appear as OBJECTID+direccion
         if "outFields" in text:
             assert "Construcciones_Urbanas_MASORA_NEW.OBJECTID" in text
             assert "direccion" in text
@@ -938,11 +1077,13 @@ def main() -> None:
     print(
         json.dumps(
             {
+                "mode": "online",
                 "rows": len(out_rows),
-                "hypothetical": hyp,
+                "scope_counts": scope_counts,
                 "displacements": [
                     {
                         "id": r["id"][-32:],
+                        "csv_status": r["csv_validation_status"],
                         "prev": r["previous_audit_point"],
                         "new": r["recalculated_point"],
                         "d_m": r["displacement_from_previous_m"],
@@ -957,7 +1098,8 @@ def main() -> None:
             ensure_ascii=False,
         )
     )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T20:28:44Z",
+  "generated_at": "2026-07-10T20:57:18Z",
   "scope": "manizales_only",
   "santander_unchanged": true,
   "database": "civi_geocode_validation_tmp (ephemeral localhost)",
@@ -29,11 +29,16 @@
       "CEA": 15,
       "CIA": 8,
       "CRC": 7
+    },
+    "resolution": {
+      "source_place_id": 44,
+      "source_records_fallback": 0
     }
   },
   "notes": [
     "No --apply executed.",
     "No production database used.",
-    "Santander CSV/scopes untouched."
+    "Santander CSV/scopes untouched.",
+    "geocode_source_url uses objectIds + full ArcGIS field names."
   ]
 }

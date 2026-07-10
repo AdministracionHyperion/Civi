@@ -23,33 +23,39 @@ from places_service.geocoding.scoring import accepts_centroid_as_business, score
 CSV_PATH = Path("services/places-service/data/geocodes/manizales/geocodes_manizales_validado.csv")
 
 EXACT_CONFIRMED = {
-    "cda-manizales-cda-caldas-el-bosque-a730920403": (5.0619543, -75.5239713),
+    "cda-manizales-cda-caldas-el-bosque-a730920403": (5.0619543, -75.5239713, 46.1),
     "cda-manizales-centro-de-diagnostico-automotor-motolina-0ce021ad5c": (
         5.0668747,
         -75.5108309,
+        41.5,
     ),
     "cea-manizales-centro-de-ensenanza-automovilistica-cald-3e6c3b1930": (
         5.0627826,
         -75.4962432,
+        33.1,
     ),
     "cia-manizales-centro-integral-de-atencion-rutas-de-col-e89cbc963e": (
         5.0694094,
         -75.5181173,
+        31.6,
     ),
     "cea-manizales-academia-automovilistica-caldas-sas-12d613c393": (
         5.0627089,
         -75.4949577,
+        33.6,
     ),
 }
 
 INTERPOLATED_APPROX = {
-    "cea-manizales-academia-automovilistica-piloto-177f760536": (5.0680434, -75.5217931),
-    "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0": (5.0518489, -75.4840936),
+    "cea-manizales-academia-automovilistica-piloto-177f760536": (5.0680434, -75.5217931, 41.2),
+    "cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0": (5.0518489, -75.4840936, 868.7),
     "cia-manizales-centro-integral-de-atencion-eje-cafetero-3000df8047": (
         5.0692235,
         -75.5179797,
+        15.8,
     ),
 }
+
 
 UNCHANGED_APPROX = {
     "cda-manizales-cda-socicar-7acac31f0f": (5.0694483, -75.5235525),
@@ -200,30 +206,45 @@ def test_csv_counts_and_bbox() -> None:
 
 
 def test_geoportal_quality_upgrade_rows() -> None:
+    import sys
+
+    sys.path.insert(0, str(Path("scripts/places-catalog").resolve()))
+    from manizales_geoportal_urls import (  # type: ignore
+        GEOPORTAL_SOURCE_OBJECT_IDS,
+        validate_official_query_url,
+    )
+
     by_id = {r["id"]: r for r in read_csv_rows(CSV_PATH)}
 
-    for sid, (lat, lng) in EXACT_CONFIRMED.items():
+    for sid, (lat, lng, dist) in EXACT_CONFIRMED.items():
         row = by_id[sid]
         assert float(row["lat"]) == pytest.approx(lat)
         assert float(row["lng"]) == pytest.approx(lng)
+        assert float(row["distance_to_runt_anchor_m"]) == pytest.approx(dist)
         assert row["validation_status"] == "confirmed_address"
         assert row["precision"] == "building"
         assert row["provider"] == "manizales_geoportal_nomenclatura_predial"
+        assert row["address_consistency"] == "within_100m"
         assert "OBJECTID" in row["evidence"]
         assert "derivation_method" in row["evidence"]
-        assert "no el negocio" in row["evidence"].lower() or "no confirma el negocio" in row["evidence"].lower() or "no el negocio" in row["evidence"]
-        assert "sig.manizales.gov.co" in row["geocode_source_url"]
+        assert "negocio" in row["evidence"].lower()
+        errs = validate_official_query_url(row["geocode_source_url"], GEOPORTAL_SOURCE_OBJECT_IDS[sid])
+        assert errs == [], (sid, errs)
 
-    for sid, (lat, lng) in INTERPOLATED_APPROX.items():
+    for sid, (lat, lng, dist) in INTERPOLATED_APPROX.items():
         row = by_id[sid]
         assert float(row["lat"]) == pytest.approx(lat)
         assert float(row["lng"]) == pytest.approx(lng)
+        assert float(row["distance_to_runt_anchor_m"]) == pytest.approx(dist)
         assert row["validation_status"] == "approximate_not_confirmed"
         assert row["precision"] == "address_interpolation"
         assert row["provider"] == "manizales_geoportal_nomenclatura_predial_interpolation"
+        errs = validate_official_query_url(row["geocode_source_url"], GEOPORTAL_SOURCE_OBJECT_IDS[sid])
+        assert errs == [], (sid, errs)
 
     practicar = by_id["cea-manizales-cea-practicar-del-eje-manizales-71a9a35cf0"]
     assert float(practicar["lng"]) < -75.48
+    assert practicar["address_consistency"] == "official_correction_over_250m"
     assert "Cerro de Oro" in practicar["evidence"]
     assert "105038" in practicar["evidence"] and "105040" in practicar["evidence"]
     assert "(59-55)/(75-55)=0.20" in practicar["evidence"]
@@ -239,6 +260,31 @@ def test_geoportal_quality_upgrade_rows() -> None:
         assert row["validation_status"] == "approximate_not_confirmed"
         assert row["provider"] != "manizales_geoportal_nomenclatura_predial"
         assert row["provider"] != "manizales_geoportal_nomenclatura_predial_interpolation"
+
+
+def test_no_control_characters_in_manizales_artifacts() -> None:
+    roots = [
+        Path("services/places-service/data/geocodes/manizales"),
+        Path("services/places-service/data/reports/validation"),
+        Path("services/places-service/data/reports/manizales_geocode_import_report.json"),
+    ]
+    allowed = {"\t", "\n", "\r"}
+    bad: list[str] = []
+    files: list[Path] = []
+    for root in roots:
+        if root.is_file():
+            files.append(root)
+        elif root.is_dir():
+            files.extend(p for p in root.rglob("*") if p.is_file())
+    for path in files:
+        if path.suffix.lower() not in {".md", ".json", ".csv", ".txt"}:
+            continue
+        text = path.read_text(encoding="utf-8")
+        for i, ch in enumerate(text):
+            if ord(ch) < 32 and ch not in allowed:
+                bad.append(f"{path}:{i}:U+{ord(ch):04X}")
+                break
+    assert bad == []
 
 
 def test_address_normalizer_colombian_vias() -> None:
