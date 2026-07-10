@@ -233,7 +233,7 @@ def main() -> None:
     rows = list(csv.DictReader(CSV_PATH.open(encoding="utf-8-sig", newline="")))
     approx = [r for r in rows if r["validation_status"] == "approximate_not_confirmed"]
     if len(approx) != 12:
-        raise SystemExit(f"expected 12 approximate rows, got {len(approx)}")
+        raise SystemExit(f"expected approximate rows, got {len(approx)}")
 
     out_rows: list[dict] = []
     table: list[dict] = []
