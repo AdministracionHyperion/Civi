@@ -31,13 +31,20 @@ LOCATION_PRECISIONS = frozenset(
         "municipality",
         "manual",
         "unknown",
-        # Precisions emitted by the validated Manizales geocode file.
+        # Precisions emitted by validated city geocode files (Manizales / Santander).
         "street_intersection",
         "building",
         "business",
         "street_interpolation",
         "address_neighbour",
         "business_complex",
+        "neighbourhood_address",
+        "nearby_address_landmark",
+        "address_interpolation",
+        "route_landmark",
+        "route_intersection",
+        "same_street_anchor",
+        "route_kilometre_anchor",
     }
 )
 # Geocode VALIDATION statuses (distinct from operational status). `approximate_*`
