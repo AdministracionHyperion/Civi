@@ -1,2 +1,4 @@
 # Keep the national catalog snapshot byte-stable across OS checkouts.
 services/places-service/data/raw/places_colombia_original.json text eol=lf
+# Keep validated geocode CSVs with LF so SHA-256 checks are OS-stable.
+services/places-service/data/geocodes/**/*.csv text eol=lf

@@ -1,0 +1,50 @@
+{
+  "mode": "dry_run",
+  "input": "services\\places-service\\data\\geocodes\\santander\\geocodes_santander_priorizado_validado.csv",
+  "scope": "santander",
+  "city": "Santander (área metropolitana priorizada)",
+  "rows": 153,
+  "valid_rows": 153,
+  "inserted": 153,
+  "updated": 0,
+  "unchanged": 0,
+  "skipped": 0,
+  "rejected": 0,
+  "unknown_site_ids": 0,
+  "manual_protected": 0,
+  "partner_protected": 0,
+  "kind_mismatch": 0,
+  "municipality_mismatch": 0,
+  "department_mismatch": 0,
+  "duplicate_source_place_id": 0,
+  "duplicate_ids": 0,
+  "outside_bbox": 0,
+  "count_mismatch": false,
+  "count_mismatch_reasons": [],
+  "by_kind": {
+    "CDA": 37,
+    "CEA": 56,
+    "CIA": 25,
+    "CRC": 35
+  },
+  "by_city": {
+    "Bucaramanga": 81,
+    "Floridablanca": 29,
+    "Giron": 23,
+    "Piedecuesta": 20
+  },
+  "by_validation_status": {
+    "confirmed_business": 65,
+    "confirmed_address": 30,
+    "approximate_not_confirmed": 58
+  },
+  "atomic_aborted": false,
+  "rejected_rows": [],
+  "blocked_rows": [],
+  "unknown_ids": [],
+  "resolution": {
+    "source_place_id": 0,
+    "source_records_fallback": 0
+  },
+  "applied_rows": 0
+}

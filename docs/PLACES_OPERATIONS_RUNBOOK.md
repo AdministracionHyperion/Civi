@@ -92,7 +92,49 @@ python -m places_service.cli.import_manizales_geocodes `
 Map (local): open `services/places-service/static/manizales_map.html?api=http://127.0.0.1:8085&token=<INTERNAL_SERVICE_TOKEN>`  
 GeoJSON: `GET /internal/places/geojson?city=Manizales&department=Caldas`
 
-Santander / Bucaramanga metro constants exist as stubs only — do not process them yet.
+### Santander validated geocodes (prioritized metro)
+
+Input (committed): `services/places-service/data/geocodes/santander/geocodes_santander_priorizado_validado.csv`
+
+- 153 establishments (37 CDA, 56 CEA, 25 CIA, 35 CRC)
+- Municipalities: Bucaramanga 81, Floridablanca 29, Girón 23, Piedecuesta 20
+- Validation mix: 65 `confirmed_business` / 30 `confirmed_address` / 58 `approximate_not_confirmed`
+- Resolves by official source `id` → `places_sites.source_place_id` (no `source_records` fallback in routine apply)
+- Validates each row against **its municipality bbox** (Girón stays `-73.18`…`-73.15`; do not widen)
+- Aborts if aggregate counts diverge from the scope contract (153; 81/29/23/20; 37/56/25/35; 65/30/58)
+- Shared engine: `validated_geocode_import` + `geocode_scopes` (Manizales remains a thin wrapper)
+- Does **not** modify Manizales rows; does **not** enable `--force` by default
+- Resolves `source_place_id` with exactly one DB hit (`unknown_site` / `duplicate_source_place_id`); re-checks department, municipality, kind and protections inside the write transaction
+
+Prerequisites before apply:
+
+1. Schema v5 migrated (`source_place_id`, `geocode_validation_status`)
+2. National catalog imported/reconciled so CSV ids resolve via `places_sites.source_place_id`
+3. Staging dry-run with DB, then manual apply **without** `--force`
+
+Dry-run (CSV validation only, no DB):
+
+```powershell
+$env:PYTHONPATH="services/places-service/src;packages/python-common/src"
+python -m places_service.cli.import_santander_geocodes `
+  --input services/places-service/data/geocodes/santander/geocodes_santander_priorizado_validado.csv `
+  --dry-run `
+  --report-path services/places-service/data/reports/santander_geocode_import_report.json
+```
+
+Apply (staging / explicit ops only — not production from this PR):
+
+```powershell
+$env:PYTHONPATH="services/places-service/src;packages/python-common/src"
+python -m places_service.cli.import_santander_geocodes `
+  --input services/places-service/data/geocodes/santander/geocodes_santander_priorizado_validado.csv `
+  --apply --database-url $env:PLACES_DATABASE_URL `
+  --report-path services/places-service/data/reports/santander_geocode_import_report.json
+```
+
+Map (local): open `services/places-service/static/santander_map.html?api=http://127.0.0.1:8085&token=<INTERNAL_SERVICE_TOKEN>`  
+GeoJSON (one call per municipality):  
+`GET /internal/places/geojson?city=Bucaramanga&department=Santander` (also Floridablanca, Giron, Piedecuesta)
 
 ## Local CI gates (Postgres legacy + compose smoke)
 
