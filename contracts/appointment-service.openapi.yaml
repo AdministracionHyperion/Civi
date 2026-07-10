@@ -58,6 +58,36 @@ paths:
       responses:
         "201":
           description: appointment created
+        "404":
+          description: place_not_found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDetail"
+        "422":
+          description: place not eligible for Civi booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDetail"
+              examples:
+                place_not_bookable:
+                  value:
+                    detail: place_not_bookable
+                operationally_unavailable:
+                  value:
+                    detail: operational_status_retired
+                missing_from_latest_snapshot:
+                  value:
+                    detail: missing_from_latest_snapshot
+        "503":
+          description: places_catalog_unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDetail"
+              example:
+                detail: places_catalog_unavailable
     get:
       summary: List appointments
       security:
@@ -85,6 +115,13 @@ paths:
         "200":
           description: cancellation result
 components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
   securitySchemes:
     internalBearer:
       type: http

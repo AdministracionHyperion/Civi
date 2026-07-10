@@ -205,6 +205,90 @@ async def test_create_appointment_rejects_non_bookable_place() -> None:
 
 
 @pytest.mark.asyncio
+async def test_create_appointment_returns_404_when_place_does_not_exist() -> None:
+    from fastapi import HTTPException
+
+    with pytest.raises(HTTPException) as exc:
+        await create_appointment(
+            CreateAppointmentRequest(
+                user_key="user-missing-place",
+                procedure="tecnomecanica",
+                starts_at="2026-07-16T09:00",
+                place=AppointmentPlace(
+                    id="does-not-exist",
+                    name="Fantasma",
+                    address="N/A",
+                    city="N/A",
+                ),
+            ),
+            places_client=FakePlacesEligibilityClient(exists=False),
+        )
+    assert exc.value.status_code == 404
+    assert exc.value.detail == "place_not_found"
+
+
+@pytest.mark.asyncio
+async def test_create_appointment_returns_503_when_places_catalog_unavailable() -> None:
+    from fastapi import HTTPException
+
+    from appointment_service.adapters.outbound.places_client import PlacesCatalogUnavailable
+
+    class UnavailablePlacesClient:
+        async def booking_eligibility(self, site_id: str) -> dict[str, object]:
+            raise PlacesCatalogUnavailable("places_catalog_timeout")
+
+    with pytest.raises(HTTPException) as exc:
+        await create_appointment(
+            CreateAppointmentRequest(
+                user_key="user-places-down",
+                procedure="tecnomecanica",
+                starts_at="2026-07-17T09:00",
+                place=AppointmentPlace(
+                    id="bga-cda-centro-01",
+                    name="CDA Centro Bucaramanga",
+                    address="Calle 36 # 15-20",
+                    city="Bucaramanga",
+                ),
+            ),
+            places_client=UnavailablePlacesClient(),
+        )
+    assert exc.value.status_code == 503
+    assert exc.value.detail == "places_catalog_unavailable"
+
+
+@pytest.mark.asyncio
+async def test_places_client_maps_timeout_and_500_to_catalog_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
+    """PlacesClient must surface timeout/5xx as PlacesCatalogUnavailable (no silent 422)."""
+    import httpx
+
+    from appointment_service.adapters.outbound.places_client import PlacesCatalogUnavailable, PlacesClient
+
+    class TimeoutTransport(httpx.AsyncBaseTransport):
+        async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+            raise httpx.ReadTimeout("timed out")
+
+    class ServerErrorTransport(httpx.AsyncBaseTransport):
+        async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+            return httpx.Response(500, json={"detail": "boom"})
+
+    async def _with_transport(transport: httpx.AsyncBaseTransport, site_id: str) -> None:
+        original = httpx.AsyncClient
+
+        class PatchedClient(original):
+            def __init__(self, *args, **kwargs):
+                kwargs["transport"] = transport
+                super().__init__(*args, **kwargs)
+
+        monkeypatch.setattr(httpx, "AsyncClient", PatchedClient)
+        client = PlacesClient(base_url="http://places.test", token="t")
+        with pytest.raises(PlacesCatalogUnavailable):
+            await client.booking_eligibility(site_id)
+
+    await _with_transport(TimeoutTransport(), "site-timeout")
+    await _with_transport(ServerErrorTransport(), "site-500")
+
+
+@pytest.mark.asyncio
 async def test_create_appointment_persists_canonical_place_fields() -> None:
     created = await create_appointment(
         CreateAppointmentRequest(
