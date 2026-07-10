@@ -1,0 +1,14 @@
+{
+  "first_apply": {
+    "inserted": 4046,
+    "updated": 0,
+    "unchanged": 0
+  },
+  "second_apply": {
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 4046
+  },
+  "database": "sqlite places_catalog_fix.sqlite",
+  "passed": true
+}

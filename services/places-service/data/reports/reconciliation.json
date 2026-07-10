@@ -1,0 +1,18 @@
+{
+  "input_rows": 4107,
+  "source_records": 4107,
+  "by_processing_status": {
+    "imported_as_site": 4040,
+    "merged_duplicate": 61,
+    "pending_review": 6
+  },
+  "unique_entities": 3293,
+  "unique_sites": 4046,
+  "merged_duplicates": 61,
+  "duplicate_candidates": 2814,
+  "site_id_collisions_disambiguated": 0,
+  "rejected": 0,
+  "sum_check": 4107,
+  "sum_matches_input": true,
+  "non_merged_equals_unique_sites": true
+}

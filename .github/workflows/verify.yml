@@ -1,0 +1,124 @@
+name: verify
+on:
+  push:
+    branches: [main, "feat/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: civi
+          POSTGRES_PASSWORD: civi
+          POSTGRES_DB: civi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U civi -d civi"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Python service deps
+        run: |
+          python -m pip install --upgrade pip
+          # One FastAPI install for the whole job. Do NOT editable-install every
+          # service: setuptools without src package discovery + repeated fastapi
+          # deps left empty/shadow packages so runtime OpenAPI checks saw only
+          # health routes. verify-runtime-contracts and pytest resolve via PYTHONPATH.
+          python -m pip install \
+            pytest pytest-asyncio httpx fastapi uvicorn sqlalchemy \
+            pydantic-settings "psycopg[binary]" asyncpg PyYAML redis greenlet
+          python -m pip install -e packages/python-common
+          python - <<'PY'
+          from pathlib import Path
+          roots = [Path("packages/python-common/src")]
+          roots.extend(sorted(p / "src" for p in Path("services").iterdir() if (p / "src").is_dir()))
+          path = ":".join(str(p.resolve()) for p in roots)
+          print(path)
+          Path("/tmp/civi_pythonpath.txt").write_text(path)
+          PY
+          echo "PYTHONPATH=$(cat /tmp/civi_pythonpath.txt)" >> "$GITHUB_ENV"
+      - name: Install Node deps
+        run: |
+          if [ -f package.json ]; then npm ci || npm install; fi
+      - name: Catalog dry-run reconciliation
+        run: |
+          python -m places_service.cli.import_catalog \
+            --input services/places-service/data/raw/places_colombia_original.json \
+            --dry-run \
+            --report-dir services/places-service/data/reports
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          recon = json.loads(Path("services/places-service/data/reports/reconciliation.json").read_text())
+          assert recon["sum_matches_input"] is True
+          assert recon["input_rows"] == 4107
+          assert recon.get("non_merged_equals_unique_sites") is True
+          print("reconciliation_ok", recon["unique_sites"], recon["by_processing_status"])
+          PY
+      - name: Sanity runtime routes include product paths
+        run: |
+          python - <<'PY'
+          from places_service.main import app
+          paths = set((app.openapi().get("paths") or {}))
+          required = {
+              "/internal/places/nearest",
+              "/internal/places/partners",
+              "/internal/places/catalog/summary",
+              "/health/live",
+          }
+          missing = required - paths
+          assert not missing, (missing, sorted(paths))
+          print("places_runtime_ok", sorted(paths))
+          PY
+      - name: Run verify.ps1 via pwsh
+        shell: pwsh
+        run: ./scripts/verify.ps1
+      - name: PostgreSQL import idempotency
+        env:
+          PLACES_DATABASE_URL: postgresql+psycopg://civi:civi@localhost:5432/civi
+        run: |
+          python -m places_service.cli.import_catalog \
+            --input services/places-service/data/raw/places_colombia_original.json \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-dir services/places-service/data/reports | tee /tmp/first_apply.txt
+          python -m places_service.cli.import_catalog \
+            --input services/places-service/data/raw/places_colombia_original.json \
+            --apply --database-url "$PLACES_DATABASE_URL" \
+            --report-dir services/places-service/data/reports | tee /tmp/second_apply.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def last_json(path: str) -> dict:
+              text = Path(path).read_text()
+              objs = []
+              buf = []
+              depth = 0
+              for line in text.splitlines():
+                  if "{" in line or depth:
+                      buf.append(line)
+                      depth += line.count("{") - line.count("}")
+                      if depth == 0 and buf:
+                          objs.append(json.loads("\n".join(buf)))
+                          buf = []
+              return objs[-1]
+
+          counts = last_json("/tmp/second_apply.txt")
+          assert counts.get("inserted") == 0, counts
+          assert counts.get("updated") == 0, counts
+          assert int(counts.get("unchanged") or 0) > 0, counts
+          print("postgres_idempotency_ok", counts)
+          PY

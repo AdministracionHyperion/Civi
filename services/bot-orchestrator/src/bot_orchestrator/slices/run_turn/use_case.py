@@ -61,6 +61,7 @@ from .formatters import (
     format_appointments_list,
     format_cancel_appointment_response,
     format_city_knowledge_response,
+    format_informative_places_response,
     format_knowledge_response,
     format_multas_response,
     format_pending_place_date_request,
@@ -557,25 +558,49 @@ async def _find_places_and_continue_appointment(
 
     places = places_data.get("places") or []
     if not places:
+        reason = places_data.get("no_results_reason")
+        empty_text = "Aun no tengo centros disponibles para ese tramite en esa ciudad."
+        if reason == "no_sites_within_radius":
+            empty_text = "No encontre centros dentro del radio de busqueda para esa ubicacion."
+        elif reason == "no_coverage_in_municipality":
+            empty_text = "No tengo cobertura de centros para ese tramite en ese municipio."
+        elif reason == "city_or_coordinates_required":
+            empty_text = (
+                "Para buscarte el centro necesito la ciudad o tu ubicacion por WhatsApp. "
+                "No puedo asumir un municipio."
+            )
+        elif reason == "coordinates_outside_colombia":
+            empty_text = "La ubicacion que enviaste esta fuera de Colombia. Comparte una ubicacion valida."
         return AgentTurnResponse(
-            text="Aun no tengo centros disponibles para ese tramite en esa ciudad.",
+            text=empty_text,
             state_version=1,
             mode="places_empty",
             tool_calls=["places.find_nearest"],
         )
 
-    if len(places) > 1:
+    bookable_places = [place for place in places if place.get("is_bookable") is True]
+    informative_places = [place for place in places if place.get("is_bookable") is not True]
+
+    if not bookable_places:
+        return AgentTurnResponse(
+            text=format_informative_places_response(informative_places or places),
+            state_version=1,
+            mode="places_informative_only",
+            tool_calls=["places.find_nearest"],
+        )
+
+    if len(bookable_places) > 1:
         appointment_selection_store.save(
             PendingAppointmentSelection(
                 user_key=payload.user_key,
                 channel=payload.channel,
                 procedure=procedure,
-                places=[dict(place) for place in places],
+                places=[dict(place) for place in bookable_places],
                 starts_at=starts_at,
             )
         )
         return AgentTurnResponse(
-            text=format_place_options_response(places, starts_at=starts_at),
+            text=format_place_options_response(bookable_places, starts_at=starts_at),
             state_version=1,
             mode="appointment_place_selection_required",
             tool_calls=["places.find_nearest"],
@@ -587,11 +612,11 @@ async def _find_places_and_continue_appointment(
                 user_key=payload.user_key,
                 channel=payload.channel,
                 procedure=procedure,
-                places=[dict(places[0])],
+                places=[dict(bookable_places[0])],
             )
         )
         return AgentTurnResponse(
-            text=format_place_response(places[0]),
+            text=format_place_response(bookable_places[0]),
             state_version=1,
             mode="places_suggested",
             tool_calls=["places.find_nearest"],
@@ -602,7 +627,7 @@ async def _find_places_and_continue_appointment(
             user_key=payload.user_key,
             procedure=procedure,
             starts_at=starts_at,
-            place=places[0],
+            place=bookable_places[0],
             notification_to=notification_to_for_turn(payload),
         )
         appointment_selection_store.clear(user_key=payload.user_key, channel=payload.channel)

@@ -188,6 +188,8 @@ class FakePlacesClient:
                     "department": "Cundinamarca",
                     "kind": "CDA",
                     "distance_km": 1.2,
+                    "is_bookable": True,
+                    "booking_mode": "civi",
                 },
                 {
                     "id": "cda-2",
@@ -197,6 +199,8 @@ class FakePlacesClient:
                     "department": "Cundinamarca",
                     "kind": "CDA",
                     "distance_km": 2.4,
+                    "is_bookable": True,
+                    "booking_mode": "civi",
                 },
             ]
         }
@@ -596,6 +600,36 @@ async def test_agent_uses_whatsapp_location_metadata_without_city(monkeypatch: p
 
 
 @pytest.mark.asyncio
+async def test_agent_asks_city_when_places_requires_location(monkeypatch: pytest.MonkeyPatch) -> None:
+    class EmptyPlacesClient(FakePlacesClient):
+        async def find_nearest(
+            self,
+            *,
+            procedure: str,
+            city: str | None = None,
+            lat: float | None = None,
+            lng: float | None = None,
+        ) -> dict[str, object]:
+            self.calls.append({"procedure": procedure, "city": city, "lat": lat, "lng": lng})
+            return {
+                "places": [],
+                "match_scope": "none",
+                "no_results_reason": "city_or_coordinates_required",
+            }
+
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: EmptyPlacesClient())
+    response = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="+573001112233",
+            text="quiero agendar tecnomecanica",
+            channel="whatsapp",
+        )
+    )
+    assert response.mode in {"places_empty", "appointment_missing_location"}
+    assert "ciudad" in response.text.lower() or "ubicacion" in response.text.lower()
+
+
+@pytest.mark.asyncio
 async def test_agent_confirms_single_place_with_natural_date(monkeypatch: pytest.MonkeyPatch) -> None:
     class SinglePlaceClient(FakePlacesClient):
         async def find_nearest(
@@ -617,6 +651,8 @@ async def test_agent_confirms_single_place_with_natural_date(monkeypatch: pytest
                         "department": "Santander",
                         "kind": "CDA",
                         "distance_km": 0.516,
+                        "is_bookable": True,
+                        "booking_mode": "civi",
                     }
                 ]
             }

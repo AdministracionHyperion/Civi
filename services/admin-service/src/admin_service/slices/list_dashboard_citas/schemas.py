@@ -9,3 +9,4 @@ class DashboardSummaryResponse(BaseModel):
     service_statuses: list[dict[str, object]] = Field(default_factory=list)
     appointments_visible: bool = False
     note: str = "dashboard data must come through service contracts"
+    places_catalog: dict[str, object] | None = None

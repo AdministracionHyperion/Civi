@@ -1,0 +1,19 @@
+{
+  "name": "places_colombia_sin_coords",
+  "source_path": "data/places/places_colombia_sin_coords.json",
+  "preserved_as": "services/places-service/data/raw/places_colombia_original.json",
+  "sha256": "457b4fda1f29096f29b385c9b47c92596ec9658f2509009af14fb3f64c25c634",
+  "bytes": 2508787,
+  "row_count": 4107,
+  "by_kind": {
+    "CDA": 989,
+    "CEA": 1552,
+    "CIA": 772,
+    "CRC": 794
+  },
+  "snapshot_at": "2026-07-09T22:51:23.945727+00:00",
+  "source_updated_at": null,
+  "notes": [
+    "source_updated_at unknown; extraction timestamp was scrape time not official RUNT publish date"
+  ]
+}

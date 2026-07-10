@@ -46,3 +46,12 @@ htmlcov/
 .benchmarks/
 .DS_Store
 Thumbs.db
+
+# Places catalog artifacts (large / regenerable)
+data/places/raw/
+data/places/geocode_cache.json
+data/places/*.json
+!data/places/.gitkeep
+services/places-service/data/processed/*.sqlite
+services/places-service/data/processed/*.sqlite-*
+scratch/
