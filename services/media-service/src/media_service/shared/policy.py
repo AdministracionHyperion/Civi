@@ -17,8 +17,16 @@ ALLOWED_IMAGE_TYPES = frozenset({
 MAX_MEDIA_BYTES = 15 * 1024 * 1024
 
 
+def normalize_content_type(content_type: str) -> str:
+    """Strip parameters (e.g. codecs) and lowercase the MIME type."""
+    raw = (content_type or "").strip().lower()
+    if not raw:
+        return ""
+    return raw.split(";", 1)[0].strip()
+
+
 def media_kind(content_type: str) -> str | None:
-    normalized = content_type.strip().lower()
+    normalized = normalize_content_type(content_type)
     if normalized in ALLOWED_AUDIO_TYPES:
         return "audio"
     if normalized in ALLOWED_IMAGE_TYPES:

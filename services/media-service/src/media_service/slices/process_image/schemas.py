@@ -7,6 +7,7 @@ class ProcessImageRequest(BaseModel):
     content_type: str = Field(min_length=3)
     size_bytes: int = Field(ge=0)
     media_ref: str = Field(min_length=1)
+    content_base64: str | None = None
 
 
 class ProcessImageResponse(BaseModel):

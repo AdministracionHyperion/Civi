@@ -12,12 +12,18 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, R
 from fastapi.responses import PlainTextResponse
 
 from civi_common import is_colombia_latlng
+from channel_gateway.adapters.outbound.media_client import MediaClient, MediaServiceError
+from channel_gateway.adapters.outbound.whatsapp_media import WhatsAppMediaClient, WhatsAppMediaDownloadError
 from channel_gateway.shared.rate_limit import require_public_rate_limit
 from channel_gateway.slices.receive_message.schemas import ReceiveMessageRequest
 from channel_gateway.slices.receive_message.use_case import receive_message
 
 router = APIRouter(tags=["whatsapp"])
 logger = logging.getLogger(__name__)
+
+MEDIA_PROCESS_FAILURE_REPLY = (
+    "No pude procesar el audio o la imagen. Escribeme el mensaje o intentalo de nuevo."
+)
 
 
 @router.get("/webhook", response_class=PlainTextResponse)
@@ -57,9 +63,20 @@ async def post_whatsapp_webhook(request: Request, background_tasks: BackgroundTa
     except json.JSONDecodeError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid JSON body")
 
-    inbound = _extract_inbound_message(payload)
+    inbound = await _extract_inbound_message(payload)
     if inbound is None:
         return {"success": True, "handled": False}
+
+    direct_reply = str(inbound.get("direct_reply") or "").strip()
+    if direct_reply:
+        background_tasks.add_task(_send_whatsapp_reply, to=inbound["from"], body=direct_reply)
+        return {
+            "success": True,
+            "handled": True,
+            "user_key": inbound["from"],
+            "source": "media_process_failure",
+            "reply_scheduled": True,
+        }
 
     response = await receive_message(
         ReceiveMessageRequest(
@@ -137,7 +154,7 @@ def _bool_from_env(name: str, default: bool) -> bool:
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def _extract_inbound_message(payload: dict[str, Any]) -> dict[str, Any] | None:
+async def _extract_inbound_message(payload: dict[str, Any]) -> dict[str, Any] | None:
     for entry in payload.get("entry", []) or []:
         for change in entry.get("changes", []) or []:
             value = change.get("value", {}) or {}
@@ -155,10 +172,116 @@ def _extract_inbound_message(payload: dict[str, Any]) -> dict[str, Any] | None:
                 if message_type == "location" or message.get("location"):
                     return _extract_location_message(sender=sender, message=message, metadata=metadata)
 
+                if message_type in {"audio", "voice"}:
+                    return await _extract_audio_message(sender=sender, message=message, metadata=metadata)
+
+                if message_type == "image":
+                    return await _extract_image_message(sender=sender, message=message, metadata=metadata)
+
                 text = str((message.get("text") or {}).get("body") or "").strip()
                 if text:
                     return {"from": sender, "text": text, "metadata": metadata}
     return None
+
+
+async def _extract_audio_message(
+    *,
+    sender: str,
+    message: dict[str, Any],
+    metadata: dict[str, Any],
+) -> dict[str, Any]:
+    media = message.get("audio") or message.get("voice") or {}
+    media_id = str(media.get("id") or "").strip()
+    if not media_id:
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    try:
+        downloaded = await WhatsAppMediaClient.from_env().download(media_id)
+        result = await MediaClient.from_env().process_audio(
+            content_type=str(downloaded.get("content_type") or media.get("mime_type") or "audio/ogg"),
+            size_bytes=int(downloaded.get("size_bytes") or 0),
+            media_ref=f"whatsapp:{media_id}",
+            content=downloaded["content"],
+        )
+    except (WhatsAppMediaDownloadError, MediaServiceError, RuntimeError):
+        logger.exception("Failed to process WhatsApp audio media_id=%s", media_id)
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    transcript = str(result.get("transcript") or "").strip()
+    if not result.get("success") or not transcript:
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    metadata.update(
+        {
+            "media_kind": "audio",
+            "whatsapp_media_id": media_id,
+            "media_job_id": result.get("job_id"),
+            "media_provider_mode": result.get("provider_mode"),
+        }
+    )
+    return {"from": sender, "text": transcript, "metadata": metadata}
+
+
+async def _extract_image_message(
+    *,
+    sender: str,
+    message: dict[str, Any],
+    metadata: dict[str, Any],
+) -> dict[str, Any]:
+    media = message.get("image") or {}
+    media_id = str(media.get("id") or "").strip()
+    caption = str(media.get("caption") or "").strip()
+    if not media_id:
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    result: dict[str, Any] = {}
+    try:
+        downloaded = await WhatsAppMediaClient.from_env().download(media_id)
+        result = await MediaClient.from_env().process_image(
+            content_type=str(downloaded.get("content_type") or media.get("mime_type") or "image/jpeg"),
+            size_bytes=int(downloaded.get("size_bytes") or 0),
+            media_ref=f"whatsapp:{media_id}",
+            content=downloaded["content"],
+        )
+    except (WhatsAppMediaDownloadError, MediaServiceError, RuntimeError):
+        logger.exception("Failed to process WhatsApp image media_id=%s", media_id)
+        # Caption alone still lets the bot continue the conversation.
+        if caption:
+            metadata.update(
+                {
+                    "media_kind": "image",
+                    "whatsapp_media_id": media_id,
+                    "media_process_failed": True,
+                }
+            )
+            return {"from": sender, "text": caption, "metadata": metadata}
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    extracted = str(result.get("extracted_text") or "").strip()
+    if not result.get("success") or not extracted:
+        if caption:
+            metadata.update(
+                {
+                    "media_kind": "image",
+                    "whatsapp_media_id": media_id,
+                    "media_job_id": result.get("job_id"),
+                    "media_provider_mode": result.get("provider_mode"),
+                    "media_ocr_empty": True,
+                }
+            )
+            return {"from": sender, "text": caption, "metadata": metadata}
+        return {"from": sender, "direct_reply": MEDIA_PROCESS_FAILURE_REPLY, "metadata": metadata}
+
+    text = f"{caption}\n{extracted}".strip() if caption else extracted
+    metadata.update(
+        {
+            "media_kind": "image",
+            "whatsapp_media_id": media_id,
+            "media_job_id": result.get("job_id"),
+            "media_provider_mode": result.get("provider_mode"),
+        }
+    )
+    return {"from": sender, "text": text, "metadata": metadata}
 
 
 def _extract_location_message(

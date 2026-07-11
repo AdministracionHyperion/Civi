@@ -7,6 +7,7 @@ import pytest
 from civi_common.events import InMemoryEventPublisher
 from fastapi.testclient import TestClient
 
+from channel_gateway.adapters.outbound.media_client import MediaServiceError
 from channel_gateway.main import app
 from channel_gateway.shared.rate_limit import rate_limiter
 from channel_gateway.slices.receive_message.schemas import ReceiveMessageRequest
@@ -283,3 +284,335 @@ def test_whatsapp_webhook_forwards_location_metadata(monkeypatch: pytest.MonkeyP
     assert captured[0].metadata["location_lng"] == -74.0721
     assert captured[0].metadata["location_source"] == "whatsapp_location"
     assert sent_replies == [("573001112233", "respuesta civi")]
+
+
+def test_whatsapp_webhook_voice_becomes_text(monkeypatch: pytest.MonkeyPatch) -> None:
+    rate_limiter.clear()
+    monkeypatch.setenv("APP_ENV", "development")
+    monkeypatch.setenv("CHANNEL_PUBLIC_RATE_LIMIT_ENABLED", "false")
+    monkeypatch.setenv("INTERNAL_SERVICE_TOKEN", "internal-test-token")
+    monkeypatch.setenv("WHATSAPP_ACCESS_TOKEN", "wa-token")
+    captured: list[ReceiveMessageRequest] = []
+
+    async def fake_receive(payload: ReceiveMessageRequest) -> ReceiveMessageResponse:
+        captured.append(payload)
+        return ReceiveMessageResponse(user_key=payload.user_key, text="ok audio", source="test")
+
+    class FakeWhatsAppMedia:
+        @classmethod
+        def from_env(cls) -> "FakeWhatsAppMedia":
+            return cls()
+
+        async def download(self, media_id: str) -> dict[str, object]:
+            assert media_id == "audio-media-1"
+            return {
+                "media_id": media_id,
+                "content_type": "audio/ogg; codecs=opus",
+                "size_bytes": 12,
+                "content": b"fake-audio",
+            }
+
+    class FakeMediaClient:
+        @classmethod
+        def from_env(cls) -> "FakeMediaClient":
+            return cls()
+
+        async def process_audio(self, **kwargs: object) -> dict[str, object]:
+            assert kwargs["media_ref"] == "whatsapp:audio-media-1"
+            assert kwargs["content"] == b"fake-audio"
+            return {
+                "success": True,
+                "job_id": 9,
+                "transcript": "quiero revisar mi soat",
+                "provider_mode": "openai",
+            }
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.receive_message",
+        fake_receive,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.WhatsAppMediaClient",
+        FakeWhatsAppMedia,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.MediaClient",
+        FakeMediaClient,
+    )
+    sent_replies: list[tuple[str, str]] = []
+
+    async def fake_send_reply(*, to: str, body: str) -> None:
+        sent_replies.append((to, body))
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api._send_whatsapp_reply",
+        fake_send_reply,
+    )
+    body = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "573001112233",
+                                    "type": "voice",
+                                    "voice": {"id": "audio-media-1", "mime_type": "audio/ogg"},
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    client = TestClient(app)
+    response = client.post("/webhook/whatsapp", json=body)
+
+    assert response.status_code == 202
+    assert response.json()["handled"] is True
+    assert response.json()["source"] == "test"
+    assert captured[0].text == "quiero revisar mi soat"
+    assert captured[0].metadata["media_kind"] == "audio"
+    assert captured[0].metadata["whatsapp_media_id"] == "audio-media-1"
+    assert sent_replies == [("573001112233", "ok audio")]
+
+
+def test_whatsapp_webhook_image_becomes_text(monkeypatch: pytest.MonkeyPatch) -> None:
+    rate_limiter.clear()
+    monkeypatch.setenv("APP_ENV", "development")
+    monkeypatch.setenv("CHANNEL_PUBLIC_RATE_LIMIT_ENABLED", "false")
+    captured: list[ReceiveMessageRequest] = []
+
+    async def fake_receive(payload: ReceiveMessageRequest) -> ReceiveMessageResponse:
+        captured.append(payload)
+        return ReceiveMessageResponse(user_key=payload.user_key, text="ok image", source="test")
+
+    class FakeWhatsAppMedia:
+        @classmethod
+        def from_env(cls) -> "FakeWhatsAppMedia":
+            return cls()
+
+        async def download(self, media_id: str) -> dict[str, object]:
+            return {
+                "media_id": media_id,
+                "content_type": "image/jpeg",
+                "size_bytes": 8,
+                "content": b"fake-img",
+            }
+
+    class FakeMediaClient:
+        @classmethod
+        def from_env(cls) -> "FakeMediaClient":
+            return cls()
+
+        async def process_image(self, **kwargs: object) -> dict[str, object]:
+            return {
+                "success": True,
+                "job_id": 11,
+                "extracted_text": "QLX871",
+                "provider_mode": "openai",
+            }
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.receive_message",
+        fake_receive,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.WhatsAppMediaClient",
+        FakeWhatsAppMedia,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.MediaClient",
+        FakeMediaClient,
+    )
+    sent_replies: list[tuple[str, str]] = []
+
+    async def fake_send_reply(*, to: str, body: str) -> None:
+        sent_replies.append((to, body))
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api._send_whatsapp_reply",
+        fake_send_reply,
+    )
+    body = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "573001112233",
+                                    "type": "image",
+                                    "image": {
+                                        "id": "image-media-1",
+                                        "mime_type": "image/jpeg",
+                                        "caption": "mi placa",
+                                    },
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    client = TestClient(app)
+    response = client.post("/webhook/whatsapp", json=body)
+
+    assert response.status_code == 202
+    assert captured[0].text == "mi placa\nQLX871"
+    assert captured[0].metadata["media_kind"] == "image"
+    assert sent_replies == [("573001112233", "ok image")]
+
+
+def test_whatsapp_webhook_image_uses_caption_when_vision_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    rate_limiter.clear()
+    monkeypatch.setenv("APP_ENV", "development")
+    monkeypatch.setenv("CHANNEL_PUBLIC_RATE_LIMIT_ENABLED", "false")
+    captured: list[ReceiveMessageRequest] = []
+
+    async def fake_receive(payload: ReceiveMessageRequest) -> ReceiveMessageResponse:
+        captured.append(payload)
+        return ReceiveMessageResponse(user_key=payload.user_key, text="ok caption", source="test")
+
+    class FakeWhatsAppMedia:
+        @classmethod
+        def from_env(cls) -> "FakeWhatsAppMedia":
+            return cls()
+
+        async def download(self, media_id: str) -> dict[str, object]:
+            return {
+                "media_id": media_id,
+                "content_type": "image/jpeg",
+                "size_bytes": 8,
+                "content": b"fake-img",
+            }
+
+    class FakeMediaClient:
+        @classmethod
+        def from_env(cls) -> "FakeMediaClient":
+            return cls()
+
+        async def process_image(self, **kwargs: object) -> dict[str, object]:
+            raise MediaServiceError("vision provider failed")
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.receive_message",
+        fake_receive,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.WhatsAppMediaClient",
+        FakeWhatsAppMedia,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.MediaClient",
+        FakeMediaClient,
+    )
+    sent_replies: list[tuple[str, str]] = []
+
+    async def fake_send_reply(*, to: str, body: str) -> None:
+        sent_replies.append((to, body))
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api._send_whatsapp_reply",
+        fake_send_reply,
+    )
+    body = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "573001112233",
+                                    "type": "image",
+                                    "image": {
+                                        "id": "image-media-2",
+                                        "mime_type": "image/jpeg",
+                                        "caption": "me paso esto que puedo hacer",
+                                    },
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    client = TestClient(app)
+    response = client.post("/webhook/whatsapp", json=body)
+
+    assert response.status_code == 202
+    assert captured[0].text == "me paso esto que puedo hacer"
+    assert captured[0].metadata["media_kind"] == "image"
+    assert captured[0].metadata["media_process_failed"] is True
+    assert sent_replies == [("573001112233", "ok caption")]
+
+
+def test_whatsapp_webhook_media_failure_skips_conversation(monkeypatch: pytest.MonkeyPatch) -> None:
+    rate_limiter.clear()
+    monkeypatch.setenv("APP_ENV", "development")
+    monkeypatch.setenv("CHANNEL_PUBLIC_RATE_LIMIT_ENABLED", "false")
+    called = {"receive": False}
+
+    async def fake_receive(payload: ReceiveMessageRequest) -> ReceiveMessageResponse:
+        called["receive"] = True
+        return ReceiveMessageResponse(user_key=payload.user_key, text="no", source="test")
+
+    class FakeWhatsAppMedia:
+        @classmethod
+        def from_env(cls) -> "FakeWhatsAppMedia":
+            return cls()
+
+        async def download(self, media_id: str) -> dict[str, object]:
+            raise RuntimeError("download failed")
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.receive_message",
+        fake_receive,
+    )
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api.WhatsAppMediaClient",
+        FakeWhatsAppMedia,
+    )
+    sent_replies: list[tuple[str, str]] = []
+
+    async def fake_send_reply(*, to: str, body: str) -> None:
+        sent_replies.append((to, body))
+
+    monkeypatch.setattr(
+        "channel_gateway.slices.receive_whatsapp_webhook.api._send_whatsapp_reply",
+        fake_send_reply,
+    )
+    body = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "573001112233",
+                                    "type": "audio",
+                                    "audio": {"id": "audio-bad", "mime_type": "audio/ogg"},
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    client = TestClient(app)
+    response = client.post("/webhook/whatsapp", json=body)
+
+    assert response.status_code == 202
+    assert response.json()["handled"] is True
+    assert response.json()["source"] == "media_process_failure"
+    assert called["receive"] is False
+    assert sent_replies[0][0] == "573001112233"
+    assert "No pude procesar" in sent_replies[0][1]

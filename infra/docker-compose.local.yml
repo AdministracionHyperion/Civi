@@ -31,9 +31,12 @@ services:
       INTERNAL_SERVICE_TOKEN: change-me-local-only
       CONVERSATION_SERVICE_URL: http://conversation-service:8081
       NOTIFICATION_SERVICE_URL: http://notification-service:8087
+      MEDIA_SERVICE_URL: http://media-service:8088
       WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN:-change-me-local-only}
       WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET:-}
       WHATSAPP_SIGNATURE_REQUIRED: ${WHATSAPP_SIGNATURE_REQUIRED:-}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_GRAPH_API_VERSION: ${WHATSAPP_GRAPH_API_VERSION:-v20.0}
       CHANNEL_PUBLIC_RATE_LIMIT_ENABLED: "true"
       CHANNEL_PUBLIC_RATE_LIMIT_MAX: "60"
       CHANNEL_PUBLIC_RATE_LIMIT_WINDOW_SECONDS: "60"
@@ -45,6 +48,7 @@ services:
     depends_on:
       - conversation-service
       - notification-service
+      - media-service
       - redis
 
   conversation-service:
@@ -387,7 +391,7 @@ services:
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com}
       OPENAI_AUDIO_TRANSCRIPTION_MODEL: ${OPENAI_AUDIO_TRANSCRIPTION_MODEL:-}
       OPENAI_IMAGE_VISION_MODEL: ${OPENAI_IMAGE_VISION_MODEL:-}
-      OPENAI_IMAGE_EXTRACTION_PROMPT: ${OPENAI_IMAGE_EXTRACTION_PROMPT:-Extrae el texto visible de esta imagen. Responde solo el texto encontrado.}
+      OPENAI_IMAGE_EXTRACTION_PROMPT: ${OPENAI_IMAGE_EXTRACTION_PROMPT:-Describe brevemente qué se ve en la imagen (objetos, situación y detalles relevantes). Si hay texto visible, inclúyelo literalmente. Responde en español, en pocas oraciones.}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
       DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}

@@ -7,10 +7,10 @@ This document explains deploy preparation only. It does not perform deployment.
 | Capability | Owner | Configuration |
 | --- | --- | --- |
 | LLM fallback | `bot-orchestrator` | `LLM_PROVIDER_MODE=openai|deepseek|groq` |
-| WhatsApp inbound | `channel-gateway` | `WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET` |
+| WhatsApp inbound | `channel-gateway` | `WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET`, `WHATSAPP_ACCESS_TOKEN` (media download) |
 | WhatsApp outbound | `notification-service` | `WHATSAPP_PROVIDER_MODE=meta` |
-| Audio transcription | `media-service` | `MEDIA_AUDIO_PROVIDER_MODE=openai` |
-| Image extraction | `media-service` | `MEDIA_IMAGE_PROVIDER_MODE=openai|deepseek|groq` |
+| Audio transcription | `media-service` via `channel-gateway` | `MEDIA_AUDIO_PROVIDER_MODE=openai`, `OPENAI_AUDIO_TRANSCRIPTION_MODEL` |
+| Image extraction | `media-service` via `channel-gateway` | `MEDIA_IMAGE_PROVIDER_MODE=openai|deepseek|groq` |
 | RUNT | `runt-service` through `vehicle-service` | `RUNT_PROVIDER_MODE=http|browser`, `RUNT_PROVIDER_API_URL` for HTTP or `CAPTCHA_API_KEY` for browser |
 | RUNT person profile | `runt-service` through `vehicle-service` | `RUNT_PERSONA_PROVIDER_MODE=http`, `RUNT_PERSONA_PROVIDER_API_URL` |
 | SIMIT | `simit-service` through `vehicle-service` | `SIMIT_PROVIDER_MODE=http|browser`, `SIMIT_PROVIDER_API_URL` for HTTP |

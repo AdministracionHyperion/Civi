@@ -1,18 +1,38 @@
 from __future__ import annotations
 
+import base64
 import os
 from typing import Protocol
 
 import httpx
 
+from media_service.shared.policy import normalize_content_type
+
+DEFAULT_IMAGE_VISION_PROMPT = (
+    "Describe brevemente qué se ve en la imagen (objetos, situación y detalles relevantes). "
+    "Si hay texto visible, inclúyelo literalmente. Responde en español, en pocas oraciones."
+)
+
 
 class ImageVisionExtractor(Protocol):
-    async def extract_text(self, *, media_ref: str, content_type: str) -> dict[str, object]:
+    async def extract_text(
+        self,
+        *,
+        media_ref: str,
+        content_type: str,
+        content_base64: str | None = None,
+    ) -> dict[str, object]:
         ...
 
 
 class DisabledImageVisionExtractor:
-    async def extract_text(self, *, media_ref: str, content_type: str) -> dict[str, object]:
+    async def extract_text(
+        self,
+        *,
+        media_ref: str,
+        content_type: str,
+        content_base64: str | None = None,
+    ) -> dict[str, object]:
         return {
             "provider_mode": "disabled_until_provider_configured",
             "extracted_text": None,
@@ -25,7 +45,7 @@ class OpenAIImageVisionExtractor:
         *,
         api_key: str,
         model: str,
-        prompt: str = "Extrae el texto visible de esta imagen. Responde solo el texto encontrado.",
+        prompt: str = DEFAULT_IMAGE_VISION_PROMPT,
         base_url: str = "https://api.openai.com",
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
@@ -37,10 +57,14 @@ class OpenAIImageVisionExtractor:
         if not self.api_key or not self.model:
             raise RuntimeError("OPENAI_API_KEY and OPENAI_IMAGE_VISION_MODEL are required")
 
-    async def extract_text(self, *, media_ref: str, content_type: str) -> dict[str, object]:
-        if not media_ref.startswith(("http://", "https://")):
-            raise RuntimeError("OpenAI image extraction requires media_ref to be an HTTP(S) URL")
-
+    async def extract_text(
+        self,
+        *,
+        media_ref: str,
+        content_type: str,
+        content_base64: str | None = None,
+    ) -> dict[str, object]:
+        image_url = _image_url_for_request(media_ref=media_ref, content_type=content_type, content_base64=content_base64)
         payload = {
             "model": self.model,
             "input": [
@@ -48,7 +72,7 @@ class OpenAIImageVisionExtractor:
                     "role": "user",
                     "content": [
                         {"type": "input_text", "text": self.prompt},
-                        {"type": "input_image", "image_url": media_ref},
+                        {"type": "input_image", "image_url": image_url},
                     ],
                 }
             ],
@@ -75,7 +99,7 @@ class OpenAICompatibleImageVisionExtractor:
         api_key: str,
         model: str,
         base_url: str,
-        prompt: str = "Extrae el texto visible de esta imagen. Responde solo el texto encontrado.",
+        prompt: str = DEFAULT_IMAGE_VISION_PROMPT,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
         self.provider_mode = provider_mode.strip().lower()
@@ -87,10 +111,14 @@ class OpenAICompatibleImageVisionExtractor:
         if not self.provider_mode or not self.api_key or not self.model or not self.base_url:
             raise RuntimeError(f"{provider_mode.upper()} image API key, model and base URL are required")
 
-    async def extract_text(self, *, media_ref: str, content_type: str) -> dict[str, object]:
-        if not media_ref.startswith(("http://", "https://")):
-            raise RuntimeError(f"{self.provider_mode} image extraction requires media_ref to be an HTTP(S) URL")
-
+    async def extract_text(
+        self,
+        *,
+        media_ref: str,
+        content_type: str,
+        content_base64: str | None = None,
+    ) -> dict[str, object]:
+        image_url = _image_url_for_request(media_ref=media_ref, content_type=content_type, content_base64=content_base64)
         payload = {
             "model": self.model,
             "messages": [
@@ -98,7 +126,7 @@ class OpenAICompatibleImageVisionExtractor:
                     "role": "user",
                     "content": [
                         {"type": "text", "text": self.prompt},
-                        {"type": "image_url", "image_url": {"url": media_ref}},
+                        {"type": "image_url", "image_url": {"url": image_url}},
                     ],
                 }
             ],
@@ -121,14 +149,12 @@ def image_vision_from_env() -> ImageVisionExtractor:
     mode = os.getenv("MEDIA_IMAGE_PROVIDER_MODE", "disabled").strip().lower()
     if mode in {"", "disabled"}:
         return DisabledImageVisionExtractor()
+    prompt = os.getenv("OPENAI_IMAGE_EXTRACTION_PROMPT", DEFAULT_IMAGE_VISION_PROMPT).strip() or DEFAULT_IMAGE_VISION_PROMPT
     if mode == "openai":
         return OpenAIImageVisionExtractor(
             api_key=os.getenv("OPENAI_API_KEY", ""),
             model=os.getenv("OPENAI_IMAGE_VISION_MODEL", ""),
-            prompt=os.getenv(
-                "OPENAI_IMAGE_EXTRACTION_PROMPT",
-                "Extrae el texto visible de esta imagen. Responde solo el texto encontrado.",
-            ),
+            prompt=prompt,
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com"),
         )
     if mode == "deepseek":
@@ -136,10 +162,7 @@ def image_vision_from_env() -> ImageVisionExtractor:
             provider_mode="deepseek",
             api_key=os.getenv("DEEPSEEK_API_KEY", ""),
             model=os.getenv("DEEPSEEK_IMAGE_MODEL", os.getenv("DEEPSEEK_MODEL", "deepseek-chat")),
-            prompt=os.getenv(
-                "OPENAI_IMAGE_EXTRACTION_PROMPT",
-                "Extrae el texto visible de esta imagen. Responde solo el texto encontrado.",
-            ),
+            prompt=prompt,
             base_url=os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
         )
     if mode == "groq":
@@ -147,13 +170,27 @@ def image_vision_from_env() -> ImageVisionExtractor:
             provider_mode="groq",
             api_key=os.getenv("GROQ_API_KEY", ""),
             model=os.getenv("GROQ_IMAGE_MODEL", os.getenv("GROQ_MODEL", "")),
-            prompt=os.getenv(
-                "OPENAI_IMAGE_EXTRACTION_PROMPT",
-                "Extrae el texto visible de esta imagen. Responde solo el texto encontrado.",
-            ),
+            prompt=prompt,
             base_url=os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
         )
     raise RuntimeError(f"unsupported image provider mode: {mode}")
+
+
+def _image_url_for_request(*, media_ref: str, content_type: str, content_base64: str | None) -> str:
+    if content_base64:
+        mime = normalize_content_type(content_type) or "image/jpeg"
+        raw = content_base64.strip()
+        if raw.lower().startswith("data:"):
+            return raw
+        # Normalize padding/whitespace for data URL.
+        try:
+            base64.b64decode(raw, validate=False)
+        except Exception as exc:
+            raise RuntimeError("invalid content_base64 for image extraction") from exc
+        return f"data:{mime};base64,{raw}"
+    if media_ref.startswith(("http://", "https://")):
+        return media_ref
+    raise RuntimeError("image extraction requires media_ref HTTP(S) URL or content_base64")
 
 
 def _extract_response_text(data: dict[str, object]) -> str | None:

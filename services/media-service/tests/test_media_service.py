@@ -28,6 +28,16 @@ async def test_validate_allowed_audio() -> None:
 
 
 @pytest.mark.asyncio
+async def test_validate_audio_with_codecs_parameter() -> None:
+    result = await validate_media(
+        ValidateMediaRequest(content_type="audio/ogg; codecs=opus", size_bytes=1000)
+    )
+
+    assert result.success
+    assert result.media_kind == "audio"
+
+
+@pytest.mark.asyncio
 async def test_reject_large_media() -> None:
     result = await validate_media(ValidateMediaRequest(content_type="image/png", size_bytes=20 * 1024 * 1024))
 
@@ -134,6 +144,35 @@ async def test_openai_audio_transcriber_uses_media_url_without_live_call() -> No
 
 
 @pytest.mark.asyncio
+async def test_openai_audio_transcriber_accepts_content_base64() -> None:
+    import base64
+
+    requests: list[httpx.Request] = []
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"text": "hola desde audio"})
+
+    transcriber = OpenAIUrlAudioTranscriber(
+        api_key="key-test",
+        model="audio-model-test",
+        base_url="https://api.example.test",
+        transport=httpx.MockTransport(handler),
+    )
+    payload = base64.b64encode(b"fake-ogg-bytes").decode("ascii")
+
+    result = await transcriber.transcribe(
+        media_ref="whatsapp:media-123",
+        content_type="audio/ogg; codecs=opus",
+        content_base64=payload,
+    )
+
+    assert result == {"provider_mode": "openai", "transcript": "hola desde audio"}
+    assert len(requests) == 1
+    assert str(requests[0].url) == "https://api.example.test/v1/audio/transcriptions"
+
+
+@pytest.mark.asyncio
 async def test_openai_image_vision_uses_responses_api_without_live_call() -> None:
     requests: list[httpx.Request] = []
 
@@ -157,6 +196,36 @@ async def test_openai_image_vision_uses_responses_api_without_live_call() -> Non
     assert str(requests[0].url) == "https://api.example.test/v1/responses"
     assert requests[0].headers["Authorization"] == "Bearer key-test"
     assert b"https://media.example.test/image.png" in requests[0].read()
+
+
+@pytest.mark.asyncio
+async def test_openai_image_vision_accepts_content_base64() -> None:
+    import base64
+
+    requests: list[httpx.Request] = []
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"output_text": "QLX871"})
+
+    extractor = OpenAIImageVisionExtractor(
+        api_key="key-test",
+        model="vision-model-test",
+        base_url="https://api.example.test",
+        transport=httpx.MockTransport(handler),
+    )
+    payload = base64.b64encode(b"fake-png-bytes").decode("ascii")
+
+    result = await extractor.extract_text(
+        media_ref="whatsapp:media-456",
+        content_type="image/png",
+        content_base64=payload,
+    )
+
+    assert result == {"provider_mode": "openai", "extracted_text": "QLX871"}
+    body = requests[0].read()
+    assert b"data:image/png;base64," in body
+    assert payload.encode("ascii") in body
 
 
 @pytest.mark.asyncio
