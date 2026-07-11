@@ -30,6 +30,7 @@ from bot_orchestrator.slices.run_turn.extractors import (
     quote_service_for_text,
     wants_appointment,
     wants_cancel_appointment,
+    wants_abandon_appointment_flow,
     wants_city_coverage,
     wants_alternative_places,
     wants_general_multas_city,
@@ -39,25 +40,45 @@ from bot_orchestrator.slices.run_turn.extractors import (
     wants_knowledge,
     wants_multas,
     wants_payment,
+    wants_place_comparison,
     wants_quote,
     wants_reminder,
     wants_runt_profile,
     wants_situational_advice,
+    wants_soat,
     wants_vigencia,
+    wants_both_vigencias,
+    wants_other_vehicle,
+    is_pure_greeting,
+    is_soft_conversation_close,
 )
 from bot_orchestrator.slices.run_turn.formatters import (
+    ANYTHING_ELSE_FOOTER,
+    CONVERSATION_CLOSED_TEXT,
+    _format_distance,
+    format_appointment_response,
+    format_multas_city_request,
+    format_multas_query_request,
     format_multas_response,
+    format_place_comparison_response,
     format_quote_response,
     format_runt_profile_response,
+    format_vehicle_slots_request,
     format_vigencia_response,
 )
-from bot_orchestrator.shared.appointment_selection import appointment_selection_store, vehicle_consult_store
+from bot_orchestrator.shared.appointment_selection import (
+    appointment_selection_store,
+    last_vehicle_slots_store,
+    vehicle_consult_store,
+)
 from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest, AgentTurnResponse
 import bot_orchestrator.slices.run_turn.use_case as run_turn_module
 from bot_orchestrator.slices.run_turn.use_case import location_for_turn, notification_to_for_turn, run_agent_turn
 
 
 class FakeLLMProvider:
+    last_history: list[dict[str, str]] | None = None
+
     async def complete(
         self,
         *,
@@ -65,7 +86,9 @@ class FakeLLMProvider:
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
+        FakeLLMProvider.last_history = history
         return {"provider_mode": "fake-llm", "text": f"respuesta LLM para {user_text}"}
 
 
@@ -196,7 +219,21 @@ class FakeVehicleClient:
             "documentoTail": documento[-4:],
             "data": {
                 "nombre": "Persona Demo",
-                "licencias": [{"categoria": "B1", "estado": "VIGENTE"}],
+                "estadoPersona": "ACTIVA",
+                "estadoConductor": "ACTIVO",
+                "licencias": [
+                    {
+                        "numero": documento,
+                        "estado": "ACTIVA",
+                        "categorias": [
+                            {
+                                "categoria": "B1",
+                                "fechaExpedicion": "29/11/2024",
+                                "fechaVencimiento": "29/11/2034",
+                            }
+                        ],
+                    }
+                ],
             },
             "checkedAt": "2026-07-07T00:00:00+00:00",
         }
@@ -276,7 +313,9 @@ class FakePlacesClient:
 
 class FakeAppointmentClient:
     created: list[dict[str, object]] = []
+    cancelled: list[dict[str, object]] = []
     decisions: list[dict[str, object]] = []
+    _next_id = 88
 
     async def create(
         self,
@@ -287,18 +326,21 @@ class FakeAppointmentClient:
         place: dict[str, object],
         notification_to: str | None = None,
     ) -> dict[str, object]:
+        appointment_id = FakeAppointmentClient._next_id
+        FakeAppointmentClient._next_id += 1
         payload = {
             "user_key": user_key,
             "procedure": procedure,
             "starts_at": starts_at,
             "place": place,
             "notification_to": notification_to,
+            "id": appointment_id,
         }
         self.created.append(payload)
         return {
             "success": True,
             "appointment": {
-                "id": 88,
+                "id": appointment_id,
                 "user_key": user_key,
                 "status": "pending_partner",
                 "starts_at": starts_at,
@@ -308,6 +350,7 @@ class FakeAppointmentClient:
         }
 
     async def cancel(self, *, user_key: str, appointment_id: int) -> dict[str, object]:
+        self.cancelled.append({"user_key": user_key, "appointment_id": appointment_id})
         return {
             "success": True,
             "appointment": {
@@ -379,7 +422,11 @@ class FakeKnowledgeClient:
 def clear_pending_appointment_selection() -> None:
     appointment_selection_store.clear_all()
     vehicle_consult_store.clear_all()
+    last_vehicle_slots_store.clear_all()
     FakeAppointmentClient.created.clear()
+    FakeAppointmentClient.cancelled.clear()
+    FakeAppointmentClient.decisions.clear()
+    FakeAppointmentClient._next_id = 88
     FakePlacesClient.calls.clear()
     FakeQuoteClient.calls.clear()
 
@@ -390,6 +437,38 @@ def test_extract_plate_and_document() -> None:
     assert extract_plate(text) == "ABC123"
     assert extract_document(text) == "123456789"
     assert wants_vigencia(text)
+
+
+def test_soat_typos_match_vigencia_intent() -> None:
+    assert wants_soat("y su soart")
+    assert wants_vigencia("y su soart")
+    assert wants_soat("revisar el soaat")
+    assert wants_soat("SOAT de la moto")
+
+
+def test_context_vigencia_extractors() -> None:
+    assert wants_both_vigencias("ambos")
+    assert wants_both_vigencias("los dos")
+    assert wants_both_vigencias("quiero soat y tecno")
+    assert wants_vigencia("ambos")
+    assert wants_other_vehicle("quiero soat de otro vehiculo")
+    assert wants_other_vehicle("ahora de otra placa")
+    assert is_pure_greeting("hola")
+    assert is_pure_greeting("buenas tardes")
+    assert not is_pure_greeting("hola quiero soat")
+    assert not is_pure_greeting("ABC123")
+
+
+def test_format_vehicle_slots_request_variants() -> None:
+    both = format_vehicle_slots_request(need_placa=True, need_documento=True)
+    only_placa = format_vehicle_slots_request(need_placa=True, need_documento=False)
+    only_doc = format_vehicle_slots_request(need_placa=False, need_documento=True)
+
+    assert both.startswith("Claro, con gusto.")
+    assert "ABC123 1234567890" in both
+    assert "😊" in both
+    assert "ABC123" in only_placa and "1234567890" not in only_placa
+    assert "1234567890" in only_doc and "ABC123" not in only_doc
 
 
 def test_multas_intent() -> None:
@@ -414,7 +493,14 @@ def test_infraccion_lookup_by_conduct() -> None:
 
 def test_runt_profile_intent() -> None:
     assert wants_runt_profile("consulta mi licencia con cedula 123456789")
+    assert wants_runt_profile("quiero consultar mi licensia")
+    assert wants_runt_profile("consulta mi lisencia")
+    assert wants_runt_profile("estado de mi liciencia")
+    assert wants_runt_profile("necesito consultar una licenia")
+    assert wants_runt_profile("necesito consultar una licencia")
     assert not wants_runt_profile("quiero agendar licencia en Bogota")
+    assert not wants_runt_profile("quiero agendar licensia en Bogota")
+    assert not wants_runt_profile("necesito un favor")
 
 
 def test_appointment_extraction() -> None:
@@ -430,6 +516,21 @@ def test_appointment_extraction() -> None:
     assert extract_partner_decision("CONFIRMAR 123") == ("confirmar", 123)
     assert extract_partner_decision("rechazar #88") == ("rechazar", 88)
     assert extract_partner_decision("hola") is None
+
+
+def test_procedure_maps_place_type_aliases() -> None:
+    assert procedure_for_text("quiero agendar una cita en un cda") == "tecnomecanica"
+    assert procedure_for_text("cda") == "tecnomecanica"
+    assert procedure_for_text("centro de diagnostico automotriz") == "tecnomecanica"
+    assert procedure_for_text("cita en un CIA") == "curso_multa"
+    assert procedure_for_text("centro integral de atencion") == "curso_multa"
+    assert procedure_for_text("cea") == "licencia_primera"
+    assert procedure_for_text("escuela de conduccion") == "licencia_primera"
+    assert procedure_for_text("curso de manejo") == "licencia_primera"
+    assert procedure_for_text("crc") == "renovacion_licencia"
+    assert procedure_for_text("reconocimiento de conductores") == "renovacion_licencia"
+    assert procedure_for_text("curso de conduccion") == "licencia_primera"
+    assert procedure_for_text("curso por multa") == "curso_multa"
 
 
 def test_product_intent_extraction() -> None:
@@ -465,10 +566,425 @@ def test_general_traffic_and_situational_intents() -> None:
 
 
 def test_place_selection_extraction() -> None:
+    places = [
+        {"name": "CDA MOTOCICLETAS PARQUE CARACOLI", "city": "Floridablanca", "kind": "CDA", "distance_km": 0.81},
+        {"name": "CDA VILLABEL", "city": "Bucaramanga", "kind": "CDA", "distance_km": 2.1},
+    ]
     assert extract_place_selection("la segunda") == 2
     assert extract_place_selection("opcion 3") == 3
-    assert extract_place_selection("esa me sirve") == 1
+    assert extract_place_selection("esa me sirve") is None
+    assert extract_place_selection("esa me sirve", places=places[:1]) == 1
+    assert extract_place_selection("cda villabels", places=places) == 2
+    assert extract_place_selection("cda", places=places) is None  # ambiguous kind-only
+    assert extract_place_selection("el mas cercano", places=places) == 1
     assert wants_alternative_places("muestrame otras opciones")
+    assert wants_place_comparison("cual es mejor? y por que?")
+    assert format_place_comparison_response(places).lower().find("caracoli") >= 0
+
+
+def test_place_selection_ignores_time_digits() -> None:
+    """Hour digits must not be read as center indexes (WhatsApp agenda loop)."""
+    from bot_orchestrator.slices.run_turn.extractors import _has_datetime_hint
+
+    assert extract_place_selection("a las 8 pm") is None
+    assert extract_place_selection("para las 8 pm") is None
+    assert extract_place_selection("para mañana a las 8 pm") is None
+    assert extract_place_selection("8 de la mañana") is None
+    assert extract_place_selection("por la mañana") is None
+    assert extract_place_selection("dame el 1") == 1
+    assert extract_place_selection("centro 2") == 2
+    assert extract_place_selection("el 2 mañana a las 10") == 2
+    assert extract_place_selection("centro 2 para mañana a las 8 pm") == 2
+    assert _has_datetime_hint("para mañana a las 8 pm")
+    assert _has_datetime_hint("a las 8 pm")
+    assert _has_datetime_hint("8 de la mañana")
+    assert _has_datetime_hint("miércoles")
+
+
+@pytest.mark.asyncio
+async def test_pending_appointment_time_not_confused_with_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """After choosing a center, time-only / date+time messages must not reset to place pick."""
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", lambda: FakeAppointmentClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-1",
+            "name": "CDA CONVERRY",
+            "address": "CALLE 1",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.0,
+        },
+        {
+            "id": "cda-2",
+            "name": "CDA CANGURO",
+            "address": "AVENIDA 2",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.2,
+        },
+        {
+            "id": "cda-3",
+            "name": "CDA MOTOLINARES",
+            "address": "CARRERA 3",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.9,
+        },
+        {
+            "id": "cda-4",
+            "name": "CDA CALDAS",
+            "address": "CALLE 4",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.9,
+        },
+        {
+            "id": "cda-5",
+            "name": "CDA PERIAUTOS",
+            "address": "CALLE 5",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 3.1,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            selected_index=1,
+        )
+    )
+
+    time_only = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="a las 8 pm")
+    )
+    assert time_only.mode == "appointment_missing_date"
+    assert "elige una opcion" not in time_only.text.lower()
+    assert "día" in time_only.text.lower() or "dia" in time_only.text.lower()
+
+    booked = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="para mañana a las 8 pm")
+    )
+    assert booked.mode == "appointment_created"
+    assert FakeAppointmentClient.created[-1]["place"]["id"] == "cda-1"
+    assert FakeAppointmentClient.created[-1]["starts_at"].endswith("T20:00")
+
+
+@pytest.mark.asyncio
+async def test_pending_appointment_bare_digit_can_switch_center_with_datetime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", lambda: FakeAppointmentClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-1",
+            "name": "CDA CONVERRY",
+            "address": "CALLE 1",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.0,
+        },
+        {
+            "id": "cda-2",
+            "name": "CDA CANGURO",
+            "address": "AVENIDA 2",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.2,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            selected_index=1,
+        )
+    )
+
+    switched = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="el 2 mañana a las 10")
+    )
+    assert switched.mode == "appointment_created"
+    assert FakeAppointmentClient.created[-1]["place"]["id"] == "cda-2"
+    assert FakeAppointmentClient.created[-1]["starts_at"].endswith("T10:00")
+
+
+@pytest.mark.asyncio
+async def test_place_comparison_and_name_correction_replaces_appointment(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", lambda: FakeAppointmentClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-caracoli",
+            "name": "CDA MOTOCICLETAS PARQUE CARACOLI",
+            "address": "CALLE 29",
+            "city": "Floridablanca",
+            "kind": "CDA",
+            "distance_km": 0.81,
+        },
+        {
+            "id": "cda-villabel",
+            "name": "CDA VILLABEL",
+            "address": "CARRERA 11",
+            "city": "Bucaramanga",
+            "kind": "CDA",
+            "distance_km": 2.1,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+        )
+    )
+
+    compare = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="cual es mejor? y por que?")
+    )
+    assert compare.mode == "appointment_place_comparison"
+    assert "cercania" in compare.text.lower() or "cerca" in compare.text.lower()
+    assert "LLM" not in compare.text
+
+    wrong = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="1")
+    )
+    assert wrong.mode == "appointment_created"
+    assert FakeAppointmentClient.created[-1]["place"]["id"] == "cda-caracoli"
+
+    fixed = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="cda villabels")
+    )
+    assert fixed.mode == "appointment_replaced"
+    assert "appointment.cancel" in (fixed.tool_calls or [])
+    assert FakeAppointmentClient.cancelled[-1]["appointment_id"] == FakeAppointmentClient.created[0]["id"]
+    assert FakeAppointmentClient.created[-1]["place"]["id"] == "cda-villabel"
+    assert "LLM" not in fixed.text
+
+
+@pytest.mark.asyncio
+async def test_post_create_pending_clears_on_non_replace_messages(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """After booking, non-replace turns free the bot; same index does not sticky-loop."""
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", lambda: FakeAppointmentClient())
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-caracoli",
+            "name": "CDA MOTOCICLETAS PARQUE CARACOLI",
+            "address": "CALLE 29",
+            "city": "Floridablanca",
+            "kind": "CDA",
+            "distance_km": 0.81,
+        },
+        {
+            "id": "cda-villabel",
+            "name": "CDA VILLABEL",
+            "address": "CARRERA 11",
+            "city": "Bucaramanga",
+            "kind": "CDA",
+            "distance_km": 2.1,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+        )
+    )
+
+    booked = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="1")
+    )
+    assert booked.mode == "appointment_created"
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is not None
+
+    same_index = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="1")
+    )
+    assert same_index.mode != "appointment_already_requested"
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
+
+    # Re-book so pending exists again, then greeting must free the flow.
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+            selected_index=1,
+            created_appointment_id=int(FakeAppointmentClient.created[-1]["id"]),
+        )
+    )
+    greeting = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="hola")
+    )
+    assert greeting.mode != "appointment_already_requested"
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
+
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+            selected_index=1,
+            created_appointment_id=int(FakeAppointmentClient.created[-1]["id"]),
+        )
+    )
+    other_cita = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quiero otra cita aparte")
+    )
+    assert other_cita.mode != "appointment_already_requested"
+    # New appointment intent should not be stuck on the old booking message.
+    assert "Ya deje pedida la cita" not in other_cita.text
+
+
+def test_wants_abandon_appointment_flow() -> None:
+    assert wants_abandon_appointment_flow("Yo ya agende no quiero agendar nsda")
+    assert wants_abandon_appointment_flow("/restart")
+    assert wants_abandon_appointment_flow("no gracias")
+    assert not wants_abandon_appointment_flow("quiero agendar tecnomecanica")
+    assert not wants_abandon_appointment_flow("1")
+
+
+@pytest.mark.asyncio
+async def test_mid_selection_pending_clears_on_greeting_and_abandon(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-caracoli",
+            "name": "CDA MOTOCICLETAS PARQUE CARACOLI",
+            "address": "CALLE 29",
+            "city": "Floridablanca",
+            "kind": "CDA",
+            "distance_km": 0.81,
+        },
+        {
+            "id": "cda-villabel",
+            "name": "CDA VILLABEL",
+            "address": "CARRERA 11",
+            "city": "Bucaramanga",
+            "kind": "CDA",
+            "distance_km": 2.1,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+        )
+    )
+
+    greeting = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="hola")
+    )
+    assert greeting.mode != "appointment_place_selection_required"
+    assert "Dime el" not in greeting.text
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
+
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+        )
+    )
+    abandon = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="web-user",
+            channel="web",
+            text="Yo ya agende no quiero agendar nsda",
+        )
+    )
+    assert abandon.mode == "appointment_flow_abandoned"
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
+
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            starts_at="2026-07-11T10:00",
+        )
+    )
+    restart = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="/restart")
+    )
+    assert restart.mode == "appointment_flow_abandoned"
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
 
 
 def test_format_soat_response() -> None:
@@ -483,7 +999,83 @@ def test_format_soat_response() -> None:
 
     assert "15/10/2026" in response
     assert "SOAT" in response
+    assert ANYTHING_ELSE_FOOTER in response
     assert "Perfecto, si necesitas algo mas" not in response
+
+
+def test_format_appointment_response_includes_footer() -> None:
+    text = format_appointment_response(
+        {
+            "id": 11,
+            "status": "pending_partner",
+            "starts_at": "2026-07-12T14:00",
+            "place": {"name": "CDA CANGURO", "address": "AV 1"},
+        }
+    )
+    assert "solicite la cita *#11*" in text
+    assert ANYTHING_ELSE_FOOTER in text
+
+
+def test_soft_conversation_close_detection() -> None:
+    assert is_soft_conversation_close("gracias")
+    assert is_soft_conversation_close("Muchas gracias!")
+    assert is_soft_conversation_close("eso es todo")
+    assert not is_soft_conversation_close("gracias por agendar mañana a las 10")
+    assert not is_soft_conversation_close("centro 2")
+
+
+@pytest.mark.asyncio
+async def test_gracias_after_appointment_closes_without_relisting_centers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingAppointmentSelection,
+        appointment_selection_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", lambda: FakeAppointmentClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    places = [
+        {
+            "id": "cda-1",
+            "name": "CDA CONVERRY",
+            "address": "CALLE 1",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.0,
+        },
+        {
+            "id": "cda-2",
+            "name": "CDA CANGURO",
+            "address": "AVENIDA 2",
+            "city": "Manizales",
+            "kind": "CDA",
+            "distance_km": 2.2,
+        },
+    ]
+    appointment_selection_store.save(
+        PendingAppointmentSelection(
+            user_key="web-user",
+            channel="web",
+            procedure="tecnomecanica",
+            places=places,
+            selected_index=1,
+            starts_at="2026-07-12T14:00",
+            created_appointment_id=11,
+        )
+    )
+
+    closed = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="gracias")
+    )
+    assert closed.mode == "conversation_closed"
+    assert closed.text == CONVERSATION_CLOSED_TEXT
+    assert "centros afiliados" not in closed.text.lower()
+    assert appointment_selection_store.get(user_key="web-user", channel="web") is None
 
 
 def test_format_multas_response_without_multas() -> None:
@@ -502,6 +1094,7 @@ def test_format_multas_response_without_multas() -> None:
     assert "SIMIT" in response
     assert "no aparecen multas" in response.lower() or "No aparecen" in response or "no aparecen" in response
     assert "webfenix" in response
+    assert ANYTHING_ELSE_FOOTER in response
 
 
 def test_format_multas_response_with_manizales_local() -> None:
@@ -524,6 +1117,66 @@ def test_format_multas_response_with_manizales_local() -> None:
     assert "SIMIT" in response
     assert "Manizales" in response
     assert "movilidadmanizales" in response
+
+
+def test_format_multas_response_includes_simit_detalles() -> None:
+    response = format_multas_response(
+        {
+            "simit": {
+                "tieneMultas": True,
+                "resumen": {"comparendos": 1, "multas": 0, "total": 1485931},
+                "detalles": [
+                    {
+                        "Infracción": "D04 No detenerse ante luz roja o amarilla",
+                        "Placa": "VCW32E",
+                        "Estado": "Pendiente",
+                        "Valor a pagar": "$1.485.931",
+                        "Tipo": "Fotodetección 03/06/2026",
+                        "Secretaría": "Barrancabermeja",
+                    }
+                ],
+            }
+        }
+    )
+
+    assert "SIMIT" in response
+    assert "1485931" in response or "1.485.931" in response
+    assert "D04" in response
+    assert "VCW32E" in response
+    assert "luz roja" in response.lower()
+    assert "fotodeteccion" in response.lower()
+    assert "Barrancabermeja" in response
+    assert "Detalle:" in response
+    assert ANYTHING_ELSE_FOOTER in response
+
+
+def test_format_multas_response_strips_proyeccion_ui_junk() -> None:
+    response = format_multas_response(
+        {
+            "simit": {
+                "tieneMultas": True,
+                "resumen": {"comparendos": 0, "multas": 1, "total": 1485931},
+                "detalles": [
+                    {
+                        "Infracción": "Fotodetección Proyección pago",
+                        "Placa": "VCW32E",
+                        "Estado": "Pendiente de pago",
+                        "Valor": "$ 1.207.860",
+                        "Tipo": "Fotodetección 03/06/2026",
+                        "Secretaría": "Barrancabermeja",
+                        "extra": "D04",
+                    }
+                ],
+            }
+        }
+    )
+
+    assert "D04" in response
+    assert "VCW32E" in response
+    assert "proyeccion" not in response.lower()
+    assert "Proyección pago" not in response
+    assert "fotodeteccion" in response.lower()
+    assert ANYTHING_ELSE_FOOTER in response
 
 
 def test_format_multas_response_manizales_audiencia_zero_total() -> None:
@@ -564,6 +1217,70 @@ def test_extract_city_supports_more_cities() -> None:
     assert extract_city("la multa fue en barranquilla") == "Barranquilla"
     assert extract_city("comparendo en Manizales") == "Manizales"
     assert extract_city("en santa marta") == "Santa Marta"
+    assert extract_city("en barrancabermeja") == "Barrancabermeja"
+    assert extract_city("Barrancabermeja") == "Barrancabermeja"
+    assert extract_city("en Floridablanca") == "Floridablanca"
+    assert extract_city("multa en Valledupar") == "Valledupar"
+    assert extract_city("en Neiva") == "Neiva"
+    assert extract_city("hola") is None
+
+
+@pytest.mark.asyncio
+async def test_multas_barrancabermeja_keeps_city_for_plate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """City must stick through placa/cedula; never fall back to a previous soft-pending city."""
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.shared.appointment_selection import (
+        PendingVehicleConsult,
+        vehicle_consult_store,
+    )
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    calls: list[dict[str, object]] = []
+
+    class TrackingVehicleClient(FakeVehicleClient):
+        async def consult_multas(self, *, documento: str, ciudad: str | None = None) -> dict[str, object]:
+            calls.append({"documento": documento, "ciudad": ciudad})
+            return await super().consult_multas(documento=documento, ciudad=ciudad)
+
+    monkeypatch.setattr(run_turn_module, "VehicleClient", TrackingVehicleClient)
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    # Leftover soft pending from a prior Manizales consult.
+    vehicle_consult_store.save(
+        PendingVehicleConsult(
+            user_key="web-user",
+            channel="web",
+            intent="multas",
+            ciudad="Manizales",
+            city_resolved=True,
+        )
+    )
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quisiera ver una multa")
+    )
+    assert first.mode == "multas_missing_city"
+    assert first.text == format_multas_city_request()
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="en barrancabermeja")
+    )
+    assert second.mode == "multas_missing_document"
+    assert "Barrancabermeja" in second.text
+    assert "placa" in second.text.lower()
+    assert "cedula" in second.text.lower()
+    assert "Manizales" not in second.text
+
+    third = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="VCW32E")
+    )
+    assert third.mode == "vehicle_multas"
+    assert calls[-1]["documento"] == "VCW32E"
+    assert calls[-1]["ciudad"] == "Barrancabermeja"
+    assert "LLM" not in third.text
 
 
 def test_format_runt_profile_response() -> None:
@@ -573,14 +1290,59 @@ def test_format_runt_profile_response() -> None:
             "documentoTail": "6789",
             "data": {
                 "nombre": "Persona Demo",
-                "licencias": [{"categoria": "B1", "estado": "VIGENTE"}],
+                "estadoPersona": "ACTIVA",
+                "estadoConductor": "ACTIVO",
+                "licencias": [
+                    {
+                        "numero": "123456789",
+                        "estado": "ACTIVA",
+                        "categorias": [
+                            {
+                                "categoria": "B1",
+                                "fechaExpedicion": "29/11/2024",
+                                "fechaVencimiento": "29/11/2034",
+                            },
+                            {
+                                "categoria": "A2",
+                                "fechaExpedicion": "30/06/2026",
+                                "fechaVencimiento": "30/06/2036",
+                            },
+                        ],
+                    }
+                ],
             },
         }
     )
 
     assert "6789" in response
     assert "B1" in response
+    assert "vence 29/11/2034" in response
+    assert "A2" in response
+    assert "vence 30/06/2036" in response
     assert "123456789" not in response
+
+
+def test_format_runt_profile_response_provider_not_configured() -> None:
+    response = format_runt_profile_response(
+        {
+            "ok": False,
+            "documentoTail": "8811",
+            "data": None,
+            "error": "persona_provider_not_configured",
+        }
+    )
+
+    assert "no esta disponible" in response.lower()
+    assert "cedula" not in response.lower()
+
+
+def test_format_runt_profile_document_request() -> None:
+    from bot_orchestrator.slices.run_turn.formatters import format_runt_profile_document_request
+
+    text = format_runt_profile_document_request()
+    assert "Claro, con gusto" in text
+    assert "1234567890" in text
+    assert "cedula" in text.lower()
 
 
 def test_format_quote_response() -> None:
@@ -738,6 +1500,28 @@ async def test_agent_uses_runt_profile_tool_before_llm(monkeypatch: pytest.Monke
     assert response.mode == "vehicle_runt_profile"
     assert response.tool_calls == ["vehicle.consult_runt_profile"]
     assert "B1" in response.text
+    assert "vence 29/11/2034" in response.text
+
+
+@pytest.mark.asyncio
+async def test_agent_asks_cedula_for_runt_profile_with_standard_copy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+
+    response = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="consulta mi licencia")
+    )
+
+    assert response.mode == "runt_profile_missing_document"
+    assert "Claro, con gusto" in response.text
+    assert "1234567890" in response.text
+
+    follow_up = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="1234567890")
+    )
+    assert follow_up.mode == "vehicle_runt_profile"
+    assert "vence 29/11/2034" in follow_up.text
 
 
 @pytest.mark.asyncio
@@ -823,8 +1607,6 @@ async def test_agent_reuses_persisted_pin_on_next_text_turn(monkeypatch: pytest.
 
 
 def test_format_distance_osrm_vs_haversine() -> None:
-    from bot_orchestrator.slices.run_turn.formatters import _format_distance
-
     assert "por carretera" in (_format_distance({"distance_km": 2.4, "distance_source": "osrm", "duration_min": 7}) or "")
     assert "linea recta" in (_format_distance({"distance_km": 2.4, "distance_source": "haversine"}) or "")
 
@@ -904,7 +1686,7 @@ async def test_agent_confirms_single_place_with_natural_date(monkeypatch: pytest
 
     assert first.mode == "places_suggested"
     assert "516 m aprox. (linea recta)" in first.text
-    assert "agendable" in first.text.lower() or "afiliad" in first.text.lower()
+    assert "afiliad" in first.text.lower() or "agendable" in first.text.lower()
     assert second.mode == "appointment_created"
     assert FakeAppointmentClient.created[0]["place"]["id"] == "cda-unico"
 
@@ -959,7 +1741,8 @@ async def test_agent_resumes_pending_vehicle_consult_and_quotes_tecno(monkeypatc
     second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ABC123 1096065250"))
 
     assert first.mode == "vehicle_missing_data"
-    assert "Va la tecno" in first.text
+    assert first.text.startswith("Claro, con gusto.")
+    assert "ABC123 1234567890" in first.text
     assert second.mode == "vehicle_tecnomecanica"
     assert second.tool_calls == ["vehicle.check_vigencia", "quote.create"]
     assert "vencida" in second.text.lower()
@@ -979,7 +1762,9 @@ async def test_agent_accumulates_plate_and_document_across_turns(monkeypatch: py
 
     assert first.mode == "vehicle_missing_data"
     assert second.mode == "vehicle_missing_data"
-    assert "cedula" in second.text.lower()
+    assert second.text.startswith("Claro, con gusto.")
+    assert "1234567890" in second.text
+    assert "ABC123" not in second.text
     assert third.mode == "vehicle_tecnomecanica"
     assert third.tool_calls == ["vehicle.check_vigencia", "quote.create"]
 
@@ -1014,6 +1799,154 @@ async def test_agent_quotes_soat_without_creating_license_appointment_context(mo
     assert response.tool_calls == ["vehicle.check_vigencia", "quote.create"]
     assert FakeQuoteClient.calls[0]["service_type"] == "soat"
     assert appointment_selection_store.get(user_key="web-user", channel="web") is None
+
+
+@pytest.mark.asyncio
+async def test_agent_reuses_last_vehicle_slots_for_soat_typo_followup(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="revisar tecno placa FSO879 cedula 79837308")
+    )
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="y su soart"))
+
+    assert first.mode == "vehicle_tecnomecanica"
+    assert second.mode == "vehicle_soat"
+    assert second.tool_calls == ["vehicle.check_vigencia", "quote.create"]
+    assert FakeQuoteClient.calls[-1]["service_type"] == "soat"
+    assert "LLM" not in second.text
+
+
+@pytest.mark.asyncio
+async def test_agent_other_vehicle_does_not_reuse_last_slots(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    # Use SOAT first so we don't open a tecno-agenda pending appointment.
+    await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="revisar soat placa FSO879 cedula 79837308")
+    )
+    response = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="quiero soat y tecno de otro vehiculo")
+    )
+
+    assert response.mode == "vehicle_missing_data"
+    assert "placa" in response.text.lower()
+    assert "LLM" not in response.text
+
+
+@pytest.mark.asyncio
+async def test_agent_otra_consulta_soat_restarts_slots(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="revisar soat placa FSO879 cedula 79837308")
+    )
+    response = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="quiero consultar otra vez el soat")
+    )
+
+    assert response.mode == "vehicle_missing_data"
+    assert "placa" in response.text.lower()
+    assert "cedula" in response.text.lower()
+    assert "LLM" not in response.text
+
+
+@pytest.mark.asyncio
+async def test_agent_otra_licencia_restarts_runt_document_ask(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="consultar licencia 79837308")
+    )
+    assert first.mode == "vehicle_runt_profile"
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="consultar otra licencia")
+    )
+    assert second.mode == "runt_profile_missing_document"
+    assert "cedula" in second.text.lower()
+    assert "LLM" not in second.text
+
+
+@pytest.mark.asyncio
+async def test_agent_ambos_after_missing_intent_runs_both(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    first = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="QLX871 30328991"))
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ambos"))
+
+    assert first.mode == "vehicle_missing_intent"
+    assert second.mode == "vehicle_ambos"
+    assert "SOAT" in second.text or "soat" in second.text.lower()
+    assert "tecnomecanica" in second.text.lower() or "tecnico" in second.text.lower()
+    assert second.tool_calls is not None
+    assert "vehicle.check_vigencia" in second.tool_calls
+
+
+@pytest.mark.asyncio
+async def test_agent_soat_y_tecno_same_message_runs_both(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    response = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="web-user",
+            text="revisar soat y tecno placa QLX871 cedula 30328991",
+        )
+    )
+
+    assert response.mode == "vehicle_ambos"
+    assert response.tool_calls is not None
+    assert "vehicle.check_vigencia" in response.tool_calls
+
+
+@pytest.mark.asyncio
+async def test_agent_hola_clears_missing_intent_pending(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    first = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="QLX871 30328991"))
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="hola"))
+
+    assert first.mode == "vehicle_missing_intent"
+    assert second.mode != "vehicle_missing_intent"
+    assert "SOAT" not in second.text or "tecnomecanica" not in second.text.lower()
+    assert "respuesta LLM" in second.text or "Hola" in second.text or "hola" in second.text.lower()
+
+
+@pytest.mark.asyncio
+async def test_agent_asks_again_for_soat_when_no_slots_no_llm(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    response = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="y su soart"))
+
+    assert response.mode == "vehicle_missing_data"
+    assert response.text.startswith("Claro, con gusto.")
+    assert "ABC123 1234567890" in response.text
+    assert "LLM" not in response.text
 
 
 @pytest.mark.asyncio
@@ -1189,27 +2122,88 @@ def test_provider_env_name_selects_deepseek(monkeypatch: pytest.MonkeyPatch) -> 
 
 
 @pytest.mark.asyncio
-async def test_appointment_curso_after_crc_does_not_hit_multas(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_appointment_cda_skips_procedure_question(monkeypatch: pytest.MonkeyPatch) -> None:
     import bot_orchestrator.slices.run_turn.use_case as run_turn_module
     from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
     from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
 
     monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
-    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
-    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quiero agendar una cita en un cda")
+    )
+    assert first.mode == "appointment_missing_location"
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="cda")
+    )
+    # Soft pending already has tecnomecanica; bare "cda" should not re-ask procedure.
+    assert second.mode == "appointment_missing_location"
+
+
+@pytest.mark.asyncio
+async def test_appointment_crc_maps_to_renovacion(monkeypatch: pytest.MonkeyPatch) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
 
     first = await run_agent_turn(
         AgentTurnRequest(user_key="web-user", channel="web", text="agendame un CRC")
     )
+    assert first.mode == "appointment_missing_location"
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="bucaramanga")
+    )
+    assert second.tool_calls == ["places.find_nearest"]
+    assert FakePlacesClient.calls[-1]["procedure"] == "renovacion_licencia"
+    assert FakePlacesClient.calls[-1]["city"] == "Bucaramanga"
+
+
+@pytest.mark.asyncio
+async def test_appointment_curso_with_crc_mention_warns_cia(monkeypatch: pytest.MonkeyPatch) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="web-user",
+            channel="web",
+            text="quiero agendar curso por multa pero me dijeron CRC",
+        )
+    )
+    assert first.mode == "appointment_missing_location"
+    assert "CIA" in first.text
+    assert "CRC" in first.text
+
+
+@pytest.mark.asyncio
+async def test_appointment_curso_after_crc_does_not_hit_multas(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(run_turn_module, "PlacesClient", lambda: FakePlacesClient())
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    # Beta maps bare "CRC" → renovacion; start without locking that procedure so
+    # "curso por multa" can resolve and must not fall through to SIMIT multas.
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quiero agendar")
+    )
     assert first.mode == "appointment_missing_procedure"
 
     second = await run_agent_turn(
-        AgentTurnRequest(user_key="web-user", channel="web", text="curso por multa")
+        AgentTurnRequest(user_key="web-user", channel="web", text="curso por multa me dijeron CRC")
     )
     assert second.mode == "appointment_missing_location"
     assert "CIA" in second.text
     assert "CRC" in second.text
     assert "cedula" not in second.text.lower()
+    assert "LLM" not in second.text
 
     third = await run_agent_turn(
         AgentTurnRequest(user_key="web-user", channel="web", text="bucaramanga")
@@ -1220,29 +2214,108 @@ async def test_appointment_curso_after_crc_does_not_hit_multas(monkeypatch: pyte
 
 
 @pytest.mark.asyncio
-async def test_multas_general_skips_city(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_multas_asks_city_then_query_then_consults(monkeypatch: pytest.MonkeyPatch) -> None:
     import bot_orchestrator.slices.run_turn.use_case as run_turn_module
     from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
     from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
 
     monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
 
     first = await run_agent_turn(
         AgentTurnRequest(user_key="web-user", channel="web", text="puedes mirar mis multas")
     )
-    assert first.mode == "multas_missing_document"
-    assert "SIMIT nacional" in first.text
+    assert first.mode == "multas_missing_city"
+    assert first.text == format_multas_city_request()
 
     second = await run_agent_turn(
-        AgentTurnRequest(user_key="web-user", channel="web", text="no se, mira general")
+        AgentTurnRequest(user_key="web-user", channel="web", text="Manizales")
     )
     assert second.mode == "multas_missing_document"
+    assert second.text == format_multas_query_request(ciudad="Manizales")
 
     third = await run_agent_turn(
         AgentTurnRequest(user_key="web-user", channel="web", text="1096065250")
     )
     assert third.mode == "vehicle_multas"
     assert third.tool_calls == ["vehicle.consult_multas"]
+
+    fourth = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quisiera revisar otra multa")
+    )
+    assert fourth.mode == "multas_missing_city"
+    assert fourth.text == format_multas_city_request()
+    assert "Manizales" not in fourth.text
+
+
+@pytest.mark.asyncio
+async def test_multas_nacional_accepts_plate_and_correction_without_llm(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import bot_orchestrator.slices.run_turn.use_case as run_turn_module
+    from bot_orchestrator.slices.run_turn.schemas import AgentTurnRequest
+    from bot_orchestrator.slices.run_turn.use_case import run_agent_turn
+
+    calls: list[dict[str, object]] = []
+
+    class TrackingVehicleClient(FakeVehicleClient):
+        async def consult_multas(self, *, documento: str, ciudad: str | None = None) -> dict[str, object]:
+            calls.append({"documento": documento, "ciudad": ciudad})
+            return await super().consult_multas(documento=documento, ciudad=ciudad)
+
+    monkeypatch.setattr(run_turn_module, "VehicleClient", TrackingVehicleClient)
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="quiero ver mis multas")
+    )
+    assert first.mode == "multas_missing_city"
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="no se, mira general")
+    )
+    assert second.mode == "multas_missing_document"
+    assert "ABC123 o 1234567890" in second.text
+
+    third = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="ABC123")
+    )
+    assert third.mode == "vehicle_multas"
+    assert calls[-1]["documento"] == "ABC123"
+    assert calls[-1]["ciudad"] is None
+
+    fourth = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="30328991 y esa")
+    )
+    assert fourth.mode == "vehicle_multas"
+    assert calls[-1]["documento"] == "30328991"
+    assert "LLM" not in fourth.text
+
+
+@pytest.mark.asyncio
+async def test_multas_general_skips_city(monkeypatch: pytest.MonkeyPatch) -> None:
+    """City-first multas: saying nacional/general skips city and asks placa/cedula (no LLM)."""
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "llm_provider_from_env", lambda: FakeLLMProvider())
+
+    first = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="puedes mirar mis multas")
+    )
+    assert first.mode == "multas_missing_city"
+
+    second = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="nacional")
+    )
+    assert second.mode == "multas_missing_document"
+    assert "placa" in second.text.lower() or "cedula" in second.text.lower()
+    assert "LLM" not in second.text
+
+    third = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", channel="web", text="1096065250")
+    )
+    assert third.mode == "vehicle_multas"
+    assert third.tool_calls == ["vehicle.consult_multas"]
+    assert "LLM" not in third.text
 
 
 @pytest.mark.asyncio
@@ -1321,4 +2394,52 @@ async def test_asesorame_does_not_handoff(monkeypatch: pytest.MonkeyPatch) -> No
     )
     assert response.mode != "handoff_queued"
     assert TrackingHandoff.calls == 0
+
+
+def test_history_from_recent_turns_builds_role_pairs() -> None:
+    from bot_orchestrator.adapters.outbound.llm_provider import history_from_recent_turns
+
+    history = history_from_recent_turns(
+        [
+            {"user_text": "hola", "agent_text": "Hola, soy Civi"},
+            {"user_text": "cuanto vale C02", "agent_text": "C02 vale..."},
+        ]
+    )
+    assert history == [
+        {"role": "user", "content": "hola"},
+        {"role": "assistant", "content": "Hola, soy Civi"},
+        {"role": "user", "content": "cuanto vale C02"},
+        {"role": "assistant", "content": "C02 vale..."},
+    ]
+
+
+@pytest.mark.asyncio
+async def test_llm_fallback_passes_recent_turn_history(monkeypatch: pytest.MonkeyPatch) -> None:
+    FakeLLMProvider.last_history = None
+    monkeypatch.setattr(run_turn_module, "VehicleClient", FakeVehicleClient)
+    monkeypatch.setattr(run_turn_module, "PlacesClient", FakePlacesClient)
+    monkeypatch.setattr(run_turn_module, "AppointmentClient", FakeAppointmentClient)
+    monkeypatch.setattr(run_turn_module, "QuoteClient", FakeQuoteClient)
+    monkeypatch.setattr(run_turn_module, "KnowledgeClient", FakeKnowledgeClient)
+    monkeypatch.setattr(run_turn_module, "NotificationClient", FakeNotificationClient)
+    monkeypatch.setattr(run_turn_module, "HandoffClient", FakeHandoffClient)
+    monkeypatch.setattr(run_turn_module, "BillingClient", FakeBillingClient)
+
+    response = await run_agent_turn(
+        AgentTurnRequest(
+            user_key="web-user",
+            text="explicame otra vez",
+            metadata={
+                "recent_turns": [
+                    {"user_text": "hola", "agent_text": "Hola, soy Civi"},
+                    {"user_text": "que es SOAT", "agent_text": "El SOAT cubre..."},
+                ]
+            },
+        ),
+        llm_provider=FakeLLMProvider(),
+    )
+    assert "explicame otra vez" in response.text
+    assert FakeLLMProvider.last_history is not None
+    assert FakeLLMProvider.last_history[0]["content"] == "hola"
+    assert FakeLLMProvider.last_history[-1]["content"] == "El SOAT cubre..."
 

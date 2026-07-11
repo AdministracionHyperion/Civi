@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import Protocol
+from typing import Any, Protocol
 
 import httpx
 
@@ -14,6 +14,7 @@ class LLMProvider(Protocol):
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
         ...
 
@@ -26,6 +27,7 @@ class DisabledLLMProvider:
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
         return {"provider_mode": "disabled_until_provider_configured", "text": None}
 
@@ -53,11 +55,12 @@ class OpenAIResponsesLLMProvider:
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
         payload = {
             "model": self.model,
             "instructions": system_prompt,
-            "input": user_text,
+            "input": _responses_input(user_text=user_text, history=history),
             "store": False,
             "metadata": {
                 "service": "bot-orchestrator",
@@ -104,13 +107,14 @@ class OpenAICompatibleChatLLMProvider:
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
+        messages: list[dict[str, str]] = [{"role": "system", "content": system_prompt}]
+        messages.extend(_normalize_history(history))
+        messages.append({"role": "user", "content": user_text})
         payload = {
             "model": self.model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_text},
-            ],
+            "messages": messages,
         }
         async with httpx.AsyncClient(timeout=60.0, transport=self.transport) as client:
             response = await client.post(
@@ -152,6 +156,44 @@ def llm_provider_from_env() -> LLMProvider:
             base_url=os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
         )
     raise RuntimeError(f"unsupported LLM provider mode: {mode}")
+
+
+def history_from_recent_turns(recent_turns: Any) -> list[dict[str, str]]:
+    """Convert conversation-service recent_turns into chat role/content pairs."""
+    if not isinstance(recent_turns, list):
+        return []
+    history: list[dict[str, str]] = []
+    for turn in recent_turns:
+        if not isinstance(turn, dict):
+            continue
+        user_text = str(turn.get("user_text") or "").strip()
+        agent_text = str(turn.get("agent_text") or "").strip()
+        if user_text:
+            history.append({"role": "user", "content": user_text})
+        if agent_text:
+            history.append({"role": "assistant", "content": agent_text})
+    return history
+
+
+def _normalize_history(history: list[dict[str, str]] | None) -> list[dict[str, str]]:
+    if not history:
+        return []
+    normalized: list[dict[str, str]] = []
+    for item in history:
+        role = str(item.get("role") or "").strip().lower()
+        content = str(item.get("content") or "").strip()
+        if role in {"user", "assistant"} and content:
+            normalized.append({"role": role, "content": content})
+    return normalized
+
+
+def _responses_input(*, user_text: str, history: list[dict[str, str]] | None) -> list[dict[str, str]] | str:
+    normalized = _normalize_history(history)
+    if not normalized:
+        return user_text
+    items = [{"role": item["role"], "content": item["content"]} for item in normalized]
+    items.append({"role": "user", "content": user_text})
+    return items
 
 
 def _extract_response_text(data: dict[str, object]) -> str | None:

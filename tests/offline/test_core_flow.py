@@ -35,6 +35,7 @@ class FakeLLMProvider:
         user_text: str,
         user_key: str,
         channel: str,
+        history: list[dict[str, str]] | None = None,
     ) -> dict[str, object]:
         return {"provider_mode": "offline-llm", "text": f"respuesta offline LLM para {user_text}"}
 

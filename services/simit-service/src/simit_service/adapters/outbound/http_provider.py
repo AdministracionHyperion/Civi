@@ -3,11 +3,15 @@ from __future__ import annotations
 import asyncio
 import os
 import re
+import unicodedata
 from typing import Any
 
 import httpx
 
 from simit_service.slices.consult_multas.schemas import SimitMultasRequest, SimitMultasResponse
+
+_INFRACTION_CODE_RE = re.compile(r"\b([A-I]\d{2})\b", re.IGNORECASE)
+_PLATE_IN_TEXT_RE = re.compile(r"\b([A-Z]{3}\d{2}[A-Z0-9]|[A-Z]{3}\d{3})\b", re.IGNORECASE)
 
 
 class HttpSimitProvider:
@@ -83,6 +87,8 @@ def normalize_simit_response(data: dict[str, Any], *, fallback_documento: str) -
         default=(resumen["comparendos"] + resumen["multas"] + resumen["total"]) > 0,
     )
     documento = str(data.get("documento") or source.get("documento") or fallback_documento)
+    detalles = [_canonicalize_simit_detalle(item) for item in _list_of_dicts(source.get("detalles"))]
+    detalles = [item for item in detalles if any(item.get(key) for key in ("codigo", "placa", "infraccion", "valor", "estado"))]
 
     return SimitMultasResponse(
         success=_bool_value(data.get("success"), default=True),
@@ -90,7 +96,7 @@ def normalize_simit_response(data: dict[str, Any], *, fallback_documento: str) -
         tieneMultas=tiene_multas,
         resumen=resumen,
         mensaje=str(source.get("mensaje") or data.get("mensaje") or ""),
-        detalles=_list_of_dicts(source.get("detalles")),
+        detalles=detalles,
     )
 
 
@@ -108,7 +114,13 @@ def _headers_for_url(url: str) -> dict[str, str]:
 
 
 def _normalize_document(value: str) -> str:
-    return "".join(char for char in str(value) if char.isdigit())
+    """Normalize SIMIT query: plate stays alphanumeric, documents keep digits."""
+    compact = "".join(char for char in str(value or "").strip().upper() if char.isalnum())
+    if not compact:
+        return ""
+    if re.fullmatch(r"[A-Z]{3}\d{2}[A-Z0-9]|[A-Z]{3}\d{3}", compact):
+        return compact
+    return "".join(char for char in compact if char.isdigit()) or compact
 
 
 def _int_value(value: Any) -> int:
@@ -142,6 +154,103 @@ def _list_of_dicts(value: Any) -> list[dict[str, object]]:
     if not isinstance(value, list):
         return []
     return [dict(item) for item in value if isinstance(item, dict)]
+
+
+def _fold_key(value: object) -> str:
+    text = "".join(
+        char for char in unicodedata.normalize("NFKD", str(value or "")) if not unicodedata.combining(char)
+    )
+    return re.sub(r"\s+", " ", text).strip().lower()
+
+
+def _pick_detalle_field(item: dict[str, object], *aliases: str) -> str:
+    wanted = {_fold_key(alias) for alias in aliases}
+    for key, value in item.items():
+        key_fold = _fold_key(key)
+        if key_fold in wanted or any(alias in key_fold for alias in wanted if len(alias) >= 5):
+            text = str(value or "").strip()
+            if text:
+                return text
+    return ""
+
+
+_UI_JUNK_LABELS = {
+    "proyeccion pago",
+    "proyección pago",
+    "detalle",
+    "ver mas",
+    "ver más",
+}
+
+
+def _clean_detalle_text(value: str) -> str:
+    text = re.sub(r"\s+", " ", str(value or "")).strip()
+    if not text:
+        return ""
+    folded = _fold_key(text)
+    if folded in _UI_JUNK_LABELS:
+        return ""
+    text = re.sub(r"(?i)\bproyecci[oó]n(?:\s+de)?\s+pago\b", " ", text)
+    text = re.sub(r"(?i)\binter[eé]s(?:es)?\b[:\s]*\$?\s*[\d\.\,]*", " ", text)
+    text = re.sub(r"\s+", " ", text).strip(" -:;,")
+    if _fold_key(text) in _UI_JUNK_LABELS:
+        return ""
+    return text
+
+
+def _canonicalize_simit_detalle(item: dict[str, object]) -> dict[str, object]:
+    """Map raw SIMIT/local row headers into stable Spanish field names for the bot."""
+    infraccion = _clean_detalle_text(
+        _pick_detalle_field(item, "infraccion", "infracción", "descripcion", "descripción")
+    )
+    placa = _clean_detalle_text(_pick_detalle_field(item, "placa"))
+    estado = _clean_detalle_text(_pick_detalle_field(item, "estado"))
+    valor = _clean_detalle_text(
+        _pick_detalle_field(item, "valor a pagar", "valor_a_pagar", "valor multa", "valor")
+    )
+    fecha = _clean_detalle_text(_pick_detalle_field(item, "fecha", "resolucion", "resolución"))
+    tipo = _clean_detalle_text(_pick_detalle_field(item, "tipo"))
+    secretaria = _clean_detalle_text(_pick_detalle_field(item, "secretaria", "secretaría"))
+    codigo = _clean_detalle_text(_pick_detalle_field(item, "codigo", "código"))
+    numero = _clean_detalle_text(
+        _pick_detalle_field(item, "numero", "número", "notificacion", "notificación")
+    )
+
+    blob = " ".join(str(value or "") for value in item.values())
+    if infraccion and not _INFRACTION_CODE_RE.search(infraccion) and len(infraccion.split()) <= 3:
+        folded = _fold_key(infraccion)
+        if "fotodetec" in folded or "proyeccion" in folded or folded in _UI_JUNK_LABELS:
+            infraccion = ""
+    if not codigo:
+        match = _INFRACTION_CODE_RE.search(infraccion or blob)
+        if match:
+            codigo = match.group(1).upper()
+    if not placa:
+        match = _PLATE_IN_TEXT_RE.search(blob)
+        if match:
+            placa = match.group(1).upper()
+    if not fecha and tipo:
+        date_match = re.search(r"\b(\d{1,2}/\d{1,2}/20\d{2})\b", tipo)
+        if date_match:
+            fecha = date_match.group(1)
+    if tipo and "fotodetec" in tipo.lower():
+        tipo = "fotodeteccion"
+    elif infraccion and "fotodetec" in infraccion.lower():
+        tipo = "fotodeteccion"
+        infraccion = _clean_detalle_text(re.sub(r"(?i)\bfotodetecci[oó]n\b", " ", infraccion))
+
+    canonical = {
+        "codigo": codigo,
+        "placa": placa,
+        "estado": estado,
+        "infraccion": infraccion,
+        "fecha": fecha,
+        "tipo": tipo,
+        "valor": valor,
+        "secretaria": secretaria,
+        "numero": numero,
+    }
+    return {key: value for key, value in canonical.items() if value}
 
 
 def _looks_transient(data: dict[str, Any]) -> bool:

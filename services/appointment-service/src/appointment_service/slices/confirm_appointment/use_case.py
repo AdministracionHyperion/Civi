@@ -5,7 +5,7 @@ from typing import Protocol
 from civi_common.events import EventPublisher, event_publisher_from_env
 from appointment_service.adapters.outbound.notification_client import NotificationClient
 from appointment_service.shared.mappers import appointment_to_dict
-from appointment_service.shared.reminders import client_lead_minutes, compute_remind_at, partner_lead_minutes
+from appointment_service.shared.reminders import client_lead_minutes, compute_remind_at, format_starts_at_human, partner_lead_minutes
 from appointment_service.shared.repository import AppointmentRecord, repository
 
 from .schemas import ConfirmAppointmentResponse
@@ -73,12 +73,13 @@ async def _notify_and_schedule(
     partner_to = record.partner_notification_to
 
     if client_to:
+        when = format_starts_at_human(record.starts_at)
         try:
             await client.send_whatsapp_message(
                 to=client_to,
                 body=(
                     f"Tu cita #{record.id} de {record.procedure} en {record.place_name} "
-                    f"({record.place_city}) para {record.starts_at} fue *confirmada* por el centro. "
+                    f"({record.place_city}) para {when} fue *confirmada* por el centro. "
                     "Te enviare un recordatorio antes."
                 ),
             )
@@ -92,7 +93,7 @@ async def _notify_and_schedule(
                 to=client_to,
                 body=(
                     f"Recordatorio Civi: cita de {record.procedure} en "
-                    f"{record.place_name}, {record.place_city}, {record.starts_at}."
+                    f"{record.place_name}, {record.place_city}, {when}."
                 ),
                 remind_at=compute_remind_at(record.starts_at, lead_minutes=client_lead_minutes()),
             )
@@ -115,7 +116,7 @@ async def _notify_and_schedule(
                 to=partner_to,
                 body=(
                     f"Recordatorio Civi negocio: cita #{record.id} de {record.procedure} "
-                    f"en {record.place_name} a las {record.starts_at}."
+                    f"en {record.place_name} a las {format_starts_at_human(record.starts_at)}."
                 ),
                 remind_at=compute_remind_at(record.starts_at, lead_minutes=partner_lead_minutes()),
             )

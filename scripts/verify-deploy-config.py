@@ -158,9 +158,11 @@ def validate(env: dict[str, str], *, allow_placeholders: bool) -> list[str]:
     elif runt_mode == "browser":
         require_keys(env, {"CAPTCHA_API_KEY"}, errors, allow_placeholders=allow_placeholders)
 
-    persona_mode = require_mode(env, "RUNT_PERSONA_PROVIDER_MODE", {"http", "disabled"}, errors)
+    persona_mode = require_mode(env, "RUNT_PERSONA_PROVIDER_MODE", {"http", "disabled", "browser", "local"}, errors)
     if persona_mode == "http":
         require_keys(env, {"RUNT_PERSONA_PROVIDER_API_URL"}, errors, allow_placeholders=allow_placeholders)
+    elif persona_mode == "browser":
+        require_keys(env, {"CAPTCHA_API_KEY"}, errors, allow_placeholders=allow_placeholders)
 
     simit_mode = require_mode(env, "SIMIT_PROVIDER_MODE", {"http", "browser"}, errors)
     if simit_mode == "http":

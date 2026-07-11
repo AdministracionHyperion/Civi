@@ -101,7 +101,8 @@ async def run_turn(
     if consent_response is not None:
         return consent_response
 
-    data = await (agent_client or HttpAgentClient()).run_turn(payload)
+    agent_payload = _with_recent_history(payload, repository=active_repository)
+    data = await (agent_client or HttpAgentClient()).run_turn(agent_payload)
     state_version = data.get("state_version", 1)
     text = data["text"]
 
@@ -305,6 +306,46 @@ def _normalize(value: str) -> str:
     without_accents = "".join(char for char in normalized if not unicodedata.combining(char))
     collapsed = " ".join(without_accents.lower().strip().split())
     return re.sub(r"[!?\.,;:]", "", collapsed).strip()
+
+
+def _llm_history_turn_limit() -> int:
+    raw = os.getenv("CONVERSATION_LLM_HISTORY_TURNS", "4").strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return 4
+    return max(0, min(value, 8))
+
+
+def _with_recent_history(
+    payload: RunTurnRequest,
+    *,
+    repository: ConversationRepository,
+) -> RunTurnRequest:
+    """Attach the last N channel turns so the bot LLM can keep short conversational memory."""
+    limit = _llm_history_turn_limit()
+    if limit <= 0:
+        return payload
+
+    # list_for_user returns newest-first; take enough then filter by channel.
+    recent = [
+        record
+        for record in repository.list_for_user(user_key=payload.user_key, limit=limit * 3)
+        if record.channel == payload.channel
+        and not str(record.user_text or "").startswith("[")
+    ][:limit]
+    recent.reverse()  # chronological for the model
+
+    turns = [
+        {
+            "user_text": record.user_text,
+            "agent_text": record.agent_text,
+        }
+        for record in recent
+    ]
+    metadata = dict(payload.metadata or {})
+    metadata["recent_turns"] = turns
+    return payload.model_copy(update={"metadata": metadata})
 
 
 def _control_command_for_text(value: str) -> str | None:

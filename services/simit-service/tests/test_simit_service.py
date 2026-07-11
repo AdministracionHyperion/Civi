@@ -57,7 +57,83 @@ async def test_simit_http_provider_normalizes_external_payload() -> None:
     assert result.documentoTail == "3456"
     assert result.tieneMultas is True
     assert result.resumen == {"comparendos": 2, "multas": 1, "total": 350000}
-    assert result.detalles == [{"numero": "ABC", "valor": "$350.000"}]
+    assert result.detalles == [{"valor": "$350.000", "numero": "ABC"}]
+
+
+def test_normalize_simit_response_canonicalizes_spanish_headers() -> None:
+    from simit_service.adapters.outbound.http_provider import normalize_simit_response
+
+    result = normalize_simit_response(
+        {
+            "success": True,
+            "tieneMultas": True,
+            "resumen": {"comparendos": 1, "multas": 0, "total": 1485931},
+            "detalles": [
+                {
+                    "Infracción": "D04 No detenerse ante luz roja o amarilla",
+                    "Placa": "VCW32E",
+                    "Estado": "Pendiente",
+                    "Valor a pagar": "$1.485.931",
+                    "Tipo": "Fotodetección 03/06/2026",
+                    "Secretaría": "Barrancabermeja",
+                }
+            ],
+        },
+        fallback_documento="VCW32E",
+    )
+
+    assert result.detalles == [
+        {
+            "codigo": "D04",
+            "placa": "VCW32E",
+            "estado": "Pendiente",
+            "infraccion": "D04 No detenerse ante luz roja o amarilla",
+            "fecha": "03/06/2026",
+            "tipo": "fotodeteccion",
+            "valor": "$1.485.931",
+            "secretaria": "Barrancabermeja",
+        }
+    ]
+
+
+def test_normalize_simit_response_strips_proyeccion_ui_junk() -> None:
+    from simit_service.adapters.outbound.http_provider import normalize_simit_response
+
+    result = normalize_simit_response(
+        {
+            "success": True,
+            "tieneMultas": True,
+            "resumen": {"comparendos": 0, "multas": 1, "total": 1485931},
+            "detalles": [
+                {
+                    "Infracción": "Fotodetección Proyección pago",
+                    "Placa": "VCW32E",
+                    "Estado": "Pendiente de pago",
+                    "Valor": "$ 1.207.860",
+                    "Tipo": "Fotodetección 03/06/2026",
+                    "Secretaría": "Barrancabermeja",
+                    "col_extra": "D04",
+                }
+            ],
+        },
+        fallback_documento="VCW32E",
+    )
+
+    detalle = result.detalles[0]
+    assert detalle["codigo"] == "D04"
+    assert detalle["placa"] == "VCW32E"
+    assert detalle["tipo"] == "fotodeteccion"
+    assert "proyeccion" not in str(detalle.get("infraccion", "")).lower()
+    assert "Fotodetección Proyección" not in str(detalle.get("infraccion", ""))
+
+
+def test_is_transient_browser_error_detects_goto_timeout() -> None:
+    from simit_service.adapters.outbound.browser_provider import _is_transient_browser_error
+
+    assert _is_transient_browser_error(
+        TimeoutError('Page.goto: Timeout 75000ms exceeded. waiting until "networkidle"')
+    )
+    assert not _is_transient_browser_error(RuntimeError("El portal SIMIT reporto un error al realizar la consulta"))
 
 
 def test_simit_browser_parser_extracts_summary_and_details() -> None:
@@ -75,6 +151,17 @@ def test_simit_browser_parser_extracts_summary_and_details() -> None:
     assert parsed["tieneMultas"] is True
     assert parsed["resumen"] == {"comparendos": 2, "multas": 1, "acuerdosPago": 0, "total": 350000}
     assert parsed["detalles"] == [{"numero": "ABC", "valor": "$350.000"}]
+
+
+def test_normalize_simit_query_accepts_plate_or_document() -> None:
+    from simit_service.adapters.outbound.browser_provider import _normalize_simit_query
+    from simit_service.adapters.outbound.http_provider import _normalize_document
+
+    assert _normalize_simit_query("abc12d") == "ABC12D"
+    assert _normalize_simit_query("ABC123") == "ABC123"
+    assert _normalize_simit_query("1.052.838.811") == "1052838811"
+    assert _normalize_document("abc12d") == "ABC12D"
+    assert _normalize_document("123.456") == "123456"
 
 
 def test_manizales_parser_and_local_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:

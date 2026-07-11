@@ -14,6 +14,7 @@ FLOW_PROMPT_FILES = (
     "flows/tecnomecanica.md",
     "flows/licencia.md",
     "flows/curso_multa.md",
+    "flows/centros.md",
     "flows/agenda.md",
 )
 

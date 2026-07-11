@@ -38,12 +38,22 @@ class BrowserSimitProvider:
 
     async def consult_multas(self, payload: SimitMultasRequest) -> SimitMultasResponse:
         async with _BROWSER_LOCK:
-            data = await self._consult(payload)
-        return normalize_simit_response(data, fallback_documento=payload.documento)
+            last_error: Exception | None = None
+            for attempt in range(1, 3):
+                try:
+                    data = await self._consult(payload)
+                    return normalize_simit_response(data, fallback_documento=payload.documento)
+                except Exception as exc:
+                    last_error = exc
+                    if attempt >= 2 or not _is_transient_browser_error(exc):
+                        break
+                    await asyncio.sleep(min(1.0 * attempt, 2.0))
+            assert last_error is not None
+            raise last_error
 
     async def _consult(self, payload: SimitMultasRequest) -> dict[str, Any]:
         async_playwright = _load_async_playwright()
-        documento = "".join(char for char in payload.documento if char.isdigit())
+        query = _normalize_simit_query(payload.documento)
 
         async with async_playwright() as playwright:
             browser = await playwright.chromium.launch(
@@ -73,17 +83,20 @@ class BrowserSimitProvider:
                 """
             )
             try:
-                await page.goto(self.portal_url, wait_until="networkidle", timeout=self.timeout_ms)
-                await page.locator("#txtBusqueda").wait_for(timeout=self.timeout_ms)
-                await page.locator("#txtBusqueda").fill(documento, timeout=10000)
+                # SIMIT is a SPA with continuous network activity; networkidle often times out.
+                await page.goto(self.portal_url, wait_until="domcontentloaded", timeout=self.timeout_ms)
+                await page.locator("#txtBusqueda").wait_for(state="visible", timeout=self.timeout_ms)
+                await page.locator("#txtBusqueda").fill(query, timeout=10000)
                 await page.locator("#btnNumDocPlaca").click(timeout=10000)
                 state = await _wait_for_simit_result(page, timeout_ms=self.timeout_ms)
                 if state["has_error"]:
                     raise RuntimeError("El portal SIMIT reporto un error al realizar la consulta")
+                if not state["has_summary"] and not state["no_fines"]:
+                    raise RuntimeError("El portal SIMIT no devolvio un resultado legible a tiempo")
 
                 body_text = await page.locator("body").inner_text(timeout=10000)
                 details = await _extract_tables(page)
-                return {"success": True, "documento": documento, **parse_simit_text(body_text, details=details)}
+                return {"success": True, "documento": query, **parse_simit_text(body_text, details=details)}
             finally:
                 await browser.close()
 
@@ -141,12 +154,20 @@ async def _extract_tables(page: Any) -> list[dict[str, object]]:
     tables = await page.evaluate(
         """
         () => {
+            const clean = (value) => (value || '').replace(/\\s+/g, ' ').trim();
             const output = [];
             document.querySelectorAll('table').forEach(table => {
-                const headers = Array.from(table.querySelectorAll('th')).map(th => th.innerText.trim());
+                const headers = Array.from(table.querySelectorAll('th')).map(th => clean(th.innerText));
                 table.querySelectorAll('tbody tr').forEach(tr => {
-                    const cols = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
-                    if (!cols.length) return;
+                    const cols = Array.from(tr.querySelectorAll('td')).map(td => clean(td.innerText));
+                    if (!cols.length || cols.every(col => !col)) return;
+                    // Skip projection/interest widgets that are not fine rows.
+                    const blob = cols.join(' ').toLowerCase();
+                    if (blob.includes('proyección pago') || blob.includes('proyeccion pago')) {
+                        if (!/[a-i]\\d{2}/i.test(blob) && !/[a-z]{3}\\d{2}[a-z0-9]/i.test(blob)) {
+                            return;
+                        }
+                    }
                     if (headers.length === cols.length) {
                         const row = {};
                         headers.forEach((header, index) => { row[header || `col_${index}`] = cols[index]; });
@@ -163,6 +184,21 @@ async def _extract_tables(page: Any) -> list[dict[str, object]]:
         """
     )
     return [dict(item) for item in tables if isinstance(item, dict)]
+
+
+def _is_transient_browser_error(exc: Exception) -> bool:
+    text = str(exc or "").lower()
+    return any(
+        marker in text
+        for marker in (
+            "timeout",
+            "networkidle",
+            "target closed",
+            "browser has been closed",
+            "navigation",
+            "no devolvio un resultado",
+        )
+    )
 
 
 def _summary_count(text: str, label: str) -> int:
@@ -214,3 +250,17 @@ def _bool_env(name: str, *, default: bool) -> bool:
     if not raw_value:
         return default
     return raw_value in {"1", "true", "yes", "si"}
+
+
+_PLATE_QUERY_RE = re.compile(r"^[A-Z]{3}\d{2}[A-Z0-9]$|^[A-Z]{3}\d{3}$", re.IGNORECASE)
+
+
+def _normalize_simit_query(value: str) -> str:
+    """SIMIT search box accepts document number or plate."""
+    compact = "".join(char for char in (value or "").strip().upper() if char.isalnum())
+    if not compact:
+        return ""
+    if _PLATE_QUERY_RE.match(compact):
+        return compact
+    digits = "".join(char for char in compact if char.isdigit())
+    return digits or compact

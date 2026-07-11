@@ -362,3 +362,9 @@ class SqlPendingAppointmentStore:
             "lat": float(lat) if lat is not None else None,
             "lng": float(lng) if lng is not None else None,
         }
+
+    def clear(self, *, user_key: str) -> None:
+        with self.engine.begin() as conn:
+            conn.execute(
+                bot_pending_appointments.delete().where(bot_pending_appointments.c.user_key == user_key)
+            )

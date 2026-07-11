@@ -223,7 +223,17 @@ async def test_confirm_schedules_dual_reminders_and_notifies_client() -> None:
     assert confirmed.success
     assert confirmed.appointment["status"] == "confirmed"
     assert any("confirmada" in str(m["body"]).lower() for m in fake_client.whatsapp)
+    assert any("12/07/2026 a las 11:00 a. m." in str(m["body"]) for m in fake_client.whatsapp)
+    assert not any("2026-07-12T11:00" in str(m["body"]) for m in fake_client.whatsapp if "confirmada" in str(m["body"]).lower())
     assert len(fake_client.reminders) == 2
+
+
+def test_format_starts_at_human() -> None:
+    from appointment_service.shared.reminders import format_starts_at_human
+
+    assert format_starts_at_human("2026-07-12T14:00") == "12/07/2026 a las 2:00 p. m."
+    assert format_starts_at_human("2026-07-12T09:30") == "12/07/2026 a las 9:30 a. m."
+    assert format_starts_at_human("not-a-date") == "not-a-date"
 
 
 @pytest.mark.asyncio

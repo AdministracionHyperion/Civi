@@ -62,9 +62,10 @@ async def process_one_job(
             repo.mark_done(job.job_id, {"data": data, "formatted": formatted, "quote": quote})
             await _send_and_dispatch(nc, to=job.user_key, channel=job.channel, body=formatted)
         elif job.intent == "multas":
-            if not job.documento:
-                raise RuntimeError("Falta documento para la consulta de multas")
-            data = await vc.consult_multas(documento=job.documento, ciudad=job.ciudad)
+            query = job.documento or job.placa
+            if not query:
+                raise RuntimeError("Falta placa o documento para la consulta de multas")
+            data = await vc.consult_multas(documento=query, ciudad=job.ciudad)
             formatted = format_multas_response(data)
             repo.mark_done(job.job_id, {"data": data, "formatted": formatted})
             await _send_and_dispatch(nc, to=job.user_key, channel=job.channel, body=formatted)
@@ -88,13 +89,47 @@ async def process_one_job(
                 nc,
                 to=job.user_key,
                 channel=job.channel,
-                body=(
-                    "Tuve un problema consultando la informacion. "
-                    "Verifica los datos (placa y cedula) y lo intento de nuevo cuando quieras."
-                ),
+                body=_consult_failure_message(job.intent),
             )
         except Exception:
             logger.exception("failed to send failure notification for job %s", job.job_id)
+
+
+def _consult_failure_message(intent: str, *, timed_out: bool = False) -> str:
+    if timed_out:
+        prefix = "Tu consulta tardo mas de lo esperado y no pude completarla."
+    else:
+        prefix = "Tuve un problema consultando la informacion."
+
+    if intent == "runt_profile":
+        if timed_out:
+            return (
+                "Tu consulta de perfil RUNT tardo mas de lo esperado y no pude completarla. "
+                "Verifica la cedula e intentalo de nuevo cuando quieras."
+            )
+        return (
+            "Tuve un problema consultando tu perfil RUNT. "
+            "Verifica la cedula y lo intento de nuevo cuando quieras."
+        )
+    if intent == "multas":
+        if timed_out:
+            return (
+                "Tu consulta de multas tardo mas de lo esperado y no pude completarla. "
+                "Verifica la placa o cedula e intentalo de nuevo cuando quieras."
+            )
+        return (
+            "Tuve un problema consultando las multas. "
+            "Verifica la placa o cedula y lo intento de nuevo cuando quieras."
+        )
+    if timed_out:
+        return (
+            f"{prefix} "
+            "Verifica los datos (placa y cedula) e intentalo de nuevo cuando quieras."
+        )
+    return (
+        f"{prefix} "
+        "Verifica los datos (placa y cedula) y lo intento de nuevo cuando quieras."
+    )
 
 
 async def _maybe_quote_for_vigencia(
@@ -188,10 +223,7 @@ async def _notify_reaped_jobs(
                 nc,
                 to=job.user_key,
                 channel=job.channel,
-                body=(
-                    "Tu consulta tardo mas de lo esperado y no pude completarla. "
-                    "Verifica los datos (placa y cedula) e intentalo de nuevo cuando quieras."
-                ),
+                body=_consult_failure_message(job.intent, timed_out=True),
             )
         except Exception:
             logger.exception("failed to notify reaped job %s", job.job_id)
