@@ -50,8 +50,18 @@ def extract_document(text: str) -> str | None:
 
 def wants_vigencia(text: str) -> bool:
     lowered = (text or "").lower()
-    terms = ("soat", "tecno", "tecnico", "técnico", "tecnomecanica", "tecnomecánica", "rtm", "vigencia", "vence", "vencimiento")
-    return any(term in lowered for term in terms)
+    terms = (
+        "tecno",
+        "tecnico",
+        "técnico",
+        "tecnomecanica",
+        "tecnomecánica",
+        "rtm",
+        "vigencia",
+        "vence",
+        "vencimiento",
+    )
+    return wants_soat(text) or any(term in lowered for term in terms)
 
 
 def wants_infraccion_quote(text: str) -> bool:
@@ -237,36 +247,92 @@ def wants_multas(text: str) -> bool:
 
 
 def wants_runt_profile(text: str) -> bool:
-    lowered = (text or "").lower()
-    if any(term in lowered for term in ("agendar", "agenda", "cita", "reservar", "cotizar", "precio")):
+    """Match RUNT license/profile consult, including common typos like 'licensia'/'licenia'."""
+    normalized = _normalize_license_typos(text)
+    if any(term in normalized for term in ("agendar", "agenda", "cita", "reservar", "cotizar", "precio")):
         return False
     terms = (
         "perfil runt",
         "runt por cedula",
-        "runt por cédula",
         "mi runt",
         "mis licencias",
         "mi licencia",
+        "una licencia",
+        "consultar licencia",
+        "consulta licencia",
+        "consulta de licencia",
+        "consultar mi licencia",
+        "consultar una licencia",
         "estado de licencia",
+        "estado licencia",
         "categoria de licencia",
-        "categoría de licencia",
         "categorias de licencia",
-        "categorías de licencia",
         "puntos de licencia",
         "puntos en licencia",
         "perfil conductor",
         "perfil de conductor",
+        "vigencia de licencia",
+        "vigencia licencia",
     )
-    return any(term in lowered for term in terms)
+    if any(term in normalized for term in terms):
+        return True
+    if "licencia" in normalized:
+        return any(
+            term in normalized
+            for term in (
+                "consultar",
+                "consulta",
+                "necesito",
+                "revisar",
+                "ver mi",
+                "mirar",
+                "estado",
+                "categoria",
+                "puntos",
+                "vigencia",
+            )
+        )
+    return False
+
+
+def _normalize_license_typos(text: str) -> str:
+    normalized = _normalized(text)
+
+    def _canon(match: re.Match[str]) -> str:
+        word = match.group(0)
+        return "licencias" if word.endswith("s") else "licencia"
+
+    # licenia, licensia, licencia, lisencia, liciencia, licence, etc.
+    normalized = re.sub(r"\b(?:li[cs]en\w{0,5}|licien\w{0,4}|licenses?|licences?)\b", _canon, normalized)
+    return normalized
 
 
 def wants_soat(text: str) -> bool:
-    return "soat" in (text or "").lower()
+    """Match SOAT including common typos like 'soart'."""
+    lowered = (text or "").lower()
+    if "soat" in lowered or "soart" in lowered:
+        return True
+    return bool(re.search(r"\bsoa+r?t\b", lowered))
 
 
 def wants_tecno(text: str) -> bool:
-    lowered = (text or "").lower()
-    return any(term in lowered for term in ("tecno", "tecnomecanica", "tecnomecánica", "rtm", "tecnico", "técnico"))
+    normalized = _normalized(text)
+    if any(
+        term in normalized
+        for term in ("tecno", "tecnomecanica", "rtm", "tecnico")
+    ):
+        return True
+    if re.search(r"\bcda\b", normalized):
+        return True
+    return any(
+        phrase in normalized
+        for phrase in (
+            "diagnostico automotor",
+            "diagnostico automotriz",
+            "centro de diagnostico",
+            "centros de diagnostico",
+        )
+    )
 
 
 def wants_appointment(text: str) -> bool:
@@ -297,68 +363,219 @@ def wants_alternative_places(text: str) -> bool:
             "alternativas",
             "mas opciones",
             "no me sirve",
-            "no ese",
             "ver otra",
         )
     )
 
 
+def wants_place_comparison(text: str) -> bool:
+    """User asks which listed place is better / closer / recommended."""
+    normalized = _normalized(text)
+    return any(
+        term in normalized
+        for term in (
+            "cual es mejor",
+            "cual me conviene",
+            "cual conviene",
+            "cual elijo",
+            "cual escojo",
+            "cual me recomiendas",
+            "me recomiendas",
+            "recomiendame",
+            "que me recomiendas",
+            "por que ese",
+            "y por que",
+            "cual es mas cerca",
+            "cual queda mas cerca",
+            "el mas cercano",
+            "la mas cercana",
+            "diferencia entre",
+        )
+    ) or (
+        ("mejor" in normalized or "conviene" in normalized or "recomienda" in normalized)
+        and any(term in normalized for term in ("cual", "que", "por que", "porque"))
+    )
+
+
+def wants_nearest_place(text: str) -> bool:
+    normalized = _normalized(text)
+    return any(
+        term in normalized
+        for term in (
+            "el mas cerca",
+            "la mas cerca",
+            "mas cercano",
+            "mas cercana",
+            "el mas cercano",
+            "la mas cercana",
+            "el de mas cerca",
+            "el primero",
+            "la primera",
+            "el mas proximo",
+        )
+    )
+
+
+GENERIC_PLACE_TOKENS = frozenset(
+    {
+        "cda",
+        "cia",
+        "cea",
+        "crc",
+        "centro",
+        "centros",
+        "diagnostico",
+        "automotor",
+        "automotriz",
+        "cita",
+        "agendar",
+        "agenda",
+        "quiero",
+        "necesito",
+        "para",
+        "por",
+        "favor",
+        "ese",
+        "esa",
+        "este",
+        "esta",
+        "aquel",
+        "aquella",
+        "uno",
+        "una",
+        "del",
+        "los",
+        "las",
+        "con",
+        "sin",
+        "pero",
+        "era",
+        "eras",
+        "solo",
+        "solamente",
+        "mejor",
+        "opcion",
+        "numero",
+    }
+)
+
+
 def extract_place_selection(text: str, *, places: list[dict[str, Any]] | None = None) -> int | None:
     normalized = _normalized(text)
-    word_map = {
-        "primera": 1,
-        "primer": 1,
-        "uno": 1,
-        "esa": 1,
-        "ese": 1,
-        "me sirve": 1,
-        "segunda": 2,
-        "segundo": 2,
-        "dos": 2,
-        "tercera": 3,
-        "tercero": 3,
-        "tres": 3,
-        "cuarta": 4,
-        "cuarto": 4,
-        "cuatro": 4,
-    }
-    for term, value in word_map.items():
-        if term in normalized:
-            return value
-    match = re.search(r"\b(?:opcion|opción|centro|cda|cia|crc)?\s*#?\s*([1-9])\b", text or "", re.IGNORECASE)
+
+    # Prefer concrete place-name matches over vague ordinals like "esa".
+    if places:
+        by_name = _match_place_by_text(text, places)
+        if by_name is not None:
+            return by_name
+        nearest = _nearest_place_index(text, places)
+        if nearest is not None:
+            return nearest
+
+    match = re.search(r"\b(?:opcion|opción|centro|cda|cia|crc|cea)?\s*#?\s*([1-9])\b", text or "", re.IGNORECASE)
     if match:
         return int(match.group(1))
 
-    if places:
-        result = _match_place_by_text(text, places)
-        if result is not None:
-            return result
+    ordinal_map = {
+        "primera": 1,
+        "primer": 1,
+        "segunda": 2,
+        "segundo": 2,
+        "tercera": 3,
+        "tercero": 3,
+        "cuarta": 4,
+        "cuarto": 4,
+        "dos": 2,
+        "tres": 3,
+        "cuatro": 4,
+    }
+    for term, value in ordinal_map.items():
+        if re.search(rf"\b{re.escape(term)}\b", normalized):
+            return value
+
+    # Vague confirmations only when there is a single option.
+    if places and len(places) == 1 and any(
+        term in normalized for term in ("esa", "ese", "me sirve", "dale", "va", "ok", "listo")
+    ):
+        return 1
 
     return None
+
+
+def _nearest_place_index(text: str, places: list[dict[str, Any]]) -> int | None:
+    if not wants_nearest_place(text) or not places:
+        return None
+    best_idx = 1
+    best_distance = float("inf")
+    for idx, place in enumerate(places, start=1):
+        raw = place.get("distance_km")
+        try:
+            distance = float(raw) if raw is not None else float("inf")
+        except (TypeError, ValueError):
+            distance = float("inf")
+        if distance < best_distance:
+            best_distance = distance
+            best_idx = idx
+    return best_idx
 
 
 def _match_place_by_text(text: str, places: list[dict[str, Any]]) -> int | None:
-    """Try to match user text against place names, cities, and kind abbreviations (1-indexed)."""
-    lowered = (text or "").lower()
-    if not lowered:
+    """Score places by specific name/city tokens; ignore generic kind words like 'cda'."""
+    tokens = [token for token in re.findall(r"[a-z0-9]+", _normalized(text)) if len(token) >= 3]
+    if not tokens or not places:
         return None
 
+    specific = [token for token in tokens if token not in GENERIC_PLACE_TOKENS]
+    scored: list[tuple[int, int]] = []
     for idx, place in enumerate(places, start=1):
-        name = str(place.get("name", "")).lower()
-        city = str(place.get("city", "")).lower()
-        kind = str(place.get("kind", "")).upper()
+        score = _score_place_match(tokens, specific, place)
+        if score > 0:
+            scored.append((idx, score))
+    if not scored:
+        return None
 
-        # Check if any word from user text appears in place name or city
-        tokens = lowered.split()
-        for token in tokens:
-            if len(token) < 3:
-                continue
-            if token in name or token in city:
-                return idx
-            if token == kind.lower() or token in kind.lower():
-                return idx
+    scored.sort(key=lambda item: (-item[1], item[0]))
+    best_idx, best_score = scored[0]
+    # If the user gave a specific token, require a real name/city hit (not only "cda").
+    if specific and best_score < 8:
+        return None
+    # Ambiguous tie on the top score → ask again instead of guessing.
+    if len(scored) > 1 and scored[1][1] == best_score:
+        return None
+    return best_idx
 
-    return None
+
+def _score_place_match(tokens: list[str], specific: list[str], place: dict[str, Any]) -> int:
+    name = _normalized(str(place.get("name") or ""))
+    city = _normalized(str(place.get("city") or ""))
+    kind = _normalized(str(place.get("kind") or ""))
+    use_tokens = specific or tokens
+    score = 0
+    for token in use_tokens:
+        generic = token in GENERIC_PLACE_TOKENS
+        if _token_matches_haystack(token, name):
+            score += 1 if generic else 10
+        elif _token_matches_haystack(token, city):
+            score += 1 if generic else 7
+        elif token == kind or token in kind.split():
+            score += 1
+    return score
+
+
+def _token_matches_haystack(token: str, haystack: str) -> bool:
+    if not token or not haystack:
+        return False
+    if token in haystack:
+        return True
+    for word in haystack.split():
+        if len(token) < 4 or len(word) < 4:
+            continue
+        # Tolerate light typos: villabels ↔ villabel, caracoli ↔ caracolí.
+        if token.startswith(word[:4]) or word.startswith(token[:4]):
+            shorter, longer = (token, word) if len(token) <= len(word) else (word, token)
+            if longer.startswith(shorter) or shorter in longer:
+                return True
+    return False
 
 
 def wants_quote(text: str) -> bool:
@@ -744,20 +961,91 @@ def extract_start_iso(text: str) -> str | None:
 
 
 def procedure_for_text(text: str) -> str | None:
-    if wants_tecno(text):
+    """Map user text to a bookable procedure, including place-type aliases (CDA/CIA/CEA/CRC)."""
+    normalized = _normalized(text)
+
+    # CDA → tecnomecanica (also covers tecno/RTM wording via wants_tecno).
+    if wants_tecno(text) or _mentions_place_alias(
+        normalized,
+        acronyms=("cda",),
+        phrases=(
+            "centro de diagnostico",
+            "centros de diagnostico",
+            "diagnostico automotor",
+            "diagnostico automotriz",
+        ),
+    ):
         return "tecnomecanica"
-    lowered = (text or "").lower()
-    if any(term in lowered for term in ("multa", "comparendo", "curso")):
+
+    # CIA → curso por multa (before bare "curso", which is ambiguous with CEA).
+    if _mentions_place_alias(
+        normalized,
+        acronyms=("cia",),
+        phrases=(
+            "centro integral de atencion",
+            "centros integrales de atencion",
+            "curso pedagogico",
+            "curso por multa",
+            "curso por comparendo",
+        ),
+    ):
         return "curso_multa"
-    if "renov" in lowered:
+
+    # CRC → renovacion / reconocimiento de conductores.
+    if _mentions_place_alias(
+        normalized,
+        acronyms=("crc",),
+        phrases=(
+            "centro de reconocimiento",
+            "centros de reconocimiento",
+            "reconocimiento de conductores",
+        ),
+    ) or "renov" in normalized:
         return "renovacion_licencia"
-    if "licencia" in lowered:
+
+    # CEA → primera licencia / escuela de conduccion (before bare "curso").
+    if _mentions_place_alias(
+        normalized,
+        acronyms=("cea",),
+        phrases=(
+            "centro de ensenanza",
+            "centros de ensenanza",
+            "ensenanza automovilistica",
+            "escuela de conduccion",
+            "escuela de manejo",
+            "curso de conduccion",
+            "curso de manejo",
+        ),
+    ):
+        return "licencia_primera"
+
+    if any(term in normalized for term in ("multa", "comparendo", "fotomulta")) and "curso" in normalized:
+        return "curso_multa"
+    if any(term in normalized for term in ("multa", "comparendo")) and any(
+        term in normalized for term in ("cita", "agendar", "agenda", "turno", "reservar")
+    ):
+        return "curso_multa"
+    if "curso" in normalized:
+        return "curso_multa"
+    if "licencia" in normalized:
         return "licencia_primera"
     return None
 
 
 def mentions_crc(text: str) -> bool:
-    return "crc" in _normalized(text)
+    return bool(re.search(r"\bcrc\b", _normalized(text))) or "reconocimiento de conductores" in _normalized(text)
+
+
+def _mentions_place_alias(
+    normalized: str,
+    *,
+    acronyms: tuple[str, ...] = (),
+    phrases: tuple[str, ...] = (),
+) -> bool:
+    for acronym in acronyms:
+        if re.search(rf"\b{re.escape(acronym)}\b", normalized):
+            return True
+    return any(phrase in normalized for phrase in phrases)
 
 
 def _normalized(text: str) -> str:

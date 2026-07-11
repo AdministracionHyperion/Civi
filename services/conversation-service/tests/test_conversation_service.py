@@ -182,7 +182,44 @@ async def test_run_turn_forwards_metadata_to_agent() -> None:
     )
 
     assert agent.calls == 1
-    assert agent.payloads[0].metadata == {"location_lat": 4.711, "location_lng": -74.0721}
+    metadata = agent.payloads[0].metadata
+    assert metadata["location_lat"] == 4.711
+    assert metadata["location_lng"] == -74.0721
+    assert metadata["recent_turns"] == []
+
+
+@pytest.mark.asyncio
+async def test_run_turn_attaches_recent_turns_for_llm_memory() -> None:
+    repo = InMemoryConversationRepository()
+    publisher = InMemoryEventPublisher()
+    agent = FakeAgentClient()
+    repo.set_consent(
+        user_key="user-memory",
+        channel="whatsapp",
+        status="accepted",
+        purpose="civi_conversation",
+        policy_version="2026-07-07",
+    )
+    for idx in range(5):
+        repo.record_turn(
+            user_key="user-memory",
+            channel="whatsapp",
+            user_text=f"msg-{idx}",
+            agent_text=f"reply-{idx}",
+            state_version=1,
+        )
+
+    await run_turn(
+        RunTurnRequest(user_key="user-memory", text="y eso cuanto vale?", channel="whatsapp"),
+        agent_client=agent,
+        conversation_repository=repo,
+        event_publisher=publisher,
+    )
+
+    recent = agent.payloads[0].metadata["recent_turns"]
+    assert len(recent) == 4
+    assert recent[0]["user_text"] == "msg-1"
+    assert recent[-1]["agent_text"] == "reply-4"
 
 
 @pytest.mark.asyncio

@@ -16,6 +16,48 @@ TIPO_LABELS: dict[str, str] = {
 
 DATE_EXAMPLES = "*manana a las 10*, *el jueves 3pm* o *2026-07-10 09:00*"
 
+VEHICLE_PLATE_EXAMPLE = "ABC123"
+VEHICLE_DOCUMENT_EXAMPLE = "1234567890"
+
+
+def format_vehicle_slots_request(*, need_placa: bool, need_documento: bool) -> str:
+    """Standard ask for placa/cedula when starting or resuming a RUNT vigencia consult."""
+    if need_placa and need_documento:
+        what = "la *placa* y *cedula*"
+        example = f"{VEHICLE_PLATE_EXAMPLE} {VEHICLE_DOCUMENT_EXAMPLE}"
+    elif need_placa:
+        what = "la *placa*"
+        example = VEHICLE_PLATE_EXAMPLE
+    elif need_documento:
+        what = "la *cedula*"
+        example = VEHICLE_DOCUMENT_EXAMPLE
+    else:
+        raise ValueError("format_vehicle_slots_request requires at least one missing slot")
+    return (
+        f"Claro, con gusto. Pasame {what} como el siguiente ejemplo por favor "
+        f"{example} 😊"
+    )
+
+
+def format_multas_city_request() -> str:
+    return (
+        "Claro, con gusto. ¿En qué ciudad crees que te pusieron la multa? "
+        "Si no sabes, dime *nacional* o *no sé* 😊"
+    )
+
+
+def format_multas_query_request(*, ciudad: str | None = None) -> str:
+    example = f"{VEHICLE_PLATE_EXAMPLE} o {VEHICLE_DOCUMENT_EXAMPLE}"
+    if ciudad:
+        return (
+            f"Claro, con gusto. Para consultar en *{ciudad}*, pasame la *placa* o la *cedula* "
+            f"como el siguiente ejemplo por favor {example} 😊"
+        )
+    return (
+        "Claro, con gusto. Pasame la *placa* o la *cedula* "
+        f"como el siguiente ejemplo por favor {example} 😊"
+    )
+
 
 def _format_ddmmyyyy(value: object) -> str | None:
     if not isinstance(value, str):
@@ -290,6 +332,13 @@ def _format_local_multa_details(detalles: object) -> str:
     return "Detalle: " + "; ".join(snippets) + "."
 
 
+def format_runt_profile_document_request() -> str:
+    return (
+        f"Claro, con gusto. Pasame la *cedula* como el siguiente ejemplo por favor "
+        f"{VEHICLE_DOCUMENT_EXAMPLE} 😊"
+    )
+
+
 def format_runt_profile_response(data: dict[str, Any]) -> str:
     if not data.get("ok"):
         return "No pude traer el perfil RUNT en este momento. Verifica la cedula y lo intento de nuevo."
@@ -297,7 +346,8 @@ def format_runt_profile_response(data: dict[str, Any]) -> str:
     payload = data.get("data") if isinstance(data.get("data"), dict) else {}
     tail = data.get("documentoTail") or ""
     name = payload.get("nombre") or payload.get("nombreCompleto") or payload.get("ciudadano")
-    licenses = _first_list(payload, ("licencias", "licenciasConduccion", "licencias_conduccion", "categorias"))
+    licenses = _first_list(payload, ("licencias", "licenciasConduccion", "licencias_conduccion"))
+    flat_categories = _first_list(payload, ("categorias",))
     fines = _first_list(payload, ("comparendos", "multas", "sanciones"))
 
     parts: list[str] = []
@@ -307,23 +357,104 @@ def format_runt_profile_response(data: dict[str, Any]) -> str:
     else:
         parts.append(f"Ya consulte el perfil RUNT para el {subject}.")
 
-    if licenses:
-        preview = []
+    estado_persona = payload.get("estadoPersona") or payload.get("estado_persona")
+    estado_conductor = payload.get("estadoConductor") or payload.get("estado_conductor")
+    status_bits = []
+    if estado_persona:
+        status_bits.append(f"persona {estado_persona}")
+    if estado_conductor:
+        status_bits.append(f"conductor {estado_conductor}")
+    if status_bits:
+        parts.append("Estado: " + ", ".join(str(value) for value in status_bits) + ".")
+
+    category_lines = _format_runt_license_categories(licenses, flat_categories)
+    if category_lines:
+        parts.append("Categorias: " + "; ".join(category_lines) + ".")
+    elif licenses:
+        license_bits = []
         for item in licenses[:3]:
-            if isinstance(item, dict):
-                category = item.get("categoria") or item.get("clase") or item.get("tipo") or "licencia"
-                status = item.get("estado") or item.get("vigencia") or item.get("estadoLicencia")
-                preview.append(f"{category}{f' ({status})' if status else ''}")
-        if preview:
-            parts.append("Licencias/categorias: " + ", ".join(str(value) for value in preview) + ".")
+            if not isinstance(item, dict):
+                continue
+            status = item.get("estado") or item.get("estadoLicencia")
+            ot = item.get("ot")
+            bit = "licencia"
+            if status:
+                bit += f" {status}"
+            if ot:
+                bit += f" ({ot})"
+            license_bits.append(bit)
+        if license_bits:
+            parts.append("Licencias: " + "; ".join(license_bits) + ".")
 
     if fines:
         parts.append(f"Tambien veo {len(fines)} registro(s) de comparendos/multas en el perfil.")
 
-    if len(parts) == 1:
-        parts.append("No me llego un detalle claro de licencias o comparendos en la respuesta.")
+    if not category_lines and not licenses and not fines:
+        parts.append("No me llego un detalle claro de licencias o categorias en la respuesta.")
 
     return " ".join(parts)
+
+
+def _format_runt_license_categories(
+    licenses: list[Any],
+    flat_categories: list[Any],
+) -> list[str]:
+    lines: list[str] = []
+    for item in licenses[:4]:
+        if not isinstance(item, dict):
+            continue
+        license_status = item.get("estado") or item.get("vigencia") or item.get("estadoLicencia")
+        nested = item.get("categorias")
+        if isinstance(nested, list) and nested:
+            for category in nested[:6]:
+                if not isinstance(category, dict):
+                    continue
+                line = _format_category_line(category, license_status=str(license_status) if license_status else None)
+                if line:
+                    lines.append(line)
+            continue
+        # Legacy flat license row without nested categorias.
+        category = item.get("categoria") or item.get("clase") or item.get("tipo")
+        if category:
+            venc = (
+                item.get("fechaVencimiento")
+                or item.get("fecha_vencimiento")
+                or item.get("vencimiento")
+            )
+            bit = str(category)
+            if license_status:
+                bit += f" ({license_status})"
+            if venc:
+                bit += f", vence {venc}"
+            lines.append(bit)
+
+    if not lines:
+        for category in flat_categories[:6]:
+            if isinstance(category, dict):
+                line = _format_category_line(category)
+                if line:
+                    lines.append(line)
+            elif category:
+                lines.append(str(category))
+    return lines
+
+
+def _format_category_line(category: dict[str, Any], *, license_status: str | None = None) -> str | None:
+    code = category.get("categoria") or category.get("clase") or category.get("tipo")
+    if not code:
+        return None
+    venc = (
+        category.get("fechaVencimiento")
+        or category.get("fecha_vencimiento")
+        or category.get("vencimiento")
+    )
+    status = category.get("estado") or license_status
+    bit = str(code)
+    if status:
+        bit += f" ({status})"
+    if venc:
+        bit += f", vence {venc}"
+    return bit
 
 
 def _first_list(payload: dict[str, Any], keys: tuple[str, ...]) -> list[Any]:
@@ -400,18 +531,54 @@ def format_place_options_response(places: list[dict[str, object]], *, starts_at:
         else "Estos son centros afiliados Civi cerca de ti:"
     )
     suffix = (
-        f"Ya tengo la fecha *{starts_at}*. Dime el numero del centro que prefieres."
+        f"Ya tengo la fecha *{starts_at}*. Dime el numero o el nombre del centro que prefieres."
         if starts_at
-        else f"Dime el numero del centro que prefieres y la fecha, por ejemplo {DATE_EXAMPLES}."
+        else f"Dime el numero o el nombre del centro que prefieres y la fecha, por ejemplo {DATE_EXAMPLES}."
     )
     return f"{header}\n" + "\n".join(options) + f"\n{suffix}"
+
+
+def format_place_comparison_response(places: list[dict[str, object]]) -> str:
+    """Deterministic advice among listed affiliates: prefer closer distance, no invented quality reviews."""
+    if not places:
+        return "No tengo centros en la lista para comparar. Comparte ubicacion o ciudad y te busco opciones."
+
+    ranked: list[tuple[float, dict[str, object]]] = []
+    for place in places:
+        raw = place.get("distance_km")
+        try:
+            distance = float(raw) if raw is not None else float("inf")
+        except (TypeError, ValueError):
+            distance = float("inf")
+        ranked.append((distance, place))
+    ranked.sort(key=lambda item: item[0])
+    best_distance, best = ranked[0]
+    best_name = str(best.get("name") or "ese centro").strip()
+    best_city = str(best.get("city") or "").strip()
+    best_dist_label = _format_distance(best.get("distance_km"))
+
+    lines = [
+        "Entre estos afiliados Civi no invento cual es 'mejor' en calidad (no tengo reseñas).",
+        "Por cercania, el que mas conviene suele ser:",
+        f"*{best_name}*" + (f" ({best_city})" if best_city else ""),
+    ]
+    if best_dist_label:
+        lines.append(f"Distancia: {best_dist_label}.")
+    if len(ranked) > 1 and ranked[1][0] != float("inf"):
+        other = ranked[1][1]
+        other_name = str(other.get("name") or "el otro").strip()
+        other_dist = _format_distance(other.get("distance_km"))
+        if other_dist and best_distance != float("inf"):
+            lines.append(f"La siguiente opcion es *{other_name}* a {other_dist}.")
+    lines.append("Si te late, dime el *numero* o el *nombre* del centro y seguimos.")
+    return "\n".join(lines)
 
 
 def format_pending_place_date_request(place: dict[str, object]) -> str:
     nombre = str(place.get("name") or "").strip() or "el centro"
     ciudad = str(place.get("city") or "").strip()
     lugar = f"*{nombre}* en {ciudad}" if ciudad else f"*{nombre}*"
-    return f"Listo, usamos {lugar}. Dime fecha y hora, por ejemplo {DATE_EXAMPLES}."
+    return f"Listo, usamos {lugar}. Cuando quieras, dime fecha y hora, por ejemplo {DATE_EXAMPLES}."
 
 
 def format_appointment_response(appointment: dict[str, object]) -> str:
@@ -421,7 +588,7 @@ def format_appointment_response(appointment: dict[str, object]) -> str:
         return (
             f"Listo, solicite la cita *#{appointment.get('id')}* para *{appointment.get('starts_at')}* "
             f"en *{place.get('name')}*, {place.get('address')}. "
-            "El centro afiliado debe confirmarla; te aviso cuando respondan."
+            "El centro afiliado debe confirmarla; te aviso apenas respondan."
         )
     return (
         f"Listo, cita *#{appointment.get('id')}* confirmada para *{appointment.get('starts_at')}* en "
@@ -432,26 +599,26 @@ def format_appointment_response(appointment: dict[str, object]) -> str:
 def format_no_affiliate_coverage() -> str:
     return (
         "Aun no tengo afiliados Civi en tu zona para agendar. "
-        "Puedo orientarte sobre el tramite o pasarte con un asesor."
+        "Con gusto te oriento sobre el tramite o te paso con un asesor."
     )
 
 
 def format_partner_decision_response(*, action: str, appointment_id: int, success: bool, error: str | None = None) -> str:
     if success:
         if action == "confirmar":
-            return f"Cita {appointment_id} confirmada. Ya avise al cliente."
-        return f"Cita {appointment_id} rechazada. Ya avise al cliente."
+            return f"Listo, cita {appointment_id} confirmada. Ya avise al cliente."
+        return f"Listo, cita {appointment_id} rechazada. Ya avise al cliente."
     if error == "not_found":
-        return f"No encontre la cita {appointment_id}."
+        return f"No encontre la cita {appointment_id}. Revisa el numero y lo intentamos."
     if error == "not_pending":
         return f"La cita {appointment_id} ya no esta pendiente de confirmacion."
-    return f"No pude procesar la cita {appointment_id}. Intentalo de nuevo."
+    return f"No pude procesar la cita {appointment_id}. Intentemoslo de nuevo."
 
 
 def format_appointments_list(data: dict[str, object]) -> str:
     appointments = data.get("appointments") or []
     if not appointments:
-        return "No tienes citas activas registradas."
+        return "Por ahora no tienes citas activas registradas."
     first = appointments[0]
     place = first.get("place") or {}
     return f"Tu proxima cita es el *{first.get('starts_at')}* en *{place.get('name')}*."
@@ -459,7 +626,7 @@ def format_appointments_list(data: dict[str, object]) -> str:
 
 def format_cancel_appointment_response(data: dict[str, object]) -> str:
     if not data.get("success"):
-        return "No encontre esa cita activa para cancelar. Revisa el ID y lo intento de nuevo."
+        return "No encontre esa cita activa para cancelar. Revisa el ID y lo intentamos de nuevo."
     appointment = data.get("appointment") if isinstance(data.get("appointment"), dict) else {}
     return f"Listo, cancele la cita *{appointment.get('id')}*."
 
@@ -468,7 +635,7 @@ def format_reminder_response(data: dict[str, object]) -> str:
     reminder = data.get("reminder") if isinstance(data.get("reminder"), dict) else {}
     remind_at = reminder.get("remind_at")
     if remind_at:
-        return f"Listo, te voy a recordar el *{remind_at}*."
+        return f"Listo, te recuerdo el *{remind_at}*."
     return "Listo, recordatorio programado."
 
 

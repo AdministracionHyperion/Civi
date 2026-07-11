@@ -43,7 +43,7 @@ class BrowserSimitProvider:
 
     async def _consult(self, payload: SimitMultasRequest) -> dict[str, Any]:
         async_playwright = _load_async_playwright()
-        documento = "".join(char for char in payload.documento if char.isdigit())
+        query = _normalize_simit_query(payload.documento)
 
         async with async_playwright() as playwright:
             browser = await playwright.chromium.launch(
@@ -75,7 +75,7 @@ class BrowserSimitProvider:
             try:
                 await page.goto(self.portal_url, wait_until="networkidle", timeout=self.timeout_ms)
                 await page.locator("#txtBusqueda").wait_for(timeout=self.timeout_ms)
-                await page.locator("#txtBusqueda").fill(documento, timeout=10000)
+                await page.locator("#txtBusqueda").fill(query, timeout=10000)
                 await page.locator("#btnNumDocPlaca").click(timeout=10000)
                 state = await _wait_for_simit_result(page, timeout_ms=self.timeout_ms)
                 if state["has_error"]:
@@ -83,7 +83,7 @@ class BrowserSimitProvider:
 
                 body_text = await page.locator("body").inner_text(timeout=10000)
                 details = await _extract_tables(page)
-                return {"success": True, "documento": documento, **parse_simit_text(body_text, details=details)}
+                return {"success": True, "documento": query, **parse_simit_text(body_text, details=details)}
             finally:
                 await browser.close()
 
@@ -214,3 +214,17 @@ def _bool_env(name: str, *, default: bool) -> bool:
     if not raw_value:
         return default
     return raw_value in {"1", "true", "yes", "si"}
+
+
+_PLATE_QUERY_RE = re.compile(r"^[A-Z]{3}\d{2}[A-Z0-9]$|^[A-Z]{3}\d{3}$", re.IGNORECASE)
+
+
+def _normalize_simit_query(value: str) -> str:
+    """SIMIT search box accepts document number or plate."""
+    compact = "".join(char for char in (value or "").strip().upper() if char.isalnum())
+    if not compact:
+        return ""
+    if _PLATE_QUERY_RE.match(compact):
+        return compact
+    digits = "".join(char for char in compact if char.isdigit())
+    return digits or compact

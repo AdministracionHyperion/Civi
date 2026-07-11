@@ -108,7 +108,13 @@ def _headers_for_url(url: str) -> dict[str, str]:
 
 
 def _normalize_document(value: str) -> str:
-    return "".join(char for char in str(value) if char.isdigit())
+    """Normalize SIMIT query: plate stays alphanumeric, documents keep digits."""
+    compact = "".join(char for char in str(value or "").strip().upper() if char.isalnum())
+    if not compact:
+        return ""
+    if re.fullmatch(r"[A-Z]{3}\d{2}[A-Z0-9]|[A-Z]{3}\d{3}", compact):
+        return compact
+    return "".join(char for char in compact if char.isdigit()) or compact
 
 
 def _int_value(value: Any) -> int:

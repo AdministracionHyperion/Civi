@@ -18,6 +18,8 @@ class PendingAppointmentSelection:
     starts_at: str | None = None
     selected_index: int | None = None
     mentioned_crc: bool = False
+    # Last appointment created in this selection flow (for corrections).
+    created_appointment_id: int | None = None
 
 
 @dataclass
@@ -28,6 +30,8 @@ class PendingVehicleConsult:
     placa: str | None = None
     documento: str | None = None
     ciudad: str | None = None
+    # For multas: True once the user gave a city or chose nacional/general.
+    city_resolved: bool = False
 
 
 class InMemoryAppointmentSelectionStore:
@@ -78,6 +82,41 @@ class InMemoryVehicleConsultStore:
 
 
 vehicle_consult_store = InMemoryVehicleConsultStore()
+
+
+@dataclass
+class LastVehicleSlots:
+    """Last placa/documento used for a SOAT/tecno consult on this channel."""
+
+    user_key: str
+    channel: str
+    placa: str | None = None
+    documento: str | None = None
+
+
+class InMemoryLastVehicleSlotsStore:
+    def __init__(self) -> None:
+        self._items: dict[tuple[str, str], LastVehicleSlots] = {}
+        self._lock = Lock()
+
+    def get(self, *, user_key: str, channel: str) -> LastVehicleSlots | None:
+        return self._items.get((user_key, channel.lower()))
+
+    def save(self, slots: LastVehicleSlots) -> LastVehicleSlots:
+        with self._lock:
+            self._items[(slots.user_key, slots.channel.lower())] = slots
+            return slots
+
+    def clear(self, *, user_key: str, channel: str) -> None:
+        with self._lock:
+            self._items.pop((user_key, channel.lower()), None)
+
+    def clear_all(self) -> None:
+        with self._lock:
+            self._items.clear()
+
+
+last_vehicle_slots_store = InMemoryLastVehicleSlotsStore()
 
 
 # ── Shared (cross-process) pending appointment store for WhatsApp async flow ──

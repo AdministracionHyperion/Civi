@@ -4,6 +4,10 @@ import os
 from datetime import datetime, timezone
 from typing import Protocol
 
+from runt_service.adapters.outbound.persona_browser_provider import (
+    BrowserRuntPersonaProvider,
+    LocalRuntPersonaProvider,
+)
 from runt_service.adapters.outbound.persona_http_provider import HttpRuntPersonaProvider
 
 from .schemas import RuntPersonaRequest, RuntPersonaResponse
@@ -23,13 +27,22 @@ async def consult_persona(
     if len(documento) < 6:
         return _error_response(documento=documento, error="documento_invalido")
 
+    request = RuntPersonaRequest(
+        documento=documento,
+        tipoDocumento=(payload.tipoDocumento or "CC").strip().upper() or "CC",
+    )
+
     if provider is not None:
-        return await provider.consult_persona(RuntPersonaRequest(documento=documento))
+        return await provider.consult_persona(request)
 
     mode = _persona_mode()
     if mode == "http":
-        return await HttpRuntPersonaProvider.from_env().consult_persona(RuntPersonaRequest(documento=documento))
-    if mode in {"local", "disabled", "browser"}:
+        return await HttpRuntPersonaProvider.from_env().consult_persona(request)
+    if mode == "browser":
+        return await BrowserRuntPersonaProvider.from_env().consult_persona(request)
+    if mode == "local":
+        return await LocalRuntPersonaProvider().consult_persona(request)
+    if mode == "disabled":
         return _error_response(documento=documento, error="persona_provider_not_configured")
     raise RuntimeError(f"unsupported RUNT persona provider mode: {mode}")
 

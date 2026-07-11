@@ -14,7 +14,7 @@ router = APIRouter(prefix="/internal/runt", dependencies=[Depends(require_intern
 async def post_persona(payload: RuntPersonaRequest) -> RuntPersonaResponse:
     try:
         return await consult_persona(payload)
-    except RuntimeError as exc:
+    except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="RUNT persona provider is unavailable",
