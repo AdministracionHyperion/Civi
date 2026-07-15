@@ -453,6 +453,7 @@ def wants_both_vigencias(text: str) -> bool:
         phrase in normalized
         for phrase in (
             "ambos",
+            "ambas",
             "las dos",
             "los dos",
             "las 2",
@@ -469,6 +470,29 @@ def wants_both_vigencias(text: str) -> bool:
     ):
         return True
     return wants_soat(text) and wants_tecno(text)
+
+
+def wants_same_vehicle_slots(text: str) -> bool:
+    """User refers to the vehicle already used in this chat (same / previous)."""
+    normalized = _normalized(text)
+    return any(
+        phrase in normalized
+        for phrase in (
+            "vehiculo anterior",
+            "el anterior",
+            "la anterior",
+            "el mismo",
+            "la misma",
+            "misma placa",
+            "mismo vehiculo",
+            "mismo carro",
+            "ese vehiculo",
+            "esa placa",
+            "del anterior",
+            "la de antes",
+            "el de antes",
+        )
+    )
 
 
 def wants_other_vehicle(text: str) -> bool:

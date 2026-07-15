@@ -428,7 +428,7 @@ async def test_run_turn_failing_consent_classifier_reasks_without_accepting() ->
 async def test_run_turn_hard_reset_clears_channel_history_and_consent_before_agent() -> None:
     repo = InMemoryConversationRepository()
     publisher = InMemoryEventPublisher()
-    agent = GuardedAgentClient()
+    agent = FakeAgentClient()
     classifier = FakeConsentClassifier("ACCEPT")
     repo.set_consent(
         user_key="user-reset",
@@ -469,7 +469,8 @@ async def test_run_turn_hard_reset_clears_channel_history_and_consent_before_age
 
     web_consent = repo.get_consent(user_key="user-reset", channel="web")
 
-    assert agent.calls == 0
+    assert agent.calls == 1
+    assert agent.payloads[0].metadata.get("control") == "hard_reset"
     assert classifier.calls == 0
     assert "historial y el consentimiento" in response.text
     assert "Habeas Data" in response.text
@@ -489,7 +490,7 @@ async def test_run_turn_hard_reset_clears_channel_history_and_consent_before_age
         event_publisher=publisher,
     )
 
-    assert agent.calls == 0
+    assert agent.calls == 1
     assert "autorizacion" in next_response.text
 
 
@@ -497,7 +498,7 @@ async def test_run_turn_hard_reset_clears_channel_history_and_consent_before_age
 async def test_run_turn_soft_reset_keeps_consent_before_agent() -> None:
     repo = InMemoryConversationRepository()
     publisher = InMemoryEventPublisher()
-    guarded_agent = GuardedAgentClient()
+    agent = FakeAgentClient()
     repo.set_consent(
         user_key="user-soft-reset",
         channel="whatsapp",
@@ -515,14 +516,15 @@ async def test_run_turn_soft_reset_keeps_consent_before_agent() -> None:
 
     response = await run_turn(
         RunTurnRequest(user_key="user-soft-reset", text="/reset-soft", channel="whatsapp"),
-        agent_client=guarded_agent,
+        agent_client=agent,
         conversation_repository=repo,
         event_publisher=publisher,
     )
 
     consent = repo.get_consent(user_key="user-soft-reset", channel="whatsapp")
 
-    assert guarded_agent.calls == 0
+    assert agent.calls == 1
+    assert agent.payloads[0].metadata.get("control") == "soft_reset"
     assert "conserve el consentimiento" in response.text
     assert consent is not None
     assert consent.status == "accepted"

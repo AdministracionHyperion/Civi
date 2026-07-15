@@ -24,11 +24,11 @@ from bot_orchestrator.adapters.outbound.vehicle_client import VehicleClient
 from bot_orchestrator.prompts.loader import build_system_prompt
 from bot_orchestrator.shared.appointment_selection import (
     AWAITING_PROCEDURE,
+    LastVehicleSlots,
     PendingAppointmentSelection,
     PendingVehicleConsult,
     appointment_selection_store,
     last_vehicle_slots_store,
-    LastVehicleSlots,
     shared_pending_store,
     vehicle_consult_store,
 )
@@ -87,6 +87,7 @@ from .extractors import (
     wants_vigencia,
     wants_both_vigencias,
     wants_other_vehicle,
+    wants_same_vehicle_slots,
     is_pure_greeting,
     is_soft_conversation_close,
     wants_fresh_consult,
@@ -127,11 +128,28 @@ logger = logging.getLogger(__name__)
 PHONE_USER_KEY_RE = re.compile(r"^\+?[0-9]{10,15}$")
 
 
+def _clear_channel_session(*, user_key: str, channel: str) -> None:
+    """Drop in-memory consult/appointment state for this WhatsApp/web channel."""
+    vehicle_consult_store.clear(user_key=user_key, channel=channel)
+    last_vehicle_slots_store.clear(user_key=user_key, channel=channel)
+    appointment_selection_store.clear(user_key=user_key, channel=channel)
+    shared_pending_store.clear(user_key=user_key)
+
+
 async def run_agent_turn(
     payload: AgentTurnRequest,
     *,
     llm_provider: LLMProvider | None = None,
 ) -> AgentTurnResponse:
+    control = str((payload.metadata or {}).get("control") or "").strip().lower()
+    if control in {"hard_reset", "soft_reset"}:
+        _clear_channel_session(user_key=payload.user_key, channel=payload.channel)
+        return AgentTurnResponse(
+            text="session_cleared",
+            state_version=0,
+            mode="session_cleared",
+        )
+
     text = payload.text
     fresh_placa = extract_plate(text)
     fresh_documento = extract_document(text)
@@ -465,7 +483,7 @@ async def run_agent_turn(
         placa = placa or pending_consult.placa
         documento = documento or pending_consult.documento
 
-    # Switching vehicle / explicit fresh consult: drop reused slots so we ask again.
+    # Switching vehicle / explicit fresh consult: drop any in-progress slots.
     if wants_other_vehicle(text) or wants_fresh_consult(text):
         last_vehicle_slots_store.clear(user_key=payload.user_key, channel=payload.channel)
         if not fresh_placa:
@@ -476,13 +494,22 @@ async def run_agent_turn(
             vehicle_consult_store.clear(user_key=payload.user_key, channel=payload.channel)
             pending_consult = None
 
-    # Reuse last successful SOAT/tecno slots only when the user asks vigencia again
-    # for the same vehicle (not an "otra consulta" / otro vehiculo restart).
+    # Reuse last successful SOAT/tecno slots for same-vehicle follow-ups
+    # (ej. "ahora su tecno", "ambas", "el del vehiculo anterior").
+    # Cleared on reset / "otro vehiculo" so a new consult still asks placa+cedula first.
+    vigencia_pending_for_slots = pending_consult is not None and pending_consult.intent not in {
+        "multas",
+        "runt_profile",
+    }
     if (
-        wants_vigencia(text)
+        (not placa or not documento)
         and not wants_other_vehicle(text)
         and not wants_fresh_consult(text)
-        and (not placa or not documento)
+        and (
+            wants_vigencia(text)
+            or wants_same_vehicle_slots(text)
+            or vigencia_pending_for_slots
+        )
     ):
         last_slots = last_vehicle_slots_store.get(user_key=payload.user_key, channel=payload.channel)
         if last_slots is not None:

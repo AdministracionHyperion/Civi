@@ -67,6 +67,8 @@ from bot_orchestrator.slices.run_turn.formatters import (
     format_vigencia_response,
 )
 from bot_orchestrator.shared.appointment_selection import (
+    LastVehicleSlots,
+    PendingVehicleConsult,
     appointment_selection_store,
     last_vehicle_slots_store,
     vehicle_consult_store,
@@ -448,9 +450,11 @@ def test_soat_typos_match_vigencia_intent() -> None:
 
 def test_context_vigencia_extractors() -> None:
     assert wants_both_vigencias("ambos")
+    assert wants_both_vigencias("ambas")
     assert wants_both_vigencias("los dos")
     assert wants_both_vigencias("quiero soat y tecno")
     assert wants_vigencia("ambos")
+    assert wants_vigencia("ambas")
     assert wants_other_vehicle("quiero soat de otro vehiculo")
     assert wants_other_vehicle("ahora de otra placa")
     assert is_pure_greeting("hola")
@@ -1819,6 +1823,76 @@ async def test_agent_reuses_last_vehicle_slots_for_soat_typo_followup(
     assert second.tool_calls == ["vehicle.check_vigencia", "quote.create"]
     assert FakeQuoteClient.calls[-1]["service_type"] == "soat"
     assert "LLM" not in second.text
+
+
+@pytest.mark.asyncio
+async def test_agent_ambas_after_missing_intent_runs_both(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    first = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="QLX871 30328991"))
+    second = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ambas"))
+
+    assert first.mode == "vehicle_missing_intent"
+    assert second.mode == "vehicle_ambos"
+    assert "vehicle.check_vigencia" in (second.tool_calls or [])
+
+
+@pytest.mark.asyncio
+async def test_agent_tecno_followup_reuses_slots_after_soat(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="revisar soat placa QLX871 cedula 30328991")
+    )
+    response = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ahora su tecno"))
+
+    assert response.mode == "vehicle_tecnomecanica"
+    assert "vehicle.check_vigencia" in (response.tool_calls or [])
+
+
+@pytest.mark.asyncio
+async def test_agent_vehiculo_anterior_reuses_slots_on_pending_tecno(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(run_turn_module, "VehicleClient", lambda: FakeVehicleClient())
+    monkeypatch.setattr(run_turn_module, "QuoteClient", lambda: FakeQuoteClient())
+
+    await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="revisar soat placa QLX871 cedula 30328991")
+    )
+    ask = await run_agent_turn(AgentTurnRequest(user_key="web-user", text="ahora su tecno"))
+    # Soft-close already completed SOAT with slots saved; follow-up should not re-ask.
+    assert ask.mode == "vehicle_tecnomecanica"
+
+    # Explicit same-vehicle phrase after clearing pending mid-ask path:
+    last_vehicle_slots_store.save(
+        LastVehicleSlots(
+            user_key="web-user",
+            channel="web",
+            placa="QLX871",
+            documento="30328991",
+        )
+    )
+    vehicle_consult_store.save(
+        PendingVehicleConsult(
+            user_key="web-user",
+            channel="web",
+            intent="tecnomecanica",
+            placa=None,
+            documento=None,
+        )
+    )
+    response = await run_agent_turn(
+        AgentTurnRequest(user_key="web-user", text="el del vehiculo anterior")
+    )
+    assert response.mode == "vehicle_tecnomecanica"
+    assert "vehicle.check_vigencia" in (response.tool_calls or [])
 
 
 @pytest.mark.asyncio

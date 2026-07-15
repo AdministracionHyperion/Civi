@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import re
 import unicodedata
@@ -10,6 +11,8 @@ from conversation_service.shared.repository import ConversationRepository, repos
 from conversation_service.slices.classify_consent.use_case import ConsentClassifier, classify_consent
 
 from .schemas import RunTurnRequest, RunTurnResponse
+
+logger = logging.getLogger(__name__)
 
 # Saludo canónico de Civi (WhatsApp). El gate de Habeas Data se concatena solo en el primer contacto.
 STANDARD_GREETING_TEXT = (
@@ -88,6 +91,7 @@ async def run_turn(
         payload,
         repository=active_repository,
         publisher=publisher,
+        agent_client=agent_client,
     )
     if control_response is not None:
         return control_response
@@ -132,6 +136,7 @@ async def _maybe_handle_control_command(
     *,
     repository: ConversationRepository,
     publisher: EventPublisher,
+    agent_client: AgentClient | None = None,
 ) -> RunTurnResponse | None:
     command = _control_command_for_text(payload.text)
     if command is None:
@@ -147,6 +152,13 @@ async def _maybe_handle_control_command(
     else:
         response_text = _status_text(payload, repository=repository)
 
+    if command in {"hard_reset", "soft_reset"}:
+        await _best_effort_clear_agent_session(
+            payload,
+            agent_client=agent_client,
+            control=command,
+        )
+
     await _publish_conversation_completed(
         publisher,
         user_key=payload.user_key,
@@ -154,6 +166,30 @@ async def _maybe_handle_control_command(
         state_version=0,
     )
     return RunTurnResponse(user_key=payload.user_key, text=response_text, state_version=0)
+
+
+async def _best_effort_clear_agent_session(
+    payload: RunTurnRequest,
+    *,
+    agent_client: AgentClient | None,
+    control: str,
+) -> None:
+    """Clear bot-orchestrator in-memory slots (placa/cita pending) on reset."""
+    clear_payload = RunTurnRequest(
+        user_key=payload.user_key,
+        channel=payload.channel,
+        text=payload.text,
+        metadata={**(payload.metadata or {}), "control": control},
+    )
+    try:
+        await (agent_client or HttpAgentClient()).run_turn(clear_payload)
+    except Exception:
+        logger.exception(
+            "failed to clear bot session on %s user_key=%s channel=%s",
+            control,
+            payload.user_key,
+            payload.channel,
+        )
 
 
 async def _maybe_handle_consent(
